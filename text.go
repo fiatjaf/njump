@@ -1,0 +1,71 @@
+package main
+
+import (
+	"image"
+	"image/draw"
+	"strings"
+
+	"github.com/apatters/go-wordwrap"
+	"github.com/lukevers/freetype-go/freetype"
+	"golang.org/x/image/font/gofont/goregular"
+)
+
+const (
+	MAX_LINES          = 20
+	MAX_CHARS_PER_LINE = 51
+	FONT_SIZE          = 7
+)
+
+func normalizeText(t string) []string {
+	lines := make([]string, 0, MAX_LINES)
+	for _, line := range strings.Split(t, "\n") {
+		line = wordwrap.Wrap(MAX_CHARS_PER_LINE, line)
+		for _, subline := range strings.Split(line, "\n") {
+			lines = append(lines, subline)
+		}
+	}
+	return lines
+}
+
+func drawImage(lines []string) (image.Image, error) {
+	// get the physical image ready with colors/size
+	fg, bg := image.Black, image.White
+	rgba := image.NewRGBA(image.Rect(0, 0, 700, 525))
+
+	// draw the empty image
+	draw.Draw(rgba, rgba.Bounds(), bg, image.ZP, draw.Src)
+
+	// create new freetype context to get ready for
+	// adding text.
+	font, _ := freetype.ParseFont(goregular.TTF)
+
+	c := freetype.NewContext()
+	c.SetDPI(300)
+	c.SetFont(font)
+	c.SetFontSize(FONT_SIZE)
+	c.SetClip(rgba.Bounds())
+	c.SetDst(rgba)
+	c.SetSrc(fg)
+	c.SetHinting(freetype.NoHinting)
+
+	// draw each line separately
+	var count float64 = 1
+	for _, line := range lines {
+		if err := drawText(c, line, count); err != nil {
+			return nil, err
+		}
+		count++
+	}
+
+	return rgba, nil
+}
+
+func drawText(c *freetype.Context, text string, line float64) error {
+	// We need an offset because we need to know where exactly on the
+	// image to place the text. The `line` is how much of an offset
+	// that we need to provide (which line the text is going on).
+	offsetY := 10 + int(c.PointToFix32(FONT_SIZE*line)>>8)
+
+	_, err := c.DrawString(text, freetype.Pt(10, offsetY))
+	return err
+}

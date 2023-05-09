@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{if eq .type "profile"}}
+    <title>Nostr Public Key {{.npub}}</title>
+    <meta property="og:site_name" content="{{.npub}}" />
+    <meta property="og:title" content="{{.title}}" />
+    {{ if .metadata.Picture }}
+    <meta property="og:image" content="{{.metadata.Picture}}" />
+    {{end}} {{ if .metadata.About }}
+    <meta property="og:description" content="{{.metadata.About}}" />
+    {{end}}
+    <meta property="twitter:card" content="summary" />
+    {{end}}
+    <!----------->
+    {{ if eq .type "event" }}
+    <title>Nostr Event {{.nevent}}</title>
+    <meta property="og:site_name" content="{{.authorLong}}" />
+    <meta property="og:title" content="{{.title}}" />
+    <meta name="twitter:title" content="{{.twitterTitle}}" />
+    <!---->
+    {{ if .textImageURL }}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@nostrprotocol" />
+    <meta property="og:image" content="{{.textImageURL}}" />
+    <meta name="twitter:image" content="{{.textImageURL}}" />
+    {{ else }}
+    <!---->
+    <meta property="twitter:card" content="summary" />
+    {{ if .image }}
+    <meta property="og:image" content="{{.image}}" />
+    <meta name="twitter:image" content="{{.image}}" />
+    {{end}} {{ if .video }}
+    <meta property="og:video" content="{{.video}}" />
+    <meta property="og:video:secure_url" content="{{.video}}" />
+    <meta property="og:video:type" content="video/{{.videoType}}" />
+    {{end}}
+    <!---->
+    {{end}}
+    <meta property="og:description" content="{{.description}}" />
+    <meta name="twitter:description" content="{{.description}}" />
+    {{end}}
+    <!----------->
+    {{ if eq .type "address" }}
+    <title>Nostr Address {{.naddr}}</title>
+    {{end}}
+    <!----------->
+
+    <style>
+      body {
+        padding: 3%;
+      }
+      #event {
+        margin-bottom: 5%;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+        font-family: monospace;
+        font-size: 130%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="event">{{.eventJSON}}</div>
+    <div>
+      open in {{range .clients}}<br />
+      &nbsp;&nbsp;<a href="{{.url}}">{{.name}}</a> {{end}}
+    </div>
+  </body>
+</html>
