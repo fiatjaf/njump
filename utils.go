@@ -57,7 +57,7 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 			// {"name": "iris", "url": ""}, doesn't support nprofile or hex
 			{"name": "yosup", "url": "https://yosup.app/profile/" + event.PubKey},
 			{"name": "nostr.band", "url": "https://nostr.band/" + code},
-			{"name": "primal", "url": "https://primal.net/thread/" + event.PubKey},
+			{"name": "primal", "url": "https://primal.net/profile/" + event.PubKey},
 			{"name": "nostribe", "url": "https://www.nostribe.com/profile/" + event.PubKey},
 			{"name": "nostrid", "url": "https://web.nostrid.app/account/" + event.PubKey},
 		}

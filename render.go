@@ -4,10 +4,10 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"net/http"
 	"regexp"
 	"strings"
+	"text/template"
 
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
