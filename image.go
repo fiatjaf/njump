@@ -32,6 +32,8 @@ func generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "image/png")
+	w.Header().Set("Cache-Control", "max-age=604800")
+
 	if err := png.Encode(w, img); err != nil {
 		log.Printf("error encoding image: %s", err)
 		http.Error(w, "error encoding image!", 500)

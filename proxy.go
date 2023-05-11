@@ -9,6 +9,7 @@ import (
 
 func proxy(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
+	w.Header().Set("Cache-Control", "max-age=604800")
 
 	src := r.URL.Query().Get("src")
 	urlParsed, err := url.Parse(src)

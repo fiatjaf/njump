@@ -21,6 +21,7 @@ var tmpl = template.Must(template.New("event").Parse(eventHTML))
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Cache-Control", "max-age=604800")
 
 	code := r.URL.Path[1:]
 	if strings.HasPrefix(code, "e/") {
