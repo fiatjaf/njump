@@ -19,6 +19,7 @@ var eventHTML string
 var tmpl = template.Must(template.New("event").Parse(eventHTML))
 
 func render(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
 
 	code := r.URL.Path[1:]
@@ -65,7 +66,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 	if len(imageMatch) > 0 {
 		image = imageMatch[0]
 	}
-	fmt.Println("IMAGE", image)
 
 	videoMatch := regexp.MustCompile(`https:\/\/[^ ]*\.(mp4|webm)`).FindStringSubmatch(event.Content)
 	var video string
@@ -170,6 +170,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"videoType":    videoType,
 		"image":        image,
 		"video":        video,
+		"proxy":        "https://" + hostname + "/proxy?src=",
 		"eventJSON":    string(eventJSON),
 	}
 	if err := tmpl.ExecuteTemplate(w, "event", params); err != nil {

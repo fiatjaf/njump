@@ -27,10 +27,18 @@ func normalizeText(t string) []string {
 	return lines
 }
 
-func drawImage(lines []string) (image.Image, error) {
+func drawImage(lines []string, style string) (image.Image, error) {
+	width, height, paddingLeft := 700, 525, 0
+	switch style {
+	case "twitter":
+		height = 366
+	case "telegram":
+		paddingLeft = 15
+	}
+
 	// get the physical image ready with colors/size
 	fg, bg := image.Black, image.White
-	rgba := image.NewRGBA(image.Rect(0, 0, 700, 525))
+	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
 
 	// draw the empty image
 	draw.Draw(rgba, rgba.Bounds(), bg, image.ZP, draw.Src)
@@ -51,7 +59,7 @@ func drawImage(lines []string) (image.Image, error) {
 	// draw each line separately
 	var count float64 = 1
 	for _, line := range lines {
-		if err := drawText(c, line, count); err != nil {
+		if err := drawText(c, line, count, paddingLeft); err != nil {
 			return nil, err
 		}
 		count++
@@ -60,12 +68,12 @@ func drawImage(lines []string) (image.Image, error) {
 	return rgba, nil
 }
 
-func drawText(c *freetype.Context, text string, line float64) error {
+func drawText(c *freetype.Context, text string, line float64, paddingLeft int) error {
 	// We need an offset because we need to know where exactly on the
 	// image to place the text. The `line` is how much of an offset
 	// that we need to provide (which line the text is going on).
 	offsetY := 10 + int(c.PointToFix32(FONT_SIZE*line)>>8)
 
-	_, err := c.DrawString(text, freetype.Pt(10, offsetY))
+	_, err := c.DrawString(text, freetype.Pt(10+paddingLeft, offsetY))
 	return err
 }

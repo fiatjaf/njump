@@ -7,6 +7,7 @@
     <meta property="og:title" content="{{.title}}" />
     {{ if .metadata.Picture }}
     <meta property="og:image" content="{{.metadata.Picture}}" />
+    <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture}}" />
     {{end}} {{ if .metadata.About }}
     <meta property="og:description" content="{{.metadata.About}}" />
     {{end}}
@@ -29,7 +30,7 @@
     <meta property="twitter:card" content="summary" />
     {{ if .image }}
     <meta property="og:image" content="{{.image}}" />
-    <meta name="twitter:image" content="{{.image}}" />
+    <meta name="twitter:image" content="{{.proxy}}{{.image}}" />
     {{end}} {{ if .video }}
     <meta property="og:video" content="{{.video}}" />
     <meta property="og:video:secure_url" content="{{.video}}" />

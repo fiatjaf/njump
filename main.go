@@ -8,6 +8,7 @@ import (
 
 func main() {
 	http.HandleFunc("/image/", generate)
+	http.HandleFunc("/proxy/", proxy)
 	http.HandleFunc("/", render)
 
 	port := os.Getenv("PORT")

@@ -23,7 +23,8 @@ func generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lines := normalizeText(event.Content)
-	img, err := drawImage(lines)
+
+	img, err := drawImage(lines, getPreviewStyle(r))
 	if err != nil {
 		log.Printf("error writing image: %s", err)
 		http.Error(w, "error writing image!", 500)
