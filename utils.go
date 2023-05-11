@@ -106,6 +106,8 @@ func getPreviewStyle(r *http.Request) string {
 		return "slack"
 	case strings.Contains(ua, "discord"):
 		return "discord"
+	case strings.Contains(ua, "whatsapp"):
+		return "whatsapp"
 	case strings.Contains(accept, "text/html"):
 		return ""
 	default:
