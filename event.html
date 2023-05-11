@@ -52,7 +52,7 @@
         padding: 3%;
       }
       #event {
-        margin-bottom: 5%;
+        margin: 5% 0;
         white-space: pre-wrap;
         word-wrap: break-word;
         word-break: break-all;
@@ -62,10 +62,40 @@
     </style>
   </head>
   <body>
-    <div id="event">{{.eventJSON}}</div>
     <div>
-      open in {{range .clients}}<br />
-      &nbsp;&nbsp;<a href="{{.url}}">{{.name}}</a> {{end}}
+      open {{.type}} in {{range .clients}}<br />
+      &nbsp;&nbsp;<span style="color: #bbb"></span>
+      <a class="client" href="{{.url}}">{{.name}}</a> {{end}}
     </div>
+    <div id="event">{{.eventJSON}}</div>
+    <div style="display: flex; justify-content: flex-end">
+      <span>
+        powered by <a href="https://git.fiatjaf.com/njump">njump</a>
+      </span>
+    </div>
+    <script>
+      const type = '{{.type}}'
+      let counts = []
+      let clients = document.querySelectorAll('.client')
+      for (let i = 0; i < clients.length; i++) {
+        let name = clients[i].innerText
+        let url = clients[i].href
+        let key = 'nj:' + type + ':' + name
+        let count = parseInt(localStorage.getItem(key) || 0)
+        clients[i].previousElementSibling.innerText = count
+        clients[i].addEventListener('click', () => {
+          localStorage.setItem(key, count + 1)
+        })
+        counts.push([count, name, url])
+      }
+      counts.sort((a, b) => b[0] - a[0])
+      let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
+
+      if (location.hash !== '#noredirect') {
+        if (counts[0][0] - tailsum > 10) {
+          location.href = counts[0][2]
+        }
+      }
+    </script>
   </body>
 </html>
