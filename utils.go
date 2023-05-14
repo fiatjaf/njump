@@ -41,7 +41,7 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 			{"name": "snort", "url": "https://snort.social/e/" + code},
 			{"name": "coracle", "url": "https://coracle.social/" + code},
 			{"name": "satellite", "url": "https://satellite.earth/thread/" + event.ID},
-			// {"name": "iris", "url": ""}, doesn't support nevent or hex
+			{"name": "iris", "url": "https://iris.to/" + code},
 			{"name": "yosup", "url": "https://yosup.app/thread/" + event.ID},
 			{"name": "nostr.band", "url": "https://nostr.band/" + code},
 			{"name": "primal", "url": "https://primal.net/thread/" + event.ID},
@@ -53,8 +53,8 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 			{"name": "native client", "url": "nostr:" + code},
 			{"name": "snort", "url": "https://snort.social/p/" + code},
 			{"name": "coracle", "url": "https://coracle.social/" + code},
-			// {"name": "satellite", "url": ""}, doesn't support nprofile or hex
-			// {"name": "iris", "url": ""}, doesn't support nprofile or hex
+			{"name": "satellite", "url": "https://satellite.earth/@" + code},
+			{"name": "iris", "url": "https://iris.to/" + code},
 			{"name": "yosup", "url": "https://yosup.app/profile/" + event.PubKey},
 			{"name": "nostr.band", "url": "https://nostr.band/" + code},
 			{"name": "primal", "url": "https://primal.net/profile/" + event.PubKey},
