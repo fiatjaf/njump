@@ -1,3 +1,4 @@
+
 html {
   font-family: Helvetica, sans-serif;
   font-size: 20px;
@@ -22,7 +23,6 @@ a {
   overflow: hidden;
   z-index: -1;
 }
-
 .background::after {
   content: "";
   position: absolute;
@@ -34,15 +34,18 @@ a {
   bottom: -40%;
 }
 
-.top, .container_wrapper {
+.top {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.top {
   margin: 1rem 0;
   justify-content: left;
+}
+
+.container_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nostr_link {
@@ -58,20 +61,16 @@ a {
   gap: 4.8vw;
 }
 
-.column {
-}
-
-.column1 {
+.columnA {
   flex-basis: 25%;
   margin-top: 2rem;
 }
 
-.container.profile .column1 .pic-wrapper {
+.container.profile .columnA .pic-wrapper {
   max-width: 100%;
   overflow: hidden;
 }
-
-.container.profile .column1 img.pic {
+.container.profile .columnA img.pic {
   max-width: 100%;
   width: 100%;
   height: auto;
@@ -88,7 +87,7 @@ a {
   color: #C9C9C9;
 }
 
-.column2 {
+.columnB {
   flex-basis: 50%;
   max-width: 50%;
   flex-grow: 0;
@@ -96,48 +95,40 @@ a {
   word-wrap: break-word;
   margin-right: 1vw;
 }
-
-.column2 .name {
+.columnB .name {
   font-size: 1.6rem;
 }
-
-.column2 .name .display {
+.columnB .name .display {
   color: #C9C9C9;
 }
-
-.column2 .separator {
+.columnB .separator {
   height: 6px;
   width: 30%;
   margin-left: -0.6rem;
   background-color: #F3F3F3;
 }
-
-.column2 .field {
+.columnB .field {
   margin-bottom: 1.5rem;
 }
-
-.column2 .field .label {
+.columnB .field .label {
   font-size: 0.8rem;
   color: #E32A6D;
 }
 
-.column3 {
+.columnC {
   flex-basis: 25%;
   margin-top: 2rem;
 }
-
-.column3 .title {
+.columnC .title {
   font-size: 0.8rem;
   margin-bottom: 1rem;
 }
-
-.column3 .btn {
+.columnC .btn {
   display: flex;
   align-items: center;
   margin-bottom: 0.8rem;
 }
-
-.column3 .btn a {
+.columnC .btn a {
   flex-basis: 80%;
   padding: 0.4rem;
   text-align: center;
@@ -147,21 +138,19 @@ a {
   text-decoration: none;
   border-radius: 8px;
 }
-
-.column3 .btn a:hover {
+.columnC .btn a:hover {
   background-color: #373737;
 }
-
-.column3 .btn:first-child a {
+.columnC .btn:first-child a {
   background-color: #E32A6D;
 }
-
-.column3 .btn:first-child a:hover {
+.columnC .btn:first-child a:hover {
   background-color: #bc1150;
 }
-
-.column3 .btn span {
+.columnC .btn span {
   flex-basis: 20%;
   margin-left: 0.4rem;
   color: #9a9a9a;
 }
+
+/*# sourceMappingURL=styles.css.map */

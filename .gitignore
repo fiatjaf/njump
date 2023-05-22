@@ -1,3 +1,5 @@
 njump
 .air.toml
-tmp/*
+tmp/
+node_modules/
+.sass-cache/

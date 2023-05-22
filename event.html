@@ -58,7 +58,7 @@
 
     <div class="container_wrapper">
       <div class="container profile">
-        <div class="column column1">
+        <div class="column columnA">
           <div class="pic-wrapper">
             <img class="pic" src="{{ .metadata.Picture }}" />
             <svg width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +77,7 @@
             {{.createdAt}}
           </div>
         </div>
-        <div class="column column2">
+        <div class="column columnB">
           <div class="field name">
             {{.content_json.name}} <span class="display">{{.content_json.display_name}}</span>
           </div>
@@ -111,7 +111,7 @@
           </div>
           <div class="field separator"></div>
         </div>
-        <div class="column column3">
+        <div class="column columnC">
           <div class="title">Open {{.type}} in</div>
           <div class="clients">
             {{range .clients}}
