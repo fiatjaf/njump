@@ -81,14 +81,14 @@ func mergeMaps[K comparable, V any](m1 map[K]V, m2 map[K]V) map[K]V {
 	return m1
 }
 
-func prettyJsonOrRaw(j string) string {
-	var parsedContent any
+func prettyJsonOrRaw(j string) (map[string]interface{}, string) {
+	var parsedContent map[string]interface{}
 	if err := json.Unmarshal([]byte(j), &parsedContent); err == nil {
 		if t, err := toml.Marshal(parsedContent); err == nil && len(t) > 0 {
-			return string(t)
+			return parsedContent, string(t)
 		}
 	}
-	return j
+	return nil, j
 }
 
 func getPreviewStyle(r *http.Request) string {

@@ -7,6 +7,9 @@ import (
 )
 
 func main() {
+
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
 	http.HandleFunc("/image/", generate)
 	http.HandleFunc("/proxy/", proxy)
 	http.HandleFunc("/", render)

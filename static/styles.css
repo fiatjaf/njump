@@ -1,0 +1,167 @@
+html {
+  font-family: Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+body {
+  color: #373737;
+}
+
+a {
+  color: #373737;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.background::after {
+  content: "";
+  position: absolute;
+  background-color: #FAFAFA;
+  width: 140%;
+  height: 100%;
+  transform: rotate(-20deg);
+  transform-origin: bottom;
+  bottom: -40%;
+}
+
+.top, .container_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top {
+  margin: 1rem 0;
+  justify-content: left;
+}
+
+.nostr_link {
+  flex-basis: 15%;
+  text-align: right;
+  text-decoration: none;
+}
+
+.container {
+  display: flex;
+  width: 70%;
+  justify-content: space-between;
+  gap: 4.8vw;
+}
+
+.column {
+}
+
+.column1 {
+  flex-basis: 25%;
+  margin-top: 2rem;
+}
+
+.container.profile .column1 .pic-wrapper {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.container.profile .column1 img.pic {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  -webkit-clip-path: url(#svg-shape);
+  -moz-clip-path: url(#svg-shape);
+  -o-clip-path: url(#svg-shape);
+  -ms-clip-path: url(#svg-shape);
+  clip-path: url(#svg-shape);
+}
+
+.last_update {
+  font-size: 0.8em;
+  text-align: center;
+  color: #C9C9C9;
+}
+
+.column2 {
+  flex-basis: 50%;
+  max-width: 50%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  word-wrap: break-word;
+  margin-right: 1vw;
+}
+
+.column2 .name {
+  font-size: 1.6rem;
+}
+
+.column2 .name .display {
+  color: #C9C9C9;
+}
+
+.column2 .separator {
+  height: 6px;
+  width: 30%;
+  margin-left: -0.6rem;
+  background-color: #F3F3F3;
+}
+
+.column2 .field {
+  margin-bottom: 1.5rem;
+}
+
+.column2 .field .label {
+  font-size: 0.8rem;
+  color: #E32A6D;
+}
+
+.column3 {
+  flex-basis: 25%;
+  margin-top: 2rem;
+}
+
+.column3 .title {
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.column3 .btn {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.column3 .btn a {
+  flex-basis: 80%;
+  padding: 0.4rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #FFFFFF;
+  background-color: #5A5A5A;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.column3 .btn a:hover {
+  background-color: #373737;
+}
+
+.column3 .btn:first-child a {
+  background-color: #E32A6D;
+}
+
+.column3 .btn:first-child a:hover {
+  background-color: #bc1150;
+}
+
+.column3 .btn span {
+  flex-basis: 20%;
+  margin-left: 0.4rem;
+  color: #9a9a9a;
+}

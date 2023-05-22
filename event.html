@@ -47,32 +47,89 @@
     {{end}}
     <!----------->
 
-    <style>
-      body {
-        padding: 3%;
-      }
-      #event {
-        margin: 5% 0;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        word-break: break-all;
-        font-family: monospace;
-        font-size: 130%;
-      }
-    </style>
+    <link rel="stylesheet" href="/static/styles.css" />
+
   </head>
   <body>
-    <div>
-      open {{.type}} in {{range .clients}}<br />
-      &nbsp;&nbsp;<span style="color: #bbb"></span>
-      <a class="client" href="{{.url}}">{{.name}}</a> {{end}}
+
+    <div class="top">
+      <a href="https://nostr.com" class="nostr_link">What is nostr?</a>
     </div>
-    <div id="event">{{.eventJSON}}</div>
-    <div style="display: flex; justify-content: flex-end">
+
+    <div class="container_wrapper">
+      <div class="container profile">
+        <div class="column column1">
+          <div class="pic-wrapper">
+            <img class="pic" src="{{ .metadata.Picture }}" />
+            <svg width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <clipPath id="svg-shape" clipPathUnits="objectBoundingBox">
+                  <path 
+                    transform="scale(0.005, 0.005)"
+                    d="M100,200c43.8,0,68.2,0,84.1-15.9C200,168.2,200,143.8,200,100s0-68.2-15.9-84.1C168.2,0,143.8,0,100,0S31.8,0,15.9,15.9C0,31.8,0,56.2,0,100s0,68.2,15.9,84.1C31.8,200,56.2,200,100,200z"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
+          </div>
+          <div class="last_update">
+            Last update:<br/>
+            {{.createdAt}}
+          </div>
+        </div>
+        <div class="column column2">
+          <div class="field name">
+            {{.content_json.name}} <span class="display">{{.content_json.display_name}}</span>
+          </div>
+          <div class="field separator"></div>
+          <div class="field">
+            <a href="{{.content_json.website}}">{{.content_json.website}}</a>
+          </div>
+          <div class="field">
+            {{.content_json.about}}
+          </div>
+          <div class="field separator"></div>
+          <div class="field">
+            <div class="label">Public key</div>
+            {{.npub}}
+          </div>
+          <div class="field">
+            <div class="label">NIP-05</div>
+            {{.content_json.nip05}}
+          </div>
+          <div class="field">
+            <div class="label">LN Address</div>
+            {{.content_json.lud16}}
+          </div>
+          <div class="field">
+            <div class="label">Metadata Event</div>
+            {{.nevent}}
+          </div>
+          <div class="field">
+            <div class="label">JSON</div>
+            {{.eventJSON}}
+          </div>
+          <div class="field separator"></div>
+        </div>
+        <div class="column column3">
+          <div class="title">Open {{.type}} in</div>
+          <div class="clients">
+            {{range .clients}}
+              <div class="btn">
+                <a class="client" href="{{.url}}">{{.name}}</a>
+                <span></span>
+              </div>
+            {{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div style="display: flex; justify-content: flex-end">
       <span>
         powered by <a href="https://git.fiatjaf.com/njump">njump</a>
       </span>
-    </div>
+    </div> -->
+
     <script>
       const type = '{{.type}}'
       let counts = []
@@ -82,7 +139,7 @@
         let url = clients[i].href
         let key = 'nj:' + type + ':' + name
         let count = parseInt(localStorage.getItem(key) || 0)
-        clients[i].previousElementSibling.innerText = count
+        clients[i].nextElementSibling.innerText = count
         clients[i].addEventListener('click', () => {
           localStorage.setItem(key, count + 1)
         })
@@ -97,5 +154,8 @@
         }
       }
     </script>
+
+    <div class="background"></div>
+    
   </body>
 </html>

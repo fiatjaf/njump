@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
-
+	"time"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
@@ -48,6 +48,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	nevent, _ := nip19.EncodeEvent(event.ID, []string{}, event.PubKey)
 	naddr := ""
+	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 
 	author := event
 	if event.Kind != 0 {
@@ -142,21 +143,23 @@ func render(w http.ResponseWriter, r *http.Request) {
 	//    : ''
 
 	textImageURL := ""
-	description := ""
+	content := ""
+	content_json := make(map[string]interface{})
 	if useTextImage {
 		textImageURL = fmt.Sprintf("https://%s/image/%s", hostname, code)
 		if subject != "" {
-			description = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
+			content = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
 		} else {
-			description = seenOnRelays
+			content = seenOnRelays
 		}
 	} else {
-		description = prettyJsonOrRaw(event.Content)
+		content_json, content = prettyJsonOrRaw(event.Content)
 	}
 
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
 	params := map[string]any{
+		"createdAt":		createdAt,
 		"clients":      generateClientList(code, event),
 		"type":         typ,
 		"title":        title,
@@ -166,7 +169,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"naddr":        naddr,
 		"metadata":     metadata,
 		"authorLong":   authorLong,
-		"description":  description,
+		"content":  		content,
+		"content_json": content_json,
 		"textImageURL": textImageURL,
 		"videoType":    videoType,
 		"image":        image,
