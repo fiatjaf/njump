@@ -223,13 +223,17 @@ a {
 				label:first-of-type {
 					cursor: pointer;
 					text-indent: -9999px;
-					width: 3rem;
-					height: 1.4rem;
-					background: grey;
+					width: 2.6rem;
+					height: 1.2rem;
+					background: $background-color_4;
 					display: inline-block;
 					border-radius: 100px;
 					position: relative;
 					margin-right: 0.5rem;
+					@media (max-width: 580px) {
+						width: 3rem;
+						height: 1.4rem;
+					}
 				}
 			
 				label:first-of-type:after {
@@ -237,11 +241,15 @@ a {
 					position: absolute;
 					top: 2px;
 					left: 2px;
-					width: 1.2rem;
-					height: 1.2rem;
+					width: 1rem;
+					height: 1rem;
 					background: #fff;
 					border-radius: 1rem;
-					transition: 0.5s;
+					transition: 0.2s;
+					@media (max-width: 580px) {
+						width: 1.2rem;
+						height: 1.2rem;
+					}
 				}
 			
 				input:checked + label {
@@ -254,7 +262,7 @@ a {
 				}
 			
 				label:first-of-type:active:after {
-					width: 130px;
+					width: 2rem;
 				}
 			
 			}
