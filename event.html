@@ -216,6 +216,12 @@
       });
 
       updateAdvanceSwitch(); // Check at the page load, some browsers keep the state in cache
+
+      var url = new URL(window.location.href);
+      var searchParams = new URLSearchParams(url.search);
+      if (searchParams.has('details') && searchParams.get('details') == 'yes') {
+        advanceSwitch.click();
+      }
       
       function syntaxHighlight(json) {
           json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
