@@ -289,6 +289,16 @@ a {
 .container.profile .columnB .field .json .null, .container.profile .columnB .field .data .null {
   color: #373737;
 }
+.container.profile .columnB .field.last_update {
+  display: none;
+}
+@media (max-width: 580px) {
+  .container.profile .columnB .field.last_update {
+    display: block;
+    font-size: 0.8em;
+    color: #C9C9C9;
+  }
+}
 .container.profile .columnC {
   flex-basis: 25%;
   margin-top: 2rem;
