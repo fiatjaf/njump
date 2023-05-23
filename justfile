@@ -1,5 +1,4 @@
 build:
-    sass -s compressed static/styles.scss static/styles.css
     CC=$(which musl-gcc) go build -ldflags='-s -w -linkmode external -extldflags "-static"' -o ./njump
 
 deploy: build
