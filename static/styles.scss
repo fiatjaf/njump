@@ -22,6 +22,11 @@ body {
 	color: $color_1;
 	margin: 0;
 	margin-bottom: 4rem;
+	&.lock {
+		@media (max-width: 580px) {
+			overflow: hidden;
+		}
+	}
 }
 a {
 	color: $color_1;

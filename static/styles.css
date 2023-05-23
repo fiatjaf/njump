@@ -10,6 +10,11 @@ body {
   margin: 0;
   margin-bottom: 4rem;
 }
+@media (max-width: 580px) {
+  body.lock {
+    overflow: hidden;
+  }
+}
 
 a {
   color: #373737;

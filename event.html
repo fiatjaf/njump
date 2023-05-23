@@ -186,6 +186,11 @@
       const clients_list = document.querySelector('.columnC');
       shareButton.addEventListener('click', function() {
         clients_list.classList.toggle('up');
+        if (clients_list.classList.contains('up')) {
+          document.body.classList.add('lock');
+        } else {
+          document.body.classList.remove('lock');
+        }
       });
 
       function updateAdvanceSwitch() {
