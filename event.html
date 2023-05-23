@@ -188,14 +188,24 @@
         clients_list.classList.toggle('up');
       });
 
+      function updateAdvanceSwitch() {
+        advanced_list.forEach(element => {
+          if (advanceSwitch.checked) {
+            element.classList.add('visible');
+          } else {
+            element.classList.remove('visible');
+          }
+        });
+      }
+
       const advanceSwitch = document.querySelector('.advanced-switch');
       const advanced_list = document.querySelectorAll('.advanced');
       advanceSwitch.addEventListener('change', function() {
-        advanced_list.forEach(element => {
-          element.classList.toggle('visible');
-        });
+        updateAdvanceSwitch()
       });
 
+      updateAdvanceSwitch(); // Check at the page load, some browsers keep the state in cache
+      
       function syntaxHighlight(json) {
           json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
           return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
