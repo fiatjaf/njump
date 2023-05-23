@@ -38,28 +38,28 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 	if strings.HasPrefix(code, "nevent") || strings.HasPrefix(code, "note") {
 		return []map[string]string{
 			{"name": "native client", "url": "nostr:" + code},
-			{"name": "snort", "url": "https://snort.social/e/" + code},
-			{"name": "coracle", "url": "https://coracle.social/" + code},
-			{"name": "satellite", "url": "https://satellite.earth/thread/" + event.ID},
-			{"name": "iris", "url": "https://iris.to/" + code},
-			{"name": "yosup", "url": "https://yosup.app/thread/" + event.ID},
-			{"name": "nostr.band", "url": "https://nostr.band/" + code},
-			{"name": "primal", "url": "https://primal.net/thread/" + event.ID},
-			{"name": "nostribe", "url": "https://www.nostribe.com/post/" + event.ID},
-			{"name": "nostrid", "url": "https://web.nostrid.app/note/" + event.ID},
+			{"name": "Snort", "url": "https://Snort.social/e/" + code},
+			{"name": "Coracle", "url": "https://coracle.social/" + code},
+			{"name": "Satellite", "url": "https://satellite.earth/thread/" + event.ID},
+			{"name": "Iris", "url": "https://iris.to/" + code},
+			{"name": "Yosup", "url": "https://yosup.app/thread/" + event.ID},
+			{"name": "Nostr.band", "url": "https://nostr.band/" + code},
+			{"name": "Primal", "url": "https://primal.net/thread/" + event.ID},
+			{"name": "Nostribe", "url": "https://www.nostribe.com/post/" + event.ID},
+			{"name": "Nostrid", "url": "https://web.nostrid.app/note/" + event.ID},
 		}
 	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
 		return []map[string]string{
 			{"name": "native client", "url": "nostr:" + code},
-			{"name": "snort", "url": "https://snort.social/p/" + code},
-			{"name": "coracle", "url": "https://coracle.social/" + code},
-			{"name": "satellite", "url": "https://satellite.earth/@" + code},
-			{"name": "iris", "url": "https://iris.to/" + code},
-			{"name": "yosup", "url": "https://yosup.app/profile/" + event.PubKey},
-			{"name": "nostr.band", "url": "https://nostr.band/" + code},
-			{"name": "primal", "url": "https://primal.net/profile/" + event.PubKey},
-			{"name": "nostribe", "url": "https://www.nostribe.com/profile/" + event.PubKey},
-			{"name": "nostrid", "url": "https://web.nostrid.app/account/" + event.PubKey},
+			{"name": "Snort", "url": "https://snort.social/p/" + code},
+			{"name": "Coracle", "url": "https://coracle.social/" + code},
+			{"name": "Satellite", "url": "https://satellite.earth/@" + code},
+			{"name": "Iris", "url": "https://iris.to/" + code},
+			{"name": "Yosup", "url": "https://yosup.app/profile/" + event.PubKey},
+			{"name": "Nostr.band", "url": "https://nostr.band/" + code},
+			{"name": "Primal", "url": "https://primal.net/profile/" + event.PubKey},
+			{"name": "Nostribe", "url": "https://www.nostribe.com/profile/" + event.PubKey},
+			{"name": "Nostrid", "url": "https://web.nostrid.app/account/" + event.PubKey},
 		}
 	} else if strings.HasPrefix(code, "naddr") {
 		return []map[string]string{
