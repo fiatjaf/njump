@@ -7,6 +7,8 @@ html {
 
 body {
   color: #373737;
+  margin: 0;
+  margin-bottom: 4rem;
 }
 
 a {
@@ -33,6 +35,12 @@ a {
   transform-origin: bottom;
   bottom: -40%;
 }
+@media (max-width: 580px) {
+  .background::after {
+    width: 200%;
+    bottom: -40%;
+  }
+}
 
 .top {
   display: flex;
@@ -41,11 +49,26 @@ a {
   margin: 1rem 0;
   justify-content: left;
 }
+@media (max-width: 580px) {
+  .top {
+    display: block;
+    width: 90%;
+    margin: 1.5rem auto 0 auto;
+    font-size: 0.8rem;
+  }
+}
 
 .container_wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+@media (max-width: 580px) {
+  .container_wrapper {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+  }
 }
 
 .nostr_link {
@@ -54,23 +77,56 @@ a {
   text-decoration: none;
 }
 
-.container {
+.container.profile {
   display: flex;
   width: 70%;
   justify-content: space-between;
   gap: 4.8vw;
 }
-
-.columnA {
+@media (max-width: 580px) {
+  .container.profile {
+    display: block;
+    width: 100%;
+  }
+}
+.container.profile .columnA {
   flex-basis: 25%;
   margin-top: 2rem;
 }
-
+@media (max-width: 580px) {
+  .container.profile .columnA {
+    display: flex;
+    align-items: center;
+    margin-top: 0rem;
+  }
+}
+.container.profile .columnA .name {
+  display: none;
+}
+@media (max-width: 580px) {
+  .container.profile .columnA .name {
+    display: block;
+    flex-basis: 64%;
+    max-width: 64%;
+    overflow: hidden;
+    font-size: 1.6rem;
+  }
+  .container.profile .columnA .name .display {
+    display: block;
+    font-size: 1.2rem;
+    color: #C9C9C9;
+  }
+}
 .container.profile .columnA .pic-wrapper {
   max-width: 100%;
   overflow: hidden;
 }
-.container.profile .columnA img.pic {
+@media (max-width: 580px) {
+  .container.profile .columnA .pic-wrapper {
+    flex-basis: 40%;
+  }
+}
+.container.profile .columnA .pic-wrapper img.pic {
   max-width: 100%;
   width: 100%;
   height: auto;
@@ -80,14 +136,18 @@ a {
   -ms-clip-path: url(#svg-shape);
   clip-path: url(#svg-shape);
 }
-
-.last_update {
+.container.profile .columnA .last_update {
   font-size: 0.8em;
+  margin-top: 0.5rem;
   text-align: center;
   color: #C9C9C9;
 }
-
-.columnB {
+@media (max-width: 580px) {
+  .container.profile .columnA .last_update {
+    display: none;
+  }
+}
+.container.profile .columnB {
   flex-basis: 50%;
   max-width: 50%;
   flex-grow: 0;
@@ -95,62 +155,187 @@ a {
   word-wrap: break-word;
   margin-right: 1vw;
 }
-.columnB .name {
+@media (max-width: 580px) {
+  .container.profile .columnB {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
+.container.profile .columnB .name {
   font-size: 1.6rem;
 }
-.columnB .name .display {
+.container.profile .columnB .name .display {
   color: #C9C9C9;
 }
-.columnB .separator {
+@media (max-width: 580px) {
+  .container.profile .columnB .name {
+    display: none;
+  }
+}
+.container.profile .columnB .separator {
   height: 6px;
   width: 30%;
   margin-left: -0.6rem;
   background-color: #F3F3F3;
 }
-.columnB .field {
+.container.profile .columnB .separator.long {
+  width: 50%;
+}
+@media (max-width: 580px) {
+  .container.profile .columnB .separator {
+    margin-left: -1rem;
+  }
+}
+.container.profile .columnB .field {
   margin-bottom: 1.5rem;
 }
-.columnB .field .label {
+.container.profile .columnB .field .label {
   font-size: 0.8rem;
   color: #E32A6D;
 }
-
-.columnC {
+.container.profile .columnC {
   flex-basis: 25%;
   margin-top: 2rem;
 }
-.columnC .title {
+@media (max-width: 580px) {
+  .container.profile .columnC {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transition: all 500ms ease-in-out;
+  }
+  .container.profile .columnC.up .btn {
+    display: block;
+  }
+  .container.profile .columnC.up .title span.open {
+    display: none;
+  }
+}
+.container.profile .columnC .title {
   font-size: 0.8rem;
   margin-bottom: 1rem;
 }
-.columnC .btn {
+.container.profile .columnC .title span.open, .container.profile .columnC .title span.close {
+  display: none;
+}
+@media (max-width: 580px) {
+  .container.profile .columnC .title {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-left: 1px solid #bc1150;
+  }
+  .container.profile .columnC .title span.text {
+    display: none;
+  }
+  .container.profile .columnC .title span.open, .container.profile .columnC .title span.close {
+    display: inline;
+  }
+  .container.profile .columnC .title span.open svg, .container.profile .columnC .title span.close svg {
+    width: 50%;
+    height: 50%;
+    margin: 28% auto auto auto;
+    display: block;
+  }
+}
+.container.profile .columnC .btn {
   display: flex;
   align-items: center;
   margin-bottom: 0.8rem;
 }
-.columnC .btn a {
+@media (max-width: 580px) {
+  .container.profile .columnC .btn {
+    display: none;
+    margin-bottom: 0;
+  }
+}
+.container.profile .columnC .btn a {
   flex-basis: 80%;
   padding: 0.4rem;
   text-align: center;
   font-size: 0.9rem;
   color: #FFFFFF;
   background-color: #5A5A5A;
+  border-bottom: 1px solid #373737;
   text-decoration: none;
   border-radius: 8px;
 }
-.columnC .btn a:hover {
+@media (max-width: 580px) {
+  .container.profile .columnC .btn a {
+    display: block;
+    padding: 0.8rem;
+    border-radius: 0px;
+    font-weight: 400;
+    text-align: left;
+  }
+}
+.container.profile .columnC .btn a span {
+  display: none;
+}
+@media (max-width: 580px) {
+  .container.profile .columnC .btn a span {
+    display: inline;
+    color: #FFFFFF;
+  }
+}
+.container.profile .columnC .btn a:hover {
   background-color: #373737;
 }
-.columnC .btn:first-child a {
-  background-color: #E32A6D;
+@media (max-width: 580px) {
+  .container.profile .columnC .btn:first-of-type {
+    display: block;
+  }
 }
-.columnC .btn:first-child a:hover {
+.container.profile .columnC .btn:first-of-type a {
+  background-color: #E32A6D;
+  border-bottom: none;
+}
+@media (max-width: 580px) {
+  .container.profile .columnC .btn:first-of-type a {
+    border-radius: 8px 8px 0 0;
+  }
+}
+.container.profile .columnC .btn:first-of-type a:hover {
   background-color: #bc1150;
 }
-.columnC .btn span {
+.container.profile .columnC .btn span {
   flex-basis: 20%;
   margin-left: 0.4rem;
   color: #9a9a9a;
+}
+@media (max-width: 580px) {
+  .container.profile .columnC .btn span {
+    display: none;
+  }
+}
+
+pre {
+  outline: 1px solid #ccc;
+  padding: 5px;
+  margin: 5px;
+}
+
+.string {
+  color: green;
+}
+
+.number {
+  color: darkorange;
+}
+
+.boolean {
+  color: blue;
+}
+
+.null {
+  color: magenta;
+}
+
+.key {
+  color: red;
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -20,6 +20,8 @@ html {
 }
 body {
 	color: $color_1;
+	margin: 0;
+	margin-bottom: 4rem;
 }
 a {
 	color: $color_1;
@@ -42,6 +44,10 @@ a {
 		transform: rotate(-20deg);
 		transform-origin: bottom;
 		bottom: -40%;
+		@media (max-width: 580px) {
+			width: 200%;
+			bottom: -40%;
+		}
 	}
 }
 .top {
@@ -50,113 +56,242 @@ a {
 	align-items: center;
 	margin: 1rem 0;
 	justify-content: left;
+	@media (max-width: 580px) {
+		display: block;
+		width: 90%;
+		margin: 1.5rem auto 0 auto;
+		font-size: 0.8rem;
+	}
 }
 .container_wrapper {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+  @media (max-width: 580px) {
+		display: block;
+    width: 90%;
+		margin: 0 auto;
+  }
 }
 .nostr_link {
 	flex-basis: 15%;
 	text-align: right;
 	text-decoration: none;
 }
-.container {
+.container.profile {
 	display: flex;
 	width: 70%;
 	justify-content: space-between;
 	gap: 4.8vw;
-}
-.columnA {
-	flex-basis: 25%;
-	margin-top: 2rem;
-}
-.container.profile {
+
+  @media (max-width: 580px) {
+		display: block;
+    width: 100%;
+  }
+
 	.columnA {
-		.pic-wrapper {
-			max-width: 100%;
-			overflow: hidden;
+		flex-basis: 25%;
+		margin-top: 2rem;
+		@media (max-width: 580px) {
+			display: flex;
+			align-items: center;
+			margin-top: 0rem;
 		}
-		img.pic {
-			max-width: 100%;
-			width: 100%;
-			height: auto;
-			-webkit-clip-path: url(#svg-shape);
-			-moz-clip-path: url(#svg-shape);
-			-o-clip-path: url(#svg-shape);
-			-ms-clip-path: url(#svg-shape);
-			clip-path: url(#svg-shape);
-		}
-	}
-}
-.last_update {
-	font-size: 0.8em;
-	text-align: center;
-	color: $color_2;
-}
-.columnB {
-	flex-basis: 50%;
-	max-width: 50%;
-	flex-grow: 0;
-	flex-shrink: 0;
-	word-wrap: break-word;
-	margin-right: 1vw;
-	.name {
-		font-size: 1.6rem;
-		.display {
-			color: $color_2;
-		}
-	}
-	.separator {
-		height: 6px;
-		width: 30%;
-		margin-left: -0.6rem;
-		background-color: $background-color_3;
-	}
-	.field {
-		margin-bottom: 1.5rem;
-		.label {
-			font-size: 0.8rem;
-			color: $color_3;
-		}
-	}
-}
-.columnC {
-	flex-basis: 25%;
-	margin-top: 2rem;
-	.title {
-		font-size: 0.8rem;
-		margin-bottom: 1rem;
-	}
-	.btn {
-		display: flex;
-		align-items: center;
-		margin-bottom: 0.8rem;
-		a {
-			flex-basis: 80%;
-			padding: 0.4rem;
-			text-align: center;
-			font-size: 0.9rem;
-			color: $color_4;
-			background-color: $background-color_4;
-			text-decoration: none;
-			border-radius: 8px;
-			&:hover {
-				background-color: $background-color_5;
-			}
-		}
-		&:first-child {
-			a {
-				background-color: $background-color_6;
-				&:hover {
-					background-color: $background-color_7;
+		.name {
+			display: none;
+			@media (max-width: 580px) {
+				display: block;
+				flex-basis: 64%;
+				max-width: 64%;
+				overflow: hidden;
+				font-size: 1.6rem;
+				.display {
+					display: block;
+					font-size: 1.2rem;
+					color: $color_2;
 				}
 			}
 		}
-		span {
-			flex-basis: 20%;
-			margin-left: 0.4rem;
-			color: $color_5;
+		.pic-wrapper {
+			max-width: 100%;
+			overflow: hidden;
+			@media (max-width: 580px) {
+				flex-basis: 40%;
+			}
+			img.pic {
+				max-width: 100%;
+				width: 100%;
+				height: auto;
+				-webkit-clip-path: url(#svg-shape);
+				-moz-clip-path: url(#svg-shape);
+				-o-clip-path: url(#svg-shape);
+				-ms-clip-path: url(#svg-shape);
+				clip-path: url(#svg-shape);
+			}
+		}
+		.last_update {
+			font-size: 0.8em;
+			margin-top: 0.5rem;
+			text-align: center;
+			color: $color_2;
+			@media (max-width: 580px) {
+				display: none;
+			}
 		}
 	}
+	.columnB {
+		flex-basis: 50%;
+		max-width: 50%;
+		@media (max-width: 580px) {
+			flex-basis: 100%;
+			max-width: 100%;
+		}
+		flex-grow: 0;
+		flex-shrink: 0;
+		word-wrap: break-word;
+		margin-right: 1vw;
+		.name {
+			font-size: 1.6rem;
+			.display {
+				color: $color_2;
+			}
+			@media (max-width: 580px) {
+				display: none;
+			}
+		}
+		.separator {
+			height: 6px;
+			width: 30%;
+			margin-left: -0.6rem;
+			background-color: $background-color_3;
+			&.long {
+				width: 50%;
+			}
+			@media (max-width: 580px) {
+				margin-left: -1rem;
+			}
+		}
+		.field {
+			margin-bottom: 1.5rem;
+			.label {
+				font-size: 0.8rem;
+				color: $color_3;
+			}
+		}
+	}
+	.columnC {
+		flex-basis: 25%;
+		margin-top: 2rem;
+		@media (max-width: 580px) {
+			position: fixed;
+			// top: calc(100vh - 4.6rem);
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			transition: all 500ms ease-in-out;
+			&.up {
+				.btn {
+					display: block;
+				}
+				.title span.open {
+					display: none;
+				}
+			}
+		}
+		.title {
+			font-size: 0.8rem;
+			margin-bottom: 1rem;
+			span.open, span.close {
+				display: none;
+			}
+			@media (max-width: 580px) {
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 2.6rem;
+				height: 2.6rem;
+				border-left: 1px solid #bc1150;
+				span.text {
+					display: none;
+				}
+				span.open, span.close {
+					display: inline;
+					svg {
+						width: 50%;
+						height: 50%;
+						margin: 28% auto auto auto;
+						display: block;
+					}
+				}
+			}
+		}
+		.btn {
+			display: flex;
+			align-items: center;
+			margin-bottom: 0.8rem;
+			@media (max-width: 580px) {
+				display: none;
+				margin-bottom: 0;
+			}
+			a {
+				flex-basis: 80%;
+				padding: 0.4rem;
+				text-align: center;
+				font-size: 0.9rem;
+				color: $color_4;
+				background-color: $background-color_4;
+				border-bottom: 1px solid $background-color_5;
+				text-decoration: none;
+				border-radius: 8px;
+				@media (max-width: 580px) {
+					display: block;
+					padding: 0.8rem;
+					border-radius: 0px;
+					font-weight: 400;
+					text-align: left;
+				}
+				span {
+					display: none;
+					@media (max-width: 580px) {
+						display: inline;
+						color: $color_4;
+					}
+				}
+				&:hover {
+					background-color: $background-color_5;
+				}
+			}
+			&:first-of-type {
+				@media (max-width: 580px) {
+					display: block;
+				}
+				a {
+					background-color: $background-color_6;
+					border-bottom: none;
+					@media (max-width: 580px) {
+						border-radius: 8px 8px 0 0;
+					}
+					&:hover {
+						background-color: $background-color_7;
+					}
+				}
+			}
+			span {
+				flex-basis: 20%;
+				margin-left: 0.4rem;
+				color: $color_5;
+				@media (max-width: 580px) {
+					display: none;
+				}
+			}
+		}
+	}	
 }
+
+
+pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
