@@ -69,7 +69,7 @@ a {
 	align-items: center;
   @media (max-width: 580px) {
 		display: block;
-    width: 90%;
+    padding: 0 1rem;
 		margin: 0 auto;
   }
 }
@@ -142,14 +142,15 @@ a {
 	.columnB {
 		flex-basis: 50%;
 		max-width: 50%;
-		@media (max-width: 580px) {
-			flex-basis: 100%;
-			max-width: 100%;
-		}
 		flex-grow: 0;
 		flex-shrink: 0;
 		word-wrap: break-word;
 		margin-right: 1vw;
+		@media (max-width: 580px) {
+			flex-basis: 100%;
+			max-width: 100%;
+			margin-right: 0;
+		}
 		.name {
 			font-size: 1.6rem;
 			.display {
@@ -177,6 +178,87 @@ a {
 				font-size: 0.8rem;
 				color: $color_3;
 			}
+			&.advanced {
+				display: none;
+				&.visible {
+					display: block;
+				}
+				.label {
+					padding: 0.2rem 1rem;
+					margin: 0 -1rem;
+					color: $color_1;
+					background-color: $color_2;
+				}
+			}
+			.json, .data {
+				white-space: pre-wrap;
+				word-break: break-all;
+				background-color: $background-color_3;
+				padding: 1rem;
+				margin: 0 -1rem;
+			
+				.key {
+					display: inline-block;
+					margin-top: 0.5rem;
+					color: $color_3;
+				}
+			
+				.string { color: $color_1; }
+				.number { color: darkorange; }
+				.boolean { color: $color_1; }
+				.null { color: $color_1; }
+			}
+
+			&.advanced-switch-wrapper {
+				display: flex;
+				align-items: center;
+			
+				input[type=checkbox]{
+					height: 0;
+					width: 0;
+					visibility: hidden;
+					display: none;
+				}
+			
+				label:first-of-type {
+					cursor: pointer;
+					text-indent: -9999px;
+					width: 3rem;
+					height: 1.4rem;
+					background: grey;
+					display: inline-block;
+					border-radius: 100px;
+					position: relative;
+					margin-right: 0.5rem;
+				}
+			
+				label:first-of-type:after {
+					content: '';
+					position: absolute;
+					top: 2px;
+					left: 2px;
+					width: 1.2rem;
+					height: 1.2rem;
+					background: #fff;
+					border-radius: 1rem;
+					transition: 0.5s;
+				}
+			
+				input:checked + label {
+					background: $color_3;
+				}
+			
+				input:checked + label:first-of-type:after {
+					left: calc(100% - 2px);
+					transform: translateX(-100%);
+				}
+			
+				label:first-of-type:active:after {
+					width: 130px;
+				}
+			
+			}
+
 		}
 	}
 	.columnC {
@@ -288,10 +370,7 @@ a {
 	}	
 }
 
-
-pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
-.string { color: green; }
-.number { color: darkorange; }
-.boolean { color: blue; }
-.null { color: magenta; }
-.key { color: red; }
+.footer {
+	font-size: 0.8rem;
+	text-align: center;
+}

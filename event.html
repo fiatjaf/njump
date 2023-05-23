@@ -97,12 +97,20 @@
             <div class="label">LN Address</div>
             {{.content_json.lud16}}
           </div>
+
           <div class="field">
             <div class="label">Metadata Event</div>
-            {{.nevent}}
+            <div>{{.nevent}}</div>
           </div>
-          <div class="field">
-            <div class="label">JSON</div>
+
+          <div class="field advanced-switch-wrapper">
+            <input type="checkbox" id="advanced-switch" class="advanced-switch" />
+            <label for="advanced-switch">X</label>
+            <label for="advanced-switch">Show more details</label>
+          </div>
+
+          <div class="field advanced">
+            <div class="label">Event JSON</div>
             <div class="json">{{.eventJSON}}</div>
           </div>
           <div class="field separator"></div>
@@ -137,10 +145,8 @@
 
     <div class="background"></div>
 
-    <div style="display: flex; justify-content: center">
-      <span>
-        powered by <a href="https://git.fiatjaf.com/njump">njump</a>
-      </span>
+    <div class="footer">
+      Powered by <a href="https://git.fiatjaf.com/njump">njump</a>
     </div>
 
     <script>
@@ -169,13 +175,46 @@
     </script>
 
     <script>
+
+      let jsons = document.querySelectorAll('.json')
+      for (let i = 0; i < jsons.length; i++) {
+        console.log(jsons[i].innerHTML);
+        jsons[i].innerHTML = syntaxHighlight(jsons[i].innerHTML);
+      }
+
       const shareButton = document.querySelector('.open-list');
       const clients_list = document.querySelector('.columnC');
-
       shareButton.addEventListener('click', function() {
         clients_list.classList.toggle('up');
-        // links.classList.toggle('visible');
       });
+
+      const advanceSwitch = document.querySelector('.advanced-switch');
+      const advanced_list = document.querySelectorAll('.advanced');
+      advanceSwitch.addEventListener('change', function() {
+        advanced_list.forEach(element => {
+          element.classList.toggle('visible');
+        });
+      });
+
+      function syntaxHighlight(json) {
+          json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+              var cls = 'number';
+              if (/^"/.test(match)) {
+                  if (/:$/.test(match)) {
+                      cls = 'key';
+                  } else {
+                      cls = 'string';
+                  }
+              } else if (/true|false/.test(match)) {
+                  cls = 'boolean';
+              } else if (/null/.test(match)) {
+                  cls = 'null';
+              }
+              return '<span class="' + cls + '">' + match + '</span>';
+          });
+      }
+
     </script>
     
   </body>
