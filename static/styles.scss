@@ -195,25 +195,6 @@ a {
 					background-color: $color_2;
 				}
 			}
-			.json, .data {
-				white-space: pre-wrap;
-				word-break: break-all;
-				background-color: $background-color_3;
-				padding: 1rem;
-				margin: 0 -1rem;
-			
-				.key {
-					display: inline-block;
-					margin-top: 0.5rem;
-					color: $color_3;
-				}
-			
-				.string { color: $color_1; }
-				.number { color: darkorange; }
-				.boolean { color: $color_1; }
-				.null { color: $color_1; }
-			}
-
 			&.advanced-switch-wrapper {
 				display: flex;
 				align-items: center;
@@ -271,7 +252,22 @@ a {
 				}
 			
 			}
-
+			.json, .data {
+				white-space: pre-wrap;
+				word-break: break-all;
+				background-color: $background-color_3;
+				padding: 1rem;
+				margin: 0 -1rem;
+				.key {
+					display: inline-block;
+					margin-top: 0.5rem;
+					color: $color_3;
+				}
+				.string { color: $color_1; }
+				.number { color: darkorange; }
+				.boolean { color: $color_1; }
+				.null { color: $color_1; }
+			}
 		}
 	}
 	.columnC {
@@ -382,7 +378,6 @@ a {
 		}
 	}	
 }
-
 .footer {
 	font-size: 0.8rem;
 	text-align: center;

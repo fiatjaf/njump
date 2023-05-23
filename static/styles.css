@@ -211,30 +211,6 @@ a {
   color: #373737;
   background-color: #C9C9C9;
 }
-.container.profile .columnB .field .json, .container.profile .columnB .field .data {
-  white-space: pre-wrap;
-  word-break: break-all;
-  background-color: #F3F3F3;
-  padding: 1rem;
-  margin: 0 -1rem;
-}
-.container.profile .columnB .field .json .key, .container.profile .columnB .field .data .key {
-  display: inline-block;
-  margin-top: 0.5rem;
-  color: #E32A6D;
-}
-.container.profile .columnB .field .json .string, .container.profile .columnB .field .data .string {
-  color: #373737;
-}
-.container.profile .columnB .field .json .number, .container.profile .columnB .field .data .number {
-  color: darkorange;
-}
-.container.profile .columnB .field .json .boolean, .container.profile .columnB .field .data .boolean {
-  color: #373737;
-}
-.container.profile .columnB .field .json .null, .container.profile .columnB .field .data .null {
-  color: #373737;
-}
 .container.profile .columnB .field.advanced-switch-wrapper {
   display: flex;
   align-items: center;
@@ -288,6 +264,30 @@ a {
 }
 .container.profile .columnB .field.advanced-switch-wrapper label:first-of-type:active:after {
   width: 2rem;
+}
+.container.profile .columnB .field .json, .container.profile .columnB .field .data {
+  white-space: pre-wrap;
+  word-break: break-all;
+  background-color: #F3F3F3;
+  padding: 1rem;
+  margin: 0 -1rem;
+}
+.container.profile .columnB .field .json .key, .container.profile .columnB .field .data .key {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: #E32A6D;
+}
+.container.profile .columnB .field .json .string, .container.profile .columnB .field .data .string {
+  color: #373737;
+}
+.container.profile .columnB .field .json .number, .container.profile .columnB .field .data .number {
+  color: darkorange;
+}
+.container.profile .columnB .field .json .boolean, .container.profile .columnB .field .data .boolean {
+  color: #373737;
+}
+.container.profile .columnB .field .json .null, .container.profile .columnB .field .data .null {
+  color: #373737;
 }
 .container.profile .columnC {
   flex-basis: 25%;
