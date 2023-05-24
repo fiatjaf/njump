@@ -136,11 +136,10 @@
               </svg>              
             </span>
           </div>
-          <div>
+          <div class="clients_wrapper">
             {{range .clients}}
               <div class="btn">
                 <a class="client" href="{{.url}}"><span>Open {{.type}} in</span> {{.name}}</a>
-                <span></span>
               </div>
             {{end}}
           </div>
@@ -164,12 +163,24 @@
         let url = clients[i].href
         let key = 'nj:' + type + ':' + name
         let count = parseInt(localStorage.getItem(key) || 0)
-        clients[i].nextElementSibling.innerText = count
+        clients[i].parentNode.setAttribute("count", count)
+        clients[i].parentNode.setAttribute("title", "Used " + count + " times")
         clients[i].addEventListener('click', () => {
           localStorage.setItem(key, count + 1)
         })
         counts.push([count, name, url])
       }
+
+      // Reorder clients following the counter
+      let clients_wrapper = document.querySelector('.clients_wrapper')
+      const elements = Array.from(clients_wrapper.getElementsByClassName("btn"));
+      elements.sort((a, b) => {
+        const rankA = parseInt(a.getAttribute("count"));
+        const rankB = parseInt(b.getAttribute("count"));
+        return rankB - rankA;
+      });
+      elements.forEach((element) => clients_wrapper.appendChild(element));
+
       counts.sort((a, b) => b[0] - a[0])
       let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
 
