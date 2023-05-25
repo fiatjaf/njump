@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -113,4 +115,39 @@ func getPreviewStyle(r *http.Request) string {
 	default:
 		return "unknown"
 	}
+}
+
+func BasicFormatting(input string) string {
+	lines := strings.Split(input, "\n")
+
+	var processedLines []string
+	for _, line := range lines {
+		processedLine := ReplaceURLsWithTags(line)
+		processedLines = append(processedLines, processedLine)
+	}
+
+	return strings.Join(processedLines, "<br/>")
+}
+
+func ReplaceURLsWithTags(line string) string {
+
+	// Match and replace image URLs with <img> tags
+	imageExtensions := []string{".jpg", ".jpeg", ".png", ".webp", ".gif"}
+	for _, extension := range imageExtensions {
+		regexPattern := fmt.Sprintf(`\s*(https?://\S+%s)\s*`, extension)
+		regex := regexp.MustCompile(regexPattern)
+		matches := regex.FindAllString(line, -1)
+
+		for _, match := range matches {
+			imgTag := fmt.Sprintf(`<img src="%s" alt="">`, strings.ReplaceAll(match, "\n", ""))
+			line = strings.ReplaceAll(line, match, imgTag)
+			return line
+		}
+	}
+
+	// Match and replace other URLs with <a> tags
+	otherRegexPattern := `\S*(https?://\S+)\S*`
+	otherRegex := regexp.MustCompile(otherRegexPattern)
+	line = otherRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
+	return line
 }

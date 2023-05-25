@@ -19,7 +19,7 @@ var rawHTML string
 //go:embed profile.html
 var profileHTML string
 
-//go:embed raw.html
+//go:embed note.html
 var noteHTML string
 
 func render(w http.ResponseWriter, r *http.Request) {
@@ -161,6 +161,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
+	// TODO: Sanitize content
+	description += "\n<script>alert('TODO: Sanitize the content!')</script>"
+
 	params := map[string]any{
 		"createdAt":    createdAt,
 		"clients":      generateClientList(code, event),
@@ -168,6 +171,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"title":        title,
 		"twitterTitle": twitterTitle,
 		"npub":         npub,
+		"npubShort":    npubShort,
 		"nevent":       nevent,
 		"naddr":        naddr,
 		"metadata":     metadata,
@@ -183,9 +187,13 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	templates := make(map[string]string)
 	templates["profile"] = profileHTML
-	templates["note"] = rawHTML
+	templates["note"] = noteHTML
 	templates["address"] = rawHTML
-	var tmpl = template.Must(template.New("event").Parse(templates[typ]))
+
+	var funcMap = template.FuncMap{
+		"BasicFormatting": BasicFormatting,
+	}
+	var tmpl = template.Must(template.New("event").Funcs(funcMap).Parse(templates[typ]))
 
 	if err := tmpl.ExecuteTemplate(w, "event", params); err != nil {
 		http.Error(w, "error rendering: "+err.Error(), 500)

@@ -59,50 +59,40 @@
     </div>
 
     <div class="container_wrapper">
-      <div class="container profile">
-        
-        <div class="column columnA">
-          <div class="info-wrapper">
-            {{.metadata.Name}} <span class="display">{{.metadata.DisplayName}}</span>
-          </div>
-          <div class="pic-wrapper">
-            <img class="pic" src="{{ .metadata.Picture }}" />
-          </div>
-          <div class="last_update">
-            Last update:<br/>
-            {{.createdAt}}
-          </div>
-        </div>
+      <div class="container note">
 
         <div class="column column_content">
-          <div class="field info-wrapper">
-            <div class="name">
-              {{.metadata.Name}} <span class="display">{{.metadata.DisplayName}}</span>
+
+          <div class="profile_intro">
+            <div class="pic-wrapper">
+              <a href="/{{.npub}}"><img class="pic" src="{{ .metadata.Picture }}" /></a>
+            </div>
+            <div class="info-wrapper">
+              <div class="name">
+                {{.metadata.Name}} <span class="display">{{.metadata.DisplayName}}</span>
+              </div>
+              <div class="npub">{{.npubShort}}</div>
+            </div>
+            <div class="published_at">
+              {{.createdAt}}
             </div>
           </div>
-          <div class="field separator long"></div>
-          <div class="field">
-            <a href="{{.metadata.Website}}">{{.metadata.Website}}</a>
-          </div>
-          <div class="field">
-            {{.metadata.About}}
-          </div>
+
           <div class="field separator"></div>
+
+          <div class="field content">
+            {{.description | BasicFormatting }}
+          </div>
+
+          <div class="field separator"></div>
+
           <div class="field">
-            <div class="label">Public key</div>
+            <div class="label">Author Public key</div>
             {{.npub}}
-          </div>
-          <div class="field">
-            <div class="label">NIP-05</div>
-            {{.metadata.NIP05}}
-          </div>
-          <div class="field">
-            <div class="label">LN Address</div>
-            {{.metadata.LUD16}}
           </div>
 
           <div class="field">
-            <div class="label">Metadata Event</div>
+            <div class="label">Nevent</div>
             <div>{{.nevent}}</div>
           </div>
 
