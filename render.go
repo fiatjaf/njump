@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"html"
 	"net/http"
 	"regexp"
 	"strings"
@@ -161,9 +162,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
-	// TODO: Sanitize content
-	description += "\n<script>alert('TODO: Sanitize the content!')</script>"
-
 	params := map[string]any{
 		"createdAt":    createdAt,
 		"clients":      generateClientList(code, event),
@@ -192,6 +190,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	var funcMap = template.FuncMap{
 		"BasicFormatting": BasicFormatting,
+		"SanitizeString":  html.EscapeString,
 	}
 	var tmpl = template.Must(template.New("event").Funcs(funcMap).Parse(templates[typ]))
 

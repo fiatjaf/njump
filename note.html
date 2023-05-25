@@ -4,47 +4,47 @@
   <head>
     {{if eq .type "profile"}}
     <title>Nostr Public Key {{.npub}}</title>
-    <meta property="og:site_name" content="{{.npub}}" />
-    <meta property="og:title" content="{{.title}}" />
+    <meta property="og:site_name" content="{{.npub | SanitizeString}}" />
+    <meta property="og:title" content="{{.title | SanitizeString}}" />
     {{ if .metadata.Picture }}
-    <meta property="og:image" content="{{.metadata.Picture}}" />
-    <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture}}" />
+    <meta property="og:image" content="{{.metadata.Picture | SanitizeString}}" />
+    <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture | SanitizeString}}" />
     {{end}} {{ if .metadata.About }}
-    <meta property="og:description" content="{{.metadata.About}}" />
+    <meta property="og:description" content="{{.metadata.About | SanitizeString}}" />
     {{end}}
     <meta property="twitter:card" content="summary" />
     {{end}}
     <!----------->
     {{ if eq .type "event" }}
     <title>Nostr Event {{.nevent}}</title>
-    <meta property="og:site_name" content="{{.authorLong}}" />
-    <meta property="og:title" content="{{.title}}" />
-    <meta name="twitter:title" content="{{.twitterTitle}}" />
+    <meta property="og:site_name" content="{{.authorLong | SanitizeString}}" />
+    <meta property="og:title" content="{{.title | SanitizeString}}" />
+    <meta name="twitter:title" content="{{.twitterTitle | SanitizeString}}" />
     <!---->
     {{ if .textImageURL }}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@nostrprotocol" />
-    <meta property="og:image" content="{{.textImageURL}}" />
-    <meta name="twitter:image" content="{{.textImageURL}}" />
+    <meta property="og:image" content="{{.textImageURL | SanitizeString}}" />
+    <meta name="twitter:image" content="{{.textImageURL | SanitizeString}}" />
     {{ else }}
     <!---->
     <meta property="twitter:card" content="summary" />
     {{ if .image }}
-    <meta property="og:image" content="{{.image}}" />
-    <meta name="twitter:image" content="{{.proxy}}{{.image}}" />
+    <meta property="og:image" content="{{.image | SanitizeString}}" />
+    <meta name="twitter:image" content="{{.proxy}}{{.image | SanitizeString}}" />
     {{end}} {{ if .video }}
-    <meta property="og:video" content="{{.video}}" />
-    <meta property="og:video:secure_url" content="{{.video}}" />
-    <meta property="og:video:type" content="video/{{.videoType}}" />
+    <meta property="og:video" content="{{.video | SanitizeString}}" />
+    <meta property="og:video:secure_url" content="{{.video | SanitizeString}}" />
+    <meta property="og:video:type" content="video/{{.videoType | SanitizeString}}" />
     {{end}}
     <!---->
     {{end}}
-    <meta property="og:description" content="{{.description}}" />
-    <meta name="twitter:description" content="{{.description}}" />
+    <meta property="og:description" content="{{.description | SanitizeString}}" />
+    <meta name="twitter:description" content="{{.description | SanitizeString}}" />
     {{end}}
     <!----------->
     {{ if eq .type "address" }}
-    <title>Nostr Address {{.naddr}}</title>
+    <title>Nostr Address {{.naddr | SanitizeString}}</title>
     {{end}}
     <!----------->
 
@@ -65,23 +65,23 @@
 
           <div class="profile_intro">
             <div class="pic-wrapper">
-              <a href="/{{.npub}}"><img class="pic" src="{{ .metadata.Picture }}" /></a>
+              <a href="/{{.npub | SanitizeString}}"><img class="pic" src="{{.metadata.Picture | SanitizeString}}" /></a>
             </div>
             <div class="info-wrapper">
               <div class="name">
-                {{.metadata.Name}} <span class="display">{{.metadata.DisplayName}}</span>
+                {{.metadata.Name | SanitizeString}} <span class="display">{{.metadata.DisplayName | SanitizeString}}</span>
               </div>
-              <div class="npub">{{.npubShort}}</div>
+              <div class="npub">{{.npubShort | SanitizeString}}</div>
             </div>
             <div class="published_at">
-              {{.createdAt}}
+              {{.createdAt | SanitizeString}}
             </div>
           </div>
 
           <div class="field separator"></div>
 
           <div class="field content">
-            {{.description | BasicFormatting }}
+            {{.description | SanitizeString | BasicFormatting }}
           </div>
 
           <div class="field separator"></div>
@@ -93,12 +93,12 @@
 
           <div class="field">
             <div class="label">Nevent</div>
-            <div>{{.nevent}}</div>
+            <div>{{.nevent | SanitizeString}}</div>
           </div>
 
           <div class="field last_update">
             Last update:<br/>
-            {{.createdAt}}
+            {{.createdAt | SanitizeString}}
           </div>
 
           <div class="field advanced-switch-wrapper">
@@ -109,7 +109,7 @@
 
           <div class="field advanced">
             <div class="label">Event JSON</div>
-            <div class="json">{{.eventJSON}}</div>
+            <div class="json">{{.eventJSON | SanitizeString}}</div>
           </div>
           <div class="field separator"></div>
         </div>
