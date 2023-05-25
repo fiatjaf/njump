@@ -143,17 +143,16 @@ func render(w http.ResponseWriter, r *http.Request) {
 	//    : ''
 
 	textImageURL := ""
-	content := ""
-	content_json := make(map[string]interface{})
+	description := ""
 	if useTextImage {
 		textImageURL = fmt.Sprintf("https://%s/image/%s", hostname, code)
 		if subject != "" {
-			content = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
+			description = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
 		} else {
-			content = seenOnRelays
+			description = seenOnRelays
 		}
 	} else {
-		content_json, content = prettyJsonOrRaw(event.Content)
+		description = prettyJsonOrRaw(event.Content)
 	}
 
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
@@ -169,8 +168,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"naddr":        naddr,
 		"metadata":     metadata,
 		"authorLong":   authorLong,
-		"content":  		content,
-		"content_json": content_json,
+		"description":  description,
 		"textImageURL": textImageURL,
 		"videoType":    videoType,
 		"image":        image,

@@ -63,7 +63,7 @@
         
         <div class="column columnA">
           <div class="name">
-            {{.content_json.name}} <span class="display">{{.content_json.display_name}}</span>
+            {{.metadata.Name}} <span class="display">{{.metadata.DisplayName}}</span>
           </div>
           <div class="pic-wrapper">
             <img class="pic" src="{{ .metadata.Picture }}" />
@@ -76,14 +76,14 @@
 
         <div class="column columnB">
           <div class="field name">
-            {{.content_json.name}} <span class="display">{{.content_json.display_name}}</span>
+            {{.metadata.Name}} <span class="display">{{.metadata.DisplayName}}</span>
           </div>
           <div class="field separator long"></div>
           <div class="field">
-            <a href="{{.content_json.website}}">{{.content_json.website}}</a>
+            <a href="{{.metadata.Website}}">{{.metadata.Website}}</a>
           </div>
           <div class="field">
-            {{.content_json.about}}
+            {{.metadata.About}}
           </div>
           <div class="field separator"></div>
           <div class="field">
@@ -92,11 +92,11 @@
           </div>
           <div class="field">
             <div class="label">NIP-05</div>
-            {{.content_json.nip05}}
+            {{.metadata.NIP05}}
           </div>
           <div class="field">
             <div class="label">LN Address</div>
-            {{.content_json.lud16}}
+            {{.metadata.LUD16}}
           </div>
 
           <div class="field">
