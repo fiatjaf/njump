@@ -13,10 +13,14 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-//go:embed event.html
-var eventHTML string
+//go:embed raw.html
+var rawHTML string
 
-var tmpl = template.Must(template.New("event").Parse(eventHTML))
+//go:embed profile.html
+var profileHTML string
+
+//go:embed raw.html
+var noteHTML string
 
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
@@ -52,7 +56,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	author := event
 	if event.Kind != 0 {
-		typ = "event"
+		typ = "note"
 		author, _ = getEvent(r.Context(), npub)
 
 		if event.Kind >= 30000 && event.Kind < 40000 {
@@ -158,7 +162,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
 	params := map[string]any{
-		"createdAt":		createdAt,
+		"createdAt":    createdAt,
 		"clients":      generateClientList(code, event),
 		"type":         typ,
 		"title":        title,
@@ -176,6 +180,13 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"proxy":        "https://" + hostname + "/proxy?src=",
 		"eventJSON":    string(eventJSON),
 	}
+
+	templates := make(map[string]string)
+	templates["profile"] = profileHTML
+	templates["note"] = rawHTML
+	templates["address"] = rawHTML
+	var tmpl = template.Must(template.New("event").Parse(templates[typ]))
+
 	if err := tmpl.ExecuteTemplate(w, "event", params); err != nil {
 		http.Error(w, "error rendering: "+err.Error(), 500)
 		return
