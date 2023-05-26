@@ -49,34 +49,36 @@
     <!----------->
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/styles.css?v=20230526" />
 
   </head>
-  <body>
+  <body class="note">
 
     <div class="top">
-      <a href="https://nostr.com" class="nostr_link">What is nostr?</a>
+      <a href="https://nostr.com" class="nostr_link">What is <span>nostr</span>?</a>
     </div>
 
     <div class="container_wrapper">
-      <div class="container note">
+      <div class="container">
 
         <div class="column column_content">
 
-          <div class="profile_intro">
-            <div class="pic-wrapper">
-              <a href="/{{.npub | SanitizeString}}"><img class="pic" src="{{.metadata.Picture | SanitizeString}}" /></a>
+            <div class="profile_intro">
+              <a href="/{{.npub | SanitizeString}}">
+                <div class="pic-wrapper">
+                  <img class="pic" src="{{.metadata.Picture | SanitizeString}}" />
+                </div>
+                <div class="info-wrapper">
+                  <div class="name">
+                    {{.metadata.Name | SanitizeString}} <span class="display">{{.metadata.DisplayName | SanitizeString}}</span>
+                  </div>
+                  <div class="npub">{{.npubShort | SanitizeString}}</div>
+                </div>
+                <div class="published_at">
+                  {{.createdAt | SanitizeString}}
+                </div>
+              </a>
             </div>
-            <div class="info-wrapper">
-              <div class="name">
-                {{.metadata.Name | SanitizeString}} <span class="display">{{.metadata.DisplayName | SanitizeString}}</span>
-              </div>
-              <div class="npub">{{.npubShort | SanitizeString}}</div>
-            </div>
-            <div class="published_at">
-              {{.createdAt | SanitizeString}}
-            </div>
-          </div>
 
           <div class="field separator"></div>
 
@@ -91,11 +93,6 @@
             {{.npub}}
           </div>
 
-          <div class="field">
-            <div class="label">Nevent</div>
-            <div>{{.nevent | SanitizeString}}</div>
-          </div>
-
           <div class="field last_update">
             Last update:<br/>
             {{.createdAt | SanitizeString}}
@@ -108,6 +105,11 @@
           </div>
 
           <div class="field advanced">
+            <div class="label">Nevent</div>
+            <div>{{.nevent | SanitizeString}}</div>
+          </div>
+
+          <div class="field advanced boxed">
             <div class="label">Event JSON</div>
             <div class="json">{{.eventJSON | SanitizeString}}</div>
           </div>

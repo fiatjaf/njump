@@ -49,17 +49,17 @@
     <!----------->
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/styles.css?v=20230526" />
 
   </head>
-  <body>
+  <body class="profile">
 
     <div class="top">
-      <a href="https://nostr.com" class="nostr_link">What is nostr?</a>
+      <a href="https://nostr.com" class="nostr_link">What is <span>nostr</span>?</a>
     </div>
 
     <div class="container_wrapper">
-      <div class="container profile">
+      <div class="container">
         
         <div class="column columnA">
           <div class="info-wrapper">
@@ -101,11 +101,6 @@
             {{.metadata.LUD16 | SanitizeString}}
           </div>
 
-          <div class="field">
-            <div class="label">Metadata Event</div>
-            <div>{{.nevent | SanitizeString}}</div>
-          </div>
-
           <div class="field last_update">
             Last update:<br/>
             {{.createdAt | SanitizeString}}
@@ -118,6 +113,11 @@
           </div>
 
           <div class="field advanced">
+            <div class="label">Metadata Event</div>
+            <div>{{.nevent | SanitizeString}}</div>
+          </div>
+
+          <div class="field advanced boxed">
             <div class="label">Event JSON</div>
             <div class="json">{{.eventJSON}}</div>
           </div>
