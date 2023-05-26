@@ -10,18 +10,17 @@ import (
 	"strings"
 	"text/template"
 	"time"
-
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-//go:embed raw.html
+//go:embed static/raw.html
 var rawHTML string
 
-//go:embed profile.html
+//go:embed static/profile.html
 var profileHTML string
 
-//go:embed note.html
+//go:embed static/note.html
 var noteHTML string
 
 func render(w http.ResponseWriter, r *http.Request) {
@@ -200,7 +199,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.Must(template.New("event").
 		Funcs(funcMap).
 		Parse(templates[typ])).
-		ParseFiles("head.html", "top.html", "column_clients.html", "footer.html", "scripts.js")
+		ParseFiles("static/head.html", "static/top.html", "static/column_clients.html", "static/footer.html", "static/scripts.js")
 	if err != nil {
 		// Handle error
 	}
