@@ -1,25 +1,96 @@
-$color_1: #373737;
-$color_2: #C9C9C9;
-$color_3: #E32A6D;
-$color_4: #FFFFFF;
-$color_5: #9a9a9a;
-$font-family_1: Helvetica, sans-serif;
-$background-color_1: white;
-$background-color_2: #FAFAFA;
-$background-color_3: #F3F3F3;
-$background-color_4: #5A5A5A;
-$background-color_5: #373737;
-$background-color_6: #E32A6D;
-$background-color_7: #bc1150;
+
+$color-base1: #FFFFFF;
+$color-base2: #FAFAFA;
+$color-base3: #F3F3F3;
+$color-base4: #C9C9C9;
+$color-base5: #9a9a9a;
+$color-base6: #3d3d3d;
+$color-base7: #373737;
+$color-accent1: #E32A6D;
+$color-accent2: #bc1150;
+
+$themes: (
+	default: (
+		base1: $color-base1,
+		base2: $color-base2,
+		base3: $color-base3,
+		base4: $color-base4,
+		base5: $color-base5,
+		base6: $color-base6,
+		base7: $color-base7,
+		accent1: $color-accent1,
+		accent2: $color-accent2,
+		bg-up: $color-base1,
+		bg-down: $color-base1,
+		boxed-title: $color-base7,
+		boxed-bg-title: $color-base4,
+		boxed-bg: $color-base3,
+		separator: $color-base3,
+	),
+	dark: (
+		base1: $color-base7,
+		base2: $color-base6,
+		base3: $color-base5,
+		base4: $color-base4,
+		base5: $color-base3,
+		base6: $color-base2,
+		base7: $color-base2,
+		accent1: $color-accent1,
+		accent2: $color-accent2,
+		bg-up: darken($color-base6, 12%),
+		bg-down: darken($color-base7, 12%),
+		boxed-title: $color-base5,
+		boxed-bg-title: darken($color-base6, 14%),
+		boxed-bg: darken($color-base7, 14%),
+		separator: darken($color-base7, 8%),
+	),
+);
+
+$base1: 'base1';
+$base2: 'base2';
+$base3: 'base3';
+$base4: 'base4';
+$base5: 'base5';
+$base6: 'base6';
+$base7: 'base7';
+$accent1: 'accent1';
+$accent2: 'accent2';
+$bg-up: 'bg-up';
+$bg-down: 'bg-down';
+$boxed-title: 'boxed-title';
+$boxed-bg-title: 'boxed-bg-title';
+$boxed-bg: 'boxed-bg';
+$separator: 'separator';
+
+$theme-map: null;
+@mixin themed() {
+  @each $theme, $map in $themes {
+    .theme--#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function t($key) {
+  @return map-get($theme-map, $key);
+}
 
 /*# sourceMappingURL=styles.css.map */
 html {
-	font-family: $font-family_1;
+	font-family: Helvetica, sans-serif;
 	font-size: 20px;
 	font-weight: 300;
 }
 body {
-	color: $color_1;
+	@include themed() {
+    color: t($base7);
+  }
 	margin: 0;
 	margin-bottom: 4rem;
 	&.lock {
@@ -29,7 +100,9 @@ body {
 	}
 }
 a {
-	color: $color_1;
+	@include themed() {
+    color: t($base7);
+  }
 }
 .background {
 	position: fixed;
@@ -37,13 +110,17 @@ a {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background-color: $background-color_1;
+	@include themed() {
+		background: t($bg-up);
+	}
 	overflow: hidden;
 	z-index: -1;
 	&::after {
 		content: "";
 		position: absolute;
-		background-color: $background-color_2;
+		@include themed() {
+			background: t($bg-down);
+		}
 		width: 140%;
 		height: 100%;
 		transform: rotate(-20deg);
@@ -68,7 +145,9 @@ a {
 		font-size: 0.8rem;
 	}
 	span {
-		color: $color_3;
+		@include themed() {
+			color: t($accent1);
+		}
 	}
 }
 
@@ -136,7 +215,9 @@ a {
 				.display {
 					display: block;
 					font-size: 1.2rem;
-					color: $color_2;
+					@include themed() {
+						color: t($base4);
+					}
 				}
 			}
 		}
@@ -144,7 +225,9 @@ a {
 			font-size: 0.8em;
 			margin-top: 0.5rem;
 			text-align: center;
-			color: $color_2;
+			@include themed() {
+				color: t($base4);
+			}
 			@media (max-width: 580px) {
 				display: none;
 			}
@@ -160,11 +243,15 @@ a {
 		.info-wrapper {
 			font-size: 1.6rem;
 			.display {
-				color: $color_2;
+				@include themed() {
+					color: t($base4);
+				}
 			}
 			.npub {
 				font-size: 1rem;
-				color: $color_2;
+				@include themed() {
+					color: t($base4);
+				}
 			}
 			@media (max-width: 580px) {
 				display: none;
@@ -174,7 +261,9 @@ a {
 			height: 6px;
 			width: 30%;
 			margin-left: -0.6rem;
-			background-color: $background-color_3;
+			@include themed() {
+				background: t($separator);
+			}
 			&.long {
 				width: 50%;
 			}
@@ -186,7 +275,9 @@ a {
 			margin-bottom: 1.5rem;
 			.label {
 				font-size: 0.8rem;
-				color: $color_3;
+				@include themed() {
+					color: t($accent1);
+				}
 			}
 			&.advanced {
 				display: none;
@@ -194,11 +285,21 @@ a {
 					display: block;
 				}
 				&.boxed {
+					padding: 0 1rem 1rem;
+					margin-left: -1rem;
+					margin-right: -1rem;
+					@include themed() {
+						background: t($boxed-bg);
+					}
 					.label {
 						padding: 0.2rem 1rem;
 						margin: 0 -1rem;
-						color: $color_1;
-						background-color: $color_2;
+						@include themed() {
+							color: t($boxed-title);
+						}
+						@include themed() {
+							background: t($boxed-bg-title);
+						}
 					}
 				}
 			}
@@ -218,7 +319,7 @@ a {
 					text-indent: -9999px;
 					width: 2.6rem;
 					height: 1.2rem;
-					background: $background-color_4;
+					background: $color-base6;
 					display: inline-block;
 					border-radius: 100px;
 					position: relative;
@@ -246,7 +347,9 @@ a {
 				}
 			
 				input:checked + label {
-					background: $color_3;
+					@include themed() {
+						background: t($accent1);
+					}
 				}
 			
 				input:checked + label:first-of-type:after {
@@ -269,25 +372,39 @@ a {
 			.json, .data {
 				white-space: pre-wrap;
 				word-break: break-all;
-				background-color: $background-color_3;
-				padding: 1rem;
-				margin: 0 -1rem;
+				margin-top: 1rem;
 				.key {
 					display: inline-block;
 					margin-top: 0.5rem;
-					color: $color_3;
+					@include themed() {
+						color: t($accent1);
+					}
 				}
-				.string { color: $color_1; }
+				.string {
+					@include themed() {
+    				color: t($base7);
+  				}
+				}
 				.number { color: darkorange; }
-				.boolean { color: $color_1; }
-				.null { color: $color_1; }
+				.boolean {
+					@include themed() {
+    				color: t($base7);
+  				}
+				}
+				.null {
+					@include themed() {
+    				color: t($base7);
+  				}
+				}
 			}
 			&.last_update {
 				display: none;
 				@media (max-width: 580px) {
 					display: block;
 					font-size: 0.8em;
-					color: $color_2;
+					@include themed() {
+						color: t($base4);
+					}
 				}
 			}
 		}
@@ -354,9 +471,9 @@ a {
 				padding: 0.4rem;
 				text-align: center;
 				font-size: 0.9rem;
-				color: $color_4;
-				background-color: $background-color_4;
-				border-bottom: 1px solid $background-color_5;
+				color: $color-base1;
+				background-color: $color-base6;
+				border-bottom: 1px solid $color-base7;
 				text-decoration: none;
 				border-radius: 8px;
 				@media (max-width: 580px) {
@@ -370,11 +487,11 @@ a {
 					display: none;
 					@media (max-width: 580px) {
 						display: inline;
-						color: $color_4;
+						color: $color-base1;
 					}
 				}
 				&:hover {
-					background-color: $background-color_5;
+					background: $color-base7;
 				}
 			}
 			&:first-of-type {
@@ -382,20 +499,26 @@ a {
 					display: block;
 				}
 				a {
-					background-color: $background-color_6;
+					@include themed() {
+  					background: t($accent1);
+					}
 					border-bottom: none;
 					@media (max-width: 580px) {
 						border-radius: 8px 8px 0 0;
 					}
 					&:hover {
-						background-color: $background-color_7;
+						@include themed() {
+							background: t($accent2);
+						}
 					}
 				}
 			}
 			span {
 				flex-basis: 20%;
 				margin-left: 0.4rem;
-				color: $color_5;
+				@include themed() {
+					color: t($base5);
+				}
 				@media (max-width: 580px) {
 					display: none;
 				}
@@ -470,7 +593,9 @@ body.note {
 				text-align: right;
 				align-self: end;
 				font-size: 0.8rem;
-				color: $color_5;
+				@include themed() {
+					color: t($base5);
+				}
 				@media (max-width: 580px) {
 					padding-top: 0.5rem;
 				}
