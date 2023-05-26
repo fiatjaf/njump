@@ -1,0 +1,51 @@
+<head>
+  {{if eq .type "profile"}}
+  <title>Nostr Public Key {{.npub}}</title>
+  <meta property="og:site_name" content="{{.npub | SanitizeString}}" />
+  <meta property="og:title" content="{{.title | SanitizeString}}" />
+  {{ if .metadata.Picture }}
+  <meta property="og:image" content="{{.metadata.Picture | SanitizeString}}" />
+  <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture | SanitizeString}}" />
+  {{end}} {{ if .metadata.About }}
+  <meta property="og:description" content="{{.metadata.About | SanitizeString}}" />
+  {{end}}
+  <meta property="twitter:card" content="summary" />
+  {{end}}
+  <!----------->
+  {{ if eq .type "event" }}
+  <title>Nostr Event {{.nevent}}</title>
+  <meta property="og:site_name" content="{{.authorLong | SanitizeString}}" />
+  <meta property="og:title" content="{{.title | SanitizeString}}" />
+  <meta name="twitter:title" content="{{.twitterTitle | SanitizeString}}" />
+  <!---->
+  {{ if .textImageURL }}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@nostrprotocol" />
+  <meta property="og:image" content="{{.textImageURL | SanitizeString}}" />
+  <meta name="twitter:image" content="{{.textImageURL | SanitizeString}}" />
+  {{ else }}
+  <!---->
+  <meta property="twitter:card" content="summary" />
+  {{ if .image }}
+  <meta property="og:image" content="{{.image | SanitizeString}}" />
+  <meta name="twitter:image" content="{{.proxy}}{{.image | SanitizeString}}" />
+  {{end}} {{ if .video }}
+  <meta property="og:video" content="{{.video | SanitizeString}}" />
+  <meta property="og:video:secure_url" content="{{.video | SanitizeString}}" />
+  <meta property="og:video:type" content="video/{{.videoType | SanitizeString}}" />
+  {{end}}
+  <!---->
+  {{end}}
+  <meta property="og:description" content="{{.description | SanitizeString}}" />
+  <meta name="twitter:description" content="{{.description | SanitizeString}}" />
+  {{end}}
+  <!----------->
+  {{ if eq .type "address" }}
+  <title>Nostr Address {{.naddr | SanitizeString }}</title>
+  {{end}}
+  <!----------->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/styles.css?v=20230526" />
+
+</head>

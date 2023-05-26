@@ -10,6 +10,7 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
@@ -195,7 +196,14 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"BasicFormatting": BasicFormatting,
 		"SanitizeString":  html.EscapeString,
 	}
-	var tmpl = template.Must(template.New("event").Funcs(funcMap).Parse(templates[typ]))
+
+	tmpl, err := template.Must(template.New("event").
+		Funcs(funcMap).
+		Parse(templates[typ])).
+		ParseFiles("head.html", "top.html", "column_clients.html", "footer.html", "scripts.js")
+	if err != nil {
+		// Handle error
+	}
 
 	if err := tmpl.ExecuteTemplate(w, "event", params); err != nil {
 		http.Error(w, "error rendering: "+err.Error(), 500)

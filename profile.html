@@ -1,62 +1,11 @@
 <!DOCTYPE html>
 <html>
   <meta charset="UTF-8">
-  <head>
-    {{if eq .type "profile"}}
-    <title>Nostr Public Key {{.npub}}</title>
-    <meta property="og:site_name" content="{{.npub | SanitizeString}}" />
-    <meta property="og:title" content="{{.title | SanitizeString}}" />
-    {{ if .metadata.Picture }}
-    <meta property="og:image" content="{{.metadata.Picture | SanitizeString}}" />
-    <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture | SanitizeString}}" />
-    {{end}} {{ if .metadata.About }}
-    <meta property="og:description" content="{{.metadata.About | SanitizeString}}" />
-    {{end}}
-    <meta property="twitter:card" content="summary" />
-    {{end}}
-    <!----------->
-    {{ if eq .type "event" }}
-    <title>Nostr Event {{.nevent}}</title>
-    <meta property="og:site_name" content="{{.authorLong | SanitizeString}}" />
-    <meta property="og:title" content="{{.title | SanitizeString}}" />
-    <meta name="twitter:title" content="{{.twitterTitle | SanitizeString}}" />
-    <!---->
-    {{ if .textImageURL }}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@nostrprotocol" />
-    <meta property="og:image" content="{{.textImageURL | SanitizeString}}" />
-    <meta name="twitter:image" content="{{.textImageURL | SanitizeString}}" />
-    {{ else }}
-    <!---->
-    <meta property="twitter:card" content="summary" />
-    {{ if .image }}
-    <meta property="og:image" content="{{.image | SanitizeString}}" />
-    <meta name="twitter:image" content="{{.proxy}}{{.image | SanitizeString}}" />
-    {{end}} {{ if .video }}
-    <meta property="og:video" content="{{.video | SanitizeString}}" />
-    <meta property="og:video:secure_url" content="{{.video | SanitizeString}}" />
-    <meta property="og:video:type" content="video/{{.videoType | SanitizeString}}" />
-    {{end}}
-    <!---->
-    {{end}}
-    <meta property="og:description" content="{{.description | SanitizeString}}" />
-    <meta name="twitter:description" content="{{.description | SanitizeString}}" />
-    {{end}}
-    <!----------->
-    {{ if eq .type "address" }}
-    <title>Nostr Address {{.naddr | SanitizeString }}</title>
-    {{end}}
-    <!----------->
+  {{template "head.html" .}}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/styles.css?v=20230526" />
-
-  </head>
   <body class="profile">
 
-    <div class="top">
-      <a href="https://nostr.com" class="nostr_link">What is <span>nostr</span>?</a>
-    </div>
+    {{template "top.html" .}}
 
     <div class="container_wrapper">
       <div class="container">
@@ -124,150 +73,17 @@
           <div class="field separator"></div>
         </div>
         
-        <div class="column column_clients">
-          <div class="title open-list">
-            <span class="text">Open {{.type}} in</span>
-            <span class="open">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                <path fill="#FAFAFA" fill-rule="evenodd" d="M3.808.355h2.85a2.85 2.85 0 0 1 2.85 2.85v2.85a2.85 2.85 0 0 1-2.85 2.85h-2.85a2.85 2.85 0 0 1-2.85-2.85v-2.85a2.85 2.85 0 0 1 2.85-2.85Zm2.85 6.65a.95.95 0 0 0 .95-.95v-2.85a.95.95 0 0 0-.95-.95h-2.85a.95.95 0 0 0-.95.95v2.85c0 .525.425.95.95.95h2.85Zm0 3.8h-2.85a2.85 2.85 0 0 0-2.85 2.85v2.85a2.85 2.85 0 0 0 2.85 2.85h2.85a2.85 2.85 0 0 0 2.85-2.85v-2.85a2.85 2.85 0 0 0-2.85-2.85Zm0 6.65a.95.95 0 0 0 .95-.95v-2.85a.95.95 0 0 0-.95-.95h-2.85a.95.95 0 0 0-.95.95v2.85c0 .525.425.95.95.95h2.85Zm10.45-6.65h-2.85a2.85 2.85 0 0 0-2.85 2.85v2.85a2.85 2.85 0 0 0 2.85 2.85h2.85a2.85 2.85 0 0 0 2.85-2.85v-2.85a2.85 2.85 0 0 0-2.85-2.85Zm0 6.65a.95.95 0 0 0 .95-.95v-2.85a.95.95 0 0 0-.95-.95h-2.85a.95.95 0 0 0-.95.95v2.85c0 .525.425.95.95.95h2.85Zm0-17.1h-2.85a2.85 2.85 0 0 0-2.85 2.85v2.85a2.85 2.85 0 0 0 2.85 2.85h2.85a2.85 2.85 0 0 0 2.85-2.85v-2.85a2.85 2.85 0 0 0-2.85-2.85Zm0 6.65a.95.95 0 0 0 .95-.95v-2.85a.95.95 0 0 0-.95-.95h-2.85a.95.95 0 0 0-.95.95v2.85c0 .525.425.95.95.95h2.85Z" clip-rule="evenodd"/>
-              </svg>
-            </span>
-            <span class="close">
-              <svg xmlns="http://www.w3.org/2000/svg" width="31" height="16" fill="currentColor" viewBox="0 0 31 16">
-                <path fill="#fff" d="M30.207 3.016 16.744 14.983a1.496 1.496 0 0 1-1.974 0L1.307 3.016A1.496 1.496 0 0 1 3.28.772l12.476 11.085L28.233.772a1.496 1.496 0 1 1 1.974 2.244Z"/>
-              </svg>              
-            </span>
-          </div>
-          <div class="clients_wrapper">
-            {{range .clients}}
-              <div class="btn">
-                <a class="client" href="{{.url}}"><span>Open {{.type}} in</span> {{.name}}</a>
-              </div>
-            {{end}}
-          </div>
-        </div>
+        {{template "column_clients.html" .}}
 
       </div>
     </div>
-
-    <div class="background"></div>
-
-    <div class="footer">
-      Powered by <a href="https://git.fiatjaf.com/njump">njump</a>
-    </div>
-
+    
+    {{template "footer.html"}}
+    
     <script>
-      const type = '{{.type}}'
-      let counts = []
-      let clients = document.querySelectorAll('.client')
-      for (let i = 0; i < clients.length; i++) {
-        let name = clients[i].innerText
-        let url = clients[i].href
-        let key = 'nj:' + type + ':' + name
-        let count = parseInt(localStorage.getItem(key) || 0)
-        clients[i].parentNode.setAttribute("count", count)
-        clients[i].parentNode.setAttribute("title", "Used " + count + " times")
-        clients[i].addEventListener('click', () => {
-          localStorage.setItem(key, count + 1)
-        })
-        counts.push([count, name, url])
-      }
-
-      // Reorder clients following the counter
-      let clients_wrapper = document.querySelector('.clients_wrapper')
-      const elements = Array.from(clients_wrapper.getElementsByClassName("btn"));
-      elements.sort((a, b) => {
-        const rankA = parseInt(a.getAttribute("count"));
-        const rankB = parseInt(b.getAttribute("count"));
-        return rankB - rankA;
-      });
-      elements.forEach((element) => clients_wrapper.appendChild(element));
-
-      counts.sort((a, b) => b[0] - a[0])
-      let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
-
-      if (location.hash !== '#noredirect') {
-        if (counts[0][0] - tailsum > 10) {
-          location.href = counts[0][2]
-        }
-      }
-    </script>
-
-    <script>
-
-      let jsons = document.querySelectorAll('.json')
-      for (let i = 0; i < jsons.length; i++) {
-        console.log(jsons[i].innerHTML);
-        jsons[i].innerHTML = syntaxHighlight(jsons[i].innerHTML);
-      }
-
-      const shareButton = document.querySelector('.open-list');
-      const clients_list = document.querySelector('.column_clients');
-      shareButton.addEventListener('click', function() {
-        clients_list.classList.toggle('up');
-        if (clients_list.classList.contains('up')) {
-          document.body.classList.add('lock');
-        } else {
-          document.body.classList.remove('lock');
-        }
-      });
-
-      function updateAdvanceSwitch() {
-        advanced_list.forEach(element => {
-          if (advanceSwitch.checked) {
-            element.classList.add('visible');
-          } else {
-            element.classList.remove('visible');
-          }
-        });
-      }
-
-      const advanceSwitch = document.querySelector('.advanced-switch');
-      const advanced_list = document.querySelectorAll('.advanced');
-      advanceSwitch.addEventListener('change', function() {
-        updateAdvanceSwitch()
-      });
-
-      updateAdvanceSwitch(); // Check at the page load, some browsers keep the state in cache
-
-      var url = new URL(window.location.href);
-      var searchParams = new URLSearchParams(url.search);
-      if (searchParams.has('details') && searchParams.get('details') == 'yes') {
-        advanceSwitch.click();
-      }
-      
-      function syntaxHighlight(json) {
-          json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-          return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-              var cls = 'number';
-              if (/^"/.test(match)) {
-                  if (/:$/.test(match)) {
-                      cls = 'key';
-                  } else {
-                      cls = 'string';
-                  }
-              } else if (/true|false/.test(match)) {
-                  cls = 'boolean';
-              } else if (/null/.test(match)) {
-                  cls = 'null';
-              }
-              return '<span class="' + cls + '">' + match + '</span>';
-          });
-      }
-
+      {{template "scripts.js"}}      
     </script>
     
   </body>
-
-  <svg width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <clipPath id="svg-shape" clipPathUnits="objectBoundingBox">
-        <path 
-          transform="scale(0.005, 0.005)"
-          d="M100,200c43.8,0,68.2,0,84.1-15.9C200,168.2,200,143.8,200,100s0-68.2-15.9-84.1C168.2,0,143.8,0,100,0S31.8,0,15.9,15.9C0,31.8,0,56.2,0,100s0,68.2,15.9,84.1C31.8,200,56.2,200,100,200z"
-        />
-      </clipPath>
-    </defs>
-  </svg>
 
 </html>
