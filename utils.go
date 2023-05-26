@@ -145,6 +145,21 @@ func ReplaceURLsWithTags(line string) string {
 		}
 	}
 
+	// Match and replace npup1, nprofile1, note1, nevent1, etc
+	nostrRegexPattern := `\s*nostr:((npub|note|nevent|nprofile)1[a-z0-9]+)\s*`
+	nostrRegex := regexp.MustCompile(nostrRegexPattern)
+	line = nostrRegex.ReplaceAllStringFunc(line, func(match string) string {
+		submatch := nostrRegex.FindStringSubmatch(match)
+		if len(submatch) < 2 {
+			return match
+		}
+		capturedGroup := submatch[1]
+		first6 := capturedGroup[:6]
+		last6 := capturedGroup[len(capturedGroup)-6:]
+		replacement := fmt.Sprintf(`<a href="/%s">%s</a>`, capturedGroup, first6+"…"+last6)
+		return replacement
+	})
+
 	// Match and replace other URLs with <a> tags
 	otherRegexPattern := `\S*(https?://\S+)\S*`
 	otherRegex := regexp.MustCompile(otherRegexPattern)
