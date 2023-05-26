@@ -160,6 +160,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 		description = prettyJsonOrRaw(event.Content)
 	}
 
+	content := prettyJsonOrRaw(event.Content)
+
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
 	params := map[string]any{
@@ -175,6 +177,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"metadata":     metadata,
 		"authorLong":   authorLong,
 		"description":  description,
+		"content":      content,
 		"textImageURL": textImageURL,
 		"videoType":    videoType,
 		"image":        image,
