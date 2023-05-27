@@ -6,3 +6,7 @@ deploy: build
     rsync njump turgot:njump/njump-new
     ssh turgot 'mv njump/njump-new njump/njump'
     ssh root@turgot 'systemctl start njump'
+
+refresh_build:
+    sass static/styles.scss static/styles.css
+    go build -o ./tmp/main .

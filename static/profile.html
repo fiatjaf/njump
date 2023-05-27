@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="theme--default">
+  <meta charset="UTF-8">
+  {{template "head.html" .}}
+
+  <body class="profile">
+
+    {{template "top.html" .}}
+
+    <div class="container_wrapper">
+      <div class="container">
+        
+        <div class="column columnA">
+          <div class="info-wrapper">
+            {{.metadata.Name | SanitizeString}} <span class="display">{{.metadata.DisplayName | SanitizeString}}</span>
+          </div>
+          <div class="pic-wrapper">
+            <img class="pic" src="{{.metadata.Picture | SanitizeString}}" />
+          </div>
+          <div class="last_update">
+            Last update:<br/>
+            {{.createdAt | SanitizeString}}
+          </div>
+        </div>
+
+        <div class="column column_content">
+          <div class="field info-wrapper">
+            <div class="name">
+              {{.metadata.Name | SanitizeString}} <span class="display">{{.metadata.DisplayName | SanitizeString}}</span>
+            </div>
+          </div>
+          <div class="field separator long"></div>
+          <div class="field">
+            <a href="{{.metadata.Website | SanitizeString}}">{{.metadata.Website | SanitizeString}}</a>
+          </div>
+          <div class="field">
+            {{.metadata.About | SanitizeString}}
+          </div>
+          <div class="field separator"></div>
+          <div class="field">
+            <div class="label">Public key</div>
+            {{.npub | SanitizeString}}
+          </div>
+          <div class="field">
+            <div class="label">NIP-05</div>
+            {{.metadata.NIP05 | SanitizeString}}
+          </div>
+          <div class="field">
+            <div class="label">LN Address</div>
+            {{.metadata.LUD16 | SanitizeString}}
+          </div>
+
+          <div class="field last_update">
+            Last update:<br/>
+            {{.createdAt | SanitizeString}}
+          </div>
+
+          <div class="field advanced-switch-wrapper">
+            <input type="checkbox" id="advanced-switch" class="advanced-switch" />
+            <label for="advanced-switch">X</label>
+            <label for="advanced-switch">Show more details</label>
+          </div>
+
+          <div class="field advanced">
+            <div class="label">Metadata Event</div>
+            <div>{{.nevent | SanitizeString}}</div>
+          </div>
+
+          <div class="field advanced boxed">
+            <div class="label">Event JSON</div>
+            <div class="json">{{.eventJSON}}</div>
+          </div>
+          <div class="field separator"></div>
+        </div>
+        
+        {{template "column_clients.html" .}}
+
+      </div>
+    </div>
+    
+    {{template "footer.html"}}
+    
+    <script>
+      {{template "scripts.js"}}      
+    </script>
+    
+  </body>
+
+</html>

@@ -4,19 +4,24 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"html"
 	"net/http"
 	"regexp"
 	"strings"
 	"text/template"
-
+	"time"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-//go:embed event.html
-var eventHTML string
+//go:embed static/raw.html
+var rawHTML string
 
-var tmpl = template.Must(template.New("event").Parse(eventHTML))
+//go:embed static/profile.html
+var profileHTML string
+
+//go:embed static/note.html
+var noteHTML string
 
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
@@ -48,10 +53,11 @@ func render(w http.ResponseWriter, r *http.Request) {
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	nevent, _ := nip19.EncodeEvent(event.ID, []string{}, event.PubKey)
 	naddr := ""
+	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 
 	author := event
 	if event.Kind != 0 {
-		typ = "event"
+		typ = "note"
 		author, _ = getEvent(r.Context(), npub)
 
 		if event.Kind >= 30000 && event.Kind < 40000 {
@@ -154,19 +160,24 @@ func render(w http.ResponseWriter, r *http.Request) {
 		description = prettyJsonOrRaw(event.Content)
 	}
 
+	content := prettyJsonOrRaw(event.Content)
+
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
 	params := map[string]any{
+		"createdAt":    createdAt,
 		"clients":      generateClientList(code, event),
 		"type":         typ,
 		"title":        title,
 		"twitterTitle": twitterTitle,
 		"npub":         npub,
+		"npubShort":    npubShort,
 		"nevent":       nevent,
 		"naddr":        naddr,
 		"metadata":     metadata,
 		"authorLong":   authorLong,
 		"description":  description,
+		"content":      content,
 		"textImageURL": textImageURL,
 		"videoType":    videoType,
 		"image":        image,
@@ -174,6 +185,25 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"proxy":        "https://" + hostname + "/proxy?src=",
 		"eventJSON":    string(eventJSON),
 	}
+
+	templates := make(map[string]string)
+	templates["profile"] = profileHTML
+	templates["note"] = noteHTML
+	templates["address"] = rawHTML
+
+	var funcMap = template.FuncMap{
+		"BasicFormatting": BasicFormatting,
+		"SanitizeString":  html.EscapeString,
+	}
+
+	tmpl, err := template.Must(template.New("event").
+		Funcs(funcMap).
+		Parse(templates[typ])).
+		ParseFiles("static/head.html", "static/top.html", "static/column_clients.html", "static/footer.html", "static/scripts.js")
+	if err != nil {
+		// Handle error
+	}
+
 	if err := tmpl.ExecuteTemplate(w, "event", params); err != nil {
 		http.Error(w, "error rendering: "+err.Error(), 500)
 		return

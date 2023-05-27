@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -38,28 +40,28 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 	if strings.HasPrefix(code, "nevent") || strings.HasPrefix(code, "note") {
 		return []map[string]string{
 			{"name": "native client", "url": "nostr:" + code},
-			{"name": "snort", "url": "https://snort.social/e/" + code},
-			{"name": "coracle", "url": "https://coracle.social/" + code},
-			{"name": "satellite", "url": "https://satellite.earth/thread/" + event.ID},
-			{"name": "iris", "url": "https://iris.to/" + code},
-			{"name": "yosup", "url": "https://yosup.app/thread/" + event.ID},
-			{"name": "nostr.band", "url": "https://nostr.band/" + code},
-			{"name": "primal", "url": "https://primal.net/thread/" + event.ID},
-			{"name": "nostribe", "url": "https://www.nostribe.com/post/" + event.ID},
-			{"name": "nostrid", "url": "https://web.nostrid.app/note/" + event.ID},
+			{"name": "Snort", "url": "https://Snort.social/e/" + code},
+			{"name": "Coracle", "url": "https://coracle.social/" + code},
+			{"name": "Satellite", "url": "https://satellite.earth/thread/" + event.ID},
+			{"name": "Iris", "url": "https://iris.to/" + code},
+			{"name": "Yosup", "url": "https://yosup.app/thread/" + event.ID},
+			{"name": "Nostr.band", "url": "https://nostr.band/" + code},
+			{"name": "Primal", "url": "https://primal.net/thread/" + event.ID},
+			{"name": "Nostribe", "url": "https://www.nostribe.com/post/" + event.ID},
+			{"name": "Nostrid", "url": "https://web.nostrid.app/note/" + event.ID},
 		}
 	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
 		return []map[string]string{
 			{"name": "native client", "url": "nostr:" + code},
-			{"name": "snort", "url": "https://snort.social/p/" + code},
-			{"name": "coracle", "url": "https://coracle.social/" + code},
-			{"name": "satellite", "url": "https://satellite.earth/@" + code},
-			{"name": "iris", "url": "https://iris.to/" + code},
-			{"name": "yosup", "url": "https://yosup.app/profile/" + event.PubKey},
-			{"name": "nostr.band", "url": "https://nostr.band/" + code},
-			{"name": "primal", "url": "https://primal.net/profile/" + event.PubKey},
-			{"name": "nostribe", "url": "https://www.nostribe.com/profile/" + event.PubKey},
-			{"name": "nostrid", "url": "https://web.nostrid.app/account/" + event.PubKey},
+			{"name": "Snort", "url": "https://snort.social/p/" + code},
+			{"name": "Coracle", "url": "https://coracle.social/" + code},
+			{"name": "Satellite", "url": "https://satellite.earth/@" + code},
+			{"name": "Iris", "url": "https://iris.to/" + code},
+			{"name": "Yosup", "url": "https://yosup.app/profile/" + event.PubKey},
+			{"name": "Nostr.band", "url": "https://nostr.band/" + code},
+			{"name": "Primal", "url": "https://primal.net/profile/" + event.PubKey},
+			{"name": "Nostribe", "url": "https://www.nostribe.com/profile/" + event.PubKey},
+			{"name": "Nostrid", "url": "https://web.nostrid.app/account/" + event.PubKey},
 		}
 	} else if strings.HasPrefix(code, "naddr") {
 		return []map[string]string{
@@ -113,4 +115,54 @@ func getPreviewStyle(r *http.Request) string {
 	default:
 		return "unknown"
 	}
+}
+
+func BasicFormatting(input string) string {
+	lines := strings.Split(input, "\n")
+
+	var processedLines []string
+	for _, line := range lines {
+		processedLine := ReplaceURLsWithTags(line)
+		processedLines = append(processedLines, processedLine)
+	}
+
+	return strings.Join(processedLines, "<br/>")
+}
+
+func ReplaceURLsWithTags(line string) string {
+
+	// Match and replace image URLs with <img> tags
+	imageExtensions := []string{".jpg", ".jpeg", ".png", ".webp", ".gif"}
+	for _, extension := range imageExtensions {
+		regexPattern := fmt.Sprintf(`\s*(https?://\S+%s)\s*`, extension)
+		regex := regexp.MustCompile(regexPattern)
+		matches := regex.FindAllString(line, -1)
+
+		for _, match := range matches {
+			imgTag := fmt.Sprintf(`<img src="%s" alt="">`, strings.ReplaceAll(match, "\n", ""))
+			line = strings.ReplaceAll(line, match, imgTag)
+			return line
+		}
+	}
+
+	// Match and replace npup1, nprofile1, note1, nevent1, etc
+	nostrRegexPattern := `\s*nostr:((npub|note|nevent|nprofile)1[a-z0-9]+)\s*`
+	nostrRegex := regexp.MustCompile(nostrRegexPattern)
+	line = nostrRegex.ReplaceAllStringFunc(line, func(match string) string {
+		submatch := nostrRegex.FindStringSubmatch(match)
+		if len(submatch) < 2 {
+			return match
+		}
+		capturedGroup := submatch[1]
+		first6 := capturedGroup[:6]
+		last6 := capturedGroup[len(capturedGroup)-6:]
+		replacement := fmt.Sprintf(`<a href="/%s">%s</a>`, capturedGroup, first6+"…"+last6)
+		return replacement
+	})
+
+	// Match and replace other URLs with <a> tags
+	otherRegexPattern := `\S*(https?://\S+)\S*`
+	otherRegex := regexp.MustCompile(otherRegexPattern)
+	line = otherRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
+	return line
 }
