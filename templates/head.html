@@ -5,9 +5,15 @@
   <meta property="og:title" content="{{.title | SanitizeString}}" />
   {{ if .metadata.Picture }}
   <meta property="og:image" content="{{.metadata.Picture | SanitizeString}}" />
-  <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture | SanitizeString}}" />
+  <meta
+    property="twitter:image"
+    content="{{.proxy}}{{.metadata.Picture | SanitizeString}}"
+  />
   {{end}} {{ if .metadata.About }}
-  <meta property="og:description" content="{{.metadata.About | SanitizeString}}" />
+  <meta
+    property="og:description"
+    content="{{.metadata.About | SanitizeString}}"
+  />
   {{end}}
   <meta property="twitter:card" content="summary" />
   {{end}}
@@ -32,12 +38,18 @@
   {{end}} {{ if .video }}
   <meta property="og:video" content="{{.video | SanitizeString}}" />
   <meta property="og:video:secure_url" content="{{.video | SanitizeString}}" />
-  <meta property="og:video:type" content="video/{{.videoType | SanitizeString}}" />
+  <meta
+    property="og:video:type"
+    content="video/{{.videoType | SanitizeString}}"
+  />
   {{end}}
   <!---->
   {{end}}
   <meta property="og:description" content="{{.description | SanitizeString}}" />
-  <meta name="twitter:description" content="{{.description | SanitizeString}}" />
+  <meta
+    name="twitter:description"
+    content="{{.description | SanitizeString}}"
+  />
   {{end}}
   <!----------->
   {{ if eq .type "address" }}
