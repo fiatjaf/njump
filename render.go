@@ -19,6 +19,9 @@ import (
 //go:embed static/*
 var static embed.FS
 
+//go:embed templates/*
+var templates embed.FS
+
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
@@ -187,12 +190,14 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"SanitizeString":  html.EscapeString,
 	}
 
-	tmpl := template.Must(template.New("event").
-		Funcs(funcMap).
-		ParseFS(static))
+	tmpl := template.Must(
+		template.New("tmpl").
+			Funcs(funcMap).
+			ParseFS(templates, "templates/*"),
+	)
 
-	if err := tmpl.ExecuteTemplate(w, "event", params); err != nil {
-		http.Error(w, "error rendering: "+err.Error(), 500)
+	if err := tmpl.ExecuteTemplate(w, "note.html", params); err != nil {
+		log.Error().Err(err).Msg("error rendering")
 		return
 	}
 
