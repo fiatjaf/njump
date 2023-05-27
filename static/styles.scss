@@ -132,6 +132,43 @@ a {
 		}
 	}
 }
+
+.theme-toggle {
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	width: 1rem;
+	height: 1rem;
+	@include themed() {
+		color: t($base3);
+		// background: t($base3);
+	}
+	border-radius: 50%;
+	cursor: pointer;
+	@media (max-width: 580px) {
+		position: relative;
+    float: right;
+    top: 0;
+    right: 0;
+	}
+}
+
+.sun {
+	display: none
+}
+.moon {
+	display: block
+}
+
+.theme--dark {
+	.sun {
+		display: block
+	}
+	.moon {
+		display: none
+	}
+}
+
 .top {
 	display: flex;
 	justify-content: center;
@@ -141,7 +178,7 @@ a {
 	@media (max-width: 580px) {
 		display: block;
 		width: 90%;
-		margin: 1.5rem auto 0 auto;
+		margin: 1rem auto 1rem auto;
 		font-size: 0.8rem;
 	}
 	span {
@@ -473,7 +510,7 @@ a {
 				font-size: 0.9rem;
 				color: $color-base1;
 				background-color: $color-base6;
-				border-bottom: 1px solid $color-base7;
+				border-bottom: 1px solid darken($color-base7, 14%);
 				text-decoration: none;
 				border-radius: 8px;
 				@media (max-width: 580px) {
@@ -516,9 +553,7 @@ a {
 			span {
 				flex-basis: 20%;
 				margin-left: 0.4rem;
-				@include themed() {
-					color: t($base5);
-				}
+				color: $color-base1;
 				@media (max-width: 580px) {
 					display: none;
 				}
@@ -541,11 +576,6 @@ body.profile {
 }
 
 body.note {
-	.top {
-		@media (max-width: 580px) {
-			text-align: right;
-		}
-	}
 	.column_content {
 		flex-basis: 70%;
 		max-width: 70%;
