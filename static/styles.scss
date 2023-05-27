@@ -281,7 +281,6 @@ a {
     flex-grow: 0;
     flex-shrink: 0;
     word-wrap: break-word;
-    margin-right: 1vw;
 
     .info-wrapper {
       font-size: 1.6rem;
@@ -585,8 +584,8 @@ body.profile {
 
 body.note {
   .column_content {
-    flex-basis: 70%;
-    max-width: 70%;
+    flex-basis: 75%;
+    max-width: 75%;
     @media (max-width: 580px) {
       flex-basis: 100%;
       max-width: 100%;
