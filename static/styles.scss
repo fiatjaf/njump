@@ -24,7 +24,8 @@ $themes: (
     boxed-title: $color-base7,
     boxed-bg-title: $color-base4,
     boxed-bg: $color-base3,
-    separator: $color-base3
+    separator: $color-base3,
+    theme-toggle: $color-base3,
   ),
   dark: (
     base1: $color-base7,
@@ -41,7 +42,8 @@ $themes: (
     boxed-title: $color-base5,
     boxed-bg-title: darken($color-base6, 14%),
     boxed-bg: darken($color-base7, 14%),
-    separator: darken($color-base7, 8%)
+    separator: darken($color-base7, 4%),
+    theme-toggle: $color-base6,
   )
 );
 
@@ -60,6 +62,7 @@ $boxed-title: 'boxed-title';
 $boxed-bg-title: 'boxed-bg-title';
 $boxed-bg: 'boxed-bg';
 $separator: 'separator';
+$theme-toggle: 'theme-toggle';
 
 $theme-map: null;
 @mixin themed() {
@@ -147,8 +150,7 @@ a {
   width: 1rem;
   height: 1rem;
   @include themed() {
-    color: t($base3);
-    // background: t($base3);
+    color: t($theme-toggle);
   }
   border-radius: 50%;
   cursor: pointer;
@@ -361,7 +363,7 @@ a {
           text-indent: -9999px;
           width: 2.6rem;
           height: 1.2rem;
-          background: $color-base6;
+          background: $color-base5;
           display: inline-block;
           border-radius: 100px;
           position: relative;
@@ -597,6 +599,7 @@ body.note {
       align-items: center;
       a {
         display: inherit;
+        width: 100%;
         align-items: inherit;
         margin: 1rem 0 1rem 0;
         text-decoration: none;
@@ -607,7 +610,7 @@ body.note {
         }
       }
       .info-wrapper {
-        flex-basis: 80%;
+        flex-grow: 1;
         @media (max-width: 580px) {
           display: block;
         }
@@ -627,7 +630,7 @@ body.note {
         }
       }
       .published_at {
-        flex-grow: 1;
+        width: 100%;
         text-align: right;
         align-self: end;
         font-size: 0.8rem;
