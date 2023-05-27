@@ -643,6 +643,10 @@ body.note {
 }
 
 .footer {
+  color: $color-base5;
   font-size: 0.8rem;
   text-align: center;
+  a {
+    color: $color-base5;
+  }
 }

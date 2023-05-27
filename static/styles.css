@@ -664,8 +664,12 @@ body.note .column_content .profile_intro .published_at {
 }
 
 .footer {
+  color: #9a9a9a;
   font-size: 0.8rem;
   text-align: center;
+}
+.footer a {
+  color: #9a9a9a;
 }
 
 /*# sourceMappingURL=styles.css.map */
