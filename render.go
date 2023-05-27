@@ -185,6 +185,17 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"eventJSON":    string(eventJSON),
 	}
 
+	// Use a mapping to expressly link the templates and share them between more kinds/types
+	template_mapping := make(map[string]string)
+	template_mapping["profile"] = "profile.html"
+	template_mapping["note"] = "note.html"
+	template_mapping["address"] = "raw.html"
+
+	// If a mapping is not found fallback to raw
+	if template_mapping[typ] == "" {
+		template_mapping[typ] = "raw.html"
+	}
+
 	funcMap := template.FuncMap{
 		"BasicFormatting": BasicFormatting,
 		"SanitizeString":  html.EscapeString,
@@ -196,7 +207,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 			ParseFS(templates, "templates/*"),
 	)
 
-	if err := tmpl.ExecuteTemplate(w, "note.html", params); err != nil {
+	if err := tmpl.ExecuteTemplate(w, template_mapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
 	}
