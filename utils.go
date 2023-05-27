@@ -137,10 +137,22 @@ func ReplaceURLsWithTags(line string) string {
 		regexPattern := fmt.Sprintf(`\s*(https?://\S+%s)\s*`, extension)
 		regex := regexp.MustCompile(regexPattern)
 		matches := regex.FindAllString(line, -1)
-
 		for _, match := range matches {
 			imgTag := fmt.Sprintf(`<img src="%s" alt="">`, strings.ReplaceAll(match, "\n", ""))
 			line = strings.ReplaceAll(line, match, imgTag)
+			return line
+		}
+	}
+
+	// Match and replace mp4 URLs with <video> tag
+	videoExtensions := []string{".mp4", ".ogg", ".webm"}
+	for _, extension := range videoExtensions {
+		regexPattern := fmt.Sprintf(`\s*(https?://\S+%s)\s*`, extension)
+		regex := regexp.MustCompile(regexPattern)
+		matches := regex.FindAllString(line, -1)
+		for _, match := range matches {
+			videoTag := fmt.Sprintf(`<video controls width="100%%"><source src="%s"></video>`, strings.ReplaceAll(match, "\n", ""))
+			line = strings.ReplaceAll(line, match, videoTag)
 			return line
 		}
 	}
@@ -161,8 +173,8 @@ func ReplaceURLsWithTags(line string) string {
 	})
 
 	// Match and replace other URLs with <a> tags
-	otherRegexPattern := `\S*(https?://\S+)\S*`
-	otherRegex := regexp.MustCompile(otherRegexPattern)
-	line = otherRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
+	hrefRegexPattern := `\S*(https?://\S+)\S*`
+	hrefRegex := regexp.MustCompile(hrefRegexPattern)
+	line = hrefRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
 	return line
 }
