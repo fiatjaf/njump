@@ -20,6 +20,12 @@ body {
 .theme--dark body {
   color: #fafafa;
 }
+.theme--default body {
+  background: #ffffff;
+}
+.theme--dark body {
+  background: #1e1e1e;
+}
 @media (max-width: 580px) {
   body.lock {
     overflow: hidden;
@@ -42,12 +48,6 @@ body {
   overflow: hidden;
   z-index: -1;
 }
-.theme--default .background {
-  background: #ffffff;
-}
-.theme--dark .background {
-  background: #1e1e1e;
-}
 .background::after {
   content: "";
   position: absolute;
@@ -58,7 +58,7 @@ body {
   bottom: -40%;
 }
 .theme--default .background::after {
-  background: #ffffff;
+  background: #fafafa;
 }
 .theme--dark .background::after {
   background: #181818;

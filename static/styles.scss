@@ -20,7 +20,7 @@ $themes: (
     accent1: $color-accent1,
     accent2: $color-accent2,
     bg-up: $color-base1,
-    bg-down: $color-base1,
+    bg-down: $color-base2,
     boxed-title: $color-base7,
     boxed-bg-title: $color-base4,
     boxed-bg: $color-base3,
@@ -98,6 +98,9 @@ body {
   @include themed() {
     color: t($base7);
   }
+  @include themed() {
+    background: t($bg-up);
+  }
   margin: 0;
   margin-bottom: 4rem;
   &.lock {
@@ -117,9 +120,6 @@ a {
   bottom: 0;
   left: 0;
   right: 0;
-  @include themed() {
-    background: t($bg-up);
-  }
   overflow: hidden;
   z-index: -1;
   &::after {
