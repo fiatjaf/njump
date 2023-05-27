@@ -11,7 +11,7 @@ func generate(w http.ResponseWriter, r *http.Request) {
 
 	code := r.URL.Path[1+len("image/"):]
 	if code == "" {
-		fmt.Fprintf(w, "call /image/<nip19 code>")
+		fmt.Fprintf(w, "call /njump/image/<nip19 code>")
 		return
 	}
 

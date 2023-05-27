@@ -149,7 +149,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	textImageURL := ""
 	description := ""
 	if useTextImage {
-		textImageURL = fmt.Sprintf("https://%s/image/%s", hostname, code)
+		textImageURL = fmt.Sprintf("https://%s/njump/image/%s", hostname, code)
 		if subject != "" {
 			description = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
 		} else {
@@ -181,7 +181,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"videoType":    videoType,
 		"image":        image,
 		"video":        video,
-		"proxy":        "https://" + hostname + "/proxy?src=",
+		"proxy":        "https://" + hostname + "/njump/proxy?src=",
 		"eventJSON":    string(eventJSON),
 	}
 

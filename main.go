@@ -11,9 +11,9 @@ var log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).
 	With().Timestamp().Logger()
 
 func main() {
-	http.HandleFunc("/image/", generate)
-	http.HandleFunc("/proxy/", proxy)
-	http.Handle("/static/", http.FileServer(http.FS(static)))
+	http.HandleFunc("/njump/image/", generate)
+	http.HandleFunc("/njump/proxy/", proxy)
+	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
 	http.HandleFunc("/", render)
 
 	port := os.Getenv("PORT")
