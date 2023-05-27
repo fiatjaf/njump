@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -10,18 +11,13 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-//go:embed static/raw.html
-var rawHTML string
-
-//go:embed static/profile.html
-var profileHTML string
-
-//go:embed static/note.html
-var noteHTML string
+//go:embed static/*
+var static embed.FS
 
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
@@ -186,23 +182,14 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"eventJSON":    string(eventJSON),
 	}
 
-	templates := make(map[string]string)
-	templates["profile"] = profileHTML
-	templates["note"] = noteHTML
-	templates["address"] = rawHTML
-
-	var funcMap = template.FuncMap{
+	funcMap := template.FuncMap{
 		"BasicFormatting": BasicFormatting,
 		"SanitizeString":  html.EscapeString,
 	}
 
-	tmpl, err := template.Must(template.New("event").
+	tmpl := template.Must(template.New("event").
 		Funcs(funcMap).
-		Parse(templates[typ])).
-		ParseFiles("static/head.html", "static/top.html", "static/column_clients.html", "static/footer.html", "static/scripts.js")
-	if err != nil {
-		// Handle error
-	}
+		ParseFS(static))
 
 	if err := tmpl.ExecuteTemplate(w, "event", params); err != nil {
 		http.Error(w, "error rendering: "+err.Error(), 500)
