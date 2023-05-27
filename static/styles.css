@@ -1,8 +1,13 @@
 
 html {
   font-family: Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 300;
+}
+@media (max-width: 580px) {
+  html {
+    font-size: 18px;
+  }
 }
 
 body {

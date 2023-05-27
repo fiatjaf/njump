@@ -84,8 +84,11 @@ $theme-map: null;
 /*# sourceMappingURL=styles.css.map */
 html {
 	font-family: Helvetica, sans-serif;
-	font-size: 20px;
+	font-size: 19px;
 	font-weight: 300;
+	@media (max-width: 580px) {
+		font-size: 18px;
+	}
 }
 body {
 	@include themed() {
