@@ -37,7 +37,7 @@
 
           <div class="field">
             <div class="label">Author Public key</div>
-            {{.npub}}
+            {{.npub | SanitizeString}}
           </div>
 
           <div class="field advanced-switch-wrapper">
@@ -50,15 +50,8 @@
             <label for="advanced-switch">Show more details</label>
           </div>
 
-          <div class="field advanced">
-            <div class="label">Nevent</div>
-            <div>{{.nevent | SanitizeString}}</div>
-          </div>
+          {{template "details.html" .}}
 
-          <div class="field advanced boxed">
-            <div class="label">Event JSON</div>
-            <div class="json">{{.eventJSON | SanitizeString}}</div>
-          </div>
           <div class="field separator"></div>
         </div>
 

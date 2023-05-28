@@ -47,25 +47,32 @@ func render(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	typ := "profile"
-
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	nevent, _ := nip19.EncodeEvent(event.ID, []string{}, event.PubKey)
 	naddr := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 
+	typ := ""
 	author := event
-	if event.Kind != 0 {
-		typ = "note"
-		author, _ = getEvent(r.Context(), npub)
 
-		if event.Kind >= 30000 && event.Kind < 40000 {
+	if event.Kind == 0 {
+		typ = "profile"
+	} else {
+		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 {
+			typ = "note"
+		} else if event.Kind >= 30000 && event.Kind < 40000 {
 			typ = "address"
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
 				naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), []string{})
 			}
+		} else {
+			typ = "other"
 		}
+		author, _ = getEvent(r.Context(), npub)
 	}
+
+	kindDescription := kindNames[event.Kind]
+	kindNIP := kindNIPS[event.Kind]
 
 	imageMatch := regexp.MustCompile(`https:\/\/[^ ]*\.(gif|jpe?g|png|webp)`).FindStringSubmatch(event.Content)
 	var image string
@@ -164,36 +171,39 @@ func render(w http.ResponseWriter, r *http.Request) {
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
 	params := map[string]any{
-		"createdAt":    createdAt,
-		"clients":      generateClientList(code, event),
-		"type":         typ,
-		"title":        title,
-		"twitterTitle": twitterTitle,
-		"npub":         npub,
-		"npubShort":    npubShort,
-		"nevent":       nevent,
-		"naddr":        naddr,
-		"metadata":     metadata,
-		"authorLong":   authorLong,
-		"description":  description,
-		"content":      content,
-		"textImageURL": textImageURL,
-		"videoType":    videoType,
-		"image":        image,
-		"video":        video,
-		"proxy":        "https://" + hostname + "/njump/proxy?src=",
-		"eventJSON":    string(eventJSON),
+		"createdAt":       createdAt,
+		"clients":         generateClientList(code, event),
+		"type":            typ,
+		"title":           title,
+		"twitterTitle":    twitterTitle,
+		"npub":            npub,
+		"npubShort":       npubShort,
+		"nevent":          nevent,
+		"naddr":           naddr,
+		"metadata":        metadata,
+		"authorLong":      authorLong,
+		"description":     description,
+		"content":         content,
+		"textImageURL":    textImageURL,
+		"videoType":       videoType,
+		"image":           image,
+		"video":           video,
+		"proxy":           "https://" + hostname + "/njump/proxy?src=",
+		"eventJSON":       string(eventJSON),
+		"kindID":          event.Kind,
+		"kindDescription": kindDescription,
+		"kindNIP":         kindNIP,
 	}
 
 	// Use a mapping to expressly link the templates and share them between more kinds/types
 	template_mapping := make(map[string]string)
 	template_mapping["profile"] = "profile.html"
 	template_mapping["note"] = "note.html"
-	template_mapping["address"] = "raw.html"
+	template_mapping["address"] = "other.html"
 
 	// If a mapping is not found fallback to raw
 	if template_mapping[typ] == "" {
-		template_mapping[typ] = "raw.html"
+		template_mapping[typ] = "other.html"
 	}
 
 	funcMap := template.FuncMap{

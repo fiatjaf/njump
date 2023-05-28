@@ -328,22 +328,22 @@ a {
         &.visible {
           display: block;
         }
-        &.boxed {
-          padding: 0 1rem 1rem;
-          margin-left: -1rem;
-          margin-right: -1rem;
+      }
+      &.boxed {
+        padding: 0 1rem 1rem;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        @include themed() {
+          background: t($boxed-bg);
+        }
+        .label {
+          padding: 0.2rem 1rem;
+          margin: 0 -1rem;
           @include themed() {
-            background: t($boxed-bg);
+            color: t($boxed-title);
           }
-          .label {
-            padding: 0.2rem 1rem;
-            margin: 0 -1rem;
-            @include themed() {
-              color: t($boxed-title);
-            }
-            @include themed() {
-              background: t($boxed-bg-title);
-            }
+          @include themed() {
+            background: t($boxed-bg-title);
           }
         }
       }
@@ -584,7 +584,7 @@ body.profile {
   }
 }
 
-body.note {
+body.note, body.raw {
   .column_content {
     flex-basis: 75%;
     max-width: 75%;
@@ -611,6 +611,7 @@ body.note {
       }
       .info-wrapper {
         flex-grow: 1;
+        margin-bottom: 1rem;
         @media (max-width: 580px) {
           display: block;
         }

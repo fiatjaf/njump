@@ -56,7 +56,10 @@
   <title>Nostr Address {{.naddr | SanitizeString }}</title>
   {{end}}
   <!----------->
+  {{ if eq .type "other" }}
+  <title>Nostr Event {{.kindID }} - {{.kindDescription | SanitizeString }}</title>
+  {{end}}
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/njump/static/styles.css?v=20230528" />
+  <link rel="stylesheet" href="/njump/static/styles.css?v=20230528b" />
 </head>

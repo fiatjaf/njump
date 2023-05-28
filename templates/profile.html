@@ -69,15 +69,8 @@
             <label for="advanced-switch">Show more details</label>
           </div>
 
-          <div class="field advanced">
-            <div class="label">Metadata Event</div>
-            <div>{{.nevent | SanitizeString}}</div>
-          </div>
-
-          <div class="field advanced boxed">
-            <div class="label">Event JSON</div>
-            <div class="json">{{.eventJSON}}</div>
-          </div>
+          {{template "details.html" .}}
+          
           <div class="field separator"></div>
         </div>
 

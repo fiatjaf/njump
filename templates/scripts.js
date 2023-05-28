@@ -16,20 +16,22 @@ for (let i = 0; i < clients.length; i++) {
 
 // Reorder clients following the counter
 let clients_wrapper = document.querySelector('.clients_wrapper')
-const elements = Array.from(clients_wrapper.getElementsByClassName('btn'))
-elements.sort((a, b) => {
-  const rankA = parseInt(a.getAttribute('count'))
-  const rankB = parseInt(b.getAttribute('count'))
-  return rankB - rankA
-})
-elements.forEach(element => clients_wrapper.appendChild(element))
+if (clients_wrapper !== null) {
+  const elements = Array.from(clients_wrapper.getElementsByClassName('btn'))
+  elements.sort((a, b) => {
+    const rankA = parseInt(a.getAttribute('count'))
+    const rankB = parseInt(b.getAttribute('count'))
+    return rankB - rankA
+  })
+  elements.forEach(element => clients_wrapper.appendChild(element))
 
-counts.sort((a, b) => b[0] - a[0])
-let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
+  counts.sort((a, b) => b[0] - a[0])
+  let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
 
-if (location.hash !== '#noredirect') {
-  if (counts[0][0] - tailsum > 10) {
-    location.href = counts[0][2]
+  if (location.hash !== '#noredirect') {
+    if (counts[0][0] - tailsum > 10) {
+      location.href = counts[0][2]
+    }
   }
 }
 
