@@ -18,7 +18,7 @@
   <meta property="twitter:card" content="summary" />
   {{end}}
   <!----------->
-  {{ if eq .type "event" }}
+  {{ if eq .type "note" }}
   <title>Nostr Event {{.nevent}}</title>
   <meta property="og:site_name" content="{{.authorLong | SanitizeString}}" />
   <meta property="og:title" content="{{.title | SanitizeString}}" />
