@@ -59,6 +59,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	note := ""
 	naddr := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
+	content := ""
 
 	typ := ""
 	author := event
@@ -85,6 +86,13 @@ func render(w http.ResponseWriter, r *http.Request) {
 		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 {
 			typ = "note"
 			note, _ = nip19.EncodeNote(event.ID)
+			content = event.Content
+		} else if event.Kind == 6 {
+			typ = "note"
+			if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
+				original_nevent, _ := nip19.EncodeNote((*reposted)[1])
+				content = "Repost of nostr:" + original_nevent
+			}
 		} else if event.Kind >= 30000 && event.Kind < 40000 {
 			typ = "address"
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
@@ -190,8 +198,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 	} else {
 		description = prettyJsonOrRaw(event.Content)
 	}
-
-	content := prettyJsonOrRaw(event.Content)
 
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
