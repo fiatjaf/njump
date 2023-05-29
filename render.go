@@ -22,6 +22,13 @@ var static embed.FS
 //go:embed templates/*
 var templates embed.FS
 
+type Event struct {
+	Nevent    string
+	Content   string
+	CreatedAt string
+	// ...
+}
+
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
@@ -49,17 +56,35 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	nevent, _ := nip19.EncodeEvent(event.ID, []string{}, event.PubKey)
+	note := ""
 	naddr := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 
 	typ := ""
 	author := event
+	lastNotes := make([]Event, 0)
 
 	if event.Kind == 0 {
 		typ = "profile"
+		thisLastNotes, err := getLastNotes(r.Context(), code)
+		lastNotes = make([]Event, len(thisLastNotes))
+		for i, n := range thisLastNotes {
+			this_nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
+			this_date := time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05")
+			lastNotes[i] = Event{
+				Nevent:    this_nevent,
+				Content:   n.Content,
+				CreatedAt: this_date,
+			}
+		}
+		if err != nil {
+			http.Error(w, "error fetching event: "+err.Error(), 404)
+			return
+		}
 	} else {
 		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 {
 			typ = "note"
+			note, _ = nip19.EncodeNote(event.ID)
 		} else if event.Kind >= 30000 && event.Kind < 40000 {
 			typ = "address"
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
@@ -179,6 +204,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"npub":            npub,
 		"npubShort":       npubShort,
 		"nevent":          nevent,
+		"note":            note,
 		"naddr":           naddr,
 		"metadata":        metadata,
 		"authorLong":      authorLong,
@@ -193,6 +219,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"kindID":          event.Kind,
 		"kindDescription": kindDescription,
 		"kindNIP":         kindNIP,
+		"lastNotes":       lastNotes,
 	}
 
 	// Use a mapping to expressly link the templates and share them between more kinds/types

@@ -24,7 +24,7 @@ $themes: (
     boxed-title: $color-base7,
     boxed-bg-title: $color-base4,
     boxed-bg: $color-base3,
-    separator: $color-base3,
+    over-bg: $color-base3,
     theme-toggle: $color-base3,
   ),
   dark: (
@@ -42,7 +42,7 @@ $themes: (
     boxed-title: $color-base5,
     boxed-bg-title: darken($color-base6, 14%),
     boxed-bg: darken($color-base7, 14%),
-    separator: darken($color-base7, 4%),
+    over-bg: darken($color-base7, 4%),
     theme-toggle: $color-base6,
   )
 );
@@ -61,7 +61,7 @@ $bg-down: 'bg-down';
 $boxed-title: 'boxed-title';
 $boxed-bg-title: 'boxed-bg-title';
 $boxed-bg: 'boxed-bg';
-$separator: 'separator';
+$over-bg: 'over-bg';
 $theme-toggle: 'theme-toggle';
 
 $theme-map: null;
@@ -111,6 +111,9 @@ body {
       overflow: hidden;
     }
   }
+}
+h1, h2 {
+  font-weight: 100;
 }
 a {
   @include themed() {
@@ -306,7 +309,7 @@ a {
       width: 30%;
       margin-left: -0.6rem;
       @include themed() {
-        background: t($separator);
+        background: t($over-bg);
       }
       &.long {
         width: 50%;
@@ -344,6 +347,36 @@ a {
           }
           @include themed() {
             background: t($boxed-bg-title);
+          }
+        }
+      }
+      &.last_notes {
+        a {
+          display: block;
+          text-decoration: none;
+          &.note {
+            margin-bottom: 1rem;
+            .published_at {
+              font-size: 0.8rem;
+              @include themed() {
+                color: t($accent1);
+              }
+            }
+            .content {
+              max-height: 160px;
+              overflow: hidden;
+              &.gradient {
+              -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+              mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+              }
+            }
+          }
+        }
+        a:hover {
+          padding-left: 1rem;
+          margin-left: -1.5rem;
+          @include themed() {
+            border-left: 0.5rem solid t($over-bg);
           }
         }
       }
@@ -647,6 +680,7 @@ body.note, body.raw {
 }
 
 .footer {
+  margin-top: 2rem;
   color: $color-base5;
   font-size: 0.8rem;
   text-align: center;

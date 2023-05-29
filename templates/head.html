@@ -23,6 +23,7 @@
   <meta property="og:site_name" content="{{.authorLong | SanitizeString}}" />
   <meta property="og:title" content="{{.title | SanitizeString}}" />
   <meta name="twitter:title" content="{{.twitterTitle | SanitizeString}}" />
+  <link rel="canonical" href="/{{.note | SanitizeString }}" />
   <!---->
   {{ if .textImageURL }}
   <meta name="twitter:card" content="summary_large_image" />
@@ -61,5 +62,5 @@
   {{end}}
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/njump/static/styles.css?v=20230528b" />
+  <link rel="stylesheet" href="/njump/static/styles.css?v=20230529" />
 </head>

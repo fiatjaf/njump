@@ -187,7 +187,7 @@ func ReplaceURLsWithTags(line string) string {
 		regex := regexp.MustCompile(regexPattern)
 		matches := regex.FindAllString(line, -1)
 		for _, match := range matches {
-			imgTag := fmt.Sprintf(`<img src="%s" alt="">`, strings.ReplaceAll(match, "\n", ""))
+			imgTag := fmt.Sprintf(`<img src="%s" alt=""> `, strings.ReplaceAll(match, "\n", ""))
 			line = strings.ReplaceAll(line, match, imgTag)
 			return line
 		}
@@ -207,7 +207,7 @@ func ReplaceURLsWithTags(line string) string {
 	}
 
 	// Match and replace npup1, nprofile1, note1, nevent1, etc
-	nostrRegexPattern := `\s*nostr:((npub|note|nevent|nprofile)1[a-z0-9]+)\s*`
+	nostrRegexPattern := `\S*nostr:((npub|note|nevent|nprofile)1[a-z0-9]+)\S*`
 	nostrRegex := regexp.MustCompile(nostrRegexPattern)
 	line = nostrRegex.ReplaceAllStringFunc(line, func(match string) string {
 		submatch := nostrRegex.FindStringSubmatch(match)

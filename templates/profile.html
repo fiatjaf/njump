@@ -72,6 +72,21 @@
           {{template "details.html" .}}
           
           <div class="field separator"></div>
+
+          <div class="field last_notes">
+            <h2>Last Notes</h2>
+            {{range .lastNotes}}
+              <a href="/{{.Nevent}}" class="note">
+                <div class="published_at">
+                  {{.CreatedAt}}
+                </div>
+                <div class="content">
+                  {{.Content}}
+                </div>
+              </a>
+            {{end}}
+          </div>
+
         </div>
 
         {{template "column_clients.html" .}}

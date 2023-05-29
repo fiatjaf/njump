@@ -32,6 +32,10 @@ body {
   }
 }
 
+h1, h2 {
+  font-weight: 100;
+}
+
 .theme--default a {
   color: #373737;
 }
@@ -322,6 +326,40 @@ body {
 }
 .theme--dark .container .column_content .field.boxed .label {
   background: #191919;
+}
+.container .column_content .field.last_notes a {
+  display: block;
+  text-decoration: none;
+}
+.container .column_content .field.last_notes a.note {
+  margin-bottom: 1rem;
+}
+.container .column_content .field.last_notes a.note .published_at {
+  font-size: 0.8rem;
+}
+.theme--default .container .column_content .field.last_notes a.note .published_at {
+  color: #e32a6d;
+}
+.theme--dark .container .column_content .field.last_notes a.note .published_at {
+  color: #e32a6d;
+}
+.container .column_content .field.last_notes a.note .content {
+  max-height: 160px;
+  overflow: hidden;
+}
+.container .column_content .field.last_notes a.note .content.gradient {
+  -webkit-mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%);
+}
+.container .column_content .field.last_notes a:hover {
+  padding-left: 1rem;
+  margin-left: -1.5rem;
+}
+.theme--default .container .column_content .field.last_notes a:hover {
+  border-left: 0.5rem solid #f3f3f3;
+}
+.theme--dark .container .column_content .field.last_notes a:hover {
+  border-left: 0.5rem solid #2d2d2d;
 }
 .container .column_content .field.advanced-switch-wrapper {
   display: flex;
@@ -667,6 +705,7 @@ body.note .column_content .profile_intro .published_at, body.raw .column_content
 }
 
 .footer {
+  margin-top: 2rem;
   color: #9a9a9a;
   font-size: 0.8rem;
   text-align: center;

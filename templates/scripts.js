@@ -37,7 +37,6 @@ if (clients_wrapper !== null) {
 
 let jsons = document.querySelectorAll('.json')
 for (let i = 0; i < jsons.length; i++) {
-  console.log(jsons[i].innerHTML)
   jsons[i].innerHTML = syntaxHighlight(jsons[i].innerHTML)
 }
 
@@ -97,3 +96,13 @@ function syntaxHighlight(json) {
     }
   )
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var contentDivs = document.getElementsByClassName('content');
+  for (var i = 0; i < contentDivs.length; i++) {
+    var contentDiv = contentDivs[i];
+    if (contentDiv.offsetHeight == 160) {
+      contentDiv.classList.add('gradient');
+    }
+  }
+});
