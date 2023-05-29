@@ -320,6 +320,14 @@ a {
     }
     .field {
       margin-bottom: 1.5rem;
+      a {
+        padding-bottom: 0.05rem;
+        text-decoration: none;
+        @include themed() {
+          color: t($base7);
+          border-bottom: 1px solid rgba( t($base7), .24 );
+        }
+      }
       .label {
         font-size: 0.8rem;
         @include themed() {
@@ -354,6 +362,7 @@ a {
         a {
           display: block;
           text-decoration: none;
+          border-bottom: none;
           &.note {
             margin-bottom: 1rem;
             .published_at {
@@ -396,7 +405,9 @@ a {
           text-indent: -9999px;
           width: 2.6rem;
           height: 1.2rem;
-          background: $color-base5;
+          @include themed() {
+            background: t($over-bg);
+          }
           display: inline-block;
           border-radius: 100px;
           position: relative;
@@ -414,7 +425,9 @@ a {
           left: 2px;
           width: 1rem;
           height: 1rem;
-          background: #fff;
+          @include themed() {
+            background: t($base7);
+          }
           border-radius: 1rem;
           transition: 0.2s;
           @media (max-width: 580px) {
@@ -432,10 +445,21 @@ a {
         input:checked + label:first-of-type:after {
           left: calc(100% - 2px);
           transform: translateX(-100%);
+          @include themed() {
+            background: t($base1);
+          }
         }
 
         label:first-of-type:active:after {
           width: 2rem;
+        }
+        label:last-of-type {
+          cursor: pointer;
+          font-size: 0.8rem;
+          @include themed() {
+            border-bottom: 1px solid rgba( t($base7), .24 );
+            padding-bottom: 0.1rem;
+          }
         }
       }
       &.content {
@@ -491,7 +515,7 @@ a {
 
   .column_clients {
     flex-basis: 25%;
-    margin-top: 2rem;
+    margin-top: 1rem;
     @media (max-width: 580px) {
       position: fixed;
       // top: calc(100vh - 4.6rem);
