@@ -3,6 +3,7 @@
   <title>Nostr Public Key {{.npub}}</title>
   <meta property="og:site_name" content="{{.npub | SanitizeString}}" />
   <meta property="og:title" content="{{.title | SanitizeString}}" />
+  <link rel="canonical" href="/{{.npub | SanitizeString }}" />
   {{ if .metadata.Picture }}
   <meta property="og:image" content="{{.metadata.Picture | SanitizeString}}" />
   <meta
