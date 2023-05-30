@@ -8,6 +8,7 @@ import (
 	"html"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -32,7 +33,7 @@ type Event struct {
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
-	w.Header().Set("Cache-Control", "max-age=604800")
+	maxAge := 86400
 
 	code := r.URL.Path[1:]
 	if strings.HasPrefix(code, "e/") {
@@ -82,6 +83,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "error fetching event: "+err.Error(), 404)
 			return
 		}
+		maxAge = 900
 	} else {
 		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 {
 			typ = "note"
@@ -249,6 +251,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 			Funcs(funcMap).
 			ParseFS(templates, "templates/*"),
 	)
+
+	w.Header().Set("Cache-Control", "max-age="+strconv.Itoa(maxAge))
 
 	if err := tmpl.ExecuteTemplate(w, template_mapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
