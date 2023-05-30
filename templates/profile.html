@@ -39,7 +39,7 @@
               >{{.metadata.Website | SanitizeString}}</a
             >
           </div>
-          <div class="field">{{.metadata.About | SanitizeString}}</div>
+          <div class="field about">{{.metadata.About | SanitizeString | BasicFormatting}}</div>
           <div class="field separator"></div>
           <div class="field">
             <div class="label">Public key</div>

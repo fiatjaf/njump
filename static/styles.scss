@@ -462,7 +462,7 @@ a {
           }
         }
       }
-      &.content {
+      &.content, &.about {
         line-height: 1.4rem;
         img {
           max-width: 100%;
