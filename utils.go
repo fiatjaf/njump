@@ -194,7 +194,7 @@ func ReplaceURLsWithTags(line string) string {
 	}
 
 	// Match and replace mp4 URLs with <video> tag
-	videoExtensions := []string{".mp4", ".ogg", ".webm"}
+	videoExtensions := []string{".mp4", ".ogg", ".webm", ".mov"}
 	for _, extension := range videoExtensions {
 		regexPattern := fmt.Sprintf(`\s*(https?://\S+%s)\s*`, extension)
 		regex := regexp.MustCompile(regexPattern)
