@@ -111,6 +111,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 	}
 
 	kindDescription := kindNames[event.Kind]
+	if kindDescription == "" {
+		kindDescription = fmt.Sprintf("Kind %d", event.Kind)
+	}
 	kindNIP := kindNIPS[event.Kind]
 
 	imageMatch := regexp.MustCompile(`https:\/\/[^ ]*\.(gif|jpe?g|png|webp)`).FindStringSubmatch(event.Content)
