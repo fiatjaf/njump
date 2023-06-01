@@ -166,19 +166,19 @@ func getPreviewStyle(r *http.Request) string {
 	}
 }
 
-func BasicFormatting(input string) string {
+func basicFormatting(input string) string {
 	lines := strings.Split(input, "\n")
 
 	var processedLines []string
 	for _, line := range lines {
-		processedLine := ReplaceURLsWithTags(line)
+		processedLine := replaceURLsWithTags(line)
 		processedLines = append(processedLines, processedLine)
 	}
 
 	return strings.Join(processedLines, "<br/>")
 }
 
-func ReplaceURLsWithTags(line string) string {
+func replaceURLsWithTags(line string) string {
 
 	// Match and replace image URLs with <img> tags
 	imageExtensions := []string{".jpg", ".jpeg", ".png", ".webp", ".gif"}

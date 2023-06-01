@@ -10,34 +10,34 @@
       <div class="container">
         <div class="column column_content">
           <div class="profile_intro">
-            <a href="/{{.npub | SanitizeString}}">
+            <a href="/{{.npub | sanitizeString}}">
               <div class="pic-wrapper">
-                <img class="pic" src="{{.metadata.Picture | SanitizeString}}" />
+                <img class="pic" src="{{.metadata.Picture | sanitizeString}}" />
               </div>
               <div class="info-wrapper">
                 <div class="name">
-                  {{.metadata.Name | SanitizeString}}
+                  {{.metadata.Name | sanitizeString}}
                   <span class="display"
-                    >{{.metadata.DisplayName | SanitizeString}}</span
+                    >{{.metadata.DisplayName | sanitizeString}}</span
                   >
                 </div>
-                <div class="npub">{{.npubShort | SanitizeString}}</div>
+                <div class="npub">{{.npubShort | sanitizeString}}</div>
               </div>
-              <div class="published_at">{{.createdAt | SanitizeString}}</div>
+              <div class="published_at">{{.createdAt | sanitizeString}}</div>
             </a>
           </div>
 
           <div class="field separator"></div>
 
           <div class="field content">
-            {{.content | SanitizeString | BasicFormatting }}
+            {{.content | sanitizeString | basicFormatting }}
           </div>
 
           <div class="field separator"></div>
 
           <div class="field">
             <div class="label">Author Public key</div>
-            {{.npub | SanitizeString}}
+            {{.npub | sanitizeString}}
           </div>
 
           <div class="field advanced-switch-wrapper">

@@ -10,53 +10,53 @@
       <div class="container">
         <div class="column columnA">
           <div class="info-wrapper">
-            {{.metadata.Name | SanitizeString}}
+            {{.metadata.Name | sanitizeString}}
             <span class="display"
-              >{{.metadata.DisplayName | SanitizeString}}</span
+              >{{.metadata.DisplayName | sanitizeString}}</span
             >
           </div>
           <div class="pic-wrapper">
-            <img class="pic" src="{{.metadata.Picture | SanitizeString}}" />
+            <img class="pic" src="{{.metadata.Picture | sanitizeString}}" />
           </div>
           <div class="last_update">
             Last update:<br />
-            {{.createdAt | SanitizeString}}
+            {{.createdAt | sanitizeString}}
           </div>
         </div>
 
         <div class="column column_content">
           <div class="field info-wrapper">
             <div class="name">
-              {{.metadata.Name | SanitizeString}}
+              {{.metadata.Name | sanitizeString}}
               <span class="display"
-                >{{.metadata.DisplayName | SanitizeString}}</span
+                >{{.metadata.DisplayName | sanitizeString}}</span
               >
             </div>
           </div>
           <div class="field separator long"></div>
           <div class="field">
-            <a href="{{.metadata.Website | SanitizeString}}"
-              >{{.metadata.Website | SanitizeString}}</a
+            <a href="{{.metadata.Website | sanitizeString}}"
+              >{{.metadata.Website | sanitizeString}}</a
             >
           </div>
-          <div class="field about">{{.metadata.About | SanitizeString | BasicFormatting}}</div>
+          <div class="field about">{{.metadata.About | sanitizeString | basicFormatting}}</div>
           <div class="field separator"></div>
           <div class="field">
             <div class="label">Public key</div>
-            {{.npub | SanitizeString}}
+            {{.npub | sanitizeString}}
           </div>
           <div class="field">
             <div class="label">NIP-05</div>
-            {{.metadata.NIP05 | SanitizeString}}
+            {{.metadata.NIP05 | sanitizeString}}
           </div>
           <div class="field">
             <div class="label">LN Address</div>
-            {{.metadata.LUD16 | SanitizeString}}
+            {{.metadata.LUD16 | sanitizeString}}
           </div>
 
           <div class="field last_update">
             Last update:<br />
-            {{.createdAt | SanitizeString}}
+            {{.createdAt | sanitizeString}}
           </div>
           
           <div class="field separator"></div>

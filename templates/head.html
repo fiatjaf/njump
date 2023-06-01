@@ -1,19 +1,19 @@
 <head>
   {{if eq .type "profile"}}
   <title>Nostr Public Key {{.npub}}</title>
-  <meta property="og:site_name" content="{{.npub | SanitizeString}}" />
-  <meta property="og:title" content="{{.title | SanitizeString}}" />
-  <link rel="canonical" href="/{{.npub | SanitizeString }}" />
+  <meta property="og:site_name" content="{{.npub | sanitizeString}}" />
+  <meta property="og:title" content="{{.title | sanitizeString}}" />
+  <link rel="canonical" href="/{{.npub | sanitizeString }}" />
   {{ if .metadata.Picture }}
-  <meta property="og:image" content="{{.metadata.Picture | SanitizeString}}" />
+  <meta property="og:image" content="{{.metadata.Picture | sanitizeString}}" />
   <meta
     property="twitter:image"
-    content="{{.proxy}}{{.metadata.Picture | SanitizeString}}"
+    content="{{.proxy}}{{.metadata.Picture | sanitizeString}}"
   />
   {{end}} {{ if .metadata.About }}
   <meta
     property="og:description"
-    content="{{.metadata.About | SanitizeString}}"
+    content="{{.metadata.About | sanitizeString}}"
   />
   {{end}}
   <meta property="twitter:card" content="summary" />
@@ -21,45 +21,45 @@
   <!----------->
   {{ if eq .type "note" }}
   <title>Nostr Event {{.nevent}}</title>
-  <meta property="og:site_name" content="{{.authorLong | SanitizeString}}" />
-  <meta property="og:title" content="{{.title | SanitizeString}}" />
-  <meta name="twitter:title" content="{{.twitterTitle | SanitizeString}}" />
-  <link rel="canonical" href="/{{.note | SanitizeString }}" />
+  <meta property="og:site_name" content="{{.authorLong | sanitizeString}}" />
+  <meta property="og:title" content="{{.title | sanitizeString}}" />
+  <meta name="twitter:title" content="{{.twitterTitle | sanitizeString}}" />
+  <link rel="canonical" href="/{{.note | sanitizeString }}" />
   <!---->
   {{ if .textImageURL }}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@nostrprotocol" />
-  <meta property="og:image" content="{{.textImageURL | SanitizeString}}" />
-  <meta name="twitter:image" content="{{.textImageURL | SanitizeString}}" />
+  <meta property="og:image" content="{{.textImageURL | sanitizeString}}" />
+  <meta name="twitter:image" content="{{.textImageURL | sanitizeString}}" />
   {{ else }}
   <!---->
   <meta property="twitter:card" content="summary" />
   {{ if .image }}
-  <meta property="og:image" content="{{.image | SanitizeString}}" />
-  <meta name="twitter:image" content="{{.proxy}}{{.image | SanitizeString}}" />
+  <meta property="og:image" content="{{.image | sanitizeString}}" />
+  <meta name="twitter:image" content="{{.proxy}}{{.image | sanitizeString}}" />
   {{end}} {{ if .video }}
-  <meta property="og:video" content="{{.video | SanitizeString}}" />
-  <meta property="og:video:secure_url" content="{{.video | SanitizeString}}" />
+  <meta property="og:video" content="{{.video | sanitizeString}}" />
+  <meta property="og:video:secure_url" content="{{.video | sanitizeString}}" />
   <meta
     property="og:video:type"
-    content="video/{{.videoType | SanitizeString}}"
+    content="video/{{.videoType | sanitizeString}}"
   />
   {{end}}
   <!---->
   {{end}}
-  <meta property="og:description" content="{{.description | SanitizeString}}" />
+  <meta property="og:description" content="{{.description | sanitizeString}}" />
   <meta
     name="twitter:description"
-    content="{{.description | SanitizeString}}"
+    content="{{.description | sanitizeString}}"
   />
   {{end}}
   <!----------->
   {{ if eq .type "address" }}
-  <title>Nostr Address {{.naddr | SanitizeString }}</title>
+  <title>Nostr Address {{.naddr | sanitizeString }}</title>
   {{end}}
   <!----------->
   {{ if eq .type "other" }}
-  <title>Nostr Event {{.kindID }} - {{.kindDescription | SanitizeString }}</title>
+  <title>Nostr Event {{.kindID }} - {{.kindDescription | sanitizeString }}</title>
   {{end}}
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
