@@ -182,41 +182,50 @@ func basicFormatting(input string) string {
 
 func replaceURLsWithTags(line string) string {
 
+	var regex *regexp.Regexp
+	var rline string
+
 	// Match and replace image URLs with <img> tags
-	imageExtensions := []string{".jpg", ".jpeg", ".png", ".webp", ".gif"}
-	for _, extension := range imageExtensions {
-		regexPattern := fmt.Sprintf(`\s*(https?://\S+%s)\s*`, extension)
-		regex := regexp.MustCompile(regexPattern)
-		matches := regex.FindAllString(line, -1)
-		for _, match := range matches {
-			imgTag := fmt.Sprintf(`<img src="%s" alt=""> `, strings.ReplaceAll(match, "\n", ""))
-			line = strings.ReplaceAll(line, match, imgTag)
-			return line
+	imgsPattern := fmt.Sprintf(`\s*(https?://\S+(\.jpg|\.jpeg|\.png|\.webp|\.gif))\s*`)
+	regex = regexp.MustCompile(imgsPattern)
+	rline = regex.ReplaceAllStringFunc(line, func(match string) string {
+		submatch := regex.FindStringSubmatch(match)
+		if len(submatch) < 2 {
+			return match
 		}
+		capturedGroup := submatch[1]
+		replacement := fmt.Sprintf(` <img src="%s" alt=""> `, capturedGroup)
+		return replacement
+	})
+	if rline != line {
+		return rline
 	}
 
 	// Match and replace mp4 URLs with <video> tag
-	videoExtensions := []string{".mp4", ".ogg", ".webm", ".mov"}
-	for _, extension := range videoExtensions {
-		regexPattern := fmt.Sprintf(`\s*(https?://\S+%s)\s*`, extension)
-		regex := regexp.MustCompile(regexPattern)
-		matches := regex.FindAllString(line, -1)
-		for _, match := range matches {
-			videoTag := fmt.Sprintf(`<video controls width="100%%"><source src="%s"></video>`, strings.ReplaceAll(match, "\n", ""))
-			line = strings.ReplaceAll(line, match, videoTag)
-			return line
+	videoPattern := fmt.Sprintf(`\s*(https?://\S+(\.mp4|\.ogg|\.webm|.mov))\s*`)
+	regex = regexp.MustCompile(videoPattern)
+	rline = regex.ReplaceAllStringFunc(line, func(match string) string {
+		submatch := regex.FindStringSubmatch(match)
+		if len(submatch) < 2 {
+			return match
 		}
+		capturedGroup := submatch[1]
+		replacement := fmt.Sprintf(` <video controls width="100%%"><source src="%s"></video> `, capturedGroup)
+		return replacement
+	})
+	if rline != line {
+		return rline
 	}
 
 	// Match and replace npup1, nprofile1, note1, nevent1, etc
-	nostrRegexPattern := `\S*nostr:((npub|note|nevent|nprofile)1[a-z0-9]+)\S*`
+	nostrRegexPattern := `\S*(nostr:)?((npub|note|nevent|nprofile)1[a-z0-9]+)\S*`
 	nostrRegex := regexp.MustCompile(nostrRegexPattern)
 	line = nostrRegex.ReplaceAllStringFunc(line, func(match string) string {
 		submatch := nostrRegex.FindStringSubmatch(match)
 		if len(submatch) < 2 {
 			return match
 		}
-		capturedGroup := submatch[1]
+		capturedGroup := submatch[2]
 		first6 := capturedGroup[:6]
 		last6 := capturedGroup[len(capturedGroup)-6:]
 		replacement := fmt.Sprintf(`<a href="/%s">%s</a>`, capturedGroup, first6+"…"+last6)
@@ -226,7 +235,8 @@ func replaceURLsWithTags(line string) string {
 	// Match and replace other URLs with <a> tags
 	hrefRegexPattern := `\S*(https?://\S+)\S*`
 	hrefRegex := regexp.MustCompile(hrefRegexPattern)
-	line = hrefRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
+	line = hrefRegex.ReplaceAllString(line, ` <a href="$1">$1</a> `)
+
 	return line
 }
 
