@@ -3,7 +3,7 @@
   <title>Nostr Public Key {{.npub}}</title>
   <meta property="og:site_name" content="{{.npub | sanitizeString}}" />
   <meta property="og:title" content="{{.title | sanitizeString}}" />
-  <link rel="canonical" href="/{{.npub | sanitizeString }}" />
+  <link rel="canonical" href="https://nostr.com/{{.npub | sanitizeString }}" />
   {{ if .metadata.Picture }}
   <meta property="og:image" content="{{.metadata.Picture | sanitizeString}}" />
   <meta
@@ -24,7 +24,7 @@
   <meta property="og:site_name" content="{{.authorLong | sanitizeString}}" />
   <meta property="og:title" content="{{.title | sanitizeString}}" />
   <meta name="twitter:title" content="{{.twitterTitle | sanitizeString}}" />
-  <link rel="canonical" href="/{{.note | sanitizeString }}" />
+  <link rel="canonical" href="https://nostr.com/{{.note | sanitizeString }}" />
   <!---->
   {{ if .textImageURL }}
   <meta name="twitter:card" content="summary_large_image" />
