@@ -31,7 +31,7 @@ $themes: (
     base1: $color-base7,
     base2: $color-base6,
     base3: $color-base5,
-    base4: $color-base4,
+    base4: darken($color-base4, 20%),
     base5: $color-base3,
     base6: $color-base2,
     base7: $color-base2,
@@ -364,6 +364,9 @@ a {
           text-decoration: none;
           border-bottom: none;
           &.note {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
             margin-bottom: 1rem;
             .published_at {
               font-size: 0.8rem;
@@ -371,7 +374,16 @@ a {
                 color: t($accent1);
               }
             }
+            .is_reply {
+              margin-left: 0.5em;
+              font-size: 0.8rem;
+              @include themed() {
+                color: t($base4);
+              }
+            }
             .content {
+              flex-basis: 100%;
+              margin-top: 0.2rem;
               max-height: 160px;
               overflow: hidden;
               &.gradient {
@@ -687,18 +699,23 @@ body.note, body.raw {
           margin-right: 0.5rem;
         }
       }
-      .published_at {
-        width: 100%;
-        text-align: right;
-        align-self: end;
-        font-size: 0.8rem;
+    }
+    .published_at, .reply_of {
+      width: 100%;
+      text-align: right;
+      align-self: end;
+      font-size: 0.8rem;
+      @include themed() {
+        color: t($base5);
+      }
+      a {
         @include themed() {
-          color: t($base5);
-        }
-        @media (max-width: 580px) {
-          padding-top: 0.5rem;
+          color: t($accent1);
         }
       }
+    }
+    .reply_of {
+      margin-top: 0.2rem;
     }
   }
 }

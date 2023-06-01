@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip10"
+	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/pelletier/go-toml"
 )
 
@@ -226,4 +228,19 @@ func replaceURLsWithTags(line string) string {
 	hrefRegex := regexp.MustCompile(hrefRegexPattern)
 	line = hrefRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
 	return line
+}
+
+func findParentNevent(event *nostr.Event) string {
+	parentNevent := ""
+	replyTag := nip10.GetImmediateReply(event.Tags)
+	if replyTag != nil {
+		relay := ""
+		if len(*replyTag) > 2 {
+			relay = (*replyTag)[2]
+		} else {
+			relay = ""
+		}
+		parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], []string{relay}, "")
+	}
+	return parentNevent
 }

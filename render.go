@@ -24,10 +24,10 @@ var static embed.FS
 var templates embed.FS
 
 type Event struct {
-	Nevent    string
-	Content   string
-	CreatedAt string
-	// ...
+	Nevent       string
+	Content      string
+	CreatedAt    string
+	ParentNevent string
 }
 
 func render(w http.ResponseWriter, r *http.Request) {
@@ -65,6 +65,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	typ := ""
 	author := event
 	lastNotes := make([]Event, 0)
+	parentNevent := ""
 
 	if event.Kind == 0 {
 		typ = "profile"
@@ -74,9 +75,10 @@ func render(w http.ResponseWriter, r *http.Request) {
 			this_nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
 			this_date := time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05")
 			lastNotes[i] = Event{
-				Nevent:    this_nevent,
-				Content:   n.Content,
-				CreatedAt: this_date,
+				Nevent:       this_nevent,
+				Content:      n.Content,
+				CreatedAt:    this_date,
+				ParentNevent: findParentNevent(&n),
 			}
 		}
 		if err != nil {
@@ -89,6 +91,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 			typ = "note"
 			note, _ = nip19.EncodeNote(event.ID)
 			content = event.Content
+			parentNevent = findParentNevent(event)
+
 		} else if event.Kind == 6 {
 			typ = "note"
 			if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
@@ -228,6 +232,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"kindDescription": kindDescription,
 		"kindNIP":         kindNIP,
 		"lastNotes":       lastNotes,
+		"parentNevent":    parentNevent,
 	}
 
 	// Use a mapping to expressly link the templates and share them between more kinds/types

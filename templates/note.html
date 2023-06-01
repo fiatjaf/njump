@@ -23,9 +23,15 @@
                 </div>
                 <div class="npub">{{.npubShort | sanitizeString}}</div>
               </div>
-              <div class="published_at">{{.createdAt | sanitizeString}}</div>
             </a>
           </div>
+          <div class="published_at">{{.createdAt | sanitizeString}}</div>
+
+          {{ if .parentNevent }}
+          <div class="reply_of">
+            In reply to {{ printf "%s%s" "nostr:" .parentNevent | sanitizeString | basicFormatting }}
+          </div>
+          {{ end }}
 
           <div class="field separator"></div>
 

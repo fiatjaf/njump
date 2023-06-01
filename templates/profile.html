@@ -68,6 +68,9 @@
                 <div class="published_at">
                   {{.CreatedAt}}
                 </div>
+                {{if not (eq .ParentNevent "")}}
+                <div class="is_reply">- reply</div>
+                {{end}}
                 <div class="content">
                   {{.Content}}
                 </div>
