@@ -10,6 +10,8 @@ import (
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
+	"github.com/microcosm-cc/bluemonday"
+
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
@@ -270,4 +272,10 @@ func mdToHTML(md string) string {
 	renderer := html.NewRenderer(opts)
 
 	return string(markdown.Render(doc, renderer))
+}
+
+func sanitizeXSS(html string) string {
+	p := bluemonday.UGCPolicy()
+	p.AllowStyling()
+	return p.Sanitize(html)
 }

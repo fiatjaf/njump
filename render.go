@@ -252,7 +252,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 	funcMap := template.FuncMap{
 		"basicFormatting": basicFormatting,
 		"mdToHTML":        mdToHTML,
-		"sanitizeString":  html.EscapeString,
+		"escapeString":    html.EscapeString,
+		"sanitizeXSS":     sanitizeXSS,
 	}
 
 	tmpl := template.Must(

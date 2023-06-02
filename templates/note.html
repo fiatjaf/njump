@@ -10,26 +10,26 @@
       <div class="container">
         <div class="column column_content">
           <div class="profile_intro">
-            <a href="/{{.npub | sanitizeString}}">
+            <a href="/{{.npub | escapeString}}">
               <div class="pic-wrapper">
-                <img class="pic" src="{{.metadata.Picture | sanitizeString}}" />
+                <img class="pic" src="{{.metadata.Picture | escapeString}}" />
               </div>
               <div class="info-wrapper">
                 <div class="name">
-                  {{.metadata.Name | sanitizeString}}
+                  {{.metadata.Name | escapeString}}
                   <span class="display"
-                    >{{.metadata.DisplayName | sanitizeString}}</span
+                    >{{.metadata.DisplayName | escapeString}}</span
                   >
                 </div>
-                <div class="npub">{{.npubShort | sanitizeString}}</div>
+                <div class="npub">{{.npubShort | escapeString}}</div>
               </div>
             </a>
           </div>
-          <div class="published_at">{{.createdAt | sanitizeString}}</div>
+          <div class="published_at">{{.createdAt | escapeString}}</div>
 
           {{ if .parentNevent }}
           <div class="reply_of">
-            In reply to {{ printf "%s%s" "nostr:" .parentNevent | sanitizeString | basicFormatting }}
+            In reply to {{ printf "%s%s" "nostr:" .parentNevent | escapeString | basicFormatting }}
           </div>
           {{ end }}
 
@@ -37,12 +37,12 @@
 
           <div class="field content">
             {{ if (not (eq .subject ""))}}
-            <h1>{{.subject | sanitizeString}}</h1>
+            <h1>{{.subject | escapeString}}</h1>
             {{ end }}
             {{ if (or (eq .kindID 30023) (eq .kindID 30024))}}
-              {{.content | sanitizeString | mdToHTML }}
+              {{.content | mdToHTML | sanitizeXSS }}
             {{ else }}
-              {{.content | sanitizeString | basicFormatting }}
+              {{.content | escapeString | basicFormatting }}
             {{ end }}
           </div>
 
@@ -50,7 +50,7 @@
 
           <div class="field">
             <div class="label">Author Public key</div>
-            {{.npub | sanitizeString}}
+            {{.npub | escapeString}}
           </div>
 
           <div class="field advanced-switch-wrapper">

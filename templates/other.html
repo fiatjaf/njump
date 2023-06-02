@@ -12,7 +12,7 @@
           <div class="profile_intro">
               <div class="info-wrapper">
                 <div class="kind_desc">
-                  {{.kindDescription | sanitizeString}}
+                  {{.kindDescription | escapeString}}
                 </div>
               </div>
           </div>
@@ -21,7 +21,7 @@
 
           <div class="field">
             <div class="label">Author Public key</div>
-            <a href="/{{.npub | sanitizeString}}">{{.npub | sanitizeString}}</a>
+            <a href="/{{.npub | escapeString}}">{{.npub | escapeString}}</a>
           </div>
 
           {{template "details.html" .}}
