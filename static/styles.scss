@@ -238,7 +238,7 @@ a {
   width: 70%;
   justify-content: space-between;
   gap: 4.8vw;
-
+  overflow: visible;
   @media (max-width: 580px) {
     display: block;
     width: 100%;
@@ -547,11 +547,15 @@ a {
   }
 
   .column_clients {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 2rem;
+    align-self: flex-start;
     flex-basis: 25%;
     margin-top: 1rem;
     @media (max-width: 580px) {
       position: fixed;
-      // top: calc(100vh - 4.6rem);
+      top: auto;
       bottom: 0;
       left: 0;
       width: 100%;
