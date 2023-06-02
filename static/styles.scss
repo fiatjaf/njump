@@ -114,6 +114,7 @@ body {
 }
 h1, h2 {
   font-weight: 100;
+  line-height: 1.1em;
 }
 a {
   @include themed() {
@@ -354,6 +355,28 @@ a {
           @include themed() {
             background: t($boxed-bg-title);
           }
+        }
+      }
+      pre {
+        overflow-x: scroll;
+        @include themed() {
+          background: t($over-bg);
+        }
+        padding: 1rem;
+      }
+      hr {
+        display: none;
+      }
+      .footnotes {
+        padding-top: 1rem;
+        margin-top: 2rem;
+        @include themed() {
+          border-top: 6px solid t($over-bg);
+        }
+        font-size: 0.8rem;
+        ol {
+          margin: 0;
+          padding: 0 0 0 1rem;
         }
       }
       &.last_notes {

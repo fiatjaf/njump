@@ -87,12 +87,11 @@ func render(w http.ResponseWriter, r *http.Request) {
 		}
 		maxAge = 900
 	} else {
-		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 {
+		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 || event.Kind == 30024 {
 			typ = "note"
 			note, _ = nip19.EncodeNote(event.ID)
 			content = event.Content
 			parentNevent = findParentNevent(event)
-
 		} else if event.Kind == 6 {
 			typ = "note"
 			if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
@@ -223,6 +222,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"naddr":           naddr,
 		"metadata":        metadata,
 		"authorLong":      authorLong,
+		"subject":         subject,
 		"description":     description,
 		"content":         content,
 		"textImageURL":    textImageURL,
@@ -251,6 +251,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	funcMap := template.FuncMap{
 		"basicFormatting": basicFormatting,
+		"mdToHTML":        mdToHTML,
 		"sanitizeString":  html.EscapeString,
 	}
 

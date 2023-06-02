@@ -7,6 +7,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
@@ -103,7 +106,7 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 		}
 	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
 		return []map[string]string{
-			{"name": "native client", "url": "nostr:" + code},
+			{"name": "Your native client", "url": "nostr:" + code},
 			{"name": "Snort", "url": "https://snort.social/p/" + code},
 			{"name": "Coracle", "url": "https://coracle.social/" + code},
 			{"name": "Satellite", "url": "https://satellite.earth/@" + code},
@@ -116,9 +119,9 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 		}
 	} else if strings.HasPrefix(code, "naddr") {
 		return []map[string]string{
-			{"name": "native client", "url": "nostr:" + code},
-			{"name": "habla", "url": "https://habla.news/a/" + code},
-			{"name": "blogstack", "url": "https://blogstack.io/" + code},
+			{"name": "Your native client", "url": "nostr:" + code},
+			{"name": "Habla", "url": "https://habla.news/a/" + code},
+			{"name": "Blogstack", "url": "https://blogstack.io/" + code},
 		}
 	} else {
 		return []map[string]string{
@@ -253,4 +256,18 @@ func findParentNevent(event *nostr.Event) string {
 		parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], []string{relay}, "")
 	}
 	return parentNevent
+}
+
+func mdToHTML(md string) string {
+	// create markdown parser with extensions
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock | parser.Footnotes
+	p := parser.NewWithExtensions(extensions)
+	doc := p.Parse([]byte(md))
+
+	// create HTML renderer with extensions
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	opts := html.RendererOptions{Flags: htmlFlags}
+	renderer := html.NewRenderer(opts)
+
+	return string(markdown.Render(doc, renderer))
 }

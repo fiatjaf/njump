@@ -34,6 +34,7 @@ body {
 
 h1, h2 {
   font-weight: 100;
+  line-height: 1.1em;
 }
 
 .theme--default a {
@@ -336,6 +337,34 @@ h1, h2 {
 }
 .theme--dark .container .column_content .field.boxed .label {
   background: #191919;
+}
+.container .column_content .field pre {
+  overflow-x: scroll;
+  padding: 1rem;
+}
+.theme--default .container .column_content .field pre {
+  background: #f3f3f3;
+}
+.theme--dark .container .column_content .field pre {
+  background: #2d2d2d;
+}
+.container .column_content .field hr {
+  display: none;
+}
+.container .column_content .field .footnotes {
+  padding-top: 1rem;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+}
+.theme--default .container .column_content .field .footnotes {
+  border-top: 6px solid #f3f3f3;
+}
+.theme--dark .container .column_content .field .footnotes {
+  border-top: 6px solid #2d2d2d;
+}
+.container .column_content .field .footnotes ol {
+  margin: 0;
+  padding: 0 0 0 1rem;
 }
 .container .column_content .field.last_notes a {
   display: block;

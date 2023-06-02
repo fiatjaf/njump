@@ -36,7 +36,14 @@
           <div class="field separator"></div>
 
           <div class="field content">
-            {{.content | sanitizeString | basicFormatting }}
+            {{ if (not (eq .subject ""))}}
+            <h1>{{.subject | sanitizeString}}</h1>
+            {{ end }}
+            {{ if (or (eq .kindID 30023) (eq .kindID 30024))}}
+              {{.content | sanitizeString | mdToHTML }}
+            {{ else }}
+              {{.content | sanitizeString | basicFormatting }}
+            {{ end }}
           </div>
 
           <div class="field separator"></div>
