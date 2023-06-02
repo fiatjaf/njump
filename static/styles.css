@@ -117,14 +117,14 @@ h1, h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 1rem 0;
+  padding: 1rem 0;
   justify-content: left;
 }
 @media (max-width: 580px) {
   .top {
     display: block;
     width: 90%;
-    margin: 1rem auto 1rem auto;
+    padding: 1rem;
     font-size: 0.8rem;
   }
 }
@@ -138,6 +138,8 @@ h1, h2 {
 .pic-wrapper {
   max-width: 100%;
   overflow: hidden;
+  -webkit-clip-path: url(#svg-shape);
+  clip-path: url(#svg-shape);
 }
 @media (max-width: 580px) {
   .pic-wrapper {
@@ -145,14 +147,10 @@ h1, h2 {
   }
 }
 .pic-wrapper img.pic {
+  display: block;
   max-width: 100%;
   width: 100%;
   height: auto;
-  -webkit-clip-path: url(#svg-shape);
-  -moz-clip-path: url(#svg-shape);
-  -o-clip-path: url(#svg-shape);
-  -ms-clip-path: url(#svg-shape);
-  clip-path: url(#svg-shape);
 }
 
 .container_wrapper {
