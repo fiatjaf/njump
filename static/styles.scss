@@ -388,6 +388,37 @@ a {
         }
         padding: 1rem;
       }
+      blockquote {
+        @include themed() {
+          border-left: 0.5rem solid t($over-bg);
+        }
+        padding: 0.5rem 0 0.5rem 1rem;
+        margin: 2rem 0;
+        font-style: italic;
+        p {
+          margin: 0 0 0.5rem 0;
+        }
+      }
+      cite {
+        font-size: 0.8em;
+      }
+      strong {
+        font-weight: 400;
+      }
+      ol, ul {
+        margin: 0;
+          padding: 0 0 0 1rem;
+        li {
+          margin-bottom: 0.5rem;
+        }
+      }
+      sup {
+        font-size: 0.6rem;
+        vertical-align: baseline;
+        position: relative;
+        top: -0.8em;
+        margin: 0 0.3rem 0 0.1rem;
+      }
       hr {
         display: none;
       }
@@ -397,11 +428,8 @@ a {
         @include themed() {
           border-top: 6px solid t($over-bg);
         }
-        font-size: 0.8rem;
-        ol {
-          margin: 0;
-          padding: 0 0 0 1rem;
-        }
+        font-size: 0.9rem;
+        line-height: 1.2rem;
       }
       &.last_notes {
         a {

@@ -387,23 +387,54 @@ h1, h2 {
 .theme--dark .container .column_content .field pre {
   background: #2d2d2d;
 }
+.container .column_content .field blockquote {
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 2rem 0;
+  font-style: italic;
+}
+.theme--default .container .column_content .field blockquote {
+  border-left: 0.5rem solid #f3f3f3;
+}
+.theme--dark .container .column_content .field blockquote {
+  border-left: 0.5rem solid #2d2d2d;
+}
+.container .column_content .field blockquote p {
+  margin: 0 0 0.5rem 0;
+}
+.container .column_content .field cite {
+  font-size: 0.8em;
+}
+.container .column_content .field strong {
+  font-weight: 400;
+}
+.container .column_content .field ol, .container .column_content .field ul {
+  margin: 0;
+  padding: 0 0 0 1rem;
+}
+.container .column_content .field ol li, .container .column_content .field ul li {
+  margin-bottom: 0.5rem;
+}
+.container .column_content .field sup {
+  font-size: 0.6rem;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.8em;
+  margin: 0 0.3rem 0 0.1rem;
+}
 .container .column_content .field hr {
   display: none;
 }
 .container .column_content .field .footnotes {
   padding-top: 1rem;
   margin-top: 2rem;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
 }
 .theme--default .container .column_content .field .footnotes {
   border-top: 6px solid #f3f3f3;
 }
 .theme--dark .container .column_content .field .footnotes {
   border-top: 6px solid #2d2d2d;
-}
-.container .column_content .field .footnotes ol {
-  margin: 0;
-  padding: 0 0 0 1rem;
 }
 .container .column_content .field.last_notes a {
   display: block;
