@@ -106,3 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+// Needed to apply proper print styles
+if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+  document.body.classList.add('safari');
+}

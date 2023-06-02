@@ -96,6 +96,10 @@ html {
   @media (max-width: 580px) {
     font-size: 18px;
   }
+  @media print {
+    font-size: 17px;
+    margin: 0;
+  }
 }
 body {
   @include themed() {
@@ -106,6 +110,10 @@ body {
   }
   margin: 0;
   margin-bottom: 4rem;
+  @media print {
+    margin: 0;
+    color: #000000 !important;
+  }
   &.lock {
     @media (max-width: 580px) {
       overflow: hidden;
@@ -145,6 +153,9 @@ a {
       bottom: -40%;
     }
   }
+  @media print {
+    display: none;
+  }
 }
 
 .theme-toggle {
@@ -163,6 +174,9 @@ a {
     float: right;
     top: 0;
     right: 0;
+  }
+  @media print {
+    display: none;
   }
 }
 
@@ -193,6 +207,9 @@ a {
     width: 90%;
     padding: 1rem;
     font-size: 0.8rem;
+  }
+  @media print {
+    display: block;
   }
   span {
     @include themed() {
@@ -231,6 +248,10 @@ a {
   flex-basis: 15%;
   text-align: right;
   text-decoration: none;
+  @media print {
+    display: block;
+    text-align: right;
+  }
 }
 
 .container {
@@ -241,6 +262,9 @@ a {
   overflow: visible;
   @media (max-width: 580px) {
     display: block;
+    width: 100%;
+  }
+  @media print {
     width: 100%;
   }
 
@@ -425,14 +449,15 @@ a {
       &.advanced-switch-wrapper {
         display: flex;
         align-items: center;
-
         input[type='checkbox'] {
           height: 0;
           width: 0;
           visibility: hidden;
           display: none;
         }
-
+        @media print {
+          display: none;
+        }
         label:first-of-type {
           cursor: pointer;
           text-indent: -9999px;
@@ -569,6 +594,9 @@ a {
         }
       }
     }
+    @media print {
+      display: none;
+    }
     .title {
       font-size: 0.8rem;
       margin-bottom: 1rem;
@@ -687,10 +715,18 @@ body.note, body.other {
       max-width: 100%;
       margin-right: 0;
     }
+    @media print {
+      flex-basis: 100%;
+      max-width: 100%;
+    }
     .profile_intro {
       display: flex;
       max-width: 100%;
       align-items: center;
+      margin-bottom: 1rem;
+      @media print {
+        margin-bottom: 1rem;
+      }
       a {
         display: inherit;
         width: 100%;
@@ -705,9 +741,11 @@ body.note, body.other {
       }
       .info-wrapper {
         flex-grow: 1;
-        margin-bottom: 1rem;
         @media (max-width: 580px) {
           display: block;
+        }
+        @media print {
+          font-size: 1rem;
         }
         .name,
         .npub {
@@ -722,6 +760,9 @@ body.note, body.other {
         margin-right: 1rem;
         @media (max-width: 580px) {
           margin-right: 0.5rem;
+        }
+        @media print {
+          flex-basis: 10%;
         }
       }
     }
@@ -752,5 +793,15 @@ body.note, body.other {
   text-align: center;
   a {
     color: $color-base5;
+  }
+}
+
+@media print {
+  @page {
+    margin: 2cm 3cm;
+  }
+  /* Safari specific styles */
+  body.safari {
+    margin: 1cm 3cm;
   }
 }
