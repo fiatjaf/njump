@@ -207,6 +207,20 @@ func render(w http.ResponseWriter, r *http.Request) {
 		description = prettyJsonOrRaw(event.Content)
 	}
 
+	// Manage not NIP-27 content replacing #[..] note/npub occurrences
+	for index, value := range event.Tags {
+		placeholderTag := "#[" + fmt.Sprintf("%d", index) + "]"
+		nreplace := ""
+		if value[0] == "p" {
+			nreplace, _ = nip19.EncodePublicKey(value[1])
+		} else if value[0] == "e" {
+			nreplace, _ = nip19.EncodeNote(value[1])
+		} else {
+			continue
+		}
+		content = strings.ReplaceAll(content, placeholderTag, "nostr:"+nreplace)
+	}
+
 	eventJSON, _ := json.MarshalIndent(event, "", "  ")
 
 	params := map[string]any{
