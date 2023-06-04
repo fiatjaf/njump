@@ -26,6 +26,7 @@ $themes: (
     boxed-bg: $color-base3,
     over-bg: $color-base3,
     theme-toggle: $color-base3,
+    hrefbg: lighten($color-accent1, 44%),
   ),
   dark: (
     base1: $color-base7,
@@ -44,6 +45,7 @@ $themes: (
     boxed-bg: darken($color-base7, 14%),
     over-bg: darken($color-base7, 4%),
     theme-toggle: $color-base6,
+    hrefbg: darken($color-accent1, 38%),
   )
 );
 
@@ -63,6 +65,7 @@ $boxed-bg-title: 'boxed-bg-title';
 $boxed-bg: 'boxed-bg';
 $over-bg: 'over-bg';
 $theme-toggle: 'theme-toggle';
+$hrefbg: 'hrefbg';
 
 $theme-map: null;
 @mixin themed() {
@@ -350,6 +353,12 @@ a {
           color: t($base7);
           border-bottom: 1px solid rgba( t($base7), .24 );
         }
+      }
+      a.nostr {
+        @include themed() {
+          background-color: t($hrefbg);
+        }
+        border-bottom: none;
       }
       .label {
         font-size: 0.8rem;

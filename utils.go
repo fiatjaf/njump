@@ -233,7 +233,7 @@ func replaceURLsWithTags(line string) string {
 		capturedGroup := submatch[2]
 		first6 := capturedGroup[:6]
 		last6 := capturedGroup[len(capturedGroup)-6:]
-		replacement := fmt.Sprintf(`<a href="/%s">%s</a>`, capturedGroup, first6+"…"+last6)
+		replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, capturedGroup, first6+"…"+last6)
 		return replacement
 	})
 
