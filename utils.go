@@ -92,43 +92,49 @@ var kindNIPS = map[int]string{
 	30078: "78",
 }
 
-func generateClientList(code string, event *nostr.Event) []map[string]string {
+type ClientReference struct {
+	Name string
+	URL  string
+}
+
+func generateClientList(code string, event *nostr.Event) []ClientReference {
 	if strings.HasPrefix(code, "nevent") || strings.HasPrefix(code, "note") {
-		return []map[string]string{
-			{"name": "native client", "url": "nostr:" + code},
-			{"name": "Snort", "url": "https://Snort.social/e/" + code},
-			{"name": "Coracle", "url": "https://coracle.social/" + code},
-			{"name": "Satellite", "url": "https://satellite.earth/thread/" + event.ID},
-			{"name": "Iris", "url": "https://iris.to/" + code},
-			{"name": "Yosup", "url": "https://yosup.app/thread/" + event.ID},
-			{"name": "Nostr.band", "url": "https://nostr.band/" + code},
-			{"name": "Primal", "url": "https://primal.net/thread/" + event.ID},
-			{"name": "Nostribe", "url": "https://www.nostribe.com/post/" + event.ID},
-			{"name": "Nostrid", "url": "https://web.nostrid.app/note/" + event.ID},
+		return []ClientReference{
+			{Name: "native client", URL: "nostr:" + code},
+			{Name: "Snort", URL: "https://Snort.social/e/" + code},
+			{Name: "Coracle", URL: "https://coracle.social/" + code},
+			{Name: "Satellite", URL: "https://satellite.earth/thread/" + event.ID},
+			{Name: "Iris", URL: "https://iris.to/" + code},
+			{Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
+			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
+			{Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
+			{Name: "Nostribe", URL: "https://www.nostribe.com/post/" + event.ID},
+			{Name: "Nostrid", URL: "https://web.nostrid.app/note/" + event.ID},
 		}
 	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
-		return []map[string]string{
-			{"name": "Your native client", "url": "nostr:" + code},
-			{"name": "Snort", "url": "https://snort.social/p/" + code},
-			{"name": "Coracle", "url": "https://coracle.social/" + code},
-			{"name": "Satellite", "url": "https://satellite.earth/@" + code},
-			{"name": "Iris", "url": "https://iris.to/" + code},
-			{"name": "Yosup", "url": "https://yosup.app/profile/" + event.PubKey},
-			{"name": "Nostr.band", "url": "https://nostr.band/" + code},
-			{"name": "Primal", "url": "https://primal.net/profile/" + event.PubKey},
-			{"name": "Nostribe", "url": "https://www.nostribe.com/profile/" + event.PubKey},
-			{"name": "Nostrid", "url": "https://web.nostrid.app/account/" + event.PubKey},
+		return []ClientReference{
+			{Name: "Your native client", URL: "nostr:" + code},
+			{Name: "Nosta", URL: "https://nosta.me/" + code},
+			{Name: "Snort", URL: "https://snort.social/p/" + code},
+			{Name: "Coracle", URL: "https://coracle.social/" + code},
+			{Name: "Satellite", URL: "https://satellite.earth/@" + code},
+			{Name: "Iris", URL: "https://iris.to/" + code},
+			{Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
+			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
+			{Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
+			{Name: "Nostribe", URL: "https://www.nostribe.com/profile/" + event.PubKey},
+			{Name: "Nostrid", URL: "https://web.nostrid.app/account/" + event.PubKey},
 		}
 	} else if strings.HasPrefix(code, "naddr") {
-		return []map[string]string{
-			{"name": "Your native client", "url": "nostr:" + code},
-			{"name": "YakiHonne", "url": "https://yakihonne.com/article/" + code},
-			{"name": "Habla", "url": "https://habla.news/a/" + code},
-			{"name": "Blogstack", "url": "https://blogstack.io/" + code},
+		return []ClientReference{
+			{Name: "Your native client", URL: "nostr:" + code},
+			{Name: "YakiHonne", URL: "https://yakihonne.com/article/" + code},
+			{Name: "Habla", URL: "https://habla.news/a/" + code},
+			{Name: "Blogstack", URL: "https://blogstack.io/" + code},
 		}
 	} else {
-		return []map[string]string{
-			{"name": "native client", "url": "nostr:" + code},
+		return []ClientReference{
+			{Name: "native client", URL: "nostr:" + code},
 		}
 	}
 }
