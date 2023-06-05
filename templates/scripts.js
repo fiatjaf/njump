@@ -97,17 +97,20 @@ function syntaxHighlight(json) {
   )
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  var contentDivs = document.getElementsByClassName('content');
+document.addEventListener('DOMContentLoaded', function () {
+  var contentDivs = document.getElementsByClassName('content')
   for (var i = 0; i < contentDivs.length; i++) {
-    var contentDiv = contentDivs[i];
+    var contentDiv = contentDivs[i]
     if (contentDiv.offsetHeight == 160) {
-      contentDiv.classList.add('gradient');
+      contentDiv.classList.add('gradient')
     }
   }
-});
+})
 
 // Needed to apply proper print styles
-if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-  document.body.classList.add('safari');
+if (
+  navigator.userAgent.indexOf('Safari') != -1 &&
+  navigator.userAgent.indexOf('Chrome') == -1
+) {
+  document.body.classList.add('safari')
 }

@@ -39,7 +39,9 @@
               >{{.metadata.Website | escapeString}}</a
             >
           </div>
-          <div class="field about">{{.metadata.About | escapeString | basicFormatting}}</div>
+          <div class="field about">
+            {{.metadata.About | escapeString | basicFormatting}}
+          </div>
           <div class="field separator"></div>
           <div class="field">
             <div class="label">Public key</div>
@@ -58,23 +60,19 @@
             Last update:<br />
             {{.createdAt | escapeString}}
           </div>
-          
+
           <div class="field separator"></div>
 
           <div class="field last_notes">
             <h2>Last Notes</h2>
             {{range .lastNotes}}
-              <a href="/{{.Nevent}}" class="note">
-                <div class="published_at">
-                  {{.CreatedAt}}
-                </div>
-                {{if not (eq .ParentNevent "")}}
-                <div class="is_reply">- reply</div>
-                {{end}}
-                <div class="content">
-                  {{.Content}}
-                </div>
-              </a>
+            <a href="/{{.Nevent}}" class="note">
+              <div class="published_at">{{.CreatedAt}}</div>
+              {{if not (eq .ParentNevent "")}}
+              <div class="is_reply">- reply</div>
+              {{end}}
+              <div class="content">{{.Content}}</div>
+            </a>
             {{end}}
           </div>
 
@@ -93,7 +91,6 @@
           {{template "details.html" .}}
 
           <div class="field separator"></div>
-
         </div>
 
         {{template "column_clients.html" .}}

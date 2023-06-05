@@ -71,14 +71,14 @@
   //   document.documentElement.classList.add('theme--dark');
   // }
 
-  window.addEventListener('beforeprint', function() {
+  window.addEventListener('beforeprint', function () {
     const htmlElement = document.documentElement
     htmlElement.classList.remove('theme--dark')
     htmlElement.classList.add('theme--default')
-  });
-  window.addEventListener('afterprint', function() {
+  })
+  window.addEventListener('afterprint', function () {
     const htmlElement = document.documentElement
     htmlElement.classList.toggle('theme--dark', isDarkMode)
     htmlElement.classList.toggle('theme--default', !isDarkMode)
-  });
+  })
 </script>
