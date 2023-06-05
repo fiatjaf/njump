@@ -44,9 +44,17 @@ body {
   }
 }
 
-h1, h2 {
+h1, h2, h3 {
   font-weight: 100;
   line-height: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+.theme--default h2 {
+  color: #e32a6d;
+}
+.theme--dark h2 {
+  color: #e32a6d;
 }
 
 .theme--default a {
@@ -54,6 +62,10 @@ h1, h2 {
 }
 .theme--dark a {
   color: #fafafa;
+}
+
+p {
+  margin-top: 0.5em;
 }
 
 .background {

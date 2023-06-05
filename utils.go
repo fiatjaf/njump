@@ -180,77 +180,6 @@ func getPreviewStyle(r *http.Request) string {
 	}
 }
 
-func basicFormatting(input string) string {
-	lines := strings.Split(input, "\n")
-
-	var processedLines []string
-	for _, line := range lines {
-		processedLine := replaceURLsWithTags(line)
-		processedLines = append(processedLines, processedLine)
-	}
-
-	return strings.Join(processedLines, "<br/>")
-}
-
-func replaceURLsWithTags(line string) string {
-	var regex *regexp.Regexp
-	var rline string
-
-	// Match and replace image URLs with <img> tags
-	imgsPattern := fmt.Sprintf(`\s*(https?://\S+(\.jpg|\.jpeg|\.png|\.webp|\.gif))\s*`)
-	regex = regexp.MustCompile(imgsPattern)
-	rline = regex.ReplaceAllStringFunc(line, func(match string) string {
-		submatch := regex.FindStringSubmatch(match)
-		if len(submatch) < 2 {
-			return match
-		}
-		capturedGroup := submatch[1]
-		replacement := fmt.Sprintf(` <img src="%s" alt=""> `, capturedGroup)
-		return replacement
-	})
-	if rline != line {
-		return rline
-	}
-
-	// Match and replace mp4 URLs with <video> tag
-	videoPattern := fmt.Sprintf(`\s*(https?://\S+(\.mp4|\.ogg|\.webm|.mov))\s*`)
-	regex = regexp.MustCompile(videoPattern)
-	rline = regex.ReplaceAllStringFunc(line, func(match string) string {
-		submatch := regex.FindStringSubmatch(match)
-		if len(submatch) < 2 {
-			return match
-		}
-		capturedGroup := submatch[1]
-		replacement := fmt.Sprintf(` <video controls width="100%%"><source src="%s"></video> `, capturedGroup)
-		return replacement
-	})
-	if rline != line {
-		return rline
-	}
-
-	// Match and replace npup1, nprofile1, note1, nevent1, etc
-	nostrRegexPattern := `\S*(nostr:)?((npub|note|nevent|nprofile)1[a-z0-9]+)\S*`
-	nostrRegex := regexp.MustCompile(nostrRegexPattern)
-	line = nostrRegex.ReplaceAllStringFunc(line, func(match string) string {
-		submatch := nostrRegex.FindStringSubmatch(match)
-		if len(submatch) < 2 {
-			return match
-		}
-		capturedGroup := submatch[2]
-		first6 := capturedGroup[:6]
-		last6 := capturedGroup[len(capturedGroup)-6:]
-		replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, capturedGroup, first6+"…"+last6)
-		return replacement
-	})
-
-	// Match and replace other URLs with <a> tags
-	hrefRegexPattern := `\S*(https?://\S+)\S*`
-	hrefRegex := regexp.MustCompile(hrefRegexPattern)
-	line = hrefRegex.ReplaceAllString(line, ` <a href="$1">$1</a> `)
-
-	return line
-}
-
 func findParentNevent(event *nostr.Event) string {
 	parentNevent := ""
 	replyTag := nip10.GetImmediateReply(event.Tags)
@@ -266,7 +195,119 @@ func findParentNevent(event *nostr.Event) string {
 	return parentNevent
 }
 
+// Rendering functions
+// ### ### ### ### ### ### ### ### ### ### ###
+
+func replateImageURLsWithTags(input string, replacement string) string {
+	// Match and replace image URLs with a custom replacement
+	// Usually is html <img> => ` <img src="%s" alt=""> `
+	// or markdown !()[...] tags for further processing => `![](%s)`
+	var regex *regexp.Regexp
+	imgsPattern := `\S*(\()?(https?://\S+(\.jpg|\.jpeg|\.png|\.webp|\.gif))\S*`
+	regex = regexp.MustCompile(imgsPattern)
+	input = regex.ReplaceAllStringFunc(input, func(match string) string {
+		submatch := regex.FindStringSubmatch(match)
+		if len(submatch) < 2 ||
+			strings.Contains(submatch[0], "](") { // Markdown ![](...) image
+			return match
+		}
+		capturedGroup := submatch[2]
+		replacement := fmt.Sprintf(replacement, capturedGroup)
+		return replacement
+	})
+	return input
+}
+
+func replateVideoURLsWithTags(input string, replacement string) string {
+	// Match and replace video URLs with a custom replacement
+	// Usually is html <video> => ` <video controls width="100%%"><source src="%s"></video> `
+	// or markdown !()[...] tags for further processing => `![](%s)`
+	var regex *regexp.Regexp
+	videoPattern := `\S*(https?://\S+(\.mp4|\.ogg|\.webm|.mov))\S*`
+	regex = regexp.MustCompile(videoPattern)
+	input = regex.ReplaceAllStringFunc(input, func(match string) string {
+		submatch := regex.FindStringSubmatch(match)
+		if len(submatch) < 2 {
+			return match
+		}
+		capturedGroup := submatch[1]
+		replacement := fmt.Sprintf(replacement, capturedGroup)
+		return replacement
+	})
+	return input
+}
+
+func replaceNostrURLsWithTags(input string) string {
+	// Match and replace npup1, nprofile1, note1, nevent1, etc
+	nostrRegexPattern := `\S*(nostr:)?((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`
+	nostrRegex := regexp.MustCompile(nostrRegexPattern)
+	input = nostrRegex.ReplaceAllStringFunc(input, func(match string) string {
+		submatch := nostrRegex.FindStringSubmatch(match)
+		if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
+			return match
+		}
+		capturedGroup := submatch[2]
+		first6 := capturedGroup[:6]
+		last6 := capturedGroup[len(capturedGroup)-6:]
+		replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, capturedGroup, first6+"…"+last6)
+		return replacement
+	})
+	return input
+}
+
+func replaceURLsWithTags(line string) string {
+
+	var rline string
+
+	rline = replateImageURLsWithTags(line, ` <img src="%s" alt=""> `)
+	if rline != line {
+		return rline
+	}
+
+	rline = replateVideoURLsWithTags(line, `<video controls width="100%%"><source src="%s"></video>`)
+	if rline != line {
+		return rline
+	}
+
+	line = replaceNostrURLsWithTags(line)
+
+	// Match and replace other URLs with <a> tags
+	hrefRegexPattern := `\S*(https?://\S+)\S*`
+	hrefRegex := regexp.MustCompile(hrefRegexPattern)
+	line = hrefRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
+
+	return line
+}
+
+func sanitizeXSS(html string) string {
+	p := bluemonday.UGCPolicy()
+	p.AllowStyling()
+	p.AllowElements("video", "source", "iframe")
+	p.AllowAttrs("controls", "width").OnElements("video")
+	p.AllowAttrs("src", "width").OnElements("source")
+	p.AllowAttrs("height", "width", "src", "frameborder").OnElements("iframe")
+	return p.Sanitize(html)
+}
+
+func basicFormatting(input string) string {
+	lines := strings.Split(input, "\n")
+
+	var processedLines []string
+	for _, line := range lines {
+		processedLine := replaceURLsWithTags(line)
+		processedLines = append(processedLines, processedLine)
+	}
+
+	return strings.Join(processedLines, "<br/>")
+}
+
 func mdToHTML(md string) string {
+
+	md = strings.ReplaceAll(md, "\u00A0", " ")
+	md = replateImageURLsWithTags(md, `![](%s)`)
+	md = replateVideoURLsWithTags(md, `<video controls width="100%%"><source src="%s"></video>`)
+	md = replaceNostrURLsWithTags(md)
+
 	// create markdown parser with extensions
 	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock | parser.Footnotes
 	p := parser.NewWithExtensions(extensions)
@@ -276,12 +317,10 @@ func mdToHTML(md string) string {
 	htmlFlags := html.CommonFlags | html.HrefTargetBlank
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
+	output := string(markdown.Render(doc, renderer))
 
-	return string(markdown.Render(doc, renderer))
-}
+	// Sanitize content
+	output = sanitizeXSS(output)
 
-func sanitizeXSS(html string) string {
-	p := bluemonday.UGCPolicy()
-	p.AllowStyling()
-	return p.Sanitize(html)
+	return output
 }

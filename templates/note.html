@@ -38,10 +38,13 @@
 
           <div class="field content">
             {{ if (not (eq .subject ""))}}
-            <h1>{{.subject | escapeString}}</h1>
-            {{ end }} {{ if (or (eq .kindID 30023) (eq .kindID 30024))}}
-            {{.content | mdToHTML | sanitizeXSS }} {{ else }} {{.content |
-            escapeString | basicFormatting }} {{ end }}
+              <h1>{{.subject | escapeString}}</h1>
+            {{ end }}
+            {{ if (or (eq .kindID 30023) (eq .kindID 30024))}}
+              {{.content | mdToHTML }}
+            {{ else }}
+              {{.content | escapeString | basicFormatting }}
+            {{ end }}
           </div>
 
           <div class="field separator"></div>
