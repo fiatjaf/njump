@@ -122,6 +122,7 @@ func generateClientList(code string, event *nostr.Event) []map[string]string {
 	} else if strings.HasPrefix(code, "naddr") {
 		return []map[string]string{
 			{"name": "Your native client", "url": "nostr:" + code},
+			{"name": "YakiHonne", "url": "https://yakihonne.com/article/" + code},
 			{"name": "Habla", "url": "https://habla.news/a/" + code},
 			{"name": "Blogstack", "url": "https://blogstack.io/" + code},
 		}
@@ -186,7 +187,6 @@ func basicFormatting(input string) string {
 }
 
 func replaceURLsWithTags(line string) string {
-
 	var regex *regexp.Regexp
 	var rline string
 
