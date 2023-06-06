@@ -282,6 +282,7 @@ func replaceURLsWithTags(line string) string {
 func sanitizeXSS(html string) string {
 	p := bluemonday.UGCPolicy()
 	p.AllowStyling()
+	p.RequireNoFollowOnLinks(false)
 	p.AllowElements("video", "source", "iframe")
 	p.AllowAttrs("controls", "width").OnElements("video")
 	p.AllowAttrs("src", "width").OnElements("source")
