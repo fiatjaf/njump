@@ -285,7 +285,7 @@ func sanitizeXSS(html string) string {
 	p.AllowElements("video", "source", "iframe")
 	p.AllowAttrs("controls", "width").OnElements("video")
 	p.AllowAttrs("src", "width").OnElements("source")
-	p.AllowAttrs("height", "width", "src", "frameborder").OnElements("iframe")
+	p.AllowAttrs("src", "frameborder").OnElements("iframe")
 	return p.Sanitize(html)
 }
 
