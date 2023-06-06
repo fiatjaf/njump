@@ -149,10 +149,13 @@ func render(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var subject string
+	var summary string
 	for _, tag := range event.Tags {
 		if tag[0] == "subject" || tag[0] == "title" {
 			subject = tag[1]
-			break
+		}
+		if tag[0] == "summary" {
+			summary = tag[1]
 		}
 	}
 
@@ -203,8 +206,13 @@ func render(w http.ResponseWriter, r *http.Request) {
 		} else {
 			description = seenOnRelays
 		}
+	} else if summary != "" {
+		description = summary
 	} else {
 		description = prettyJsonOrRaw(event.Content)
+		if len(description) > 240 {
+			description = description[:240]
+		}
 	}
 
 	// Manage not NIP-27 content replacing #[..] note/npub occurrences
