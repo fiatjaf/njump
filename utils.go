@@ -107,7 +107,6 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
 			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
-			{Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
 			{Name: "Nostribe", URL: "https://www.nostribe.com/post/" + event.ID},
 			{Name: "Nostrid", URL: "https://web.nostrid.app/note/" + event.ID},
 		}
@@ -121,7 +120,6 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
 			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
-			{Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
 			{Name: "Nostribe", URL: "https://www.nostribe.com/profile/" + event.PubKey},
 			{Name: "Nostrid", URL: "https://web.nostrid.app/account/" + event.PubKey},
 		}
@@ -256,7 +254,6 @@ func replaceNostrURLsWithTags(input string) string {
 }
 
 func replaceURLsWithTags(line string) string {
-
 	var rline string
 
 	rline = replateImageURLsWithTags(line, ` <img src="%s" alt=""> `)
@@ -303,7 +300,6 @@ func basicFormatting(input string) string {
 }
 
 func mdToHTML(md string) string {
-
 	md = strings.ReplaceAll(md, "\u00A0", " ")
 	md = replateImageURLsWithTags(md, `![](%s)`)
 	md = replateVideoURLsWithTags(md, `<video controls width="100%%"><source src="%s"></video>`)
