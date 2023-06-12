@@ -66,12 +66,12 @@
           <div class="field last_notes">
             <h2>Last Notes</h2>
             {{range .lastNotes}}
-            <a href="/{{.Nevent}}" class="note">
-              <div class="published_at">{{.CreatedAt}}</div>
+            <a href="/{{.Nevent | escapeString}}" class="note">
+              <div class="published_at">{{.CreatedAt | escapeString}}</div>
               {{if not (eq .ParentNevent "")}}
               <div class="is_reply">- reply</div>
               {{end}}
-              <div class="content">{{.Content}}</div>
+              <div class="content">{{.Content | escapeString}}</div>
             </a>
             {{end}}
           </div>
