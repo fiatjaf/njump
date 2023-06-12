@@ -107,9 +107,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Agora", URL: "https://agorasocial.app/" + code},
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
-			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
-			{Name: "Nostribe", URL: "https://www.nostribe.com/post/" + event.ID},
-			{Name: "Nostrid", URL: "https://web.nostrid.app/note/" + event.ID},
+			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 		}
 	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
 		return []ClientReference{
@@ -121,15 +119,14 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Agora", URL: "https://agorasocial.app/" + code},
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
-			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
-			{Name: "Nostribe", URL: "https://www.nostribe.com/profile/" + event.PubKey},
-			{Name: "Nostrid", URL: "https://web.nostrid.app/account/" + event.PubKey},
+			{Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
 		}
 	} else if strings.HasPrefix(code, "naddr") {
 		return []ClientReference{
 			{Name: "Your native client", URL: "nostr:" + code},
 			{Name: "YakiHonne", URL: "https://yakihonne.com/article/" + code},
 			{Name: "Habla", URL: "https://habla.news/a/" + code},
+			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 			{Name: "Blogstack", URL: "https://blogstack.io/" + code},
 		}
 	} else {
