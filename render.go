@@ -40,6 +40,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 		code, _ = nip19.EncodeNote(code[2:])
 	} else if strings.HasPrefix(code, "p/") {
 		code, _ = nip19.EncodePublicKey(code[2:])
+	} else if strings.HasPrefix(code, "nostr:") {
+		http.Redirect(w, r, "/"+code[6:], http.StatusFound)
 	}
 	if code == "" {
 		fmt.Fprintf(w, "call /<nip19 code>")
