@@ -107,6 +107,8 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Agora", URL: "https://agorasocial.app/" + code},
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
+			{Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
+			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
 			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 		}
 	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
@@ -119,6 +121,8 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Agora", URL: "https://agorasocial.app/" + code},
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
+			{Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
+			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
 			{Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
 		}
 	} else if strings.HasPrefix(code, "naddr") {
