@@ -99,26 +99,18 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	return nil, fmt.Errorf("couldn't find this %s", prefix)
 }
 
-func getLastNotes(ctx context.Context, npub string) ([]nostr.Event, error) {
-	var filter nostr.Filters
-	relays := make([]string, 0, 7)
-	relays = append(relays, always...)
+func getLastNotes(ctx context.Context, pubkey string) ([]nostr.Event, error) {
 	lastNotes := make([]nostr.Event, 0)
-	if _, v, err := nip19.Decode(npub); err == nil {
-		pub := v.(string)
-		filter = nostr.Filters{
-			{
-				Kinds:   []int{nostr.KindTextNote},
-				Authors: []string{pub},
-				Limit:   20,
-			},
-		}
-	} else {
-		panic(err)
+	filter := nostr.Filters{
+		{
+			Kinds:   []int{nostr.KindTextNote},
+			Authors: []string{pubkey},
+			Limit:   20,
+		},
 	}
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 	defer cancel()
-	events := pool.SubManyEose(ctx, relays, filter)
+	events := pool.SubManyEose(ctx, always, filter)
 	for event := range events {
 		lastNotes = append(lastNotes, *event)
 	}
