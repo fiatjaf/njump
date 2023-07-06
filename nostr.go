@@ -110,7 +110,7 @@ func getLastNotes(ctx context.Context, pubkey string) ([]nostr.Event, error) {
 	}
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 	defer cancel()
-	events := pool.SubManyEose(ctx, always, filter)
+	events := pool.SubManyEose(ctx, profiles, filter)
 	for event := range events {
 		lastNotes = append(lastNotes, *event)
 	}
