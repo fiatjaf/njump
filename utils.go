@@ -181,7 +181,7 @@ func getPreviewStyle(r *http.Request) string {
 	}
 }
 
-func findParentNevent(event *nostr.Event) string {
+func getParentNevent(event *nostr.Event) string {
 	parentNevent := ""
 	replyTag := nip10.GetImmediateReply(event.Tags)
 	if replyTag != nil {

@@ -121,12 +121,17 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	return nil, fmt.Errorf("couldn't find this %s", prefix)
 }
 
-func getLastNotes(ctx context.Context, pubkey string) ([]nostr.Event, error) {
+func getLastNotes(ctx context.Context, code string) []*nostr.Event {
+	pp := sdk.InputToProfile(ctx, code)
+	if pp == nil {
+		return nil
+	}
+
 	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
 	defer cancel()
 
-	relays := make([]string, 0, 20)
-	for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pubkey, relays...) {
+	relays := pp.Relays
+	for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pp.PublicKey, pp.Relays...) {
 		if relay.Outbox {
 			relays = append(relays, relay.URL)
 		}
@@ -140,13 +145,13 @@ func getLastNotes(ctx context.Context, pubkey string) ([]nostr.Event, error) {
 	events := pool.SubManyEose(ctx, relays, nostr.Filters{
 		{
 			Kinds:   []int{nostr.KindTextNote},
-			Authors: []string{pubkey},
+			Authors: []string{pp.PublicKey},
 			Limit:   20,
 		},
 	})
-	lastNotes := make([]nostr.Event, 0, 20)
+	lastNotes := make([]*nostr.Event, 0, 20)
 	for event := range events {
-		lastNotes = append(lastNotes, *event)
+		lastNotes = append(lastNotes, event)
 	}
-	return lastNotes, nil
+	return lastNotes
 }

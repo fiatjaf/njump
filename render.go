@@ -71,7 +71,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	if event.Kind == 0 {
 		typ = "profile"
-		thisLastNotes, err := getLastNotes(r.Context(), code)
+		thisLastNotes := getLastNotes(r.Context(), code)
 		lastNotes = make([]Event, len(thisLastNotes))
 		for i, n := range thisLastNotes {
 			this_nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
@@ -80,7 +80,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 				Nevent:       this_nevent,
 				Content:      n.Content,
 				CreatedAt:    this_date,
-				ParentNevent: findParentNevent(&n),
+				ParentNevent: getParentNevent(n),
 			}
 		}
 		if err != nil {
@@ -93,7 +93,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 			typ = "note"
 			note, _ = nip19.EncodeNote(event.ID)
 			content = event.Content
-			parentNevent = findParentNevent(event)
+			parentNevent = getParentNevent(event)
 		} else if event.Kind == 6 {
 			typ = "note"
 			if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
