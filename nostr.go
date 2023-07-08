@@ -8,6 +8,7 @@ import (
 	"github.com/die-net/lrucache"
 	"github.com/mailru/easyjson"
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/nbd-wtf/go-nostr/sdk"
 )
@@ -50,7 +51,11 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 
 	prefix, data, err := nip19.Decode(code)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode %w", err)
+		pp, _ := nip05.QueryIdentifier(ctx, code)
+		if pp == nil {
+			return nil, fmt.Errorf("failed to decode %w", err)
+		}
+		data = *pp
 	}
 
 	var author string
