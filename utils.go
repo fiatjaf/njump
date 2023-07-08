@@ -98,7 +98,7 @@ type ClientReference struct {
 }
 
 func generateClientList(code string, event *nostr.Event) []ClientReference {
-	if strings.HasPrefix(code, "nevent") || strings.HasPrefix(code, "note") {
+	if event.Kind == 1 || event.Kind == 6 {
 		return []ClientReference{
 			{Name: "native client", URL: "nostr:" + code},
 			{Name: "Snort", URL: "https://Snort.social/e/" + code},
@@ -111,7 +111,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
 			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 		}
-	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
+	} else if event.Kind == 0 {
 		return []ClientReference{
 			{Name: "Your native client", URL: "nostr:" + code},
 			{Name: "Nosta", URL: "https://nosta.me/" + code},
@@ -125,7 +125,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
 			{Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
 		}
-	} else if strings.HasPrefix(code, "naddr") {
+	} else if event.Kind == 30023 {
 		return []ClientReference{
 			{Name: "Your native client", URL: "nostr:" + code},
 			{Name: "YakiHonne", URL: "https://yakihonne.com/article/" + code},
@@ -133,11 +133,9 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 			{Name: "Blogstack", URL: "https://blogstack.io/" + code},
 		}
-	} else {
-		return []ClientReference{
-			{Name: "native client", URL: "nostr:" + code},
-		}
 	}
+
+	return nil
 }
 
 func mergeMaps[K comparable, V any](m1 map[K]V, m2 map[K]V) map[K]V {
