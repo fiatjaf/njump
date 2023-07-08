@@ -116,7 +116,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 		relays = append(relays, getRelay())
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
 		cache.Set(code, []byte(event.String()))

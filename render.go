@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	_ "embed"
 	"encoding/json"
@@ -8,7 +9,6 @@ import (
 	"html"
 	"net/http"
 	"regexp"
-	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -33,7 +33,6 @@ type Event struct {
 func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
-	maxAge := 86400
 
 	code := r.URL.Path[1:]
 	if strings.HasPrefix(code, "e/") {
@@ -71,15 +70,17 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	if event.Kind == 0 {
 		typ = "profile"
-		thisLastNotes := getLastNotes(r.Context(), code)
+		ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
+		defer cancel()
+		thisLastNotes := getLastNotes(ctx, code)
 		lastNotes = make([]Event, len(thisLastNotes))
 		for i, n := range thisLastNotes {
-			this_nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
-			this_date := time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05")
+			thisNevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
+			thisDate := time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05")
 			lastNotes[i] = Event{
-				Nevent:       this_nevent,
+				Nevent:       thisNevent,
 				Content:      n.Content,
-				CreatedAt:    this_date,
+				CreatedAt:    thisDate,
 				ParentNevent: getParentNevent(n),
 			}
 		}
@@ -87,7 +88,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "error fetching event: "+err.Error(), 404)
 			return
 		}
-		maxAge = 900
 	} else {
 		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 || event.Kind == 30024 {
 			typ = "note"
@@ -161,7 +161,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	useTextImage := (event.Kind == 1 || event.Kind == 30023) && image == "" && video == "" && len(event.Content) > 120
+	useTextImage := (event.Kind == 1 || event.Kind == 30023) &&
+		image == "" && video == "" && len(event.Content) > 120
 	if style == "slack" || style == "discord" {
 		useTextImage = false
 	}
@@ -286,7 +287,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 			ParseFS(templates, "templates/*"),
 	)
 
-	w.Header().Set("Cache-Control", "max-age="+strconv.Itoa(maxAge))
+	w.Header().Set("Cache-Control", "max-age=604800")
 
 	if err := tmpl.ExecuteTemplate(w, template_mapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
