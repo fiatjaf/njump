@@ -9,6 +9,7 @@ import (
 	"github.com/mailru/easyjson"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/go-nostr/sdk"
 )
 
 var (
@@ -27,12 +28,11 @@ var (
 		"wss://nostr.mom",
 		"wss://atlas.nostr.land",
 		"wss://relay.snort.social",
-		"wss://eden.nostr.land",
+		"wss://offchain.pub",
 		"wss://nostr-pub.wellorder.net",
 	}
 	profiles = []string{
 		"wss://purplepag.es",
-		"wss://rbr.bio",
 	}
 )
 
@@ -53,22 +53,27 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 		return nil, fmt.Errorf("failed to decode %w", err)
 	}
 
+	var author string
+
 	var filter nostr.Filter
-	relays := make([]string, 0, 7)
+	relays := make([]string, 0, 25)
 	relays = append(relays, always...)
 
 	switch v := data.(type) {
 	case nostr.ProfilePointer:
+		author = v.PublicKey
 		filter.Authors = []string{v.PublicKey}
 		filter.Kinds = []int{0}
 		relays = append(relays, profiles...)
 		relays = append(relays, v.Relays...)
 	case nostr.EventPointer:
+		author = v.Author
 		filter.IDs = []string{v.ID}
 		relays = append(relays, getRelay())
 		relays = append(relays, getRelay())
 		relays = append(relays, v.Relays...)
 	case nostr.EntityPointer:
+		author = v.PublicKey
 		filter.Authors = []string{v.PublicKey}
 		filter.Tags = nostr.TagMap{
 			"d": []string{v.Identifier},
@@ -83,10 +88,27 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 			relays = append(relays, getRelay())
 			relays = append(relays, getRelay())
 		} else if prefix == "npub" {
+			author = v
 			filter.Authors = []string{v}
 			filter.Kinds = []int{0}
 			relays = append(relays, profiles...)
 		}
+	}
+
+	if author != "" {
+		// fetch relays for author
+		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
+		defer cancel()
+
+		for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, author, relays...) {
+			if relay.Outbox {
+				relays = append(relays, relay.URL)
+			}
+		}
+	}
+
+	for len(relays) < 5 {
+		relays = append(relays, getRelay())
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
@@ -100,17 +122,29 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 }
 
 func getLastNotes(ctx context.Context, pubkey string) ([]nostr.Event, error) {
-	lastNotes := make([]nostr.Event, 0)
-	filter := nostr.Filters{
+	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
+	defer cancel()
+
+	relays := make([]string, 0, 20)
+	for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pubkey, relays...) {
+		if relay.Outbox {
+			relays = append(relays, relay.URL)
+		}
+	}
+
+	ctx, cancel = context.WithTimeout(ctx, time.Second*4)
+	defer cancel()
+
+	relays = append(relays, getRelay())
+	relays = append(relays, getRelay())
+	events := pool.SubManyEose(ctx, relays, nostr.Filters{
 		{
 			Kinds:   []int{nostr.KindTextNote},
 			Authors: []string{pubkey},
 			Limit:   20,
 		},
-	}
-	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-	defer cancel()
-	events := pool.SubManyEose(ctx, profiles, filter)
+	})
+	lastNotes := make([]nostr.Event, 0, 20)
 	for event := range events {
 		lastNotes = append(lastNotes, *event)
 	}
