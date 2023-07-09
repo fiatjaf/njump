@@ -65,22 +65,31 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	typ := ""
 	author := event
-	lastNotes := make([]Event, 0)
+	var renderableLastNotes []*Event
 	parentNevent := ""
 
 	if event.Kind == 0 {
 		typ = "profile"
-		ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
-		defer cancel()
-		thisLastNotes := getLastNotes(ctx, code)
-		lastNotes = make([]Event, len(thisLastNotes))
-		for i, n := range thisLastNotes {
-			thisNevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
-			thisDate := time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05")
-			lastNotes[i] = Event{
-				Nevent:       thisNevent,
+		key := "ln:" + event.PubKey
+		var lastNotes []*nostr.Event
+
+		if res, ok := cache.Get(key); ok {
+			lastNotes = res.([]*nostr.Event)
+		} else {
+			ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
+			lastNotes = getLastNotes(ctx, code)
+			cache.SetWithTTL(key, lastNotes, int64(len(lastNotes)), time.Hour*24)
+			cancel()
+		}
+
+		renderableLastNotes = make([]*Event, len(lastNotes))
+		for i, n := range lastNotes {
+			nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
+			date := time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05")
+			renderableLastNotes[i] = &Event{
+				Nevent:       nevent,
 				Content:      n.Content,
-				CreatedAt:    thisDate,
+				CreatedAt:    date,
 				ParentNevent: getParentNevent(n),
 			}
 		}
@@ -259,7 +268,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"kindID":          event.Kind,
 		"kindDescription": kindDescription,
 		"kindNIP":         kindNIP,
-		"lastNotes":       lastNotes,
+		"lastNotes":       renderableLastNotes,
 		"parentNevent":    parentNevent,
 	}
 

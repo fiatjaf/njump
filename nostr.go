@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/die-net/lrucache"
-	"github.com/mailru/easyjson"
+	"github.com/dgraph-io/ristretto"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
@@ -14,8 +13,12 @@ import (
 )
 
 var (
-	pool   = nostr.NewSimplePool(context.Background())
-	cache  = lrucache.New(50, 60*60)
+	pool     = nostr.NewSimplePool(context.Background())
+	cache, _ = ristretto.NewCache(&ristretto.Config{
+		NumCounters: 100_000,
+		MaxCost:     10_000,
+		BufferItems: 64,
+	})
 	serial int
 
 	always = []string{
@@ -44,9 +47,7 @@ func getRelay() string {
 
 func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	if v, ok := cache.Get(code); ok {
-		evt := &nostr.Event{}
-		easyjson.Unmarshal(v, evt)
-		return evt, nil
+		return v.(*nostr.Event), nil
 	}
 
 	prefix, data, err := nip19.Decode(code)
@@ -119,7 +120,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
-		cache.Set(code, []byte(event.String()))
+		cache.SetWithTTL(code, event, 1, time.Hour*24*7)
 		return event, nil
 	}
 
