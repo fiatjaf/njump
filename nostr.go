@@ -153,7 +153,7 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 		{
 			Kinds:   []int{nostr.KindTextNote},
 			Authors: []string{pp.PublicKey},
-			Limit:   20,
+			Limit:   10,
 		},
 	})
 	lastNotes := make([]*nostr.Event, 0, 20)

@@ -7,9 +7,8 @@ require (
 	github.com/dgraph-io/ristretto v0.1.1
 	github.com/gomarkdown/markdown v0.0.0-20230322041520-c84983bdbf2a
 	github.com/lukevers/freetype-go v0.0.0-20150513150840-77e276735410
-	github.com/mailru/easyjson v0.7.7
 	github.com/microcosm-cc/bluemonday v1.0.24
-	github.com/nbd-wtf/go-nostr v0.19.3
+	github.com/nbd-wtf/go-nostr v0.19.4
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/zerolog v1.29.1
 	golang.org/x/image v0.0.0-20190802002840-cff245a6509b
@@ -30,6 +29,7 @@ require (
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
