@@ -132,18 +132,19 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 	if pp == nil {
 		return nil
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
-	defer cancel()
-
 	relays := pp.Relays
-	for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pp.PublicKey, pp.Relays...) {
-		if relay.Outbox {
-			relays = append(relays, relay.URL)
+
+	{
+		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
+		defer cancel()
+		for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pp.PublicKey, pp.Relays...) {
+			if relay.Outbox {
+				relays = append(relays, relay.URL)
+			}
 		}
 	}
 
-	ctx, cancel = context.WithTimeout(ctx, time.Second*4)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 	defer cancel()
 
 	relays = append(relays, getRelay())

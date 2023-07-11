@@ -117,7 +117,10 @@ func render(w http.ResponseWriter, r *http.Request) {
 		} else {
 			typ = "other"
 		}
-		author, _ = getEvent(r.Context(), npub)
+
+		ctx, cancel := context.WithTimeout(r.Context(), time.Second*3)
+		author, _ = getEvent(ctx, npub)
+		cancel()
 	}
 
 	kindDescription := kindNames[event.Kind]
