@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html class="theme--default">
+  <meta charset="UTF-8" />
+  {{template "head.html" .}}
+
+  <body class="profile">
+    {{template "top.html" .}}
+
+    <div class="container_wrapper">
+      <div class="container">
+        <div class="column columnA">
+          <div class="info-wrapper">
+            {{.info.Name | escapeString}}
+            <span class="display">{{.info.Description | escapeString}}</span>
+          </div>
+          <div class="pic-wrapper">
+            <img class="pic" src="{{.info.Icon | escapeString}}" />
+          </div>
+        </div>
+
+        <div class="column column_content">
+          <div class="field last_notes">
+            <h2>Last Notes</h2>
+            {{range .lastNotes}}
+            <a href="/{{.Nevent | escapeString}}" class="note">
+              <div class="published_at">{{.CreatedAt | escapeString}}</div>
+              {{if not (eq .ParentNevent "")}}
+              <div class="is_reply">- reply</div>
+              {{end}}
+              <div class="content">{{.Content | escapeString}}</div>
+            </a>
+            {{end}}
+          </div>
+        </div>
+
+        {{template "column_clients.html" .}}
+      </div>
+    </div>
+
+    {{template "footer.html"}}
+
+    <script>
+      {{template "scripts.js"}}
+    </script>
+  </body>
+</html>

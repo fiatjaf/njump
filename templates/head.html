@@ -55,8 +55,12 @@
   <title>Nostr Address {{.naddr | escapeString }}</title>
   {{end}}
   <!----------->
+  {{ if eq .type "relay" }}
+  <title>Nostr Relay {{.hostname}}</title>
+  {{end}}
+  <!----------->
   {{ if eq .type "other" }}
-  <title>Nostr Event {{.kindID }} - {{.kindDescription | escapeString }}</title>
+  <title>Nostr Event {{.kindID}} - {{.kindDescription | escapeString }}</title>
   {{end}}
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />

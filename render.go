@@ -2,26 +2,17 @@ package main
 
 import (
 	"context"
-	"embed"
 	_ "embed"
 	"encoding/json"
 	"fmt"
-	"html"
 	"net/http"
 	"regexp"
 	"strings"
-	"text/template"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
-
-//go:embed static/*
-var static embed.FS
-
-//go:embed templates/*
-var templates embed.FS
 
 type Event struct {
 	Nevent       string
@@ -50,8 +41,15 @@ func render(w http.ResponseWriter, r *http.Request) {
 	hostname := r.Header.Get("X-Forwarded-Host")
 	style := getPreviewStyle(r)
 
+	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
 	event, err := getEvent(r.Context(), code)
 	if err != nil {
+		// this will fail if code is a relay URL, in which case we will handle it differently
+		if urlMatcher.MatchString(code) {
+			renderRelayPage(w, r)
+			return
+		}
+
 		http.Error(w, "error fetching event: "+err.Error(), 404)
 		return
 	}
@@ -275,29 +273,10 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"parentNevent":    parentNevent,
 	}
 
-	// Use a mapping to expressly link the templates and share them between more kinds/types
-	templateMapping := make(map[string]string)
-	templateMapping["profile"] = "profile.html"
-	templateMapping["note"] = "note.html"
-	templateMapping["address"] = "other.html"
-
-	// If a mapping is not found fallback to raw
+	// if a mapping is not found fallback to raw
 	if templateMapping[typ] == "" {
 		templateMapping[typ] = "other.html"
 	}
-
-	funcMap := template.FuncMap{
-		"basicFormatting": basicFormatting,
-		"mdToHTML":        mdToHTML,
-		"escapeString":    html.EscapeString,
-		"sanitizeXSS":     sanitizeXSS,
-	}
-
-	tmpl := template.Must(
-		template.New("tmpl").
-			Funcs(funcMap).
-			ParseFS(templates, "templates/*"),
-	)
 
 	w.Header().Set("Cache-Control", "max-age=604800")
 	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {

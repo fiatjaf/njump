@@ -63,6 +63,7 @@
 
           <div class="field separator"></div>
 
+          {{if .lastNotes}}
           <div class="field last_notes">
             <h2>Last Notes</h2>
             {{range .lastNotes}}
@@ -75,8 +76,8 @@
             </a>
             {{end}}
           </div>
-
           <div class="field separator"></div>
+          {{end}}
 
           <div class="field advanced-switch-wrapper">
             <input

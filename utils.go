@@ -92,6 +92,8 @@ var kindNIPS = map[int]string{
 	30078: "78",
 }
 
+var urlMatcher = regexp.MustCompile(`^(wss?:\/\/)?[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
+
 type ClientReference struct {
 	Name string
 	URL  string
