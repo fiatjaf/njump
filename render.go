@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -76,7 +77,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 		} else {
 			ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
 			lastNotes = getLastNotes(ctx, code)
-			cache.SetWithTTL(key, lastNotes, int64(len(lastNotes)), time.Hour*24)
+			if (os.Getenv("DISABLE_CACHE") != "yes") {
+				cache.SetWithTTL(key, lastNotes, int64(len(lastNotes)), time.Hour*24)
+			}
 			cancel()
 		}
 

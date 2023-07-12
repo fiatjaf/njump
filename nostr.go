@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/dgraph-io/ristretto"
@@ -120,7 +121,9 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
-		cache.SetWithTTL(code, event, 1, time.Hour*24*7)
+		if (os.Getenv("DISABLE_CACHE") != "yes") {
+			cache.SetWithTTL(code, event, 1, time.Hour*24*7)
+		}
 		return event, nil
 	}
 
