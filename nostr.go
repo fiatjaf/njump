@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/dgraph-io/ristretto"
@@ -163,5 +164,8 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 	for event := range events {
 		lastNotes = append(lastNotes, event)
 	}
+	sort.Slice(lastNotes, func(i, j int) bool {
+		return lastNotes[i].CreatedAt.Time().After(lastNotes[j].CreatedAt.Time())
+	})
 	return lastNotes
 }
