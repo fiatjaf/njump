@@ -154,7 +154,7 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 }
 
 func relaysForPubkey(ctx context.Context, pubkey string, extraRelays ...string) []string {
-	pubkeyRelays := make([]string, 12)
+	pubkeyRelays := make([]string, 0, 12)
 	if ok := cache.GetJSON("io:"+pubkey, &pubkeyRelays); !ok {
 		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
 		for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pubkey, extraRelays...) {
