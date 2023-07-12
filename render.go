@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -77,11 +76,11 @@ func render(w http.ResponseWriter, r *http.Request) {
 		} else {
 			ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
 			lastNotes = getLastNotes(ctx, code)
-			if os.Getenv("DISABLE_CACHE") != "yes" {
+			cancel()
+			if !s.DisableCache {
 				b, _ := json.Marshal(lastNotes)
 				cache.SetWithTTL(key, b, time.Hour*24)
 			}
-			cancel()
 		}
 
 		renderableLastNotes = make([]*Event, len(lastNotes))

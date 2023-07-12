@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
 	"sort"
 	"time"
 
@@ -119,7 +118,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
-		if os.Getenv("DISABLE_CACHE") != "yes" {
+		if !s.DisableCache {
 			b, err := nson.Marshal(event)
 			if err != nil {
 				log.Error().Err(err).Stringer("event", event).Msg("error marshaling nson")

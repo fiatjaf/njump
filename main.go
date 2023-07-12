@@ -7,8 +7,14 @@ import (
 	"os"
 	"text/template"
 
+	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/zerolog"
 )
+
+type Settings struct {
+	Port         string `envconfig:"PORT" required:"true"`
+	DisableCache bool   `envconfig:"DISABLE_CACHE" default:"false"`
+}
 
 //go:embed static/*
 var static embed.FS
@@ -17,6 +23,8 @@ var static embed.FS
 var templates embed.FS
 
 var (
+	s Settings
+
 	tmpl            *template.Template
 	templateMapping = make(map[string]string)
 
@@ -24,6 +32,11 @@ var (
 )
 
 func main() {
+	err := envconfig.Process("", &s)
+	if err != nil {
+		log.Fatal().Err(err).Msg("couldn't process envconfig.")
+	}
+
 	// initialize disk cache
 	defer cache.initialize()()
 
@@ -53,13 +66,8 @@ func main() {
 	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
 	http.HandleFunc("/", render)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "2999"
-	}
-
-	log.Print("listening at http://0.0.0.0:" + port)
-	if err := http.ListenAndServe("0.0.0.0:"+port, nil); err != nil {
+	log.Print("listening at http://0.0.0.0:" + s.Port)
+	if err := http.ListenAndServe("0.0.0.0:"+s.Port, nil); err != nil {
 		log.Fatal().Err(err).Msg("")
 	}
 }

@@ -6,6 +6,7 @@ require (
 	github.com/apatters/go-wordwrap v1.0.0
 	github.com/dgraph-io/badger v1.6.2
 	github.com/gomarkdown/markdown v0.0.0-20230322041520-c84983bdbf2a
+	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lukevers/freetype-go v0.0.0-20150513150840-77e276735410
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/go-nostr v0.19.4
