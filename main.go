@@ -12,7 +12,7 @@ import (
 )
 
 type Settings struct {
-	Port         string `envconfig:"PORT" required:"true"`
+	Port         string `envconfig:"PORT" default:"2999"`
 	DisableCache bool   `envconfig:"DISABLE_CACHE" default:"false"`
 }
 
