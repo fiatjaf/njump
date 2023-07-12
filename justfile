@@ -9,4 +9,4 @@ deploy: build
 
 refresh_build:
     sass static/styles.scss static/styles.css
-    go build -o ./tmp/main .
+    go build -tags=nocache -o ./tmp/main .
