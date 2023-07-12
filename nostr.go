@@ -115,14 +115,12 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
-		if !s.DisableCache {
-			b, err := nson.Marshal(event)
-			if err != nil {
-				log.Error().Err(err).Stringer("event", event).Msg("error marshaling nson")
-				return event, nil
-			}
-			cache.SetWithTTL(code, []byte(b), time.Hour*24*7)
+		b, err := nson.Marshal(event)
+		if err != nil {
+			log.Error().Err(err).Stringer("event", event).Msg("error marshaling nson")
+			return event, nil
 		}
+		cache.SetWithTTL(code, []byte(b), time.Hour*24*7)
 		return event, nil
 	}
 
@@ -153,8 +151,11 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 	})
 	lastNotes := make([]*nostr.Event, 0, 20)
 	for event := range events {
+		fmt.Println("last note", event)
 		lastNotes = nostr.InsertEventIntoDescendingList(lastNotes, event)
 	}
+
+	fmt.Println("returning", len(lastNotes))
 	return lastNotes
 }
 

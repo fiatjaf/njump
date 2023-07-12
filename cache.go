@@ -1,3 +1,5 @@
+//go:build !nocache
+
 package main
 
 import (
