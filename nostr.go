@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"sort"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -163,10 +162,7 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 	})
 	lastNotes := make([]*nostr.Event, 0, 20)
 	for event := range events {
-		lastNotes = append(lastNotes, event)
+		lastNotes = nostr.InsertEventIntoDescendingList(lastNotes, event)
 	}
-	sort.Slice(lastNotes, func(i, j int) bool {
-		return lastNotes[i].CreatedAt.Time().After(lastNotes[j].CreatedAt.Time())
-	})
 	return lastNotes
 }
