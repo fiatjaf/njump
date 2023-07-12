@@ -18,6 +18,7 @@ type Event struct {
 	Nevent       string
 	Content      string
 	CreatedAt    string
+	ModifiedAt   string
 	ParentNevent string
 }
 
@@ -25,6 +26,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
 
+	typ := ""
 	code := r.URL.Path[1:]
 	if strings.HasPrefix(code, "e/") {
 		code, _ = nip19.EncodeNote(code[2:])
@@ -32,7 +34,11 @@ func render(w http.ResponseWriter, r *http.Request) {
 		code, _ = nip19.EncodePublicKey(code[2:])
 	} else if strings.HasPrefix(code, "nostr:") {
 		http.Redirect(w, r, "/"+code[6:], http.StatusFound)
+	} else if strings.HasPrefix(code, "npub") && strings.HasSuffix(code, ".xml") {
+		code = code[:len(code)-4]
+		typ = "profile_sitemap"
 	}
+
 	if code == "" {
 		fmt.Fprintf(w, "call /<nip19 code>")
 		return
@@ -59,21 +65,29 @@ func render(w http.ResponseWriter, r *http.Request) {
 	note := ""
 	naddr := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
+	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 	content := ""
 
-	typ := ""
 	author := event
 	var renderableLastNotes []*Event
 	parentNevent := ""
 
 	if event.Kind == 0 {
-		typ = "profile"
-		key := "ln:" + event.PubKey
+		key := ""
+		events_num := 10
+		if typ == "profile_sitemap" { 
+			key = "lns:" + event.PubKey
+			events_num = 50000
+		} else {
+			typ = "profile"
+			key = "ln:" + event.PubKey
+		}
+
 		var lastNotes []*nostr.Event
 
 		if ok := cache.GetJSON(key, &lastNotes); !ok {
 			ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
-			lastNotes = getLastNotes(ctx, code)
+			lastNotes = getLastNotes(ctx, code, events_num)
 			cancel()
 			cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
 		}
@@ -81,11 +95,11 @@ func render(w http.ResponseWriter, r *http.Request) {
 		renderableLastNotes = make([]*Event, len(lastNotes))
 		for i, n := range lastNotes {
 			nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
-			date := time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05")
 			renderableLastNotes[i] = &Event{
 				Nevent:       nevent,
 				Content:      n.Content,
-				CreatedAt:    date,
+				CreatedAt:    time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05"),
+				ModifiedAt:   time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),
 				ParentNevent: getParentNevent(n),
 			}
 		}
@@ -243,6 +257,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	params := map[string]any{
 		"createdAt":       createdAt,
+		"modifiedAt":      modifiedAt,
 		"clients":         generateClientList(code, event),
 		"type":            typ,
 		"title":           title,

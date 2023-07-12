@@ -127,7 +127,13 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	return nil, fmt.Errorf("couldn't find this %s", prefix)
 }
 
-func getLastNotes(ctx context.Context, code string) []*nostr.Event {
+func getLastNotes(ctx context.Context, code string, options ...int) []*nostr.Event {
+
+	events_num := 10
+	if len(options) > 0 {
+		events_num = options[0]
+	}
+
 	pp := sdk.InputToProfile(ctx, code)
 	if pp == nil {
 		return nil
@@ -146,7 +152,7 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 		{
 			Kinds:   []int{nostr.KindTextNote},
 			Authors: []string{pp.PublicKey},
-			Limit:   10,
+			Limit:   events_num,
 		},
 	})
 	lastNotes := make([]*nostr.Event, 0, 20)

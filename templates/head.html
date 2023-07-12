@@ -4,6 +4,8 @@
   <meta property="og:site_name" content="{{.npub | escapeString}}" />
   <meta property="og:title" content="{{.title | escapeString}}" />
   <link rel="canonical" href="https://nostr.com/{{.npub | escapeString }}" />
+  <link rel="sitemap" type="application/xml" title="Sitemap for {{.npub | escapeString}}"
+    href="/{{.npub | escapeString}}.xml">
   {{ if .metadata.Picture }}
   <meta property="og:image" content="{{.metadata.Picture | escapeString}}" />
   <meta

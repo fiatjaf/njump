@@ -42,6 +42,7 @@ func main() {
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
 	templateMapping["profile"] = "profile.html"
+	templateMapping["profile_sitemap"] = "sitemap.xml"
 	templateMapping["note"] = "note.html"
 	templateMapping["address"] = "other.html"
 	templateMapping["relay"] = "relay.html"
