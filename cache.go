@@ -127,6 +127,15 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	return val, true
 }
 
+func (c *Cache) GetJSON(key string, recv any) bool {
+	b, ok := c.Get(key)
+	if !ok {
+		return ok
+	}
+	json.Unmarshal(b, recv)
+	return true
+}
+
 func (c *Cache) Set(key string, value []byte) {
 	err := c.DB.Update(func(txn *badger.Txn) error {
 		return txn.Set([]byte(key), value)
@@ -134,6 +143,11 @@ func (c *Cache) Set(key string, value []byte) {
 	if err != nil {
 		log.Fatal().Err(err).Msg("")
 	}
+}
+
+func (c *Cache) SetJSON(key string, value any) {
+	j, _ := json.Marshal(value)
+	c.Set(key, j)
 }
 
 func (c *Cache) SetWithTTL(key string, value []byte, ttl time.Duration) {
@@ -145,4 +159,9 @@ func (c *Cache) SetWithTTL(key string, value []byte, ttl time.Duration) {
 	}
 	c.expiringKeys[key] = time.Now().Add(ttl)
 	c.refreshTimers <- struct{}{}
+}
+
+func (c *Cache) SetJSONWithTTL(key string, value any, ttl time.Duration) {
+	j, _ := json.Marshal(value)
+	c.SetWithTTL(key, j, ttl)
 }

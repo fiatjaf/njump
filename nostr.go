@@ -100,14 +100,8 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 
 	if author != "" {
 		// fetch relays for author
-		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
-		defer cancel()
-
-		for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, author, relays...) {
-			if relay.Outbox {
-				relays = append(relays, relay.URL)
-			}
-		}
+		authorRelays := relaysForPubkey(ctx, author, relays...)
+		relays = append(relays, authorRelays...)
 	}
 
 	for len(relays) < 5 {
@@ -136,17 +130,9 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 	if pp == nil {
 		return nil
 	}
-	relays := pp.Relays
 
-	{
-		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
-		defer cancel()
-		for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pp.PublicKey, pp.Relays...) {
-			if relay.Outbox {
-				relays = append(relays, relay.URL)
-			}
-		}
-	}
+	pubkeyRelays := relaysForPubkey(ctx, pp.PublicKey, pp.Relays...)
+	relays := append(pp.Relays, pubkeyRelays...)
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 	defer cancel()
@@ -165,4 +151,19 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 		lastNotes = nostr.InsertEventIntoDescendingList(lastNotes, event)
 	}
 	return lastNotes
+}
+
+func relaysForPubkey(ctx context.Context, pubkey string, extraRelays ...string) []string {
+	pubkeyRelays := make([]string, 12)
+	if ok := cache.GetJSON("io:"+pubkey, &pubkeyRelays); !ok {
+		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
+		for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pubkey, extraRelays...) {
+			if relay.Outbox {
+				pubkeyRelays = append(pubkeyRelays, relay.URL)
+			}
+		}
+		cancel()
+		cache.SetJSONWithTTL("io:"+pubkey, pubkeyRelays, time.Hour*24*7)
+	}
+	return pubkeyRelays
 }

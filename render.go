@@ -71,15 +71,12 @@ func render(w http.ResponseWriter, r *http.Request) {
 		key := "ln:" + event.PubKey
 		var lastNotes []*nostr.Event
 
-		if b, ok := cache.Get(key); ok {
-			json.Unmarshal(b, &lastNotes)
-		} else {
+		if ok := cache.GetJSON(key, &lastNotes); !ok {
 			ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
 			lastNotes = getLastNotes(ctx, code)
 			cancel()
 			if !s.DisableCache {
-				b, _ := json.Marshal(lastNotes)
-				cache.SetWithTTL(key, b, time.Hour*24)
+				cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
 			}
 		}
 
