@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -36,6 +37,9 @@ var (
 )
 
 func getRelay() string {
+	if serial == 0 {
+		serial = rand.Intn(len(everything))
+	}
 	serial = (serial + 1) % len(everything)
 	return everything[serial]
 }
