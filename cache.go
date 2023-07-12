@@ -20,6 +20,18 @@ func (c *Cache) initialize() func() {
 	}
 	c.DB = db
 
+	go func() {
+		ticker := time.NewTicker(2 * time.Hour)
+		defer ticker.Stop()
+		for range ticker.C {
+		again:
+			err := db.RunValueLogGC(0.8)
+			if err == nil {
+				goto again
+			}
+		}
+	}()
+
 	return func() { db.Close() }
 }
 
