@@ -143,6 +143,7 @@ func getLastNotes(ctx context.Context, code string) []*nostr.Event {
 
 	relays = append(relays, getRelay())
 	relays = append(relays, getRelay())
+	relays = unique(relays)
 	events := pool.SubManyEose(ctx, relays, nostr.Filters{
 		{
 			Kinds:   []int{nostr.KindTextNote},

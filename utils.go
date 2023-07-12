@@ -324,3 +324,15 @@ func mdToHTML(md string) string {
 
 	return output
 }
+
+func unique(strSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}	
+	for _, entry := range strSlice {
+			if _, ok := keys[entry]; !ok {
+					keys[entry] = true
+					list = append(list, entry)
+			}
+	}    
+	return list
+}
