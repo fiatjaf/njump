@@ -67,7 +67,9 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		"lastNotes": renderableLastNotes,
 	}
 
+	// +build !nocache
 	w.Header().Set("Cache-Control", "max-age=604800")
+	
 	if err := tmpl.ExecuteTemplate(w, templateMapping["relay"], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
