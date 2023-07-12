@@ -24,6 +24,9 @@ var (
 )
 
 func main() {
+	// initialize disk cache
+	defer cache.initialize()()
+
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
 	templateMapping["profile"] = "profile.html"

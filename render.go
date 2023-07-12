@@ -72,13 +72,14 @@ func render(w http.ResponseWriter, r *http.Request) {
 		key := "ln:" + event.PubKey
 		var lastNotes []*nostr.Event
 
-		if res, ok := cache.Get(key); ok {
-			lastNotes = res.([]*nostr.Event)
+		if b, ok := cache.Get(key); ok {
+			json.Unmarshal(b, &lastNotes)
 		} else {
 			ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
 			lastNotes = getLastNotes(ctx, code)
-			if (os.Getenv("DISABLE_CACHE") != "yes") {
-				cache.SetWithTTL(key, lastNotes, int64(len(lastNotes)), time.Hour*24)
+			if os.Getenv("DISABLE_CACHE") != "yes" {
+				b, _ := json.Marshal(lastNotes)
+				cache.SetWithTTL(key, b, time.Hour*24)
 			}
 			cancel()
 		}
@@ -231,7 +232,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Manage not NIP-27 content replacing #[..] note/npub occurrences
 	for index, value := range event.Tags {
 		placeholderTag := "#[" + fmt.Sprintf("%d", index) + "]"
 		nreplace := ""

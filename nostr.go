@@ -7,20 +7,15 @@ import (
 	"sort"
 	"time"
 
-	"github.com/dgraph-io/ristretto"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/go-nostr/nson"
 	"github.com/nbd-wtf/go-nostr/sdk"
 )
 
 var (
-	pool     = nostr.NewSimplePool(context.Background())
-	cache, _ = ristretto.NewCache(&ristretto.Config{
-		NumCounters: 100_000,
-		MaxCost:     10_000,
-		BufferItems: 64,
-	})
+	pool   = nostr.NewSimplePool(context.Background())
 	serial int
 
 	always = []string{
@@ -48,8 +43,10 @@ func getRelay() string {
 }
 
 func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
-	if v, ok := cache.Get(code); ok {
-		return v.(*nostr.Event), nil
+	if b, ok := cache.Get(code); ok {
+		v := &nostr.Event{}
+		err := nson.Unmarshal(string(b), v)
+		return v, err
 	}
 
 	prefix, data, err := nip19.Decode(code)
@@ -122,8 +119,13 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
-		if (os.Getenv("DISABLE_CACHE") != "yes") {
-			cache.SetWithTTL(code, event, 1, time.Hour*24*7)
+		if os.Getenv("DISABLE_CACHE") != "yes" {
+			b, err := nson.Marshal(event)
+			if err != nil {
+				log.Error().Err(err).Stringer("event", event).Msg("error marshaling nson")
+				return event, nil
+			}
+			cache.SetWithTTL(code, []byte(b), time.Hour*24*7)
 		}
 		return event, nil
 	}
