@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/{{.npub | escapeString}}</loc>
+    <loc>https://nostr.com/{{.npub | escapeString}}</loc>
 		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
 	</url>
 {{range .lastNotes}}
 	<url>
-		<loc>/{{.Nevent | escapeString}}</loc>
+		<loc>https://nostr.com/{{.Nevent | escapeString}}</loc>
 		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
 		<changefreq>never</changefreq>
 		<priority>0.5</priority>
