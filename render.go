@@ -15,7 +15,6 @@ import (
 )
 
 type Event struct {
-	Note         string
 	Nevent       string
 	Content      string
 	CreatedAt    string
@@ -30,7 +29,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	typ := ""
 	code := r.URL.Path[1:]
 	if strings.HasPrefix(code, "e/") {
-		code, _ = nip19.EncodeNote(code[2:])
+		code, _ = nip19.EncodeEvent(code[2:], []string{}, "")
 	} else if strings.HasPrefix(code, "p/") {
 		code, _ = nip19.EncodePublicKey(code[2:])
 	} else if strings.HasPrefix(code, "nostr:") {
@@ -63,11 +62,14 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	nevent, _ := nip19.EncodeEvent(event.ID, []string{}, event.PubKey)
-	note := ""
 	naddr := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 	content := ""
+
+	if strings.HasPrefix(code, "note1") {
+		http.Redirect(w, r, "/"+nevent, http.StatusFound)
+	}
 
 	author := event
 	var renderableLastNotes []*Event
@@ -96,10 +98,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 		renderableLastNotes = make([]*Event, len(lastNotes))
 		for i, n := range lastNotes {
 			nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
-			note, _ = nip19.EncodeNote(n.ID)
 			renderableLastNotes[i] = &Event{
 				Nevent:       nevent,
-				Note:         note,
 				Content:      n.Content,
 				CreatedAt:    time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05"),
 				ModifiedAt:   time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),
@@ -113,13 +113,12 @@ func render(w http.ResponseWriter, r *http.Request) {
 	} else {
 		if event.Kind == 1 || event.Kind == 7 || event.Kind == 30023 || event.Kind == 30024 {
 			typ = "note"
-			note, _ = nip19.EncodeNote(event.ID)
 			content = event.Content
 			parentNevent = getParentNevent(event)
 		} else if event.Kind == 6 {
 			typ = "note"
 			if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
-				original_nevent, _ := nip19.EncodeNote((*reposted)[1])
+				original_nevent, _ := nip19.EncodeEvent((*reposted)[1], []string{}, "")
 				content = "Repost of nostr:" + original_nevent
 			}
 		} else if event.Kind >= 30000 && event.Kind < 40000 {
@@ -249,7 +248,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		if value[0] == "p" {
 			nreplace, _ = nip19.EncodePublicKey(value[1])
 		} else if value[0] == "e" {
-			nreplace, _ = nip19.EncodeNote(value[1])
+			nreplace, _ = nip19.EncodeEvent(value[1], []string{}, "")
 		} else {
 			continue
 		}
@@ -268,7 +267,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"npub":            npub,
 		"npubShort":       npubShort,
 		"nevent":          nevent,
-		"note":            note,
 		"naddr":           naddr,
 		"metadata":        metadata,
 		"authorLong":      authorLong,
