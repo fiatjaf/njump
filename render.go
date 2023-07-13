@@ -55,10 +55,10 @@ func render(w http.ResponseWriter, r *http.Request) {
 		// If the protocol is present strip it and redirect
 		if strings.HasPrefix(code, "wss:/") || strings.HasPrefix(code, "ws:/") {
 			hostname := code
-			hostname = strings.Replace(hostname, "wss://", "", 1)
-			hostname = strings.Replace(hostname, "ws://", "", 1)
-			hostname = strings.Replace(hostname, "wss:/", "", 1) // Some browsers replace upfront '//' with '/'
-			hostname = strings.Replace(hostname, "ws:/", "", 1)  // Some browsers replace upfront '//' with '/'
+			hostname = strings.TrimPrefix(hostname, "wss://")
+			hostname = strings.TrimPrefix(hostname, "ws://")
+			hostname = strings.TrimPrefix(hostname, "wss:/") // Some browsers replace upfront '//' with '/'
+			hostname = strings.TrimPrefix(hostname, "ws:/")  // Some browsers replace upfront '//' with '/'
 			http.Redirect(w, r, "/"+hostname, http.StatusFound)
 		}
 
