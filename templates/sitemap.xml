@@ -3,15 +3,15 @@
   <url>
     <loc>/{{.npub | escapeString}}</loc>
 		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
-		<changefreq>hourly</changefreq>
-		<priority>1.0</priority>
+		<changefreq>daily</changefreq>
+		<priority>0.8</priority>
 	</url>
 {{range .lastNotes}}
 	<url>
 		<loc>/{{.Nevent | escapeString}}</loc>
 		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.8</priority>
+		<changefreq>never</changefreq>
+		<priority>0.5</priority>
 	</url>
 {{end}}
 </urlset>
