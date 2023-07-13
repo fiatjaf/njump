@@ -11,7 +11,7 @@
         <div class="column columnA">
           <div class="info-wrapper">
             {{.info.Name | escapeString}}
-            <span class="display">{{.info.Description | escapeString}}</span>
+            <span class="display">&nbsp;</span>
           </div>
           <div class="pic-wrapper">
             <img class="pic" src="{{.info.Icon | escapeString}}" />
@@ -19,6 +19,35 @@
         </div>
 
         <div class="column column_content">
+          <div class="field info-wrapper">
+            <div class="name">
+              {{.info.Name | escapeString}}
+            </div>
+          </div>
+          <div class="field separator long"></div>
+
+          <div class="field about">
+            {{.info.Description | escapeString | basicFormatting}}
+          </div>
+          <div class="field separator long"></div>
+
+          {{if .info.PubKey}}
+          <div class="field">
+            <div class="label">Public Key</div>
+            {{.info.PubKey | escapeString}}
+          </div>
+          {{end}}
+          {{if .info.Contact}}
+          <div class="field">
+            <div class="label">Contact</div>
+            <a href="{{.info.Contact | escapeString}}"
+              >{{.info.Contact | escapeString}}</a
+            >
+          </div>
+          {{end}}
+          
+          <div class="field separator"></div>
+
           <div class="field last_notes">
             <h2>Last Notes</h2>
             {{range .lastNotes}}

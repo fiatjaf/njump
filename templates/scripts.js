@@ -63,11 +63,13 @@ function updateAdvanceSwitch() {
 
 const advanceSwitch = document.querySelector('.advanced-switch')
 const advanced_list = document.querySelectorAll('.advanced')
-advanceSwitch.addEventListener('change', function () {
-  updateAdvanceSwitch()
-})
+if (advanceSwitch) {
+  advanceSwitch.addEventListener('change', function () {
+    updateAdvanceSwitch()
+  })
 
-updateAdvanceSwitch() // Check at the page load, some browsers keep the state in cache
+  updateAdvanceSwitch() // Check at the page load, some browsers keep the state in cache
+}
 
 var url = new URL(window.location.href)
 var searchParams = new URLSearchParams(url.search)
