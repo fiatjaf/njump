@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -16,12 +15,6 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Path[1:]
 
 	hostname := code
-	if strings.HasPrefix(code, "wss://") {
-		hostname = code[6:]
-	}
-	if strings.HasPrefix(code, "ws://") {
-		hostname = code[5:]
-	}
 
 	fmt.Println("hostname", hostname)
 
@@ -29,7 +22,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	// relay metadata
-	info, _ := nip11.Fetch(r.Context(), code)
+	info, _ := nip11.Fetch(r.Context(), hostname)
 	if info == nil {
 		info = &nip11.RelayInformationDocument{
 			Name: hostname,
@@ -38,7 +31,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 
 	// last notes
 	var lastNotes []*nostr.Event
-	if relay, err := pool.EnsureRelay(code); err == nil {
+	if relay, err := pool.EnsureRelay(hostname); err == nil {
 		lastNotes, _ = relay.QuerySync(ctx, nostr.Filter{
 			Kinds: []int{1},
 			Limit: 50,

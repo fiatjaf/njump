@@ -51,6 +51,17 @@ func render(w http.ResponseWriter, r *http.Request) {
 	event, err := getEvent(r.Context(), code)
 	if err != nil {
 		// this will fail if code is a relay URL, in which case we will handle it differently
+
+		// If the protocol is present strip it and redirect
+		if strings.HasPrefix(code, "wss:/") || strings.HasPrefix(code, "ws:/") {
+			hostname := code
+			hostname = strings.Replace(hostname, "wss://", "", 1)
+			hostname = strings.Replace(hostname, "ws://", "", 1)
+			hostname = strings.Replace(hostname, "wss:/", "", 1) // Some browsers replace upfront '//' with '/'
+			hostname = strings.Replace(hostname, "ws:/", "", 1)  // Some browsers replace upfront '//' with '/'
+			http.Redirect(w, r, "/"+hostname, http.StatusFound)
+		}
+
 		if urlMatcher.MatchString(code) {
 			renderRelayPage(w, r)
 			return
