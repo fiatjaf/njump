@@ -59,6 +59,8 @@
   <!----------->
   {{ if eq .type "relay" }}
   <title>Nostr Relay {{.hostname}}</title>
+  <link rel="sitemap" type="application/xml" title="Sitemap for {{.hostname | escapeString}}"
+    href="/{{.hostname | escapeString}}.xml">
   {{end}}
   <!----------->
   {{ if eq .type "other" }}

@@ -46,6 +46,7 @@ func main() {
 	templateMapping["note"] = "note.html"
 	templateMapping["address"] = "other.html"
 	templateMapping["relay"] = "relay.html"
+	templateMapping["relay_sitemap"] = "sitemap.xml"
 
 	funcMap := template.FuncMap{
 		"basicFormatting": basicFormatting,
