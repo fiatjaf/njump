@@ -15,6 +15,7 @@ import (
 )
 
 type Event struct {
+	Note         string
 	Nevent       string
 	Content      string
 	CreatedAt    string
@@ -75,7 +76,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	if event.Kind == 0 {
 		key := ""
 		events_num := 10
-		if typ == "profile_sitemap" { 
+		if typ == "profile_sitemap" {
 			key = "lns:" + event.PubKey
 			events_num = 50000
 		} else {
@@ -95,8 +96,10 @@ func render(w http.ResponseWriter, r *http.Request) {
 		renderableLastNotes = make([]*Event, len(lastNotes))
 		for i, n := range lastNotes {
 			nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
+			note, _ = nip19.EncodeNote(n.ID)
 			renderableLastNotes[i] = &Event{
 				Nevent:       nevent,
+				Note:         note,
 				Content:      n.Content,
 				CreatedAt:    time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05"),
 				ModifiedAt:   time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),

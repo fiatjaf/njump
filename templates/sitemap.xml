@@ -8,7 +8,7 @@
 	</url>
 {{range .lastNotes}}
 	<url>
-		<loc>/{{.Nevent | escapeString}}</loc>
+		<loc>/{{.Note | escapeString}}</loc>
 		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
 		<changefreq>never</changefreq>
 		<priority>0.5</priority>
