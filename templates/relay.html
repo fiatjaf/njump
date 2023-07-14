@@ -1,7 +1,24 @@
 <!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
-  {{template "head.html" .}}
+  <head>
+    <title>Nostr Relay {{.hostname | escapeString}}</title>
+    <meta property="og:title" content="{{.info.Name | escapeString}} - A nostr relay" />
+    <meta name="twitter:title" content="{{.info.Name | escapeString}} - A nostr relay" />
+    <meta property="og:site_name" content="{{.hostname | escapeString}} nostr relay homepage" />
+    {{ if .info.Icon }}
+    <meta property="og:image" content="{{.info.Icon | escapeString}}" />
+    <meta property="twitter:image" content="{{.proxy}}{{.info.Icon | escapeString}}" />
+    {{end}}
+    {{ if .info.Description }}
+    <meta property="og:description" content="{{.info.Description | escapeString}}" />
+    <meta name="twitter:description" content="{{.info.Description | escapeString}}" />
+    {{end}}
+
+    <link rel="sitemap" type="application/xml" title="Sitemap for {{.hostname | escapeString}}" href="/{{.hostname | escapeString}}.xml">
+
+    {{template "head_common.html" }}
+  </head>
 
   <body class="profile">
     {{template "top.html" .}}

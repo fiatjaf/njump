@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
-  {{template "head.html" .}}
+  <head>
+    <title>{{.metadata.Name | escapeString}} on nostr - {{.npub}}</title>
+    <meta property="og:title" content="{{.metadata.Name | escapeString}} on nostr - {{.npub | escapeString}}" />
+    <meta name="twitter:title" content="{{.metadata.Name | escapeString}} on nostr - {{.npub | escapeString}}" />
+    <meta property="og:site_name" content="{{.metadata.Name | escapeString}} nostr homepage" />
+    {{ if .metadata.Picture }}
+    <meta property="og:image" content="{{.metadata.Picture | escapeString}}" />
+    <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture | escapeString}}" />
+    {{end}}
+    {{ if .metadata.About }}
+    <meta property="og:description" content="{{.metadata.About | escapeString}}" />
+    <meta name="twitter:description" content="{{.metadata.About | escapeString}}" />
+    {{end}}
+
+    <link rel="canonical" href="https://nostr.com/{{.npub | escapeString }}" />
+    <link rel="sitemap" type="application/xml" title="Sitemap for {{.npub | escapeString}}" href="/{{.npub | escapeString}}.xml">
+    
+    {{template "head_common.html" }}
+  </head>
 
   <body class="profile">
     {{template "top.html" .}}

@@ -1,7 +1,36 @@
 <!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
-  {{template "head.html" .}}
+  <head>
+
+    <title>Nostr Event {{.nevent}}</title>
+    <meta property="og:title" content="Nostr Event {{.nevent | escapeString}} by {{.metadata.Name | escapeString}}" />
+    <meta name="twitter:title" content="Nostr Event {{.nevent | escapeString}} by {{.metadata.Name | escapeString}}" />
+    <meta property="og:site_name" content="{{.metadata.Name | escapeString}} nostr homepage" />
+    {{ if .textImageURL }}
+    <meta property="og:image" content="{{.textImageURL | escapeString}}" />
+    <meta property="twitter:image" content="{{.proxy}}{{.textImageURL | escapeString}}" />
+    {{ else }}
+    <!---->
+    <meta property="twitter:card" content="summary" />
+    {{ if .image }}
+    <meta property="og:image" content="{{.image | escapeString}}" />
+    <meta name="twitter:image" content="{{.proxy}}{{.image | escapeString}}" />
+    {{end}} {{ if .video }}
+    <meta property="og:video" content="{{.video | escapeString}}" />
+    <meta property="og:video:secure_url" content="{{.video | escapeString}}" />
+    <meta property="og:video:type" content="video/{{.videoType | escapeString}}" />
+    {{end}}
+    {{end}}
+    {{ if .description }}
+    <meta property="og:description" content="{{.description | escapeString}}" />
+    <meta name="twitter:description" content="{{.description | escapeString}}" />
+    {{end}}
+
+    <link rel="canonical" href="https://nostr.com/{{.nevent | escapeString }}" />
+
+    {{template "head_common.html" }}
+  </head>
 
   <body class="note">
     {{template "top.html" .}}

@@ -252,6 +252,8 @@ iframe {
   top: 2rem;
   align-self: flex-start;
   flex-basis: 25%;
+  max-width: 25%;
+  word-wrap: break-word;
   margin-top: 2rem;
 }
 @media (max-width: 580px) {
