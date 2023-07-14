@@ -26,6 +26,9 @@
           </div>
           <div class="field separator long"></div>
 
+          <div class="field">
+            wss://{{.hostname | escapeString}}
+          </div>
           <div class="field about">
             {{.info.Description | escapeString | basicFormatting}}
           </div>
