@@ -309,7 +309,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 		templateMapping[typ] = "other.html"
 	}
 
-	// +build !nocache
 	w.Header().Set("Cache-Control", "max-age=604800")
 
 	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {

@@ -31,8 +31,6 @@ func generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "image/png")
-
-	// +build !nocache
 	w.Header().Set("Cache-Control", "max-age=604800")
 
 	if err := png.Encode(w, img); err != nil {
