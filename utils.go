@@ -336,3 +336,11 @@ func unique(strSlice []string) []string {
 	}    
 	return list
 }
+
+func trimProtocol(relay string) string {
+	relay = strings.TrimPrefix(relay, "wss://")
+	relay = strings.TrimPrefix(relay, "ws://")
+	relay = strings.TrimPrefix(relay, "wss:/") // Some browsers replace upfront '//' with '/'
+	relay = strings.TrimPrefix(relay, "ws:/")  // Some browsers replace upfront '//' with '/'
+	return relay
+}

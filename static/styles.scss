@@ -376,6 +376,20 @@ iframe {
         }
         border-bottom: none;
       }
+      a.button {
+        border-bottom: 0;
+        border: 1px solid $color-base4;
+        border-radius: 8px;
+        padding: 2px 8px;
+        display: inline-block;
+        margin-top: 0.6em;
+        margin-right: 0.2em;
+        &:hover {
+          color: $color-base1;
+          background-color: $color-accent1;
+          border: 1px solid $color-accent1;
+        }
+      }
       .label {
         font-size: 0.8rem;
         @include themed() {

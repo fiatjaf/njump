@@ -366,6 +366,20 @@ iframe {
 .theme--dark .container .column_content .field a.nostr {
   background-color: #42091e;
 }
+.container .column_content .field a.button {
+  border-bottom: 0;
+  border: 1px solid #c9c9c9;
+  border-radius: 8px;
+  padding: 2px 8px;
+  display: inline-block;
+  margin-top: 0.6em;
+  margin-right: 0.2em;
+}
+.container .column_content .field a.button:hover {
+  color: #ffffff;
+  background-color: #e32a6d;
+  border: 1px solid #e32a6d;
+}
 .container .column_content .field .label {
   font-size: 0.8rem;
 }

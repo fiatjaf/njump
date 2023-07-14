@@ -54,11 +54,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 		// If the protocol is present strip it and redirect
 		if strings.HasPrefix(code, "wss:/") || strings.HasPrefix(code, "ws:/") {
-			hostname := code
-			hostname = strings.TrimPrefix(hostname, "wss://")
-			hostname = strings.TrimPrefix(hostname, "ws://")
-			hostname = strings.TrimPrefix(hostname, "wss:/") // Some browsers replace upfront '//' with '/'
-			hostname = strings.TrimPrefix(hostname, "ws:/")  // Some browsers replace upfront '//' with '/'
+			hostname := trimProtocol(code)
 			http.Redirect(w, r, "/"+hostname, http.StatusFound)
 		}
 
@@ -85,6 +81,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	author := event
 	var renderableLastNotes []*Event
 	parentNevent := ""
+	authorRelays := []string{}
 
 	if event.Kind == 0 {
 		key := ""
@@ -95,6 +92,13 @@ func render(w http.ResponseWriter, r *http.Request) {
 		} else {
 			typ = "profile"
 			key = "ln:" + event.PubKey
+		}
+
+		ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
+		authorRelays = relaysForPubkey(ctx, event.PubKey)
+		cancel()
+		for i, n := range authorRelays {
+			authorRelays[i] = trimProtocol(n)
 		}
 
 		var lastNotes []*nostr.Event
@@ -295,6 +299,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"kindNIP":         kindNIP,
 		"lastNotes":       renderableLastNotes,
 		"parentNevent":    parentNevent,
+		"authorRelays": authorRelays,
 	}
 
 	// if a mapping is not found fallback to raw

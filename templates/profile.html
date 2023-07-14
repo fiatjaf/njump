@@ -56,6 +56,13 @@
             {{.metadata.LUD16 | escapeString}}
           </div>
 
+          <div class="field">
+            <div class="label">Last seen on these relays</div>
+            {{range $index, $element := .authorRelays}}
+            <a href="/{{$element | escapeString}}" class="button">{{$element}}</a>
+            {{end}}
+          </div>
+
           <div class="field last_update">
             Last update:<br />
             {{.createdAt | escapeString}}
