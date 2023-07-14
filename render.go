@@ -107,7 +107,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 			ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
 			lastNotes = getLastNotes(ctx, code, events_num)
 			cancel()
-			cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
+			if len(lastNotes) > 0 {
+				cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
+			}
 		}
 
 		renderableLastNotes = make([]*Event, len(lastNotes))

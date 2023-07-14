@@ -172,7 +172,9 @@ func relaysForPubkey(ctx context.Context, pubkey string, extraRelays ...string) 
 			}
 		}
 		cancel()
-		cache.SetJSONWithTTL("io:"+pubkey, pubkeyRelays, time.Hour*24*7)
+		if len(pubkeyRelays) > 0 {
+			cache.SetJSONWithTTL("io:"+pubkey, pubkeyRelays, time.Hour*24*7)
+		}
 	}
 	return pubkeyRelays
 }
