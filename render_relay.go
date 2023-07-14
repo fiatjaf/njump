@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -20,8 +19,6 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		hostname = code[:len(hostname)-4]
 		typ = "relay_sitemap"
 	}
-
-	fmt.Println("hostname", hostname)
 
 	ctx, cancel := context.WithTimeout(r.Context(), time.Second*5)
 	defer cancel()

@@ -157,11 +157,9 @@ func getLastNotes(ctx context.Context, code string, options ...int) []*nostr.Eve
 	})
 	lastNotes := make([]*nostr.Event, 0, 20)
 	for event := range events {
-		fmt.Println("last note", event)
 		lastNotes = nostr.InsertEventIntoDescendingList(lastNotes, event)
 	}
-
-	fmt.Println("returning", len(lastNotes))
+	
 	return lastNotes
 }
 
