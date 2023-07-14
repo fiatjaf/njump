@@ -77,9 +77,13 @@
           </div>
 
           <div class="field">
-            <div class="label">Last seen on these relays</div>
+            <div class="label">Posting on these relays</div>
+            {{if .authorRelays}}
             {{range $index, $element := .authorRelays}}
             <a href="/{{$element | escapeString}}" class="button">{{$element}}</a>
+            {{end}}
+            {{else}}
+            No relays found, sorry! Try to reload to search again.
             {{end}}
           </div>
 
