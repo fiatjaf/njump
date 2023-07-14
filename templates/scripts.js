@@ -99,6 +99,19 @@ function syntaxHighlight(json) {
   )
 }
 
+function isElementInViewport(element) {
+  // Get the position and dimensions of the element
+  const rect = element.getBoundingClientRect();
+
+  // Check if the element is within the viewport's boundaries
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   var contentDivs = document.getElementsByClassName('content')
   for (var i = 0; i < contentDivs.length; i++) {
@@ -108,6 +121,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 })
+
+const desktop_name = document.querySelector('.column_content .name');
+window.addEventListener('scroll', function() {
+  desktop_profile = document.querySelector('.column_content .info-wrapper');
+  if (window.getComputedStyle(desktop_profile).display === 'none') {
+    return
+  }
+  if (isElementInViewport(desktop_name)) {
+    console.log('Element is in viewport');
+    document.querySelector('.columnA .info-wrapper').style.display = 'none';
+  } else {
+    console.log('Element is outside the viewport');
+    document.querySelector('.columnA .info-wrapper').style.display = 'block';
+  }
+});
 
 // Needed to apply proper print styles
 if (

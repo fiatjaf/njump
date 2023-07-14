@@ -288,28 +288,39 @@ iframe {
   }
 
   .columnA {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 2rem;
+    align-self: flex-start;
     flex-basis: 25%;
     margin-top: 2rem;
     @media (max-width: 580px) {
       display: flex;
+      position: relative;
+      top: auto;
       align-items: center;
       margin-top: 0rem;
     }
     .info-wrapper {
       display: none;
+      font-size: 1.6rem;
+      margin-bottom: 0.6em;
+      text-align: center;
+      .display {
+        display: block;
+        font-size: 1.2rem;
+        @include themed() {
+          color: t($base4);
+        }
+      }
       @media (max-width: 580px) {
         display: block;
+        text-align: left;
+        margin-bottom: 0;
         flex-basis: 64%;
         max-width: 64%;
         overflow: hidden;
         font-size: 1.6rem;
-        .display {
-          display: block;
-          font-size: 1.2rem;
-          @include themed() {
-            color: t($base4);
-          }
-        }
       }
     }
     .last_update {

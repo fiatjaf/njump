@@ -10,10 +10,12 @@
       <div class="container">
         <div class="column columnA">
           <div class="info-wrapper">
+            <div class="name">
             {{.metadata.Name | escapeString}}
             <span class="display"
               >{{.metadata.DisplayName | escapeString}}</span
             >
+            </div>
           </div>
           <div class="pic-wrapper">
             <img class="pic" src="{{.metadata.Picture | escapeString}}" />
@@ -26,7 +28,7 @@
 
         <div class="column column_content">
           <div class="field info-wrapper">
-            <div class="name">
+            <div id="profile_name" class="name">
               {{.metadata.Name | escapeString}}
               <span class="display"
                 >{{.metadata.DisplayName | escapeString}}</span
