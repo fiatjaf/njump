@@ -112,6 +112,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 		relays = append(relays, getRelay())
 	}
 
+	relays = unique(relays)
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
