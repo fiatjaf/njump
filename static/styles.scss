@@ -148,6 +148,9 @@ iframe {
     height: 250px;
   }
 }
+.h {
+  display: none;
+}
 .background {
   position: fixed;
   top: 0;
@@ -344,6 +347,9 @@ iframe {
 
     .info-wrapper {
       font-size: 1.6rem;
+      h1 {
+        font-size: 1.6rem;
+      }
       .display {
         @include themed() {
           color: t($base4);
@@ -390,13 +396,14 @@ iframe {
         border-bottom: none;
       }
       a.button {
+        display: inline-block;
+        max-width: 100%;
+        padding: 2px 8px;
+        margin-top: 0.6em;
+        margin-right: 0.2em;
         border-bottom: 0;
         border: 1px solid $color-base4;
         border-radius: 8px;
-        padding: 2px 8px;
-        display: inline-block;
-        margin-top: 0.6em;
-        margin-right: 0.2em;
         &:hover {
           color: $color-base1;
           background-color: $color-accent1;

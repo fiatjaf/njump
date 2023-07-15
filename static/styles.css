@@ -78,6 +78,10 @@ iframe {
   }
 }
 
+.h {
+  display: none;
+}
+
 .background {
   position: fixed;
   top: 0;
@@ -316,6 +320,9 @@ iframe {
 .container .column_content .info-wrapper {
   font-size: 1.6rem;
 }
+.container .column_content .info-wrapper h1 {
+  font-size: 1.6rem;
+}
 .theme--default .container .column_content .info-wrapper .display {
   color: #c9c9c9;
 }
@@ -380,13 +387,14 @@ iframe {
   background-color: #42091e;
 }
 .container .column_content .field a.button {
+  display: inline-block;
+  max-width: 100%;
+  padding: 2px 8px;
+  margin-top: 0.6em;
+  margin-right: 0.2em;
   border-bottom: 0;
   border: 1px solid #c9c9c9;
   border-radius: 8px;
-  padding: 2px 8px;
-  display: inline-block;
-  margin-top: 0.6em;
-  margin-right: 0.2em;
 }
 .container .column_content .field a.button:hover {
   color: #ffffff;

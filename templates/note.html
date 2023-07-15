@@ -3,7 +3,7 @@
   <meta charset="UTF-8" />
   <head>
 
-    <title>Nostr Event {{.nevent}}</title>
+    <title>Nostr Event {{.nevent}} by {{.metadata.Name | escapeString}}</title>
     <meta property="og:title" content="Nostr Event {{.nevent | escapeString}} by {{.metadata.Name | escapeString}}" />
     <meta name="twitter:title" content="Nostr Event {{.nevent | escapeString}} by {{.metadata.Name | escapeString}}" />
     <meta property="og:site_name" content="{{.metadata.Name | escapeString}} nostr homepage" />
@@ -38,7 +38,7 @@
     <div class="container_wrapper">
       <div class="container">
         <div class="column column_content">
-          <div class="profile_intro">
+          <header class="profile_intro">
             <a href="/{{.npub | escapeString}}">
               <div class="pic-wrapper">
                 <img class="pic" src="{{.metadata.Picture | escapeString}}" />
@@ -53,7 +53,7 @@
                 <div class="npub">{{.npubShort | escapeString}}</div>
               </div>
             </a>
-          </div>
+          </header>
           <div class="published_at">{{.createdAt | escapeString}}</div>
 
           {{ if .parentNevent }}
@@ -65,16 +65,18 @@
 
           <div class="field separator"></div>
 
-          <div class="field content">
+          <article class="field content">
             {{ if (not (eq .subject ""))}}
               <h1>{{.subject | escapeString}}</h1>
+            {{ else }}
+              <h1 class="h">{{.nevent}} by {{.metadata.Name | escapeString}}</h1>
             {{ end }}
             {{ if (or (eq .kindID 30023) (eq .kindID 30024))}}
               {{.content | mdToHTML }}
             {{ else }}
               {{.content | escapeString | basicFormatting }}
             {{ end }}
-          </div>
+          </article>
 
           <div class="field separator"></div>
 
