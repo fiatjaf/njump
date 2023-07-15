@@ -176,5 +176,6 @@ func relaysForPubkey(ctx context.Context, pubkey string, extraRelays ...string) 
 			cache.SetJSONWithTTL("io:"+pubkey, pubkeyRelays, time.Hour*24*7)
 		}
 	}
+	pubkeyRelays = unique(pubkeyRelays)
 	return pubkeyRelays
 }
