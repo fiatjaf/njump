@@ -2,10 +2,10 @@
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    <title>Nostr Relay {{.hostname | escapeString}}</title>
-    <meta property="og:title" content="{{.info.Name | escapeString}} - A nostr relay" />
-    <meta name="twitter:title" content="{{.info.Name | escapeString}} - A nostr relay" />
-    <meta property="og:site_name" content="{{.hostname | escapeString}} nostr relay homepage" />
+    <title>Nostr Relay {{.hostname | escapeString}} - {{.info.Name | escapeString}}</title>
+    <meta property="og:title" content="{{.hostname | escapeString}} - nostr relay" />
+    <meta name="twitter:title" content="{{.hostname | escapeString}} - nostr relay" />
+    <meta property="og:site_name" content="{{.hostname | escapeString}} - nostr relay" />
     {{ if .info.Icon }}
     <meta property="og:image" content="{{.info.Icon | escapeString}}" />
     <meta property="twitter:image" content="{{.proxy}}{{.info.Icon | escapeString}}" />
@@ -14,6 +14,7 @@
     <meta property="og:description" content="{{.info.Description | escapeString}}" />
     <meta name="twitter:description" content="{{.info.Description | escapeString}}" />
     {{end}}
+    <meta property="twitter:card" content="summary" />
 
     <link rel="sitemap" type="application/xml" title="Sitemap for {{.hostname | escapeString}}" href="/{{.hostname | escapeString}}.xml">
 

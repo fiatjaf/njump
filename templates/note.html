@@ -4,12 +4,14 @@
   <head>
 
     <title>Nostr Event {{.nevent}} by {{.metadata.Name | escapeString}}</title>
-    <meta property="og:title" content="Nostr Event {{.nevent | escapeString}} by {{.metadata.Name | escapeString}}" />
-    <meta name="twitter:title" content="Nostr Event {{.nevent | escapeString}} by {{.metadata.Name | escapeString}}" />
-    <meta property="og:site_name" content="{{.metadata.Name | escapeString}} nostr homepage" />
+    <meta property="og:title" content="{{.title | escapeString}}" />
+    <meta name="twitter:title" content="{{.twitterTitle | escapeString}}" />
+    <meta property="og:site_name" content="{{.authorLong | escapeString}}" /> 
     {{ if .textImageURL }}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@nostrprotocol" />
     <meta property="og:image" content="{{.textImageURL | escapeString}}" />
-    <meta property="twitter:image" content="{{.proxy}}{{.textImageURL | escapeString}}" />
+    <meta name="twitter:image" content="{{.textImageURL | escapeString}}" />
     {{ else }}
     <!---->
     <meta property="twitter:card" content="summary" />
