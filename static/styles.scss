@@ -302,6 +302,7 @@ iframe {
     @media (max-width: 580px) {
       display: flex;
       position: relative;
+      max-width: none;
       top: auto;
       align-items: center;
       margin-top: 0rem;
