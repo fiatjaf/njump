@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 
 	"github.com/dgraph-io/badger"
@@ -57,6 +58,38 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	}
 
 	return val, true
+}
+
+func (c *Cache) GetPaginatedkeys(prefix string, page int, size int) []string {
+	keys := []string{}
+	err := c.DB.View(func(txn *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchValues = false
+		it := txn.NewIterator(opts)
+		defer it.Close()
+		start := (page-1)*size + 1
+		index := 1
+		for it.Seek([]byte(prefix)); it.ValidForPrefix([]byte(prefix)); it.Next() {
+			if index < start {
+				index++
+				continue
+			}
+			if index > start+size-1 {
+				break
+			}
+			item := it.Item()
+			k := item.Key()
+			keys = append(keys, strings.TrimPrefix(string(k), prefix+":"))
+			index++
+		}
+		return nil
+	})
+
+	if err != nil {
+		log.Fatal().Err(err).Msg("")
+	}
+
+	return keys
 }
 
 func (c *Cache) GetJSON(key string, recv any) bool {

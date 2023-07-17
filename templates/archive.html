@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html class="theme--default">
+  <meta charset="UTF-8" />
+  <head>
+    <title>Nostr npubs archive</title>
+
+    {{template "head_common.html" }}
+  </head>
+
+  <body class="profile">
+    {{template "top.html" .}}
+
+    <div class="container_wrapper">
+      <div class="container">
+        <div class="column columnA">
+          <div class="info-wrapper">
+            Nostr npubs archive
+            <span class="display">&nbsp;</span>
+          </div>
+          <div class="pic-wrapper">
+            
+          </div>
+        </div>
+
+        <div class="column column_content">
+          <div class="field info-wrapper">
+            <h1 class="name">
+              Nostr npubs archive
+            </h1>
+          </div>
+          <div class="field separator long"></div>
+
+          <div class="field last_notes">
+            {{range $index, $element := .data}}
+            <a href="/{{$element | escapeString}}" class="note">
+              <div class="content">{{$element | escapeString}}</div>
+            </a>
+            {{end}}
+          </div>
+
+          {{if not (eq .prevPage "0")}}
+          <a href="/npubs-archive/{{.prevPage | escapeString}}"><< Prev page</a>
+          {{end}}
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {{if not (eq .nextPage "0")}}
+          <a href="/npubs-archive/{{.nextPage | escapeString}}">Next page >></a>
+          {{end}}
+
+        </div>
+
+        <aside class="column column_clients"></aside>
+
+      </div>
+    </div>
+
+    {{template "footer.html"}}
+
+    <script>
+      {{template "scripts.js"}}
+    </script>
+  </body>
+</html>

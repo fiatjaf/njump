@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"html"
 	"net/http"
 	"os"
 	"text/template"
+	"time"
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/zerolog"
@@ -30,6 +32,14 @@ var (
 	log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 )
 
+func updateArchives(ctx context.Context) {
+	for {
+			loadNpubsArchive(ctx)
+			// Wait for 24 hours before executing the function again
+			time.Sleep(24 * time.Hour)
+	}
+}
+
 func main() {
 	err := envconfig.Process("", &s)
 	if err != nil {
@@ -38,6 +48,10 @@ func main() {
 
 	// initialize disk cache
 	defer cache.initialize()()
+
+	// initialize the function to update the npubs/relays archive
+	ctx := context.Background()
+	go updateArchives(ctx)
 
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
@@ -65,10 +79,14 @@ func main() {
 	http.HandleFunc("/njump/image/", generate)
 	http.HandleFunc("/njump/proxy/", proxy)
 	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
+	http.HandleFunc("/npubs-archive/", renderProfilesArchive)
 	http.HandleFunc("/", render)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
 	if err := http.ListenAndServe("0.0.0.0:"+s.Port, nil); err != nil {
 		log.Fatal().Err(err).Msg("")
 	}
+
+	select {}
+
 }
