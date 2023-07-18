@@ -35,6 +35,7 @@ var (
 func updateArchives(ctx context.Context) {
 	for {
 			loadNpubsArchive(ctx)
+			loadRelaysArchive(ctx)
 			// Wait for 24 hours before executing the function again
 			time.Sleep(24 * time.Hour)
 	}
@@ -79,7 +80,8 @@ func main() {
 	http.HandleFunc("/njump/image/", generate)
 	http.HandleFunc("/njump/proxy/", proxy)
 	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
-	http.HandleFunc("/npubs-archive/", renderProfilesArchive)
+	http.HandleFunc("/npubs-archive/", renderArchive)
+	http.HandleFunc("/relays-archive/", renderArchive)
 	http.HandleFunc("/", render)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)

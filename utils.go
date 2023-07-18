@@ -365,3 +365,22 @@ func loadNpubsArchive(ctx context.Context) {
 		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
 	}
 }
+
+func loadRelaysArchive(ctx context.Context) {
+	fmt.Println("Refreshing the relays archive")
+
+	relaysArchive := make([]string, 0, 500)
+
+	for _, pubkey := range trustedPubKeys {
+		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+		pubkeyContacts := relaysForPubkey(ctx, pubkey)
+		relaysArchive = append(relaysArchive, pubkeyContacts...)
+		cancel()
+	}
+
+	relaysArchive = unique(relaysArchive)
+	for _, relay := range relaysArchive {
+		fmt.Printf("Adding relay %s\n", relay)
+		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
+	}
+}

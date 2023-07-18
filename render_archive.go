@@ -9,8 +9,8 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-func renderProfilesArchive(w http.ResponseWriter, r *http.Request) {
-	resultsPerPage := 100
+func renderArchive(w http.ResponseWriter, r *http.Request) {
+	resultsPerPage := 50
 	lastIndex := strings.LastIndex(r.URL.Path, "/")
 	page := 1
 	if lastIndex != -1 {
@@ -23,11 +23,26 @@ func renderProfilesArchive(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	keys := cache.GetPaginatedkeys("pa", page, resultsPerPage)
-	npubs := []string{}
+	prefix := ""
+	title := ""
+	area := strings.Split(r.URL.Path[1:], "/")[0]
+	if area == "npubs-archive" {
+		prefix = "pa"
+		title = "Nostr npubs archive"
+	} else {
+		prefix = "ra"
+		title = "Nostr relays archive"
+	}
+
+	keys := cache.GetPaginatedkeys(prefix, page, resultsPerPage)
+	data := []string{}
 	for i := 0; i < len(keys); i++ {
-		npub, _ := nip19.EncodePublicKey(keys[i])
-		npubs = append(npubs, npub)
+		if area == "npubs-archive" {
+			npub, _ := nip19.EncodePublicKey(keys[i])
+			data = append(data, npub)
+		} else  {
+			data = append(data, keys[i])
+		}	
 	}
 
 	prevPage := page - 1
@@ -38,12 +53,14 @@ func renderProfilesArchive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := map[string]any{
+		"title":    title,
+		"data":     data,
+		"pagination_url": area ,
 		"nextPage": fmt.Sprint(nextPage),
 		"prevPage": fmt.Sprint(prevPage),
-		"data": npubs,
 	}
 
-	w.Header().Set("Cache-Control", "max-age=604800")
+	w.Header().Set("Cache-Control", "max-age=86400")
 
 	if err := tmpl.ExecuteTemplate(w, "archive.html", params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
