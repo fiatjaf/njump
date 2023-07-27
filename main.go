@@ -34,10 +34,10 @@ var (
 
 func updateArchives(ctx context.Context) {
 	for {
-			loadNpubsArchive(ctx)
-			loadRelaysArchive(ctx)
-			// Wait for 24 hours before executing the function again
-			time.Sleep(24 * time.Hour)
+		loadNpubsArchive(ctx)
+		loadRelaysArchive(ctx)
+		// Wait for 24 hours before executing the function again
+		time.Sleep(24 * time.Hour)
 	}
 }
 
@@ -68,6 +68,7 @@ func main() {
 		"mdToHTML":        mdToHTML,
 		"escapeString":    html.EscapeString,
 		"sanitizeXSS":     sanitizeXSS,
+		"trimProtocol":    trimProtocol,
 	}
 
 	tmpl = template.Must(

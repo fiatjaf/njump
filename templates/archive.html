@@ -32,7 +32,7 @@
 
           <div class="field last_notes">
             {{range $index, $element := .data }}
-            <a href="/{{$.pathPrefix}}{{$element | escapeString}}" class="note">
+            <a href="/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}" class="note">
               <div class="content">{{$element | escapeString}}</div>
             </a>
             {{end}}
