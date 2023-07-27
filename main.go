@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"embed"
+	"fmt"
 	"html"
 	"net/http"
 	"os"
@@ -34,9 +35,15 @@ var (
 
 func updateArchives(ctx context.Context) {
 	for {
-		loadNpubsArchive(ctx)
-		loadRelaysArchive(ctx)
-		// Wait for 24 hours before executing the function again
+		select {
+		// Check for the cancellation signal.
+		case <-ctx.Done():
+			fmt.Println("Exit updateArchives gracefully...")
+			return
+		default:
+			loadNpubsArchive(ctx)
+			loadRelaysArchive(ctx)
+		}
 		time.Sleep(24 * time.Hour)
 	}
 }
