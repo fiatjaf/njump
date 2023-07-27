@@ -380,6 +380,15 @@ func loadRelaysArchive(ctx context.Context) {
 
 	relaysArchive = unique(relaysArchive)
 	for _, relay := range relaysArchive {
+		for _, excluded := range excludedRelays {
+			if strings.Contains(relay, excluded) {
+				fmt.Printf("Skypping relay %s\n", relay)
+				continue
+			}
+		}
+		if strings.Contains(relay, "/npub1") {
+			continue // Skip relays with personalyzed query like filter.nostr.wine
+		}
 		fmt.Printf("Adding relay %s\n", relay)
 		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
 	}

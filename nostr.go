@@ -41,6 +41,10 @@ var (
 		"97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322", // hodlbod
 		"ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49", // Michael Dilger
 	}
+
+	excludedRelays = []string{
+		"wss://filter.nostr.wine", // paid
+	}
 )
 
 func getRelay() string {
