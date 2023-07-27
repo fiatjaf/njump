@@ -92,7 +92,7 @@ var kindNIPS = map[int]string{
 	30078: "78",
 }
 
-var urlMatcher = regexp.MustCompile(`^(wss?:\/\/)?[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
+var urlSuffixMatcher = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
 
 type ClientReference struct {
 	Name string
@@ -327,13 +327,13 @@ func mdToHTML(md string) string {
 
 func unique(strSlice []string) []string {
 	keys := make(map[string]bool)
-	list := []string{}	
+	list := []string{}
 	for _, entry := range strSlice {
-			if _, ok := keys[entry]; !ok {
-					keys[entry] = true
-					list = append(list, entry)
-			}
-	}    
+		if _, ok := keys[entry]; !ok {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
 	return list
 }
 

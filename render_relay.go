@@ -13,7 +13,7 @@ import (
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Path[1:]
-	hostname := code
+	hostname := code[2:]
 	typ := "relay"
 	if strings.HasSuffix(hostname, ".xml") {
 		hostname = code[:len(hostname)-4]

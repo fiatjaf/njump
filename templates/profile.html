@@ -7,16 +7,26 @@
     <meta property="og:site_name" content="{{.npub | escapeString}}" />
     {{ if .metadata.Picture }}
     <meta property="og:image" content="{{.metadata.Picture | escapeString}}" />
-    <meta property="twitter:image" content="{{.proxy}}{{.metadata.Picture | escapeString}}" />
-    {{end}}
-    {{ if .metadata.About }}
-    <meta property="og:description" content="{{.metadata.About | escapeString}}" />
+    <meta
+      property="twitter:image"
+      content="{{.proxy}}{{.metadata.Picture | escapeString}}"
+    />
+    {{end}} {{ if .metadata.About }}
+    <meta
+      property="og:description"
+      content="{{.metadata.About | escapeString}}"
+    />
     {{end}}
     <meta property="twitter:card" content="summary" />
 
     <link rel="canonical" href="https://nostr.com/{{.npub | escapeString }}" />
-    <link rel="sitemap" type="application/xml" title="Sitemap for {{.npub | escapeString}}" href="/{{.npub | escapeString}}.xml">
-    
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap for {{.npub | escapeString}}"
+      href="/{{.npub | escapeString}}.xml"
+    />
+
     {{template "head_common.html" }}
   </head>
 
@@ -28,10 +38,10 @@
         <header class="column columnA">
           <div class="info-wrapper">
             <div class="name">
-            {{.metadata.Name | escapeString}}
-            <span class="display"
-              >{{.metadata.DisplayName | escapeString}}</span
-            >
+              {{.metadata.Name | escapeString}}
+              <span class="display"
+                >{{.metadata.DisplayName | escapeString}}</span
+              >
             </div>
           </div>
           <div class="pic-wrapper">
@@ -77,13 +87,12 @@
 
           <div class="field">
             <div class="label">Posting on these relays</div>
-            {{if .authorRelays}}
-            {{range $index, $element := .authorRelays}}
-            <a href="/{{$element | escapeString}}" class="button">{{$element}}</a>
-            {{end}}
-            {{else}}
-            No relays found, sorry! Try to reload to search again.
-            {{end}}
+            {{if .authorRelays}} {{range $index, $element := .authorRelays}}
+            <a href="/r/{{$element | escapeString}}" class="button"
+              >{{$element}}</a
+            >
+            {{end}} {{else}} No relays found, sorry! Try to reload to search
+            again. {{end}}
           </div>
 
           <div class="field last_update">

@@ -31,7 +31,22 @@ func render(w http.ResponseWriter, r *http.Request) {
 	if strings.HasPrefix(code, "e/") {
 		code, _ = nip19.EncodeEvent(code[2:], []string{}, "")
 	} else if strings.HasPrefix(code, "p/") {
-		code, _ = nip19.EncodePublicKey(code[2:])
+		if urlSuffixMatcher.MatchString(code) {
+			// it's a nip05
+			code = code[2:]
+		} else {
+			// it's a hex pubkey
+			code, _ = nip19.EncodePublicKey(code[2:])
+		}
+	} else if strings.HasPrefix(code, "r/") {
+		hostname := code[2:]
+		if strings.HasPrefix(hostname, "wss:/") || strings.HasPrefix(hostname, "ws:/") {
+			hostname = trimProtocol(hostname)
+			http.Redirect(w, r, "/r/"+hostname, http.StatusFound)
+		} else {
+			renderRelayPage(w, r)
+		}
+		return
 	} else if strings.HasPrefix(code, "nostr:") {
 		http.Redirect(w, r, "/"+code[6:], http.StatusFound)
 	} else if strings.HasPrefix(code, "npub") && strings.HasSuffix(code, ".xml") {
@@ -50,19 +65,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
 	event, err := getEvent(r.Context(), code)
 	if err != nil {
-		// this will fail if code is a relay URL, in which case we will handle it differently
-
-		// If the protocol is present strip it and redirect
-		if strings.HasPrefix(code, "wss:/") || strings.HasPrefix(code, "ws:/") {
-			hostname := trimProtocol(code)
-			http.Redirect(w, r, "/"+hostname, http.StatusFound)
-		}
-
-		if urlMatcher.MatchString(code) {
-			renderRelayPage(w, r)
-			return
-		}
-
 		http.Error(w, "error fetching event: "+err.Error(), 404)
 		return
 	}
@@ -301,7 +303,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"kindNIP":         kindNIP,
 		"lastNotes":       renderableLastNotes,
 		"parentNevent":    parentNevent,
-		"authorRelays": authorRelays,
+		"authorRelays":    authorRelays,
 	}
 
 	// if a mapping is not found fallback to raw
