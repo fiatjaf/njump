@@ -87,7 +87,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	if event.Kind == 0 {
 		key := ""
-		events_num := 10
+		events_num := 100
 		if typ == "profile_sitemap" {
 			key = "lns:" + event.PubKey
 			events_num = 50000
