@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
@@ -343,4 +345,51 @@ func trimProtocol(relay string) string {
 	relay = strings.TrimPrefix(relay, "wss:/") // Some browsers replace upfront '//' with '/'
 	relay = strings.TrimPrefix(relay, "ws:/")  // Some browsers replace upfront '//' with '/'
 	return relay
+}
+
+func loadNpubsArchive(ctx context.Context) {
+	fmt.Println("Refreshing the npubs archive")
+
+	contactsArchive := make([]string, 0, 500)
+
+	for _, pubkey := range trustedPubKeys {
+		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+		pubkeyContacts := contactsForPubkey(ctx, pubkey)
+		contactsArchive = append(contactsArchive, pubkeyContacts...)
+		cancel()
+	}
+
+	contactsArchive = unique(contactsArchive)
+	for _, contact := range contactsArchive {
+		fmt.Printf("Adding contact %s\n", contact)
+		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
+	}
+}
+
+func loadRelaysArchive(ctx context.Context) {
+	fmt.Println("Refreshing the relays archive")
+
+	relaysArchive := make([]string, 0, 500)
+
+	for _, pubkey := range trustedPubKeys {
+		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+		pubkeyContacts := relaysForPubkey(ctx, pubkey)
+		relaysArchive = append(relaysArchive, pubkeyContacts...)
+		cancel()
+	}
+
+	relaysArchive = unique(relaysArchive)
+	for _, relay := range relaysArchive {
+		for _, excluded := range excludedRelays {
+			if strings.Contains(relay, excluded) {
+				fmt.Printf("Skypping relay %s\n", relay)
+				continue
+			}
+		}
+		if strings.Contains(relay, "/npub1") {
+			continue // Skip relays with personalyzed query like filter.nostr.wine
+		}
+		fmt.Printf("Adding relay %s\n", relay)
+		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
+	}
 }
