@@ -31,19 +31,19 @@
           <div class="field separator long"></div>
 
           <div class="field last_notes">
-            {{range $index, $element := .data}}
-            <a href="/{{$element | escapeString}}" class="note">
+            {{range $index, $element := .data }}
+            <a href="/{{$.pathPrefix}}{{$element | escapeString}}" class="note">
               <div class="content">{{$element | escapeString}}</div>
             </a>
             {{end}}
           </div>
 
           {{if not (eq .prevPage "0")}}
-          <a href="/{{.pagination_url}}/{{.prevPage | escapeString}}"><< Prev page</a>
+          <a href="/{{.paginationUrl}}/{{.prevPage | escapeString}}"><< Prev page</a>
           {{end}}
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {{if not (eq .nextPage "0")}}
-          <a href="/{{.pagination_url}}/{{.nextPage | escapeString}}">Next page >></a>
+          <a href="/{{.paginationUrl}}/{{.nextPage | escapeString}}">Next page >></a>
           {{end}}
 
         </div>

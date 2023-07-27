@@ -24,13 +24,16 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	prefix := ""
+	path_prefix := ""
 	title := ""
 	area := strings.Split(r.URL.Path[1:], "/")[0]
 	if area == "npubs-archive" {
 		prefix = "pa"
+		path_prefix = ""
 		title = "Nostr npubs archive"
 	} else {
 		prefix = "ra"
+		path_prefix = "r/"
 		title = "Nostr relays archive"
 	}
 
@@ -40,9 +43,9 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		if area == "npubs-archive" {
 			npub, _ := nip19.EncodePublicKey(keys[i])
 			data = append(data, npub)
-		} else  {
+		} else {
 			data = append(data, keys[i])
-		}	
+		}
 	}
 
 	prevPage := page - 1
@@ -53,11 +56,12 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := map[string]any{
-		"title":    title,
-		"data":     data,
-		"pagination_url": area ,
-		"nextPage": fmt.Sprint(nextPage),
-		"prevPage": fmt.Sprint(prevPage),
+		"title":         title,
+		"pathPrefix":    path_prefix,
+		"data":          data,
+		"paginationUrl": area,
+		"nextPage":      fmt.Sprint(nextPage),
+		"prevPage":      fmt.Sprint(prevPage),
 	}
 
 	w.Header().Set("Cache-Control", "max-age=86400")
