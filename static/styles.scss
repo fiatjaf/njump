@@ -657,6 +657,15 @@ iframe {
         }
       }
     }
+    a.pagination {
+      color: $color-accent1;
+      &.next {
+        float: right;
+      }
+      &.prev {
+        float: left;
+      } 
+    }
   }
 
   .column_clients {

@@ -712,6 +712,15 @@ iframe {
     color: #969696;
   }
 }
+.container .column_content a.pagination {
+  color: #e32a6d;
+}
+.container .column_content a.pagination.next {
+  float: right;
+}
+.container .column_content a.pagination.prev {
+  float: left;
+}
 .container .column_clients {
   position: -webkit-sticky;
   position: sticky;

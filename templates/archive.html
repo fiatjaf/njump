@@ -39,11 +39,11 @@
           </div>
 
           {{if not (eq .prevPage "0")}}
-          <a href="/{{.paginationUrl}}/{{.prevPage | escapeString}}"><< Prev page</a>
+          <a href="/{{.paginationUrl}}/{{.prevPage | escapeString}}" class="pagination prev"><< Prev page</a>
           {{end}}
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {{if not (eq .nextPage "0")}}
-          <a href="/{{.paginationUrl}}/{{.nextPage | escapeString}}">Next page >></a>
+          <a href="/{{.paginationUrl}}/{{.nextPage | escapeString}}" class="pagination next">Next page >></a>
           {{end}}
 
         </div>
