@@ -54,6 +54,16 @@ func render(w http.ResponseWriter, r *http.Request) {
 		typ = "profile_sitemap"
 	}
 
+	if strings.HasPrefix(code, "note1") {
+		_, redirectHex, err := nip19.Decode(code)
+		if err != nil {
+			http.Error(w, "error fetching event: "+err.Error(), 404)
+			return
+		}
+		redirectNevent, _ := nip19.EncodeEvent(redirectHex.(string), []string{}, "")
+		http.Redirect(w, r, "/"+redirectNevent, http.StatusFound)
+	}
+
 	if code == "" {
 		fmt.Fprintf(w, "call /<nip19 code>")
 		return
@@ -75,10 +85,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 	content := ""
-
-	if strings.HasPrefix(code, "note1") {
-		http.Redirect(w, r, "/"+nevent, http.StatusFound)
-	}
 
 	author := event
 	var renderableLastNotes []*Event
