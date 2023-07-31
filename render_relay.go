@@ -45,8 +45,9 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 	renderableLastNotes := make([]*Event, len(lastNotes))
 	lastEventAt := time.Now()
+	relay := []string{"wss://" + hostname}
 	for i, n := range lastNotes {
-		nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
+		nevent, _ := nip19.EncodeEvent(n.ID, relay, n.PubKey)
 		renderableLastNotes[i] = &Event{
 			Nevent:       nevent,
 			Content:      n.Content,
