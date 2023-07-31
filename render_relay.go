@@ -16,7 +16,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	hostname := code[2:]
 	typ := "relay"
 	if strings.HasSuffix(hostname, ".xml") {
-		hostname = code[:len(hostname)-4]
+		hostname = hostname[:len(hostname)-4]
 		typ = "relay_sitemap"
 	}
 

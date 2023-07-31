@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		{{if .npub}}<loc>https://nostr.com/{{.npub | escapeString}}</loc>{{end}}
-		{{if .hostname}}<loc>https://nostr.com/{{.hostname | escapeString}}</loc>{{end}}
+		{{if .hostname}}<loc>https://nostr.com/r/{{.hostname | escapeString}}</loc>{{end}}
 		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
