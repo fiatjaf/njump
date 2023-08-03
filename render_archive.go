@@ -64,7 +64,9 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		"prevPage":      fmt.Sprint(prevPage),
 	}
 
-	w.Header().Set("Cache-Control", "max-age=86400")
+	if len(data) != 0 {
+		w.Header().Set("Cache-Control", "max-age=86400")
+	}
 
 	if err := tmpl.ExecuteTemplate(w, "archive.html", params); err != nil {
 		log.Error().Err(err).Msg("error rendering")

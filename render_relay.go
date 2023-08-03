@@ -72,7 +72,9 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		"modifiedAt": lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 	}
 
-	w.Header().Set("Cache-Control", "max-age=604800")
+	if len(renderableLastNotes) != 0 {
+		w.Header().Set("Cache-Control", "max-age=604800")
+	}
 
 	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")

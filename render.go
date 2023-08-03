@@ -317,7 +317,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 		templateMapping[typ] = "other.html"
 	}
 
-	w.Header().Set("Cache-Control", "max-age=604800")
+	if (strings.Contains(typ, "profile") && len(renderableLastNotes) != 0) || (!strings.Contains(typ, "profile") && len(content) != 0) {
+		w.Header().Set("Cache-Control", "max-age=604800")
+	}
 
 	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
