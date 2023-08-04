@@ -73,7 +73,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(renderableLastNotes) != 0 {
-		w.Header().Set("Cache-Control", "max-age=604800")
+		w.Header().Set("Cache-Control", "max-age=3600")
 	} else {
 		w.Header().Set("Cache-Control", "max-age=60")
 	}

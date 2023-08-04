@@ -320,7 +320,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 		templateMapping[typ] = "other.html"
 	}
 
-	if (strings.Contains(typ, "profile") && len(renderableLastNotes) != 0) || (!strings.Contains(typ, "profile") && len(content) != 0) {
+	if strings.Contains(typ, "profile") && len(renderableLastNotes) != 0 {
+		w.Header().Set("Cache-Control", "max-age=3600")
+	} else if !strings.Contains(typ, "profile") && len(content) != 0 {
 		w.Header().Set("Cache-Control", "max-age=604800")
 	} else {
 		w.Header().Set("Cache-Control", "max-age=60")
