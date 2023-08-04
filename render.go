@@ -57,6 +57,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	if strings.HasPrefix(code, "note1") {
 		_, redirectHex, err := nip19.Decode(code)
 		if err != nil {
+			w.Header().Set("Cache-Control", "max-age=60")
 			http.Error(w, "error fetching event: "+err.Error(), 404)
 			return
 		}
@@ -75,6 +76,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
 	event, err := getEvent(r.Context(), code)
 	if err != nil {
+		w.Header().Set("Cache-Control", "max-age=60")
 		http.Error(w, "error fetching event: "+err.Error(), 404)
 		return
 	}
@@ -132,6 +134,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if err != nil {
+			w.Header().Set("Cache-Control", "max-age=60")
 			http.Error(w, "error fetching event: "+err.Error(), 404)
 			return
 		}
@@ -319,6 +322,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	if (strings.Contains(typ, "profile") && len(renderableLastNotes) != 0) || (!strings.Contains(typ, "profile") && len(content) != 0) {
 		w.Header().Set("Cache-Control", "max-age=604800")
+	} else {
+		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
 	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {

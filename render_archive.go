@@ -66,6 +66,8 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 
 	if len(data) != 0 {
 		w.Header().Set("Cache-Control", "max-age=86400")
+	} else {
+		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
 	if err := tmpl.ExecuteTemplate(w, "archive.html", params); err != nil {
