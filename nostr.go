@@ -170,7 +170,7 @@ func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
 	for event := range events {
 		lastNotes = append(lastNotes, event)
 	}
-	slices.SortFunc(lastNotes, func(a, b *nostr.Event) bool { return a.CreatedAt < b.CreatedAt })
+	slices.SortFunc(lastNotes, func(a, b *nostr.Event) bool { return a.CreatedAt > b.CreatedAt })
 
 	return lastNotes
 }
