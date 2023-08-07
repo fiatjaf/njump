@@ -9,7 +9,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lukevers/freetype-go v0.0.0-20150513150840-77e276735410
 	github.com/microcosm-cc/bluemonday v1.0.24
-	github.com/nbd-wtf/go-nostr v0.19.4
+	github.com/nbd-wtf/go-nostr v0.20.0
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/zerolog v1.29.1
 	golang.org/x/image v0.0.0-20190802002840-cff245a6509b

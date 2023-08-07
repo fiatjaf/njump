@@ -11,6 +11,7 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/nbd-wtf/go-nostr/nson"
 	"github.com/nbd-wtf/go-nostr/sdk"
+	"golang.org/x/exp/slices"
 )
 
 var (
@@ -126,21 +127,20 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	relays = unique(relays)
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
-	for event := range pool.SubManyEose(ctx, relays, nostr.Filters{filter}) {
-		b, err := nson.Marshal(event)
+	if evt := pool.QuerySingle(ctx, relays, filter); evt != nil {
+		b, err := nson.Marshal(evt)
 		if err != nil {
-			log.Error().Err(err).Stringer("event", event).Msg("error marshaling nson")
-			return event, nil
+			log.Error().Err(err).Stringer("event", evt).Msg("error marshaling nson")
+			return evt, nil
 		}
 		cache.SetWithTTL(code, []byte(b), time.Hour*24*7)
-		return event, nil
+		return evt, nil
 	}
 
 	return nil, fmt.Errorf("couldn't find this %s", prefix)
 }
 
 func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
-
 	if limit <= 0 {
 		limit = 10
 	}
@@ -168,8 +168,9 @@ func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
 	})
 	lastNotes := make([]*nostr.Event, 0, 20)
 	for event := range events {
-		lastNotes = nostr.InsertEventIntoDescendingList(lastNotes, event)
+		lastNotes = append(lastNotes, event)
 	}
+	slices.SortFunc(lastNotes, func(a, b *nostr.Event) bool { return a.CreatedAt < b.CreatedAt })
 
 	return lastNotes
 }
