@@ -104,11 +104,20 @@ func render(w http.ResponseWriter, r *http.Request) {
 			key = "ln:" + event.PubKey
 		}
 
+		rawAuthorRelays := []string{}
 		ctx, cancel := context.WithTimeout(r.Context(), time.Second*4)
-		authorRelays = relaysForPubkey(ctx, event.PubKey)
+		rawAuthorRelays = relaysForPubkey(ctx, event.PubKey)
 		cancel()
-		for i, n := range authorRelays {
-			authorRelays[i] = trimProtocol(n)
+		for _, relay := range rawAuthorRelays {
+			for _, excluded := range excludedRelays {
+				if strings.Contains(relay, excluded) {
+					continue
+				}
+			}
+			if strings.Contains(relay, "/npub1") {
+				continue // Skip relays with personalyzed query like filter.nostr.wine
+			}
+			authorRelays = append(authorRelays, trimProtocol(relay))
 		}
 
 		var lastNotes []*nostr.Event
