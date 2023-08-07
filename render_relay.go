@@ -32,9 +32,9 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// last notes
-	events_num := 50
+	events_num := 1000
 	if typ == "relay_sitemap" {
-		events_num = 50000
+		events_num = 5000
 	}
 	var lastNotes []*nostr.Event
 	if relay, err := pool.EnsureRelay(hostname); err == nil {
