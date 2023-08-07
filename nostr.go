@@ -159,17 +159,29 @@ func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
 	relays = append(relays, getRelay())
 	relays = append(relays, getRelay())
 	relays = unique(relays)
-	events := pool.SubManyEose(ctx, relays, nostr.Filters{
+
+	ch := pool.SubManyEose(ctx, relays, nostr.Filters{
 		{
 			Kinds:   []int{nostr.KindTextNote},
 			Authors: []string{pp.PublicKey},
 			Limit:   limit,
 		},
 	})
+
 	lastNotes := make([]*nostr.Event, 0, 20)
-	for event := range events {
-		lastNotes = append(lastNotes, event)
+	for {
+		select {
+		case evt, more := <-ch:
+			if !more {
+				goto end
+			}
+			lastNotes = append(lastNotes, evt)
+		case <-ctx.Done():
+			goto end
+		}
 	}
+
+end:
 	slices.SortFunc(lastNotes, func(a, b *nostr.Event) bool { return a.CreatedAt > b.CreatedAt })
 
 	return lastNotes
@@ -198,7 +210,7 @@ func contactsForPubkey(ctx context.Context, pubkey string, extraRelays ...string
 	relays := make([]string, 0, 12)
 	if ok := cache.GetJSON("cc:"+pubkey, &pubkeyContacts); !ok {
 		fmt.Printf("Searching contacts for %s\n", pubkey)
-		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
+		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 
 		pubkeyRelays := relaysForPubkey(ctx, pubkey, relays...)
 		relays = append(relays, pubkeyRelays...)
@@ -213,14 +225,23 @@ func contactsForPubkey(ctx context.Context, pubkey string, extraRelays ...string
 			},
 		})
 
-		for event := range ch {
-			for _, tag := range event.Tags {
-				if tag[0] == "p" {
-					pubkeyContacts = append(pubkeyContacts, tag[1])
+		for {
+			select {
+			case evt, more := <-ch:
+				if !more {
+					goto end
 				}
+				for _, tag := range evt.Tags {
+					if tag[0] == "p" {
+						pubkeyContacts = append(pubkeyContacts, tag[1])
+					}
+				}
+			case <-ctx.Done():
+				goto end
 			}
 		}
 
+	end:
 		cancel()
 		if len(pubkeyContacts) > 0 {
 			cache.SetJSONWithTTL("cc:"+pubkey, pubkeyContacts, time.Hour*6)
