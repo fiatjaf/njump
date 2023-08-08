@@ -18,19 +18,21 @@ for (let i = 0; i < clients.length; i++) {
 let clients_wrapper = document.querySelector('.clients_wrapper')
 if (clients_wrapper !== null) {
   const elements = Array.from(clients_wrapper.getElementsByClassName('btn'))
-  elements.sort((a, b) => {
-    const rankA = parseInt(a.getAttribute('count'))
-    const rankB = parseInt(b.getAttribute('count'))
-    return rankB - rankA
-  })
-  elements.forEach(element => clients_wrapper.appendChild(element))
+  if (elements.length > 0) {
+    elements.sort((a, b) => {
+      const rankA = parseInt(a.getAttribute('count'))
+      const rankB = parseInt(b.getAttribute('count'))
+      return rankB - rankA
+    })
+    elements.forEach(element => clients_wrapper.appendChild(element))
 
-  counts.sort((a, b) => b[0] - a[0])
-  let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
+    counts.sort((a, b) => b[0] - a[0])
+    let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
 
-  if (location.hash !== '#noredirect') {
-    if (counts[0][0] - tailsum > 10) {
-      location.href = counts[0][2]
+    if (location.hash !== '#noredirect') {
+      if (counts[0][0] - tailsum > 10) {
+        location.href = counts[0][2]
+      }
     }
   }
 }
@@ -128,12 +130,11 @@ window.addEventListener('scroll', function() {
   if (window.getComputedStyle(desktop_profile).display === 'none') {
     return
   }
-  if (isElementInViewport(desktop_name)) {
-    console.log('Element is in viewport');
-    document.querySelector('.columnA .info-wrapper').style.display = 'none';
+  columnA = document.querySelector('.columnA')
+  if (columnA != null && isElementInViewport(desktop_name)) {
+    columnA.querySelector('.info-wrapper').style.display = 'none';
   } else {
-    console.log('Element is outside the viewport');
-    document.querySelector('.columnA .info-wrapper').style.display = 'block';
+    document.querySelector('.info-wrapper').style.display = 'block';
   }
 });
 
