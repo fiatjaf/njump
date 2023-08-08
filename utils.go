@@ -129,7 +129,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
 			{Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
 		}
-	} else if event.Kind == 30023 {
+	} else if event.Kind == 30023 || event.Kind == 30024 {
 		return []ClientReference{
 			{Name: "Your native client", URL: "nostr:" + code},
 			{Name: "YakiHonne", URL: "https://yakihonne.com/article/" + code},
