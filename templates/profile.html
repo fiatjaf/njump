@@ -2,7 +2,8 @@
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    <title>{{.metadata.Name | escapeString}} on nostr - {{.npub}}</title>
+    <title>{{.metadata.Name | escapeString}} / {{.metadata.DisplayName | escapeString}} is on nostr</title>
+    <meta name="description" content="{{.npub | escapeString}} is {{.metadata.Name | escapeString}} / {{.metadata.DisplayName | escapeString}} public key on nostr" >
     <meta property="og:title" content="{{.title | escapeString}}" />
     <meta property="og:site_name" content="{{.npub | escapeString}}" />
     {{ if .metadata.Picture }}
