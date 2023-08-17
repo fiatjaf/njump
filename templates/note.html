@@ -3,7 +3,8 @@
   <meta charset="UTF-8" />
   <head>
 
-    <title>Nostr Event {{.nevent}} by {{.metadata.Name | escapeString}}</title>
+    <title>{{.content | escapeString | titleize}}</title>
+    <title>{{.nevent | escapeString}} by {{.metadata.Name | escapeString}} is this note nostr ”nevent"</title>
     <meta property="og:title" content="{{.title | escapeString}}" />
     <meta name="twitter:title" content="{{.twitterTitle | escapeString}}" />
     <meta property="og:site_name" content="{{.authorLong | escapeString}}" /> 
@@ -71,7 +72,7 @@
             {{ if (not (eq .subject ""))}}
               <h1>{{.subject | escapeString}}</h1>
             {{ else }}
-              <h1 class="h">{{.nevent}} by {{.metadata.Name | escapeString}}</h1>
+              <h1 class="h">{{.metadata.Name | escapeString}} wrote: {{.content | escapeString | titleize}}</h1>
             {{ end }}
             {{ if (or (eq .kindID 30023) (eq .kindID 30024))}}
               {{.content | mdToHTML }}

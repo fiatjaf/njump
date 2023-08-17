@@ -327,6 +327,15 @@ func mdToHTML(md string) string {
 	return output
 }
 
+func titleize(s string) string {
+	s = strings.Replace(s, "\r\n", " ", -1)
+	s = strings.Replace(s, "\n", " ", -1)
+	if len(s) <= 65 {
+		return "\"" + s + "\""
+	}
+	return "\"" + s[:65] + "...\""
+}
+
 func unique(strSlice []string) []string {
 	keys := make(map[string]bool)
 	list := []string{}
