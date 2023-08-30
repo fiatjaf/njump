@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"time"
@@ -9,7 +10,6 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/nbd-wtf/go-nostr/nson"
 	"github.com/nbd-wtf/go-nostr/sdk"
 	"golang.org/x/exp/slices"
 )
@@ -59,7 +59,7 @@ func getRelay() string {
 func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	if b, ok := cache.Get(code); ok {
 		v := &nostr.Event{}
-		err := nson.Unmarshal(string(b), v)
+		err := json.Unmarshal(b, v)
 		return v, err
 	}
 
@@ -128,7 +128,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
 	if evt := pool.QuerySingle(ctx, relays, filter); evt != nil {
-		b, err := nson.Marshal(evt)
+		b, err := json.Marshal(evt)
 		if err != nil {
 			log.Error().Err(err).Stringer("event", evt).Msg("error marshaling nson")
 			return evt, nil
