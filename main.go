@@ -71,12 +71,13 @@ func main() {
 	templateMapping["relay_sitemap"] = "sitemap.xml"
 
 	funcMap := template.FuncMap{
-		"basicFormatting": basicFormatting,
-		"mdToHTML":        mdToHTML,
-		"escapeString":    html.EscapeString,
-		"sanitizeXSS":     sanitizeXSS,
-		"trimProtocol":    trimProtocol,
-		"titleize":        titleize,
+		"basicFormatting":      basicFormatting,
+		"renderInlineMentions": renderInlineMentions,
+		"mdToHTML":             mdToHTML,
+		"escapeString":         html.EscapeString,
+		"sanitizeXSS":          sanitizeXSS,
+		"trimProtocol":         trimProtocol,
+		"titleize":             titleize,
 	}
 
 	tmpl = template.Must(

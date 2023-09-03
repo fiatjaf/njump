@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/html"
+	mdhtml "github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/microcosm-cc/bluemonday"
 
@@ -258,6 +258,32 @@ func replaceNostrURLsWithTags(input string) string {
 	return input
 }
 
+func renderInlineMentions(input string) string {
+	lines := strings.Split(input, "\n")
+
+	var processedLines []string
+	for _, line := range lines {
+		nostrRegexPattern := `\S*(nostr:)?((note|nevent)1[a-z0-9]+)\b`
+		nostrRegex := regexp.MustCompile(nostrRegexPattern)
+		input = nostrRegex.ReplaceAllStringFunc(line, func(match string) string {
+			submatch := nostrRegex.FindStringSubmatch(match)
+			if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
+				return match
+			}
+			capturedGroup := submatch[2]
+			replacement := ""
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+			event, _ := getEvent(ctx, capturedGroup)
+			cancel()
+			replacement = fmt.Sprintf(`{blockquote} {div}From: %s {/div} %s {/blockquote}`, capturedGroup, event.Content)
+			return replacement
+		})
+		processedLines = append(processedLines, input)
+	}
+
+	return strings.Join(processedLines, "\n")
+}
+
 func replaceURLsWithTags(line string) string {
 	var rline string
 
@@ -293,8 +319,11 @@ func sanitizeXSS(html string) string {
 }
 
 func basicFormatting(input string) string {
+	input = strings.ReplaceAll(input, "{blockquote}", "<blockquote class='mention'>")
+	input = strings.ReplaceAll(input, "{/blockquote}", "</blockquote>")
+	input = strings.ReplaceAll(input, "{div}", "<div>")
+	input = strings.ReplaceAll(input, "{/div}", "</div>")
 	lines := strings.Split(input, "\n")
-
 	var processedLines []string
 	for _, line := range lines {
 		processedLine := replaceURLsWithTags(line)
@@ -316,9 +345,9 @@ func mdToHTML(md string) string {
 	doc := p.Parse([]byte(md))
 
 	// create HTML renderer with extensions
-	htmlFlags := html.CommonFlags | html.HrefTargetBlank
-	opts := html.RendererOptions{Flags: htmlFlags}
-	renderer := html.NewRenderer(opts)
+	htmlFlags := mdhtml.CommonFlags | mdhtml.HrefTargetBlank
+	opts := mdhtml.RendererOptions{Flags: htmlFlags}
+	renderer := mdhtml.NewRenderer(opts)
 	output := string(markdown.Render(doc, renderer))
 
 	// Sanitize content

@@ -3,6 +3,7 @@ package main
 import (
 	"image"
 	"image/draw"
+	"regexp"
 	"strings"
 
 	"github.com/apatters/go-wordwrap"
@@ -17,10 +18,27 @@ const (
 )
 
 func normalizeText(t string) []string {
+	re := regexp.MustCompile(`{div}.*?{/div}`)
+	t = re.ReplaceAllString(t, "")
 	lines := make([]string, 0, MAX_LINES)
+	mention := false
+	maxChars := MAX_CHARS_PER_LINE
 	for _, line := range strings.Split(t, "\n") {
-		line = wordwrap.Wrap(MAX_CHARS_PER_LINE, line)
+		line = wordwrap.Wrap(maxChars, line)
 		for _, subline := range strings.Split(line, "\n") {
+			if strings.HasPrefix(subline, "{blockquote}") {
+				mention = true
+				subline = strings.ReplaceAll(subline, "{blockquote}", "")
+				subline = strings.ReplaceAll(subline, "{/blockquote}", "")
+				maxChars = MAX_CHARS_PER_LINE - 1
+			} else if strings.HasSuffix(subline, "{/blockquote}") {
+				mention = false
+				subline = strings.ReplaceAll(subline, "{/blockquote}", "")
+				maxChars = MAX_CHARS_PER_LINE
+			}
+			if mention {
+				subline = "> " + subline
+			}
 			lines = append(lines, subline)
 		}
 	}

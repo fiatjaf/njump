@@ -465,6 +465,20 @@ iframe {
 .theme--dark .container .column_content .field blockquote {
   border-left: 0.5rem solid #2d2d2d;
 }
+.container .column_content .field blockquote.mention {
+  border-left: 0.5rem solid #e32a6d;
+  padding: 0rem 0 0.5rem 1rem;
+}
+.theme--default .container .column_content .field blockquote.mention div {
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  margin: 0 0 1rem -1rem;
+  background-color: #f3f3f3;
+}
+.theme--dark .container .column_content .field blockquote.mention div {
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  margin: 0 0 1rem -1rem;
+  background-color: #2d2d2d;
+}
 .container .column_content .field blockquote p {
   margin: 0 0 0.5rem 0;
 }

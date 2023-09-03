@@ -77,7 +77,7 @@
             {{ if (or (eq .kindID 30023) (eq .kindID 30024))}}
               {{.content | mdToHTML }}
             {{ else }}
-              {{.content | escapeString | basicFormatting }}
+              {{.content | renderInlineMentions | escapeString | basicFormatting}}
             {{ end }}
           </article>
 

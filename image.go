@@ -21,7 +21,7 @@ func generate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lines := normalizeText(event.Content)
+	lines := normalizeText(renderInlineMentions(event.Content))
 
 	img, err := drawImage(lines, getPreviewStyle(r))
 	if err != nil {

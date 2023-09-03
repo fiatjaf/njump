@@ -455,6 +455,17 @@ iframe {
         padding: 0.5rem 0 0.5rem 1rem;
         margin: 2rem 0;
         font-style: italic;
+        &.mention {
+          border-left: 0.5rem solid $color-accent1;
+          padding: 0rem 0 0.5rem 1rem;
+          div {
+            @include themed() {
+              padding: 0.5rem 0.5rem 0.5rem 1rem;
+              margin: 0 0 1rem -1rem;
+              background-color: t($over-bg);
+            }
+          }
+        }
         p {
           margin: 0 0 0.5rem 0;
         }
