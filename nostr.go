@@ -20,6 +20,7 @@ var (
 
 	always = []string{
 		"wss://relay.nostr.band",
+		"wss://relay.primal.net",
 	}
 	everything = []string{
 		"wss://relay.nostr.bg",
