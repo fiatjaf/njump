@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{{if .npub}}
 	<url>
-		{{if .npub}}<loc>https://{{.CanonicalHost}}/{{.npub | escapeString}}</loc>{{end}}
-		{{if .hostname}}<loc>https://{{.CanonicalHost}}/r/{{.hostname | escapeString}}</loc>{{end}}
+		<loc>https://{{.CanonicalHost}}/{{.npub | escapeString}}</loc>
 		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
 	</url>
+{{end}}
+{{if .hostname}}
+	<url>
+		<loc>https://{{.CanonicalHost}}/r/{{.hostname | escapeString}}</loc>
+		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.8</priority>
+	</url>
+{{end}}
+{{if .lastNotes}}
 {{range .lastNotes}}
 	<url>
 		<loc>https://{{$.CanonicalHost}}/{{.Nevent | escapeString}}</loc>
@@ -14,5 +24,16 @@
 		<changefreq>never</changefreq>
 		<priority>0.5</priority>
 	</url>
+{{end}}
+{{end}}
+{{if .data}}
+{{range $element := .data }}
+	<url>
+		<loc>https://{{$.CanonicalHost}}/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}</loc>
+		<lastmod>{{$.modifiedAt | escapeString}}</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.5</priority>
+	</url>
+{{end}}
 {{end}}
 </urlset>

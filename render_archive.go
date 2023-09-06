@@ -2,15 +2,26 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
 func renderArchive(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Path[1:]
+	hostname := code[2:]
+	typ := "archive"
 	resultsPerPage := 50
+
+	if strings.HasSuffix(hostname, ".xml") {
+		typ = "archive_sitemap"
+		resultsPerPage = 5000
+	}
+
 	lastIndex := strings.LastIndex(r.URL.Path, "/")
 	page := 1
 	if lastIndex != -1 {
@@ -26,7 +37,11 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	prefix := ""
 	path_prefix := ""
 	title := ""
-	area := strings.Split(r.URL.Path[1:], "/")[0]
+	area := ""
+	if strings.HasPrefix(r.URL.Path[1:], "npubs-archive") {
+		area = "npubs-archive"
+	}
+
 	if area == "npubs-archive" {
 		prefix = "pa"
 		path_prefix = ""
@@ -55,10 +70,19 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		nextPage = 0
 	}
 
+	// Generate a random duration between 2 and 6 hours
+	minHours := 2
+	maxHours := 6
+	randomHours := rand.Intn(maxHours-minHours+1) + minHours
+	randomDuration := time.Duration(randomHours) * time.Hour
+	currentTime := time.Now()
+	modifiedAt := currentTime.Add(-randomDuration).Format("2006-01-02T15:04:05Z07:00")
+
 	params := map[string]any{
 		"title":         title,
 		"pathPrefix":    path_prefix,
 		"data":          data,
+		"modifiedAt":    modifiedAt,
 		"paginationUrl": area,
 		"nextPage":      fmt.Sprint(nextPage),
 		"prevPage":      fmt.Sprint(prevPage),
@@ -71,7 +95,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
-	if err := tmpl.ExecuteTemplate(w, "archive.html", params); err != nil {
+	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
 	}

@@ -31,7 +31,7 @@
           <div class="field separator long"></div>
 
           <div class="field last_notes">
-            {{range $index, $element := .data }}
+            {{range $element := .data }}
             <a href="/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}" class="note">
               <div class="content">{{$element | escapeString}}</div>
             </a>

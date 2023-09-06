@@ -29,7 +29,7 @@ var (
 	s               Settings
 	tmpl            *template.Template
 	templateMapping = make(map[string]string)
-	log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
+	log             = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 )
 
 func updateArchives(ctx context.Context) {
@@ -67,6 +67,8 @@ func main() {
 	templateMapping["address"] = "other.html"
 	templateMapping["relay"] = "relay.html"
 	templateMapping["relay_sitemap"] = "sitemap.xml"
+	templateMapping["archive"] = "archive.html"
+	templateMapping["archive_sitemap"] = "sitemap.xml"
 
 	funcMap := template.FuncMap{
 		"basicFormatting":      basicFormatting,
@@ -90,6 +92,8 @@ func main() {
 	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
 	http.HandleFunc("/npubs-archive/", renderArchive)
 	http.HandleFunc("/relays-archive/", renderArchive)
+	http.HandleFunc("/npubs-archive.xml", renderArchive)
+	http.HandleFunc("/relays-archive.xml", renderArchive)
 	http.HandleFunc("/", render)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
