@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		{{if .npub}}<loc>https://nostr.com/{{.npub | escapeString}}</loc>{{end}}
-		{{if .hostname}}<loc>https://nostr.com/r/{{.hostname | escapeString}}</loc>{{end}}
+		{{if .npub}}<loc>https://{{.CanonicalHost}}/{{.npub | escapeString}}</loc>{{end}}
+		{{if .hostname}}<loc>https://{{.CanonicalHost}}/r/{{.hostname | escapeString}}</loc>{{end}}
 		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
 	</url>
 {{range .lastNotes}}
 	<url>
-		<loc>https://nostr.com/{{.Nevent | escapeString}}</loc>
+		<loc>https://{{$.CanonicalHost}}/{{.Nevent | escapeString}}</loc>
 		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
 		<changefreq>never</changefreq>
 		<priority>0.5</priority>
