@@ -322,6 +322,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"lastNotes":       renderableLastNotes,
 		"parentNevent":    parentNevent,
 		"authorRelays":    authorRelays,
+		"CanonicalHost":   s.CanonicalHost,
 	}
 
 	// if a mapping is not found fallback to raw

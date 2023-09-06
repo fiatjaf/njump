@@ -64,12 +64,13 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		"clients": []ClientReference{
 			{Name: "Coracle", URL: "https://coracle.social/relays/" + hostname},
 		},
-		"type":       "relay",
-		"info":       info,
-		"hostname":   hostname,
-		"proxy":      "https://" + hostname + "/njump/proxy?src=",
-		"lastNotes":  renderableLastNotes,
-		"modifiedAt": lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
+		"type":          "relay",
+		"info":          info,
+		"hostname":      hostname,
+		"proxy":         "https://" + hostname + "/njump/proxy?src=",
+		"lastNotes":     renderableLastNotes,
+		"modifiedAt":    lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
+		"CanonicalHost": s.CanonicalHost,
 	}
 
 	if len(renderableLastNotes) != 0 {

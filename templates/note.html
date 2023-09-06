@@ -30,7 +30,7 @@
     <meta name="twitter:description" content="{{.description | escapeString}}" />
     {{end}}
 
-    <link rel="canonical" href="https://nostr.com/{{.nevent | escapeString }}" />
+    <link rel="canonical" href="https://{{.CanonicalHost}}/{{.nevent | escapeString }}" />
 
     {{template "head_common.html" }}
   </head>

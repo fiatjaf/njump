@@ -20,7 +20,7 @@
     {{end}}
     <meta property="twitter:card" content="summary" />
 
-    <link rel="canonical" href="https://nostr.com/{{.npub | escapeString }}" />
+    <link rel="canonical" href="https://{{.CanonicalHost}}/{{.npub | escapeString }}" />
     <link
       rel="sitemap"
       type="application/xml"

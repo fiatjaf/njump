@@ -15,7 +15,8 @@ import (
 )
 
 type Settings struct {
-	Port string `envconfig:"PORT" default:"2999"`
+	Port          string `envconfig:"PORT" default:"2999"`
+	CanonicalHost string `envconfig:"CANONICAL_HOST" default:"njump.me"`
 }
 
 //go:embed static/*
@@ -25,11 +26,9 @@ var static embed.FS
 var templates embed.FS
 
 var (
-	s Settings
-
+	s               Settings
 	tmpl            *template.Template
 	templateMapping = make(map[string]string)
-
 	log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 )
 
@@ -53,7 +52,6 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("couldn't process envconfig.")
 	}
-
 	// initialize disk cache
 	defer cache.initialize()()
 
