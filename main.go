@@ -69,6 +69,7 @@ func main() {
 	templateMapping["relay_sitemap"] = "sitemap.xml"
 	templateMapping["archive"] = "archive.html"
 	templateMapping["archive_sitemap"] = "sitemap.xml"
+	templateMapping["robots"] = "robots.txt"
 
 	funcMap := template.FuncMap{
 		"basicFormatting":      basicFormatting,
@@ -87,6 +88,7 @@ func main() {
 	)
 
 	// routes
+	http.HandleFunc("/robots.txt", renderRobots)
 	http.HandleFunc("/njump/image/", generate)
 	http.HandleFunc("/njump/proxy/", proxy)
 	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
