@@ -16,23 +16,25 @@
         <div>
           <h2>What is Njump?</h2>
 
-          <p>Njump is a static Nostr gateway that allows you to browse profiles, notes and relays; it is an easy way to preview a resource and then open it with the preferred client.</p>
+          <p>Njump is a static <a href="https://github.com/nostr-protocol/nostr">Nostr</a> gateway that allows you to browse profiles, notes and relays; it is an easy way to preview a resource and then open it with the preferred client. The typical use of njump is to share a resource outside the nostr world (clients), where the nostr: schema is not (yet) active.</p>
           <p>Njump currently lives under njump.me, you can reach it appending a nostr (<a href="https://github.com/nostr-protocol/nips/blob/master/19.md">NIP-19</a>) entity (npub, nevent, naddr, etc) after the domain: <span class="exampleUrl">njump.me/p/&lt;nip-19-entity&gt;</span><br/>
             For example <a href='https://njump.me/npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6'>a user</a> <a href="https://njump.me/npub10000003zmk89narqpczy4ff6rnuht2wu05na7kpnh3mak7z2tqzsv8vwqk">profile</a>, <a href='https://njump.me/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t'>a note</a> or a <a href='https://njump.me/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv'>long blog post</a></p>
-          
-          <p>The typical use of njump is to share a resource outside the nostr world (clients), where the nostr: schema is not (yet) active. There are several reasons to prefer njump to share a nostr resource, versus other web clients, let's see them.</p>
 
           <h2>Try it now, jump to a nostr content</h2>
 
           <div class="try">
             <form action="/try" method="POST">
               <div class="tryForm">
-                <input id="nip19entity" name="nip19entity" type="text" placeholder="Paste a npub / nprofile / nevent / ..." autofocus /><button>GO</button>
+                  <div>njump.me/</div>
+                  <input id="nip19entity" name="nip19entity" type="text" placeholder="paste a npub / nprofile / nevent / ..." autofocus />
+                  <button>VIEW</button>
               </div>
               
             </form>
             <div id="pickRandomEntityLink">or pick a <a href="#">random content</a></div>
           </div>
+
+          <p>There are several reasons to prefer njump to share a nostr resource, versus other web clients, let's see them.</p>
           
           <h2>Clean, fast and solid</h2>
           
@@ -46,7 +48,7 @@
           
           <p>Njump is not interested into "capture" users at all, on the contrary it invites them to "jump" to the nostr resource with one of the proposed clients. It even remembers the most used one and put it on the top for fast click/tap.</p>
           
-          <h2>Search engine friendly (jump-in)</h2>
+          <h2>Search friendly (jump-in)</h2>
 
           <p>This is crucial: njump pages are static so search engines can index them, these means that njump can help others to discover great content on nostr, jump in and join us! Njump is the only nostr resource that has this explicit goal, if you care that a good note could be found online use njump to share it, this way you also help nostr flourish.</p>
           
@@ -56,10 +58,10 @@
           A profile shows the basic metadata infos, the used "outbox" relays (Gossip model) and the last notes.
           Of course profiles are also static, fast and indexable, so start to promote your nostr presence this way!
           
-          <h2>Bonus 2: relays</h2>
+          <h2>Bonus 2: Relays view</h2>
           
           You can have a view of the last content posted to a relay using <span class="exampleUrl">njump.me/r/&lt;relay-host&gt;</span>, example: <a href="https://njump.me/r/nostr.wine">https://njump.me/r/nostr.wine</a>
-          Some basic infos (<a href="https://github.com/nostr-protocol/nips/blob/master/11.md">NIP-11</a>) are available; I hope operators will start to make them more personal and informative so users can have a way to evaluate if/when to join a relay.
+          Some basic infos (<a href="https://github.com/nostr-protocol/nips/blob/master/11.md">NIP-11</a>) are available; We hope operators will start to make them more personal and informative so users can have a way to evaluate if/when to join a relay.
           
           <h2>Bonus 3: Inspector tool</h2>
           

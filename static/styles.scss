@@ -294,7 +294,8 @@ iframe {
     @include themed() {
       background-color: t($over-bg);
     }
-    padding: 2rem 2rem 1.4rem 2rem;
+    padding: 1.6rem 1.6rem 1rem 1.6rem;
+    margin-bottom: 2rem;
     border-radius: 8px;
     font-size: 0.8rem;
     @media (max-width: 580px) {
@@ -302,17 +303,39 @@ iframe {
     }
     .tryForm {
       display: flex;
+      align-items: center;
+      @media (max-width: 580px) {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
       input, button {
-        font-size: 1.2rem;
-        padding: 0.5rem;
         flex-basis: 90%;
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 1.2rem;
         border-radius: 8px;
+        @media (max-width: 580px) {
+          flex-basis: 100%;
+        }
+      }
+      div {
+        font-size: 1.4rem;
+        @media (max-width: 580px) {
+          margin-bottom: 0.4rem;
+        }
       }
       input {
         @include themed() {
           color: t($base7);
           background-color: t($bg-up);
-          border: 1px solid t($base4);
+          // border: 1px solid t($base4);
+          border: none;
+        }
+        margin-left: 0.3rem;
+        @media (max-width: 580px) {
+          margin-left: 0;
+          border-radius: 8px 8px 0px 0px;
         }
         &:focus {
           outline: none; /* Remove the default outline */
@@ -327,16 +350,24 @@ iframe {
         flex-basis: 10%;
         @include themed() {
           background-color: t($accent1);
-          color: $color-base1;
-          border: none;
-          margin-left: -16px;
+        }
+        color: $color-base1;
+        border: none;
+        margin-left: -16px;
+        @media (max-width: 580px) {
+          flex-basis: 100%;
+          margin-left: 0px;
+          border-radius: 0px 0px 8px 8px;
         }
       }
     }
     #pickRandomEntityLink {
       display: block;
-      padding-left: 0.4rem;
       margin-top: 0.2rem;
+      @media (max-width: 580px) {
+        margin-top: 0.8rem;
+        text-align: center;
+      }
     }
   }
 
@@ -872,10 +903,9 @@ body.homepage {
 
       span.exampleUrl {
         @include themed() {
-          background-color: t($accent1);
+          background-color: t($hrefbg);
         }
-        color: $color-base1;
-        padding: 0 0.4rem;
+        padding: 0 0.2rem;
         border-radius: 4px;
       }
 
