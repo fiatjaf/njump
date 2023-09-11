@@ -43,15 +43,17 @@ for (let i = 0; i < jsons.length; i++) {
 }
 
 const shareButton = document.querySelector('.open-list')
-const clients_list = document.querySelector('.column_clients')
-shareButton.addEventListener('click', function () {
-  clients_list.classList.toggle('up')
-  if (clients_list.classList.contains('up')) {
-    document.body.classList.add('lock')
-  } else {
-    document.body.classList.remove('lock')
-  }
-})
+if (shareButton) {
+  const clients_list = document.querySelector('.column_clients')
+  shareButton.addEventListener('click', function () {
+    clients_list.classList.toggle('up')
+    if (clients_list.classList.contains('up')) {
+      document.body.classList.add('lock')
+    } else {
+      document.body.classList.remove('lock')
+    }
+  })
+}
 
 function updateAdvanceSwitch() {
   advanced_list.forEach(element => {
@@ -125,18 +127,20 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 const desktop_name = document.querySelector('.column_content .name');
-window.addEventListener('scroll', function() {
-  desktop_profile = document.querySelector('.column_content .info-wrapper');
-  if (window.getComputedStyle(desktop_profile).display === 'none') {
-    return
-  }
-  columnA = document.querySelector('.columnA')
-  if (columnA != null && isElementInViewport(desktop_name)) {
-    columnA.querySelector('.info-wrapper').style.display = 'none';
-  } else {
-    document.querySelector('.info-wrapper').style.display = 'block';
-  }
-});
+if (desktop_name) {
+  window.addEventListener('scroll', function() {
+    desktop_profile = document.querySelector('.column_content .info-wrapper');
+    if (window.getComputedStyle(desktop_profile).display === 'none') {
+      return
+    }
+    columnA = document.querySelector('.columnA')
+    if (columnA != null && isElementInViewport(desktop_name)) {
+      columnA.querySelector('.info-wrapper').style.display = 'none';
+    } else {
+      document.querySelector('.info-wrapper').style.display = 'block';
+    }
+  });
+}
 
 // Needed to apply proper print styles
 if (

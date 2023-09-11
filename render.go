@@ -66,7 +66,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if code == "" {
-		fmt.Fprintf(w, "call /<nip19 code>")
+		renderHomepage(w, r)
 		return
 	}
 

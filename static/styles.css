@@ -250,6 +250,70 @@ iframe {
     width: 100%;
   }
 }
+.container .try {
+  padding: 2rem 2rem 1.4rem 2rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+}
+.theme--default .container .try {
+  background-color: #f3f3f3;
+}
+.theme--dark .container .try {
+  background-color: #2d2d2d;
+}
+@media (max-width: 580px) {
+  .container .try {
+    padding: 1rem 1rem 0.8rem 1rem;
+  }
+}
+.container .try .tryForm {
+  display: flex;
+}
+.container .try .tryForm input, .container .try .tryForm button {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  flex-basis: 90%;
+  border-radius: 8px;
+}
+.theme--default .container .try .tryForm input {
+  color: #373737;
+  background-color: #ffffff;
+  border: 1px solid #c9c9c9;
+}
+.theme--dark .container .try .tryForm input {
+  color: #fafafa;
+  background-color: #1e1e1e;
+  border: 1px solid #969696;
+}
+.container .try .tryForm input:focus {
+  outline: none; /* Remove the default outline */
+}
+.theme--default .container .try .tryForm ::placeholder {
+  color: #c9c9c9;
+}
+.theme--dark .container .try .tryForm ::placeholder {
+  color: #969696;
+}
+.container .try .tryForm button {
+  flex-basis: 10%;
+}
+.theme--default .container .try .tryForm button {
+  background-color: #e32a6d;
+  color: #ffffff;
+  border: none;
+  margin-left: -16px;
+}
+.theme--dark .container .try .tryForm button {
+  background-color: #e32a6d;
+  color: #ffffff;
+  border: none;
+  margin-left: -16px;
+}
+.container .try #pickRandomEntityLink {
+  display: block;
+  padding-left: 0.4rem;
+  margin-top: 0.2rem;
+}
 .container .columnA {
   position: -webkit-sticky;
   position: sticky;
@@ -874,6 +938,39 @@ iframe {
   .container .column_clients .btn span {
     display: none;
   }
+}
+
+body.homepage .container_wrapper {
+  display: block;
+}
+@media (max-width: 580px) {
+  body.homepage .container_wrapper {
+    display: block;
+    padding: 0 1rem;
+    margin: 0 auto;
+  }
+}
+body.homepage .container_wrapper .container {
+  display: block;
+  width: 60%;
+  margin: 0 auto;
+}
+@media (max-width: 580px) {
+  body.homepage .container_wrapper .container {
+    display: block;
+    width: 100%;
+  }
+}
+body.homepage .container_wrapper .container span.exampleUrl {
+  color: #ffffff;
+  padding: 0 0.4rem;
+  border-radius: 4px;
+}
+.theme--default body.homepage .container_wrapper .container span.exampleUrl {
+  background-color: #e32a6d;
+}
+.theme--dark body.homepage .container_wrapper .container span.exampleUrl {
+  background-color: #e32a6d;
 }
 
 body.profile .column_content {

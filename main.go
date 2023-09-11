@@ -61,6 +61,7 @@ func main() {
 
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
+	templateMapping["homepage"] = "homepage.html"
 	templateMapping["profile"] = "profile.html"
 	templateMapping["profile_sitemap"] = "sitemap.xml"
 	templateMapping["note"] = "note.html"
@@ -88,6 +89,8 @@ func main() {
 	)
 
 	// routes
+	http.HandleFunc("/", render)
+	http.HandleFunc("/try", renderTry)
 	http.HandleFunc("/robots.txt", renderRobots)
 	http.HandleFunc("/njump/image/", generate)
 	http.HandleFunc("/njump/proxy/", proxy)
@@ -96,7 +99,6 @@ func main() {
 	http.HandleFunc("/relays-archive/", renderArchive)
 	http.HandleFunc("/npubs-archive.xml", renderArchive)
 	http.HandleFunc("/relays-archive.xml", renderArchive)
-	http.HandleFunc("/", render)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
 	if err := http.ListenAndServe("0.0.0.0:"+s.Port, nil); err != nil {
