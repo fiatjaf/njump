@@ -2,9 +2,9 @@
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    <title>Njump - The Nostr static gateway</title>
-    <meta name="description" content="" >
-  
+    <title>njump - the nostr static gateway</title>
+    <meta name="description" content="" />
+
     {{template "head_common.html" }}
   </head>
 
@@ -14,58 +14,168 @@
     <div class="container_wrapper">
       <div class="container">
         <div>
-          <h2>What is Njump?</h2>
+          <h2>What is njump?</h2>
 
-          <p>Njump is a static <a href="https://github.com/nostr-protocol/nostr">Nostr</a> gateway that allows you to browse profiles, notes and relays; it is an easy way to preview a resource and then open it with the preferred client. The typical use of njump is to share a resource outside the nostr world (clients), where the nostr: schema is not (yet) active.</p>
-          <p>Njump currently lives under njump.me, you can reach it appending a nostr (<a href="https://github.com/nostr-protocol/nips/blob/master/19.md">NIP-19</a>) entity (npub, nevent, naddr, etc) after the domain: <span class="exampleUrl">njump.me/p/&lt;nip-19-entity&gt;</span><br/>
-            For example <a href='https://njump.me/npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6'>a user</a> <a href="https://njump.me/npub10000003zmk89narqpczy4ff6rnuht2wu05na7kpnh3mak7z2tqzsv8vwqk">profile</a>, <a href='https://njump.me/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t'>a note</a> or a <a href='https://njump.me/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv'>long blog post</a></p>
+          <p>
+            <i>njump</i> is a HTTP
+            <a href="https://github.com/nostr-protocol/nostr">Nostr</a> gateway
+            that allows you to browse profiles, notes and relays; it is an easy
+            way to preview a resource and then open it with your preferred
+            client. The typical use of <i>njump</i> is to share a resource
+            outside the Nostr world, where the <code>nostr:</code> schema is not
+            (yet) working.
+          </p>
+          <p>
+            <i>njump</i> currently lives under njump.me, you can reach it
+            appending a nostr (<a
+              href="https://github.com/nostr-protocol/nips/blob/master/19.md"
+              >NIP-19</a
+            >) entity (<code>npub</code>, <code>nevent</code>,
+            <code>naddr</code>, etc) after the domain:
+            <span class="exampleUrl">njump.me/&lt;nip-19-entity&gt;</span>.
+          </p>
+          <p>
+            For example, here's
+            <a
+              href="https://njump.me/npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6"
+              >a user</a
+            >
+            <a
+              href="https://njump.me/npub10000003zmk89narqpczy4ff6rnuht2wu05na7kpnh3mak7z2tqzsv8vwqk"
+              >profile</a
+            >,
+            <a
+              href="https://njump.me/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t"
+              >a note</a
+            >
+            and a
+            <a
+              href="https://njump.me/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv"
+              >long blog post</a
+            >.
+          </p>
 
-          <h2>Try it now, jump to a nostr content</h2>
+          <h2>Try it now, jump to some Nostr content</h2>
 
           <div class="try">
             <form action="/try" method="POST">
               <div class="tryForm">
-                  <div>njump.me/</div>
-                  <input id="nip19entity" name="nip19entity" type="text" placeholder="paste a npub / nprofile / nevent / ..." autofocus />
-                  <button>VIEW</button>
+                <div>njump.me/</div>
+                <input
+                  id="nip19entity"
+                  name="nip19entity"
+                  type="text"
+                  placeholder="paste a npub / nprofile / nevent / ..."
+                  autofocus
+                />
+                <button>VIEW</button>
               </div>
-              
             </form>
-            <div id="pickRandomEntityLink">or pick a <a href="#">random content</a></div>
+            <div id="pickRandomEntityLink">
+              or pick <a href="#">some random content</a>
+            </div>
           </div>
 
-          <p>There are several reasons to prefer njump to share a nostr resource, versus other web clients, let's see them.</p>
-          
-          <h2>Clean, fast and solid</h2>
-          
-          <p>Pages by njump are extremely light and fast to load because there isn't any client side javascript involved; they are minimalistic with the right attention to typography, focusing the content without unecessary details. Furthermore they are cached, so sharing a page you can expect the other part will load it without any glitch in a fraction of second: the perfect tool to onboard new users!</p>
-          
-          <h2>Good preview</h2>
-          
-          Njump previews notes in a simple but effective way, including links (to other nostr resources and web), images, video, quotes, code. It is compatible with long form content so it also renders markdown. It shows the note parent, allowing to follow it up. It has custom css for printing or exporting to PDF, so it is a nice option to read long form contents offline.
-          
-          <h2>Cooperative (jump-out)</h2>
-          
-          <p>Njump is not interested into "capture" users at all, on the contrary it invites them to "jump" to the nostr resource with one of the proposed clients. It even remembers the most used one and put it on the top for fast click/tap.</p>
-          
-          <h2>Search friendly (jump-in)</h2>
+          <p>
+            There are several reasons to choose <i>njump</i> when sharing Nostr
+            content outside of Nostr:
+          </p>
 
-          <p>This is crucial: njump pages are static so search engines can index them, these means that njump can help others to discover great content on nostr, jump in and join us! Njump is the only nostr resource that has this explicit goal, if you care that a good note could be found online use njump to share it, this way you also help nostr flourish.</p>
-          
-          <h2>Bonus: NIP-5 profiles</h2>
-          
-          Now you can share your own profile with an pretty <a href="https://github.com/nostr-protocol/nips/blob/master/05.md">NIP-05</a> inspired permalink: <span class="exampleUrl">njump.me/p/&lt;nip-5&gt;</span>, example: <a href="https://njump.me/p/fiatjaf.com">https://njump.me/p/fiatjaf.com</a>
-          A profile shows the basic metadata infos, the used "outbox" relays (Gossip model) and the last notes.
-          Of course profiles are also static, fast and indexable, so start to promote your nostr presence this way!
-          
+          <h2>Clean, fast and solid</h2>
+          <p>
+            Pages by <i>njump</i> are extremely lightweight and fast to load
+            because there isn't any client side javascript involved; they are
+            minimalistic with the right attention to typography, focusing the
+            content without unecessary details. Furthermore they are cached, so
+            when sharing a page you can expect the other part will load it
+            without any glitch in a fraction of second: the perfect tool to
+            onboard new users!
+          </p>
+
+          <h2>Good preview</h2>
+          <p>
+            <i>njump</i> renders everything on the server-side, so it is able to
+            generate useful rich previews that work on Telegram, Discord,
+            Twitter and other places.
+          </p>
+          <p>
+            When opening the URL directly in a browser, visitors will find
+            referenced content like images, video and links to referenced Nostr
+            events displayed in a simple but effective way. It shows the note
+            parent, allowing the visitor to follow it up and it has custom CSS
+            for printing or exporting to PDF.
+          </p>
+
+          <h2>Cooperative (jump-out)</h2>
+          <p>
+            <i>njump</i> is not interested capturing users at all, on the
+            contrary it invites them to "jump" to the Nostr resource by picking
+            from a list of web clients or with a <code>nostr:</code> for native
+            clients. It even remembers the most used one for each visitor and
+            puts it on the top for fast clicking or tap.
+          </p>
+          <p>
+            <a href="https://github.com/nostr-protocol/nips/blob/master/89.md"
+              >NIP-89</a
+            >
+            support coming!
+          </p>
+
+          <h2>Search friendly (jump-in)</h2>
+          <p>
+            This is crucial: <i>njump</i> pages are static so search engines can
+            index them, this means that <i>njump</i> can help others to discover
+            great content on Nostr, jump in and join us! <i>njump</i> is the
+            only nostr resource that has this explicit goal, if you care that a
+            good note can be found online use <i>njump</i> to share it, this way
+            you also help Nostr flourish.
+          </p>
+
+          <h2>Bonus 1: NIP-05 profiles</h2>
+          <p>
+            Now you can share your own profile with a pretty
+            <a href="https://github.com/nostr-protocol/nips/blob/master/05.md"
+              >NIP-05</a
+            >
+            inspired permalink:
+            <span class="exampleUrl">njump.me/p/&lt;nip-5&gt;</span>, for
+            example:
+            <a href="https://njump.me/nvk.org">https://njump.me/nvk.org</a> or
+            <a href="https://njump.me/mike@mikedilger.com"
+              >https://njump.me/mike@mikedilger.com</a
+            >.
+          </p>
+          <p>
+            A profile shows the basic metadata infos, the used "outbox" relays
+            and the last notes.
+          </p>
+
           <h2>Bonus 2: Relays view</h2>
-          
-          You can have a view of the last content posted to a relay using <span class="exampleUrl">njump.me/r/&lt;relay-host&gt;</span>, example: <a href="https://njump.me/r/nostr.wine">https://njump.me/r/nostr.wine</a>
-          Some basic infos (<a href="https://github.com/nostr-protocol/nips/blob/master/11.md">NIP-11</a>) are available; We hope operators will start to make them more personal and informative so users can have a way to evaluate if/when to join a relay.
-          
+          <p>
+            You can have a view of the last content posted to a relay using
+            <span class="exampleUrl">njump.me/r/&lt;relay-host&gt;</span>, for
+            example:
+            <a href="https://njump.me/r/nostr.wine"
+              >https://njump.me/r/nostr.wine</a
+            >
+          </p>
+          <p>
+            Some basic infos (<a
+              href="https://github.com/nostr-protocol/nips/blob/master/11.md"
+              >NIP-11</a
+            >) are available; We hope operators will start to make them more
+            personal and informative so users can have a way to evaluate if/when
+            to join a relay.
+          </p>
+
           <h2>Bonus 3: Inspector tool</h2>
-          
-          You know, we are all devs including our moms, so for every njump resource you can toggle the "Show more details" switch and inspect the full event's json; without installing other tools, like nak, this is probably the fastest way to obtain it.
+          <p>
+            You know, we are all programmers, including our moms, so for every
+            <i>njump</i> page you can toggle the "Show more details" switch and
+            inspect the full event JSON. Without installing other tools (like
+            <a href="https://github.com/fiatjaf/nak">nak</a>) this is probably
+            the fastest way to access that.
+          </p>
         </div>
       </div>
     </div>
@@ -94,7 +204,7 @@
       // Add a click event listener to the link
       const pickRandomEntityLink = document.getElementById("pickRandomEntityLink");
       pickRandomEntityLink.addEventListener("click", pickRandomEntity);
-  
+
       {{template "scripts.js"}}
     </script>
   </body>
