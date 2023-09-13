@@ -66,6 +66,12 @@ h1, h2, h3 {
 
 p {
   margin-top: 0.5em;
+  text-align: justify;
+}
+@media (max-width: 580px) {
+  p {
+    text-align: left;
+  }
 }
 
 iframe {
