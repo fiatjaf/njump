@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"html"
 	"net/http"
 	"regexp"
 	"strings"
@@ -224,6 +225,14 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	useTextImage := (event.Kind == 1 || event.Kind == 30023) &&
 		image == "" && video == "" && len(event.Content) > 120
+
+	if style == "telegram" {
+		if event.Kind == 30023 ||
+			(event.Kind == 1 && len(event.Content) > 650) {
+			typ = "telegram_instant_view"
+			useTextImage = false
+		}
+	}
 	if style == "slack" || style == "discord" {
 		useTextImage = false
 	}
@@ -279,6 +288,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// content massaging
 	for index, value := range event.Tags {
 		placeholderTag := "#[" + fmt.Sprintf("%d", index) + "]"
 		nreplace := ""
@@ -291,43 +301,47 @@ func render(w http.ResponseWriter, r *http.Request) {
 		}
 		content = strings.ReplaceAll(content, placeholderTag, "nostr:"+nreplace)
 	}
-
-	eventJSON, _ := json.MarshalIndent(event, "", "  ")
+	if event.Kind == 30023 || event.Kind == 30024 {
+		content = mdToHTML(content)
+	} else {
+		content = renderInlineMentions(basicFormatting(html.EscapeString(content)))
+	}
 
 	params := map[string]any{
-		"createdAt":       createdAt,
-		"modifiedAt":      modifiedAt,
-		"clients":         generateClientList(code, event),
-		"type":            typ,
-		"title":           title,
-		"twitterTitle":    twitterTitle,
-		"npub":            npub,
-		"npubShort":       npubShort,
-		"nevent":          nevent,
-		"naddr":           naddr,
-		"metadata":        metadata,
-		"authorLong":      authorLong,
-		"subject":         subject,
-		"description":     description,
-		"content":         content,
-		"textImageURL":    textImageURL,
-		"videoType":       videoType,
-		"image":           image,
-		"video":           video,
-		"proxy":           "https://" + hostname + "/njump/proxy?src=",
-		"eventJSON":       string(eventJSON),
-		"kindID":          event.Kind,
-		"kindDescription": kindDescription,
-		"kindNIP":         kindNIP,
-		"lastNotes":       renderableLastNotes,
-		"parentNevent":    parentNevent,
-		"authorRelays":    authorRelays,
-		"CanonicalHost":   s.CanonicalHost,
+		"createdAt":        createdAt,
+		"modifiedAt":       modifiedAt,
+		"clients":          generateClientList(code, event),
+		"type":             typ,
+		"title":            title,
+		"twitterTitle":     twitterTitle,
+		"npub":             npub,
+		"npubShort":        npubShort,
+		"nevent":           nevent,
+		"naddr":            naddr,
+		"metadata":         metadata,
+		"authorLong":       authorLong,
+		"subject":          subject,
+		"description":      description,
+		"event":            event,
+		"content":          content,
+		"titleizedContent": titleize(content),
+		"textImageURL":     textImageURL,
+		"videoType":        videoType,
+		"image":            image,
+		"video":            video,
+		"proxy":            "https://" + hostname + "/njump/proxy?src=",
+		"kindDescription":  kindDescription,
+		"kindNIP":          kindNIP,
+		"lastNotes":        renderableLastNotes,
+		"parentNevent":     parentNevent,
+		"authorRelays":     authorRelays,
+		"CanonicalHost":    s.CanonicalHost,
 	}
 
 	// if a mapping is not found fallback to raw
-	if templateMapping[typ] == "" {
-		templateMapping[typ] = "other.html"
+	currentTemplate, ok := templateMapping[typ]
+	if !ok {
+		currentTemplate = "other.html"
 	}
 
 	if strings.Contains(typ, "profile") && len(renderableLastNotes) != 0 {
@@ -338,7 +352,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
-	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
+	if err := tmpl.ExecuteTemplate(w, currentTemplate, params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
 	}

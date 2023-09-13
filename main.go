@@ -28,7 +28,7 @@ var templates embed.FS
 var (
 	s               Settings
 	tmpl            *template.Template
-	templateMapping = make(map[string]string)
+	templateMapping map[string]string
 	log             = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 )
 
@@ -61,25 +61,25 @@ func main() {
 
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
-	templateMapping["homepage"] = "homepage.html"
-	templateMapping["profile"] = "profile.html"
-	templateMapping["profile_sitemap"] = "sitemap.xml"
-	templateMapping["note"] = "note.html"
-	templateMapping["address"] = "other.html"
-	templateMapping["relay"] = "relay.html"
-	templateMapping["relay_sitemap"] = "sitemap.xml"
-	templateMapping["archive"] = "archive.html"
-	templateMapping["archive_sitemap"] = "sitemap.xml"
-	templateMapping["robots"] = "robots.txt"
+	templateMapping = map[string]string{
+		"homepage":              "homepage.html",
+		"profile":               "profile.html",
+		"profile_sitemap":       "sitemap.xml",
+		"note":                  "note.html",
+		"telegram_instant_view": "telegram_instant_view.html",
+		"address":               "other.html",
+		"relay":                 "relay.html",
+		"relay_sitemap":         "sitemap.xml",
+		"archive":               "archive.html",
+		"archive_sitemap":       "sitemap.xml",
+		"robots":                "robots.txt",
+	}
 
 	funcMap := template.FuncMap{
-		"basicFormatting":      basicFormatting,
-		"renderInlineMentions": renderInlineMentions,
-		"mdToHTML":             mdToHTML,
-		"escapeString":         html.EscapeString,
-		"sanitizeXSS":          sanitizeXSS,
-		"trimProtocol":         trimProtocol,
-		"titleize":             titleize,
+		"basicFormatting": basicFormatting,
+		"escapeString":    html.EscapeString,
+		"sanitizeXSS":     sanitizeXSS,
+		"trimProtocol":    trimProtocol,
 	}
 
 	tmpl = template.Must(
@@ -106,5 +106,4 @@ func main() {
 	}
 
 	select {}
-
 }

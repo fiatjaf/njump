@@ -54,7 +54,7 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 		return nil, false
 	}
 	if err != nil {
-		log.Fatal().Err(err).Msg("")
+		log.Fatal().Err(err).Str("key", key).Msg("error getting key from cache")
 	}
 
 	return val, true
@@ -84,7 +84,6 @@ func (c *Cache) GetPaginatedkeys(prefix string, page int, size int) []string {
 		}
 		return nil
 	})
-
 	if err != nil {
 		log.Fatal().Err(err).Msg("")
 	}

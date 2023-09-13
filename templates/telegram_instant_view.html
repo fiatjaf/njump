@@ -1,0 +1,29 @@
+<meta charset="UTF-8" />
+<!-- check https://nikstar.me/post/instant-view/ for more information on how this was set up -->
+
+<!-- required stuff so telegram treats us like a medium.com article -->
+<meta property="al:android:app_name" content="Medium" />
+<meta property="article:published_time" content="{{.createdAt}}" />
+
+<!-- stuff that goes in the actual telegram message preview -->
+<meta property="og:site_name" content="{{.authorLong | escapeString}}" />
+{{ if .description }}
+<meta property="og:description" content="{{.description | escapeString}}" />
+{{ end }}
+<!---->
+{{ if .image }}
+<meta property="og:image" content="{{.image | escapeString}}" />
+{{ end }}
+
+<!-- stuff that affects the content inside the preview window -->
+<meta name="author" content="{{.metadata.Name}}" />
+<meta name="telegram:channel" content="@nostr_protocol" />
+
+<!-- basic content of the preview window -->
+<article>
+  <h1>
+    {{ if (not (eq .subject ""))}} {{.subject | escapeString}} {{ else }}
+    {{.metadata.Name | escapeString}} wrote: {{ end }}
+  </h1>
+  {{.content}}
+</article>
