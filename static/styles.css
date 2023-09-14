@@ -885,10 +885,6 @@ iframe {
 .theme--dark .container .column_content .field .data .string {
   color: #fafafa;
 }
-.container .column_content .field .json .string.content,
-.container .column_content .field .data .string.content {
-  word-break: normal;
-}
 .container .column_content .field .json .number,
 .container .column_content .field .data .number {
   color: darkorange;

@@ -741,9 +741,6 @@ iframe {
           @include themed() {
             color: t($base7);
           }
-          &.content {
-            word-break: normal;
-          }
         }
         .number {
           color: darkorange;
