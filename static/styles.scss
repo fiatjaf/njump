@@ -713,12 +713,13 @@ iframe {
       }
       .json,
       .data {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.9rem;
         white-space: pre-wrap;
         word-break: break-all;
         margin-top: 1rem;
         .key {
           display: inline-block;
-          margin-top: 0.5rem;
           @include themed() {
             color: t($accent1);
           }
@@ -726,6 +727,9 @@ iframe {
         .string {
           @include themed() {
             color: t($base7);
+          }
+          &.content {
+            word-break: normal;
           }
         }
         .number {

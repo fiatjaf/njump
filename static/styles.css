@@ -776,6 +776,8 @@ iframe {
 }
 .container .column_content .field .json,
 .container .column_content .field .data {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9rem;
   white-space: pre-wrap;
   word-break: break-all;
   margin-top: 1rem;
@@ -783,7 +785,6 @@ iframe {
 .container .column_content .field .json .key,
 .container .column_content .field .data .key {
   display: inline-block;
-  margin-top: 0.5rem;
 }
 .theme--default .container .column_content .field .json .key,
 .theme--default .container .column_content .field .data .key {
@@ -800,6 +801,10 @@ iframe {
 .theme--dark .container .column_content .field .json .string,
 .theme--dark .container .column_content .field .data .string {
   color: #fafafa;
+}
+.container .column_content .field .json .string.content,
+.container .column_content .field .data .string.content {
+  word-break: normal;
 }
 .container .column_content .field .json .number,
 .container .column_content .field .data .number {
