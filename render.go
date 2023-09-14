@@ -224,11 +224,14 @@ func render(w http.ResponseWriter, r *http.Request) {
 	}
 
 	useTextImage := (event.Kind == 1 || event.Kind == 30023) &&
-		image == "" && video == "" && len(event.Content) > 120
+		image == "" && video == "" && len(event.Content) > 133
 
 	if style == "telegram" {
-		if event.Kind == 30023 ||
-			(event.Kind == 1 && len(event.Content) > 650) {
+		// do telegram instant preview (only works on telegram mobile apps, not desktop)
+		if event.Kind == 30023 || // do it for longform articles
+			(event.Kind == 1 && len(event.Content) > 650) || // or very long notes
+			// or shorter notes that should be using text-to-image stuff but are not because they have video or images
+			(event.Kind == 1 && len(event.Content) > 133 && !useTextImage) {
 			typ = "telegram_instant_view"
 			useTextImage = false
 		}

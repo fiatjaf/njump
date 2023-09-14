@@ -14,6 +14,12 @@
 {{ if .image }}
 <meta property="og:image" content="{{.image | escapeString}}" />
 {{ end }}
+<!---->
+{{ if .video }}
+<meta property="og:video" content="{{.video | escapeString}}" />
+<meta property="og:video:secure_url" content="{{.video | escapeString}}" />
+<meta property="og:video:type" content="video/{{.videoType | escapeString}}" />
+{{ end }}
 
 <!-- stuff that affects the content inside the preview window -->
 <meta name="author" content="{{.metadata.Name}}" />
