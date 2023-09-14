@@ -4,12 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/ast"
+	"github.com/gomarkdown/markdown/html"
 	mdhtml "github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/microcosm-cc/bluemonday"
@@ -201,7 +204,7 @@ func getParentNevent(event *nostr.Event) string {
 // Rendering functions
 // ### ### ### ### ### ### ### ### ### ### ###
 
-func replateImageURLsWithTags(input string, replacement string) string {
+func replaceImageURLsWithTags(input string, replacement string) string {
 	// Match and replace image URLs with a custom replacement
 	// Usually is html <img> => ` <img src="%s" alt=""> `
 	// or markdown !()[...] tags for further processing => `![](%s)`
@@ -221,7 +224,7 @@ func replateImageURLsWithTags(input string, replacement string) string {
 	return input
 }
 
-func replateVideoURLsWithTags(input string, replacement string) string {
+func replaceVideoURLsWithTags(input string, replacement string) string {
 	// Match and replace video URLs with a custom replacement
 	// Usually is html <video> => ` <video controls width="100%%"><source src="%s"></video> `
 	// or markdown !()[...] tags for further processing => `![](%s)`
@@ -287,12 +290,12 @@ func renderInlineMentions(input string) string {
 func replaceURLsWithTags(line string) string {
 	var rline string
 
-	rline = replateImageURLsWithTags(line, ` <img src="%s" alt=""> `)
+	rline = replaceImageURLsWithTags(line, ` <img src="%s" alt=""> `)
 	if rline != line {
 		return rline
 	}
 
-	rline = replateVideoURLsWithTags(line, `<video controls width="100%%"><source src="%s"></video>`)
+	rline = replaceVideoURLsWithTags(line, `<video controls width="100%%"><source src="%s"></video>`)
 	if rline != line {
 		return rline
 	}
@@ -333,24 +336,51 @@ func basicFormatting(input string) string {
 	return strings.Join(processedLines, "<br/>")
 }
 
-func mdToHTML(md string) string {
+func mdToHTML(md string, usingTelegramInstantView bool) string {
 	md = strings.ReplaceAll(md, "\u00A0", " ")
-	md = replateImageURLsWithTags(md, `![](%s)`)
-	md = replateVideoURLsWithTags(md, `<video controls width="100%%"><source src="%s"></video>`)
+	md = replaceImageURLsWithTags(md, `![](%s)`)
+	md = replaceVideoURLsWithTags(md, `<video controls width="100%%"><source src="%s"></video>`)
 	md = replaceNostrURLsWithTags(md)
 
 	// create markdown parser with extensions
-	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock | parser.Footnotes
-	p := parser.NewWithExtensions(extensions)
+	p := parser.NewWithExtensions(
+		parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock | parser.Footnotes)
 	doc := p.Parse([]byte(md))
 
+	var customNodeHook html.RenderNodeFunc = nil
+	if usingTelegramInstantView {
+		// telegram instant view really doesn't like when there is an image inside a paragraph (like <p><img></p>)
+		// so we use this custom thing to stop all paragraphs before the images, print the images then start a new
+		// paragraph afterwards.
+		customNodeHook = func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
+			if img, ok := node.(*ast.Image); ok {
+				if entering {
+					src := img.Destination
+					w.Write([]byte(`</p><img src="`))
+					html.EscLink(w, src)
+					w.Write([]byte(`" alt="`))
+				} else {
+					if img.Title != nil {
+						w.Write([]byte(`" title="`))
+						html.EscapeHTML(w, img.Title)
+					}
+					w.Write([]byte(`" /><p>`))
+				}
+				return ast.GoToNext, true
+			}
+			return ast.GoToNext, false
+		}
+	}
+
 	// create HTML renderer with extensions
-	htmlFlags := mdhtml.CommonFlags | mdhtml.HrefTargetBlank
-	opts := mdhtml.RendererOptions{Flags: htmlFlags}
+	opts := mdhtml.RendererOptions{
+		Flags:          mdhtml.CommonFlags | mdhtml.HrefTargetBlank,
+		RenderNodeHook: customNodeHook,
+	}
 	renderer := mdhtml.NewRenderer(opts)
 	output := string(markdown.Render(doc, renderer))
 
-	// Sanitize content
+	// sanitize content
 	output = sanitizeXSS(output)
 
 	return output

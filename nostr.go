@@ -213,7 +213,7 @@ func contactsForPubkey(ctx context.Context, pubkey string, extraRelays ...string
 	pubkeyContacts := make([]string, 0, 100)
 	relays := make([]string, 0, 12)
 	if ok := cache.GetJSON("cc:"+pubkey, &pubkeyContacts); !ok {
-		fmt.Printf("Searching contacts for %s\n", pubkey)
+		log.Debug().Msgf("searching contacts for %s", pubkey)
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 
 		pubkeyRelays := relaysForPubkey(ctx, pubkey, relays...)

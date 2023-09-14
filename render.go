@@ -304,7 +304,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		content = strings.ReplaceAll(content, placeholderTag, "nostr:"+nreplace)
 	}
 	if event.Kind == 30023 || event.Kind == 30024 {
-		content = mdToHTML(content)
+		content = mdToHTML(content, typ == "telegram_instant_view")
 	} else {
 		content = renderInlineMentions(basicFormatting(html.EscapeString(content)))
 	}
@@ -327,6 +327,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"authorLong":       authorLong,
 		"subject":          subject,
 		"description":      description,
+		"summary":          summary,
 		"event":            event,
 		"eventJSON":        string(eventJSON),
 		"content":          content,

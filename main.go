@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"embed"
-	"fmt"
 	"html"
 	"net/http"
 	"os"
@@ -39,7 +38,6 @@ func updateArchives(ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("exit updateArchives gracefully...")
 			return
 		default:
 			loadNpubsArchive(ctx)
