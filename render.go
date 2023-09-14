@@ -307,6 +307,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 		content = renderInlineMentions(basicFormatting(html.EscapeString(content)))
 	}
 
+	// pretty JSON
+	eventJSON, _ := json.MarshalIndent(event, "", "  ")
+
 	params := map[string]any{
 		"createdAt":        createdAt,
 		"modifiedAt":       modifiedAt,
@@ -323,6 +326,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"subject":          subject,
 		"description":      description,
 		"event":            event,
+		"eventJSON":        string(eventJSON),
 		"content":          content,
 		"titleizedContent": titleize(content),
 		"textImageURL":     textImageURL,
