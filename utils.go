@@ -362,7 +362,7 @@ func titleize(s string) string {
 	if len(s) <= 65 {
 		return "\"" + s + "\""
 	}
-	return "\"" + s[:65] + "...\""
+	return "\"" + s[:64] + "…\""
 }
 
 func unique(strSlice []string) []string {

@@ -328,7 +328,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"event":            event,
 		"eventJSON":        string(eventJSON),
 		"content":          content,
-		"titleizedContent": titleize(content),
+		"titleizedContent": titleize(event.Content),
 		"textImageURL":     textImageURL,
 		"videoType":        videoType,
 		"image":            image,
