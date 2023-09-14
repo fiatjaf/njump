@@ -98,6 +98,9 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 		filter.Tags = nostr.TagMap{
 			"d": []string{v.Identifier},
 		}
+		if v.Kind != 0 {
+			filter.Kinds = append(filter.Kinds, v.Kind)
+		}
 		relays = append(relays, getRelay())
 		relays = append(relays, getRelay())
 		relays = append(relays, v.Relays...)

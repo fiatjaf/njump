@@ -235,8 +235,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 			typ = "telegram_instant_view"
 			useTextImage = false
 		}
-	}
-	if style == "slack" || style == "discord" {
+	} else if style == "slack" || style == "discord" {
 		useTextImage = false
 	}
 
