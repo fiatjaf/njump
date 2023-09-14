@@ -33,11 +33,13 @@ var (
 )
 
 func updateArchives(ctx context.Context) {
+	// do this so we don't run this every time we restart it locally
+	time.Sleep(10 * time.Minute)
+
 	for {
 		select {
-		// Check for the cancellation signal.
 		case <-ctx.Done():
-			fmt.Println("Exit updateArchives gracefully...")
+			fmt.Println("exit updateArchives gracefully...")
 			return
 		default:
 			loadNpubsArchive(ctx)
