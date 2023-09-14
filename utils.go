@@ -399,7 +399,7 @@ func loadNpubsArchive(ctx context.Context) {
 
 	contactsArchive = unique(contactsArchive)
 	for _, contact := range contactsArchive {
-		log.Debug().Msgf("adding contact %s\n", contact)
+		log.Debug().Msgf("adding contact %s", contact)
 		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
 	}
 }
@@ -420,14 +420,14 @@ func loadRelaysArchive(ctx context.Context) {
 	for _, relay := range relaysArchive {
 		for _, excluded := range excludedRelays {
 			if strings.Contains(relay, excluded) {
-				log.Debug().Msgf("skipping relay %s\n", relay)
+				log.Debug().Msgf("skipping relay %s", relay)
 				continue
 			}
 		}
 		if strings.Contains(relay, "/npub1") {
 			continue // skip relays with personalyzed query like filter.nostr.wine
 		}
-		log.Debug().Msgf("adding relay %s\n", relay)
+		log.Debug().Msgf("adding relay %s", relay)
 		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
 	}
 }
