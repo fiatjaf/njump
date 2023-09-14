@@ -6,10 +6,7 @@
 <meta property="article:published_time" content="{{.createdAt}}" />
 
 <!-- stuff that goes in the actual telegram message preview -->
-<meta
-  property="og:site_name"
-  content="{{ if .subject }} {{.subject | escapeString}} {{ else }} {{.authorLong | escapeString}} {{ end }}"
-/>
+<meta property="og:site_name" content="{{.authorLong | escapeString}}" />
 {{ if .description }}
 <meta property="og:description" content="{{.description | escapeString}}" />
 {{ end }}
