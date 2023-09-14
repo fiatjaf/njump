@@ -26,7 +26,7 @@ $themes: (
     boxed-bg: $color-base3,
     over-bg: $color-base3,
     theme-toggle: $color-base3,
-    hrefbg: lighten($color-accent1, 44%),
+    hrefbg: lighten($color-accent1, 44%)
   ),
   dark: (
     base1: $color-base7,
@@ -45,7 +45,7 @@ $themes: (
     boxed-bg: darken($color-base7, 14%),
     over-bg: darken($color-base7, 4%),
     theme-toggle: $color-base6,
-    hrefbg: darken($color-accent1, 38%),
+    hrefbg: darken($color-accent1, 38%)
   )
 );
 
@@ -123,7 +123,9 @@ body {
     }
   }
 }
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-weight: 300;
   line-height: 1.1em;
   margin-bottom: 0.5em;
@@ -313,7 +315,8 @@ iframe {
         justify-content: center;
       }
 
-      input, button {
+      input,
+      button {
         flex-basis: 90%;
         width: 100%;
         padding: 0.5rem;
@@ -472,7 +475,7 @@ iframe {
         text-decoration: none;
         @include themed() {
           color: t($base7);
-          border-bottom: 1px solid rgba( t($base7), .24 );
+          border-bottom: 1px solid rgba(t($base7), 0.24);
         }
       }
       a.nostr {
@@ -561,9 +564,10 @@ iframe {
       strong {
         font-weight: 400;
       }
-      ol, ul {
+      ol,
+      ul {
         margin: 0;
-          padding: 0 0 0 1rem;
+        padding: 0 0 0 1rem;
         li {
           margin-bottom: 0.5rem;
         }
@@ -616,8 +620,16 @@ iframe {
               max-height: 160px;
               overflow: hidden;
               &.gradient {
-              -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
-              mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+                -webkit-mask-image: linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 1) 50%,
+                  rgba(0, 0, 0, 0) 100%
+                );
+                mask-image: linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 1) 50%,
+                  rgba(0, 0, 0, 0) 100%
+                );
               }
             }
           }
@@ -699,12 +711,13 @@ iframe {
           cursor: pointer;
           font-size: 0.8rem;
           @include themed() {
-            border-bottom: 1px solid rgba( t($base7), .24 );
+            border-bottom: 1px solid rgba(t($base7), 0.24);
             padding-bottom: 0.1rem;
           }
         }
       }
-      &.content, &.about {
+      &.content,
+      &.about {
         line-height: 1.4rem;
         img {
           max-width: 100%;
@@ -764,7 +777,7 @@ iframe {
       }
       &.prev {
         float: left;
-      } 
+      }
     }
   }
 
@@ -916,7 +929,6 @@ body.homepage {
         padding: 0 0.2rem;
         border-radius: 4px;
       }
-
     }
   }
 }
@@ -933,7 +945,8 @@ body.profile {
   }
 }
 
-body.note, body.other {
+body.note,
+body.other {
   .column_content {
     flex-basis: 75%;
     max-width: 75%;
@@ -993,7 +1006,8 @@ body.note, body.other {
         }
       }
     }
-    .published_at, .reply_of {
+    .published_at,
+    .reply_of {
       width: 100%;
       text-align: right;
       align-self: end;

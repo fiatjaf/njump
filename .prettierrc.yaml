@@ -7,5 +7,4 @@ proseWrap: preserve
 singleQuote: true
 trailingComma: none
 useTabs: false
-jsxBracketSameLine: false
 bracketSpacing: false
