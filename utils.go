@@ -386,7 +386,7 @@ func trimProtocol(relay string) string {
 }
 
 func loadNpubsArchive(ctx context.Context) {
-	fmt.Println("Refreshing the npubs archive")
+	log.Debug().Msg("refreshing the npubs archive")
 
 	contactsArchive := make([]string, 0, 500)
 
@@ -399,13 +399,13 @@ func loadNpubsArchive(ctx context.Context) {
 
 	contactsArchive = unique(contactsArchive)
 	for _, contact := range contactsArchive {
-		fmt.Printf("Adding contact %s\n", contact)
+		log.Debug().Msgf("adding contact %s\n", contact)
 		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
 	}
 }
 
 func loadRelaysArchive(ctx context.Context) {
-	fmt.Println("Refreshing the relays archive")
+	log.Debug().Msg("refreshing the relays archive")
 
 	relaysArchive := make([]string, 0, 500)
 
@@ -420,14 +420,14 @@ func loadRelaysArchive(ctx context.Context) {
 	for _, relay := range relaysArchive {
 		for _, excluded := range excludedRelays {
 			if strings.Contains(relay, excluded) {
-				fmt.Printf("Skypping relay %s\n", relay)
+				log.Debug().Msgf("skipping relay %s\n", relay)
 				continue
 			}
 		}
 		if strings.Contains(relay, "/npub1") {
-			continue // Skip relays with personalyzed query like filter.nostr.wine
+			continue // skip relays with personalyzed query like filter.nostr.wine
 		}
-		fmt.Printf("Adding relay %s\n", relay)
+		log.Debug().Msgf("adding relay %s\n", relay)
 		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
 	}
 }
