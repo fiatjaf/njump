@@ -35,7 +35,7 @@
   <div class="clients_wrapper">
     {{range .clients}}
     <div class="btn">
-      <a class="client" href="{{.URL}}"
+      <a class="client" data-client="{{.Name}}" href="{{.URL}}"
         ><span>Open {{$.type}} in</span> {{.Name}}</a
       >
     </div>
