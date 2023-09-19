@@ -77,7 +77,7 @@
               {{if not (eq .ParentNevent "")}}
               <div class="is_reply">- reply</div>
               {{end}}
-              <div class="content">{{.Content | escapeString}}</div>
+              <div class="content">{{.Content | escapeString | basicNostrFormatting}}</div>
             </a>
             {{end}}
           </div>

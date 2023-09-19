@@ -245,7 +245,7 @@ func replaceVideoURLsWithTags(input string, replacement string) string {
 	return input
 }
 
-func replaceNostrURLsWithTags(input string) string {
+func replaceNostrURLs(input string, style string) string {
 	// Match and replace npup1, nprofile1, note1, nevent1, etc
 	input = nostrEveryMatcher.ReplaceAllStringFunc(input, func(match string) string {
 		submatch := nostrEveryMatcher.FindStringSubmatch(match)
@@ -255,19 +255,40 @@ func replaceNostrURLsWithTags(input string) string {
 		nip19 := submatch[2]
 		first_chars := nip19[:8]
 		last_chars := nip19[len(nip19)-4:]
+		replacement := ""
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
-			defer cancel()
-			name := getNameFromNip19(ctx, nip19)
-			replacement := fmt.Sprintf(`<a href="/%s" class="nostr" ><strong>%s</strong> (<i>%s</i>)</a>`, nip19, name, first_chars+"…"+last_chars)
+			if style == "tags" {
+				ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
+				defer cancel()
+				name := getNameFromNip19(ctx, nip19)
+				replacement = fmt.Sprintf(`<a href="/%s" class="nostr" ><strong>%s</strong> (<i>%s</i>)</a>`, nip19, name, first_chars+"…"+last_chars)
+			} else if style == "short" {
+				replacement = "@" + first_chars + "…" + last_chars
+			} else {
+				replacement = nip19
+			}
 			return replacement
 		} else {
-			replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, nip19, first_chars+"…"+last_chars)
+			if style == "tags" {
+				replacement = fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, nip19, first_chars+"…"+last_chars)
+			} else if style == "short" {
+				replacement = "#" + first_chars + "…" + last_chars
+			} else {
+				replacement = nip19
+			}
 			return replacement
 		}
 
 	})
 	return input
+}
+
+func replaceNostrURLsWithTags(input string) string {
+	return replaceNostrURLs(input, "tags")
+}
+
+func shortenNostrURLs(input string) string {
+	return replaceNostrURLs(input, "short")
 }
 
 func getNameFromNip19(ctx context.Context, nip19 string) string {
@@ -416,6 +437,18 @@ func basicFormatting(input string) string {
 	var processedLines []string
 	for _, line := range lines {
 		processedLine := replaceURLsWithTags(line)
+		processedLines = append(processedLines, processedLine)
+	}
+
+	return strings.Join(processedLines, "<br/>")
+}
+
+func basicNostrFormatting(input string) string {
+
+	lines := strings.Split(input, "\n")
+	var processedLines []string
+	for _, line := range lines {
+		processedLine := shortenNostrURLs(line)
 		processedLines = append(processedLines, processedLine)
 	}
 

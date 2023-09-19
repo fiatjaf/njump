@@ -76,10 +76,11 @@ func main() {
 	}
 
 	funcMap := template.FuncMap{
-		"basicFormatting": basicFormatting,
-		"escapeString":    html.EscapeString,
-		"sanitizeXSS":     sanitizeXSS,
-		"trimProtocol":    trimProtocol,
+		"basicFormatting":      basicFormatting,
+		"basicNostrFormatting": basicNostrFormatting,
+		"escapeString":         html.EscapeString,
+		"sanitizeXSS":          sanitizeXSS,
+		"trimProtocol":         trimProtocol,
 	}
 
 	tmpl = template.Must(
