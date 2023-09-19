@@ -60,9 +60,11 @@
               <div class="info-wrapper">
                 <div class="name">
                   {{.metadata.Name | escapeString}}
+                  {{if not (eq .metadata.Name .metadata.DisplayName)}}
                   <span class="display"
                     >{{.metadata.DisplayName | escapeString}}</span
                   >
+                  {{end}}
                 </div>
                 <div class="npub">{{.npubShort | escapeString}}</div>
               </div>
