@@ -443,11 +443,14 @@ func basicFormatting(input string) string {
 	return strings.Join(processedLines, "<br/>")
 }
 
-func basicNostrFormatting(input string) string {
+func previewNotesFormatting(input string) string {
 
 	lines := strings.Split(input, "\n")
 	var processedLines []string
 	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
 		processedLine := shortenNostrURLs(line)
 		processedLines = append(processedLines, processedLine)
 	}

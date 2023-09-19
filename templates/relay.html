@@ -73,11 +73,15 @@
             <h2>Last Notes</h2>
             {{range .lastNotes}}
             <a href="/{{.Nevent | escapeString}}" class="note">
-              <div class="published_at">{{.CreatedAt | escapeString}}</div>
-              {{if not (eq .ParentNevent "")}}
-              <div class="is_reply">- reply</div>
-              {{end}}
-              <div class="content">{{.Content | escapeString | basicNostrFormatting}}</div>
+              
+              <div class="header">
+                <div class="published_at">{{.CreatedAt | escapeString}}</div><br/>
+                {{if not (eq .ParentNevent "")}}
+                <div class="is_reply">- reply</div>
+                {{end}}
+                <div class="npub">by <span href="#">{{.Npub}}</span></div>
+              </div>
+              <div class="content">{{.Content | escapeString | previewNotesFormatting}}</div>
             </a>
             {{end}}
           </div>

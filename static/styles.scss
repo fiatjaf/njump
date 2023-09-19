@@ -597,21 +597,51 @@ iframe {
           text-decoration: none;
           border-bottom: none;
           &.note {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-            .published_at {
-              font-size: 0.8rem;
+            margin: 2rem 0;
+            .header {
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+              margin-left: -0.6rem;
+              margin-bottom: 0.4rem;
+              padding-left: 0.6rem;
+              padding-bottom: 0.2rem;
               @include themed() {
-                color: t($accent1);
+                border-bottom: 6px solid t($over-bg);
               }
-            }
-            .is_reply {
-              margin-left: 0.5em;
-              font-size: 0.8rem;
-              @include themed() {
-                color: t($base4);
+              .published_at,
+              .npub {
+                font-size: 0.8rem;
+                @include themed() {
+                  color: t($accent1);
+                }
+              }
+              .npub {
+                margin-left: auto;
+                @include themed() {
+                  color: t($base6);
+                }
+                span {
+                  padding: 0 0.2rem;
+                  border-radius: 4px;
+                  @include themed() {
+                    background-color: t($hrefbg);
+                  }
+                  &:hover {
+                    text-decoration: none;
+                    @include themed() {
+                      color: t($base1);
+                      background-color: t($accent1);
+                    }
+                  }
+                }
+              }
+              .is_reply {
+                margin-left: 0.5em;
+                font-size: 0.8rem;
+                @include themed() {
+                  color: t($base4);
+                }
               }
             }
             .content {

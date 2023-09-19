@@ -16,6 +16,7 @@ import (
 )
 
 type Event struct {
+	Npub         string
 	Nevent       string
 	Content      string
 	CreatedAt    string
