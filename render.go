@@ -24,7 +24,7 @@ type Event struct {
 }
 
 func render(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
+	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
 
 	typ := ""
@@ -306,7 +306,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	if event.Kind == 30023 || event.Kind == 30024 {
 		content = mdToHTML(content, typ == "telegram_instant_view")
 	} else {
-		content = basicFormatting(renderInlineMentions(html.EscapeString(content)))
+		content = basicFormatting(renderQuotesAsHTML(r.Context(), html.EscapeString(content)))
 	}
 
 	// pretty JSON

@@ -3,7 +3,6 @@ package main
 import (
 	"image"
 	"image/draw"
-	"regexp"
 	"strings"
 
 	"github.com/apatters/go-wordwrap"
@@ -12,34 +11,45 @@ import (
 )
 
 const (
-	MAX_LINES          = 20
-	MAX_CHARS_PER_LINE = 51
-	FONT_SIZE          = 7
+	MAX_LINES                = 20
+	MAX_CHARS_PER_LINE       = 52
+	MAX_CHARS_PER_QUOTE_LINE = 48
+	FONT_SIZE                = 7
 )
 
-func normalizeText(t string) []string {
-	re := regexp.MustCompile(`{div}.*?{/div}`)
-	t = re.ReplaceAllString(t, "")
+func normalizeText(input []string) []string {
 	lines := make([]string, 0, MAX_LINES)
-	mention := false
-	maxChars := MAX_CHARS_PER_LINE
-	for _, line := range strings.Split(t, "\n") {
-		line = wordwrap.Wrap(maxChars, line)
-		for _, subline := range strings.Split(line, "\n") {
-			if strings.HasPrefix(subline, "{blockquote}") {
-				mention = true
-				subline = strings.ReplaceAll(subline, "{blockquote}", "")
-				subline = strings.ReplaceAll(subline, "{/blockquote}", "")
-				maxChars = MAX_CHARS_PER_LINE - 1
-			} else if strings.HasSuffix(subline, "{/blockquote}") {
-				mention = false
-				subline = strings.ReplaceAll(subline, "{/blockquote}", "")
-				maxChars = MAX_CHARS_PER_LINE
+	l := 0 // global line counter
+
+	for _, block := range input {
+		quoting := false
+		maxChars := MAX_CHARS_PER_LINE
+		if strings.HasPrefix(block, "> ") {
+			quoting = true
+			maxChars = MAX_CHARS_PER_QUOTE_LINE // on quote lines we tolerate less characters
+			block = block[2:]
+			lines = append(lines, "") // add an empty line before each quote
+			l++
+		}
+		for _, line := range strings.Split(block, "\n") {
+			if l == MAX_LINES {
+				// escape and return here if we're over max lines
+				return lines
 			}
-			if mention {
-				subline = "> " + subline
+
+			line = wordwrap.Wrap(maxChars, strings.TrimSpace(line))
+			for _, subline := range strings.Split(line, "\n") {
+				// if a line has a word so big that it would overflow (like a nevent), hide it with an ellipsis
+				if len(subline) > maxChars {
+					subline = subline[0:maxChars-1] + "…"
+				}
+				if quoting {
+					subline = "> " + subline
+				}
+
+				lines = append(lines, subline)
+				l++
 			}
-			lines = append(lines, subline)
 		}
 	}
 	return lines
@@ -59,7 +69,7 @@ func drawImage(lines []string, style string) (image.Image, error) {
 	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
 
 	// draw the empty image
-	draw.Draw(rgba, rgba.Bounds(), bg, image.ZP, draw.Src)
+	draw.Draw(rgba, rgba.Bounds(), bg, image.Point{}, draw.Src)
 
 	// create new freetype context to get ready for
 	// adding text.

@@ -21,7 +21,13 @@ func generate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lines := normalizeText(renderInlineMentions(event.Content))
+	lines := normalizeText(
+		replaceUserReferencesWithNames(r.Context(),
+			renderQuotesAsArrowPrefixedText(r.Context(),
+				event.Content,
+			),
+		),
+	)
 
 	img, err := drawImage(lines, getPreviewStyle(r))
 	if err != nil {

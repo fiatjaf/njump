@@ -23,6 +23,16 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
+var (
+	urlSuffixMatcher         = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
+	nostrEveryMatcher        = regexp.MustCompile(`\S*(nostr:)?((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`)
+	nostrNoteNeventMatcher   = regexp.MustCompile(`\S*(nostr:)?((note|nevent)1[a-z0-9]+)\b`)
+	nostrNpubNprofileMatcher = regexp.MustCompile(`\S*(nostr:)?((npub|nprofile)1[a-z0-9]+)\b`)
+	hrefMatcher              = regexp.MustCompile(`\S*(https?://\S+)\S*`)
+	imgsMatcher              = regexp.MustCompile(`\S*(\()?(https?://\S+(\.jpg|\.jpeg|\.png|\.webp|\.gif))\S*`)
+	videoMatcher             = regexp.MustCompile(`\S*(https?://\S+(\.mp4|\.ogg|\.webm|.mov))\S*`)
+)
+
 var kindNames = map[int]string{
 	0:     "Metadata",
 	1:     "Short Text Note",
@@ -96,8 +106,6 @@ var kindNIPS = map[int]string{
 	30023: "23",
 	30078: "78",
 }
-
-var urlSuffixMatcher = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
 
 type ClientReference struct {
 	Name string
@@ -208,11 +216,8 @@ func replaceImageURLsWithTags(input string, replacement string) string {
 	// Match and replace image URLs with a custom replacement
 	// Usually is html <img> => ` <img src="%s" alt=""> `
 	// or markdown !()[...] tags for further processing => `![](%s)`
-	var regex *regexp.Regexp
-	imgsPattern := `\S*(\()?(https?://\S+(\.jpg|\.jpeg|\.png|\.webp|\.gif))\S*`
-	regex = regexp.MustCompile(imgsPattern)
-	input = regex.ReplaceAllStringFunc(input, func(match string) string {
-		submatch := regex.FindStringSubmatch(match)
+	input = imgsMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		submatch := imgsMatcher.FindStringSubmatch(match)
 		if len(submatch) < 2 ||
 			strings.Contains(submatch[0], "](") { // Markdown ![](...) image
 			return match
@@ -228,11 +233,8 @@ func replaceVideoURLsWithTags(input string, replacement string) string {
 	// Match and replace video URLs with a custom replacement
 	// Usually is html <video> => ` <video controls width="100%%"><source src="%s"></video> `
 	// or markdown !()[...] tags for further processing => `![](%s)`
-	var regex *regexp.Regexp
-	videoPattern := `\S*(https?://\S+(\.mp4|\.ogg|\.webm|.mov))\S*`
-	regex = regexp.MustCompile(videoPattern)
-	input = regex.ReplaceAllStringFunc(input, func(match string) string {
-		submatch := regex.FindStringSubmatch(match)
+	input = videoMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		submatch := videoMatcher.FindStringSubmatch(match)
 		if len(submatch) < 2 {
 			return match
 		}
@@ -245,46 +247,122 @@ func replaceVideoURLsWithTags(input string, replacement string) string {
 
 func replaceNostrURLsWithTags(input string) string {
 	// Match and replace npup1, nprofile1, note1, nevent1, etc
-	nostrRegexPattern := `\S*(nostr:)?((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`
-	nostrRegex := regexp.MustCompile(nostrRegexPattern)
-	input = nostrRegex.ReplaceAllStringFunc(input, func(match string) string {
-		submatch := nostrRegex.FindStringSubmatch(match)
+	input = nostrEveryMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		submatch := nostrEveryMatcher.FindStringSubmatch(match)
 		if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
 			return match
 		}
-		capturedGroup := submatch[2]
-		first6 := capturedGroup[:6]
-		last6 := capturedGroup[len(capturedGroup)-6:]
-		replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, capturedGroup, first6+"…"+last6)
+		nip19 := submatch[2]
+		first6 := nip19[:6]
+		last6 := nip19[len(nip19)-6:]
+		replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, nip19, first6+"…"+last6)
 		return replacement
 	})
 	return input
 }
 
-func renderInlineMentions(input string) string {
-	lines := strings.Split(input, "\n")
+// replaces an npub/nprofile with the name of the author, if possible
+func replaceUserReferencesWithNames(ctx context.Context, input []string) []string {
+	// Match and replace npup1 or nprofile1
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
 
-	var processedLines []string
-	for _, line := range lines {
-		nostrRegexPattern := `\S*(nostr:)?((note|nevent)1[a-z0-9]+)\b`
-		nostrRegex := regexp.MustCompile(nostrRegexPattern)
-		input = nostrRegex.ReplaceAllStringFunc(line, func(match string) string {
-			submatch := nostrRegex.FindStringSubmatch(match)
+	for i, line := range input {
+		input[i] = nostrNpubNprofileMatcher.ReplaceAllStringFunc(line, func(match string) string {
+			submatch := nostrNpubNprofileMatcher.FindStringSubmatch(match)
 			if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
 				return match
 			}
-			capturedGroup := submatch[2]
-			replacement := ""
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
-			event, _ := getEvent(ctx, capturedGroup)
-			cancel()
-			replacement = fmt.Sprintf(`{blockquote} {div}From: %s {/div} %s {/blockquote}`, capturedGroup, event.Content)
-			return replacement
+			nip19 := submatch[2]
+			author, err := getEvent(ctx, nip19)
+			if err != nil {
+				return nip19
+			}
+			metadata, err := nostr.ParseMetadata(*author)
+			if err != nil {
+				return nip19
+			}
+			if metadata.Name == "" {
+				return nip19
+			}
+			return metadata.Name
 		})
-		processedLines = append(processedLines, input)
+	}
+	return input
+}
+
+// replace nevent and note with their text, HTML-formatted
+func renderQuotesAsHTML(ctx context.Context, input string) string {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	return nostrNoteNeventMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		submatch := nostrNoteNeventMatcher.FindStringSubmatch(match)
+		if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
+			return match
+		}
+		nip19 := submatch[2]
+
+		event, err := getEvent(ctx, nip19)
+		if err != nil {
+			return nip19
+		}
+
+		return fmt.Sprintf(`<blockquote class="mention"><div>quoting %s </div> %s </blockquote>`, match, event.Content)
+	})
+}
+
+// replace nevent and note with their text, as an extra line prefixed by >
+// this returns a slice of lines
+func renderQuotesAsArrowPrefixedText(ctx context.Context, input string) []string {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	blocks := make([]string, 0, 8)
+	matches := nostrNoteNeventMatcher.FindAllStringSubmatchIndex(input, -1)
+
+	if len(matches) == 0 {
+		// no matches, just return text as it is
+		blocks = append(blocks, input)
+		return blocks
 	}
 
-	return strings.Join(processedLines, "\n")
+	// one or more matches, return multiple lines
+	blocks = append(blocks, input[0:matches[0][0]])
+	i := -1 // matches iteration counter
+	b := 0  // current block index
+	for _, match := range matches {
+		i++
+
+		matchText := input[match[0]:match[1]]
+		submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
+		if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
+			// error case concat this to previous block
+			blocks[b] += matchText
+			continue
+		}
+		nip19 := submatch[2]
+
+		event, err := getEvent(ctx, nip19)
+		if err != nil {
+			// error case concat this to previous block
+			blocks[b] += matchText
+			continue
+		}
+
+		// add a new block with the quoted text
+		blocks = append(blocks, "> "+event.Content)
+
+		// increase block count
+		b++
+	}
+	// add remaining text after the last match
+	remainingText := input[matches[i][1]:]
+	if strings.TrimSpace(remainingText) != "" {
+		blocks = append(blocks, remainingText)
+	}
+
+	return blocks
 }
 
 func replaceURLsWithTags(line string) string {
@@ -303,9 +381,7 @@ func replaceURLsWithTags(line string) string {
 	line = replaceNostrURLsWithTags(line)
 
 	// Match and replace other URLs with <a> tags
-	hrefRegexPattern := `\S*(https?://\S+)\S*`
-	hrefRegex := regexp.MustCompile(hrefRegexPattern)
-	line = hrefRegex.ReplaceAllString(line, `<a href="$1">$1</a>`)
+	line = hrefMatcher.ReplaceAllString(line, `<a href="$1">$1</a>`)
 
 	return line
 }
@@ -322,10 +398,6 @@ func sanitizeXSS(html string) string {
 }
 
 func basicFormatting(input string) string {
-	input = strings.ReplaceAll(input, "{blockquote}", "<blockquote class='mention'>")
-	input = strings.ReplaceAll(input, "{/blockquote}", "</blockquote>")
-	input = strings.ReplaceAll(input, "{div}", "<div>")
-	input = strings.ReplaceAll(input, "{/div}", "</div>")
 	lines := strings.Split(input, "\n")
 	var processedLines []string
 	for _, line := range lines {
