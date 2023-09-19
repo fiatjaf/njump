@@ -253,12 +253,36 @@ func replaceNostrURLsWithTags(input string) string {
 			return match
 		}
 		nip19 := submatch[2]
-		first6 := nip19[:6]
-		last6 := nip19[len(nip19)-6:]
-		replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, nip19, first6+"…"+last6)
-		return replacement
+		first_chars := nip19[:8]
+		last_chars := nip19[len(nip19)-4:]
+		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
+			defer cancel()
+			name := getNameFromNip19(ctx, nip19)
+			replacement := fmt.Sprintf(`<a href="/%s" class="nostr" ><strong>%s</strong> (<i>%s</i>)</a>`, nip19, name, first_chars+"…"+last_chars)
+			return replacement
+		} else {
+			replacement := fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, nip19, first_chars+"…"+last_chars)
+			return replacement
+		}
+
 	})
 	return input
+}
+
+func getNameFromNip19(ctx context.Context, nip19 string) string {
+	author, err := getEvent(ctx, nip19)
+	if err != nil {
+		return nip19
+	}
+	metadata, err := nostr.ParseMetadata(*author)
+	if err != nil {
+		return nip19
+	}
+	if metadata.Name == "" {
+		return nip19
+	}
+	return metadata.Name
 }
 
 // replaces an npub/nprofile with the name of the author, if possible
@@ -274,18 +298,7 @@ func replaceUserReferencesWithNames(ctx context.Context, input []string) []strin
 				return match
 			}
 			nip19 := submatch[2]
-			author, err := getEvent(ctx, nip19)
-			if err != nil {
-				return nip19
-			}
-			metadata, err := nostr.ParseMetadata(*author)
-			if err != nil {
-				return nip19
-			}
-			if metadata.Name == "" {
-				return nip19
-			}
-			return metadata.Name
+			return getNameFromNip19(ctx, nip19)
 		})
 	}
 	return input
@@ -398,6 +411,7 @@ func sanitizeXSS(html string) string {
 }
 
 func basicFormatting(input string) string {
+
 	lines := strings.Split(input, "\n")
 	var processedLines []string
 	for _, line := range lines {
