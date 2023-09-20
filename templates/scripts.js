@@ -146,6 +146,22 @@ if (desktop_name) {
   });
 }
 
+// Get all the npubs elements in last notes and link them
+const headerDivs = document.querySelectorAll('div.header');
+headerDivs.forEach((headerDiv) => {
+  const spanElements = headerDiv.querySelectorAll('span');
+  spanElements.forEach((span) => {
+    const href = span.getAttribute('href');
+    if (href) {
+      span.addEventListener('click', () => {
+        event.preventDefault();
+        window.location.href = href;
+      });
+    }
+  });
+});
+
+
 // Needed to apply proper print styles
 if (
   navigator.userAgent.indexOf('Safari') != -1 &&

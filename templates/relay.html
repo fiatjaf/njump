@@ -79,7 +79,7 @@
                 {{if not (eq .ParentNevent "")}}
                 <div class="is_reply">- reply</div>
                 {{end}}
-                <div class="npub">by <span href="#">{{.Npub}}</span></div>
+                <div class="npub">by <span href="/{{.Npub}}">{{.NpubShort}}</span></div>
               </div>
               <div class="content">{{.Content | escapeString | previewNotesFormatting}}</div>
             </a>

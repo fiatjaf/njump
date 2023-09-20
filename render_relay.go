@@ -51,7 +51,8 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		npub, _ := nip19.EncodePublicKey(n.PubKey)
 		npubShort := npub[:8] + "…" + npub[len(npub)-4:]
 		renderableLastNotes[i] = &Event{
-			Npub:         npubShort,
+			Npub:         npub,
+			NpubShort:    npubShort,
 			Nevent:       nevent,
 			Content:      n.Content,
 			CreatedAt:    time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05"),
