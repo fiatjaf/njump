@@ -228,7 +228,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	useTextImage := (event.Kind == 1 || event.Kind == 30023) &&
 		image == "" && video == "" && len(event.Content) > 133
 
-	if style == "telegram" {
+	if style == "telegram" || r.URL.Query().Get("tgiv") == "true" {
 		// do telegram instant preview (only works on telegram mobile apps, not desktop)
 		if event.Kind == 30023 || // do it for longform articles
 			(event.Kind == 1 && len(event.Content) > 650) || // or very long notes
@@ -353,7 +353,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 		currentTemplate = "other.html"
 	}
 
-	if strings.Contains(typ, "profile") && len(renderableLastNotes) != 0 {
+	if typ == "telegram_instant_view" {
+		w.Header().Set("Cache-Control", "no-cache")
+	} else if strings.Contains(typ, "profile") && len(renderableLastNotes) != 0 {
 		w.Header().Set("Cache-Control", "max-age=3600")
 	} else if !strings.Contains(typ, "profile") && len(content) != 0 {
 		w.Header().Set("Cache-Control", "max-age=604800")
