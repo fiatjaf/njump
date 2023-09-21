@@ -12,7 +12,9 @@ require (
 	github.com/nbd-wtf/go-nostr v0.20.0
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/zerolog v1.29.1
+	golang.org/x/exp v0.0.0-20221106115401-f9659909a136
 	golang.org/x/image v0.0.0-20190802002840-cff245a6509b
+	mvdan.cc/xurls/v2 v2.5.0
 )
 
 require (
@@ -42,7 +44,6 @@ require (
 	github.com/tidwall/gjson v1.14.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
-	golang.org/x/exp v0.0.0-20221106115401-f9659909a136 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	google.golang.org/protobuf v1.23.0 // indirect

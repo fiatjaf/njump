@@ -16,6 +16,7 @@ import (
 	mdhtml "github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/microcosm-cc/bluemonday"
+	"mvdan.cc/xurls/v2"
 
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
@@ -25,12 +26,19 @@ import (
 
 var (
 	urlSuffixMatcher         = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
-	nostrEveryMatcher        = regexp.MustCompile(`\S*(nostr:)?((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`)
-	nostrNoteNeventMatcher   = regexp.MustCompile(`\S*(nostr:)?((note|nevent)1[a-z0-9]+)\b`)
-	nostrNpubNprofileMatcher = regexp.MustCompile(`\S*(nostr:)?((npub|nprofile)1[a-z0-9]+)\b`)
-	hrefMatcher              = regexp.MustCompile(`\S*(https?://\S+)\S*`)
-	imgsMatcher              = regexp.MustCompile(`\S*(\()?(https?://\S+(\.jpg|\.jpeg|\.png|\.webp|\.gif))\S*`)
-	videoMatcher             = regexp.MustCompile(`\S*(https?://\S+(\.mp4|\.ogg|\.webm|.mov))\S*`)
+	nostrEveryMatcher        = regexp.MustCompile(`nostr:((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`)
+	nostrNoteNeventMatcher   = regexp.MustCompile(`nostr:((note|nevent)1[a-z0-9]+)\b`)
+	nostrNpubNprofileMatcher = regexp.MustCompile(`nostr:((npub|nprofile)1[a-z0-9]+)\b`)
+
+	urlMatcher = func() *regexp.Regexp {
+		// hack to only allow these schemes while still using this library
+		xurls.Schemes = []string{"https"}
+		xurls.SchemesNoAuthority = []string{"blob"}
+		xurls.SchemesUnofficial = []string{"http"}
+		return xurls.Strict()
+	}()
+	imageExtensionMatcher = regexp.MustCompile(`.*\.(png|jpg|jpeg|gif|webp)(\?.*)?$`)
+	videoExtensionMatcher = regexp.MustCompile(`.*\.(mp4|ogg|webm|mov)(\?.*)?$`)
 )
 
 var kindNames = map[int]string{
@@ -212,47 +220,29 @@ func getParentNevent(event *nostr.Event) string {
 // Rendering functions
 // ### ### ### ### ### ### ### ### ### ### ###
 
-func replaceImageURLsWithTags(input string, replacement string) string {
-	// Match and replace image URLs with a custom replacement
-	// Usually is html <img> => ` <img src="%s" alt=""> `
-	// or markdown !()[...] tags for further processing => `![](%s)`
-	input = imgsMatcher.ReplaceAllStringFunc(input, func(match string) string {
-		submatch := imgsMatcher.FindStringSubmatch(match)
-		if len(submatch) < 2 ||
-			strings.Contains(submatch[0], "](") { // Markdown ![](...) image
-			return match
+func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacementTemplate string) string {
+	return urlMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		switch {
+		case imageExtensionMatcher.MatchString(match):
+			// Match and replace image URLs with a custom replacement
+			// Usually is html <img> => ` <img src="%s" alt=""> `
+			// or markdown !()[...] tags for further processing => `![](%s)`
+			return fmt.Sprintf(imageReplacementTemplate, match)
+		case videoExtensionMatcher.MatchString(match):
+			// Match and replace video URLs with a custom replacement
+			// Usually is html <video> => ` <video controls width="100%%"><source src="%s"></video> `
+			// or markdown !()[...] tags for further processing => `![](%s)`
+			return fmt.Sprintf(videoReplacementTemplate, match)
+		default:
+			return "<a href=\"" + match + "\">" + match + "</a>"
 		}
-		capturedGroup := submatch[2]
-		replacement := fmt.Sprintf(replacement, capturedGroup)
-		return replacement
 	})
-	return input
 }
 
-func replaceVideoURLsWithTags(input string, replacement string) string {
-	// Match and replace video URLs with a custom replacement
-	// Usually is html <video> => ` <video controls width="100%%"><source src="%s"></video> `
-	// or markdown !()[...] tags for further processing => `![](%s)`
-	input = videoMatcher.ReplaceAllStringFunc(input, func(match string) string {
-		submatch := videoMatcher.FindStringSubmatch(match)
-		if len(submatch) < 2 {
-			return match
-		}
-		capturedGroup := submatch[1]
-		replacement := fmt.Sprintf(replacement, capturedGroup)
-		return replacement
-	})
-	return input
-}
-
-func replaceNostrURLs(input string, style string) string {
+func replaceNostrURLs(matcher *regexp.Regexp, input string, style string) string {
 	// Match and replace npup1, nprofile1, note1, nevent1, etc
-	input = nostrEveryMatcher.ReplaceAllStringFunc(input, func(match string) string {
-		submatch := nostrEveryMatcher.FindStringSubmatch(match)
-		if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
-			return match
-		}
-		nip19 := submatch[2]
+	input = matcher.ReplaceAllStringFunc(input, func(match string) string {
+		nip19 := match[len("nostr:"):]
 		first_chars := nip19[:8]
 		last_chars := nip19[len(nip19)-4:]
 		replacement := ""
@@ -278,17 +268,16 @@ func replaceNostrURLs(input string, style string) string {
 			}
 			return replacement
 		}
-
 	})
 	return input
 }
 
-func replaceNostrURLsWithTags(input string) string {
-	return replaceNostrURLs(input, "tags")
+func replaceNostrURLsWithTags(matcher *regexp.Regexp, input string) string {
+	return replaceNostrURLs(matcher, input, "tags")
 }
 
 func shortenNostrURLs(input string) string {
-	return replaceNostrURLs(input, "short")
+	return replaceNostrURLs(nostrEveryMatcher, input, "short")
 }
 
 func getNameFromNip19(ctx context.Context, nip19 string) string {
@@ -315,10 +304,7 @@ func replaceUserReferencesWithNames(ctx context.Context, input []string) []strin
 	for i, line := range input {
 		input[i] = nostrNpubNprofileMatcher.ReplaceAllStringFunc(line, func(match string) string {
 			submatch := nostrNpubNprofileMatcher.FindStringSubmatch(match)
-			if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
-				return match
-			}
-			nip19 := submatch[2]
+			nip19 := submatch[1]
 			return getNameFromNip19(ctx, nip19)
 		})
 	}
@@ -326,23 +312,23 @@ func replaceUserReferencesWithNames(ctx context.Context, input []string) []strin
 }
 
 // replace nevent and note with their text, HTML-formatted
-func renderQuotesAsHTML(ctx context.Context, input string) string {
+func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantView bool) string {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
 
 	return nostrNoteNeventMatcher.ReplaceAllStringFunc(input, func(match string) string {
 		submatch := nostrNoteNeventMatcher.FindStringSubmatch(match)
-		if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
-			return match
-		}
-		nip19 := submatch[2]
+		nip19 := submatch[1]
 
 		event, err := getEvent(ctx, nip19)
 		if err != nil {
+			log.Warn().Str("nip19", nip19).Msg("failed to get nip19")
 			return nip19
 		}
 
-		return fmt.Sprintf(`<blockquote class="mention"><div>quoting %s </div> %s </blockquote>`, match, event.Content)
+		content := fmt.Sprintf(
+			`<blockquote class="mention"><div>quoting %s </div> %s </blockquote>`, match, event.Content)
+		return basicFormatting(content, false, usingTelegramInstantView)
 	})
 }
 
@@ -370,11 +356,6 @@ func renderQuotesAsArrowPrefixedText(ctx context.Context, input string) []string
 
 		matchText := input[match[0]:match[1]]
 		submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
-		if len(submatch) < 2 || strings.Contains(submatch[0], "/") {
-			// error case concat this to previous block
-			blocks[b] += matchText
-			continue
-		}
 		nip19 := submatch[2]
 
 		event, err := getEvent(ctx, nip19)
@@ -399,27 +380,6 @@ func renderQuotesAsArrowPrefixedText(ctx context.Context, input string) []string
 	return blocks
 }
 
-func replaceURLsWithTags(line string) string {
-	var rline string
-
-	rline = replaceImageURLsWithTags(line, ` <img src="%s" alt=""> `)
-	if rline != line {
-		return rline
-	}
-
-	rline = replaceVideoURLsWithTags(line, `<video controls width="100%%"><source src="%s"></video>`)
-	if rline != line {
-		return rline
-	}
-
-	line = replaceNostrURLsWithTags(line)
-
-	// Match and replace other URLs with <a> tags
-	line = hrefMatcher.ReplaceAllString(line, `<a href="$1">$1</a>`)
-
-	return line
-}
-
 func sanitizeXSS(html string) string {
 	p := bluemonday.UGCPolicy()
 	p.AllowStyling()
@@ -431,20 +391,34 @@ func sanitizeXSS(html string) string {
 	return p.Sanitize(html)
 }
 
-func basicFormatting(input string) string {
-
-	lines := strings.Split(input, "\n")
-	var processedLines []string
-	for _, line := range lines {
-		processedLine := replaceURLsWithTags(line)
-		processedLines = append(processedLines, processedLine)
+func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstantView bool) string {
+	nostrMatcher := nostrEveryMatcher
+	if skipNostrEventLinks {
+		nostrMatcher = nostrNpubNprofileMatcher
 	}
 
-	return strings.Join(processedLines, "<br/>")
+	imageReplacementTemplate := ` <img src="%s"> `
+	if usingTelegramInstantView {
+		// telegram instant view doesn't like when there is an image inside a blockquote (like <p><img></p>)
+		// so we use this custom thing to stop all blockquotes before the images, print the images then
+		// start a new blockquote afterwards -- we do the same with the markdown renderer for <p> tags on mdToHtml
+		imageReplacementTemplate = "</blockquote>" + imageReplacementTemplate + "<blockquote>"
+	}
+
+	lines := strings.Split(input, "\n")
+	for i, line := range lines {
+		line = replaceURLsWithTags(line,
+			imageReplacementTemplate,
+			`<video controls width="100%%"><source src="%s"></video>`,
+		)
+
+		line = replaceNostrURLsWithTags(nostrMatcher, line)
+		lines[i] = line
+	}
+	return strings.Join(lines, "<br/>")
 }
 
 func previewNotesFormatting(input string) string {
-
 	lines := strings.Split(input, "\n")
 	var processedLines []string
 	for _, line := range lines {
@@ -460,9 +434,7 @@ func previewNotesFormatting(input string) string {
 
 func mdToHTML(md string, usingTelegramInstantView bool) string {
 	md = strings.ReplaceAll(md, "\u00A0", " ")
-	md = replaceImageURLsWithTags(md, `![](%s)`)
-	md = replaceVideoURLsWithTags(md, `<video controls width="100%%"><source src="%s"></video>`)
-	md = replaceNostrURLsWithTags(md)
+	md = replaceNostrURLsWithTags(nostrEveryMatcher, md)
 
 	// create markdown parser with extensions
 	p := parser.NewWithExtensions(

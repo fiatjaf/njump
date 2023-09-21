@@ -76,7 +76,7 @@ func main() {
 	}
 
 	funcMap := template.FuncMap{
-		"basicFormatting":        basicFormatting,
+		"basicFormatting":        func(input string) string { return basicFormatting(input, false, false) },
 		"previewNotesFormatting": previewNotesFormatting,
 		"escapeString":           html.EscapeString,
 		"sanitizeXSS":            sanitizeXSS,

@@ -308,7 +308,11 @@ func render(w http.ResponseWriter, r *http.Request) {
 	if event.Kind == 30023 || event.Kind == 30024 {
 		content = mdToHTML(content, typ == "telegram_instant_view")
 	} else {
-		content = basicFormatting(renderQuotesAsHTML(r.Context(), html.EscapeString(content)))
+		// first we run basicFormatting, which turns URLs into their appropriate HTML tags
+		content = basicFormatting(html.EscapeString(content), true, false)
+		// then we render quotes as HTML, which will also apply basicFormatting to all the internal quotes
+		content = renderQuotesAsHTML(r.Context(), content, typ == "telegram_instant_view")
+		// we must do this because inside <blockquotes> we must treat <img>s different when telegram_instant_view
 	}
 
 	// pretty JSON
