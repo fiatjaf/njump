@@ -13,6 +13,7 @@ import (
 
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/pelletier/go-toml"
 )
 
 type Event struct {
@@ -286,9 +287,19 @@ func render(w http.ResponseWriter, r *http.Request) {
 	} else if summary != "" {
 		description = summary
 	} else {
-		description = prettyJsonOrRaw(event.Content)
-		if len(description) > 240 {
-			description = description[:240]
+		// if content is valid JSON, parse that and print as TOML for easier readability
+		var parsedJson any
+		if err := json.Unmarshal([]byte(event.Content), &parsedJson); err == nil {
+			if t, err := toml.Marshal(parsedJson); err == nil && len(t) > 0 {
+				description = string(t)
+			}
+		} else {
+			// otherwise replace npub/nprofiles with names and trim length
+			res := replaceUserReferencesWithNames(r.Context(), []string{event.Content})
+			description = res[0]
+			if len(description) > 240 {
+				description = description[:240]
+			}
 		}
 	}
 

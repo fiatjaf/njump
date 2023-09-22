@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -21,7 +20,6 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/pelletier/go-toml"
 )
 
 var (
@@ -159,23 +157,6 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 	}
 
 	return nil
-}
-
-func mergeMaps[K comparable, V any](m1 map[K]V, m2 map[K]V) map[K]V {
-	for k, v := range m2 {
-		m1[k] = v
-	}
-	return m1
-}
-
-func prettyJsonOrRaw(j string) string {
-	var parsedContent any
-	if err := json.Unmarshal([]byte(j), &parsedContent); err == nil {
-		if t, err := toml.Marshal(parsedContent); err == nil && len(t) > 0 {
-			return string(t)
-		}
-	}
-	return j
 }
 
 func getPreviewStyle(r *http.Request) string {
