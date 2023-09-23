@@ -243,6 +243,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	}
 
 	title := ""
+	titleizedContent := ""
 	twitterTitle := title
 	if event.Kind == 0 && metadata.Name != "" {
 		title = metadata.Name
@@ -300,7 +301,21 @@ func render(w http.ResponseWriter, r *http.Request) {
 			if len(description) > 240 {
 				description = description[:240]
 			}
+			{
+				titleizedContent = strings.Replace(
+					strings.Replace(description, "\r\n", " ", -1),
+					"\n", " ", -1,
+				)
+				if len(titleizedContent) <= 65 {
+					titleizedContent = "\"" + titleizedContent + "\""
+				} else {
+					titleizedContent = "\"" + titleizedContent[:64] + "…\""
+				}
+			}
 		}
+	}
+	if titleizedContent == "" {
+		titleizedContent = title
 	}
 
 	// content massaging
@@ -335,6 +350,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"clients":          generateClientList(code, event),
 		"type":             typ,
 		"title":            title,
+		"titleizedContent": titleizedContent,
 		"twitterTitle":     twitterTitle,
 		"npub":             npub,
 		"npubShort":        npubShort,
@@ -348,7 +364,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"event":            event,
 		"eventJSON":        string(eventJSON),
 		"content":          content,
-		"titleizedContent": titleize(event.Content),
 		"textImageURL":     textImageURL,
 		"videoType":        videoType,
 		"image":            image,

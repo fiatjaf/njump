@@ -59,8 +59,8 @@
               </div>
               <div class="info-wrapper">
                 <div class="name">
-                  {{.metadata.Name | escapeString}}
-                  {{if not (eq .metadata.Name .metadata.DisplayName)}}
+                  {{.metadata.Name | escapeString}} {{if not (eq .metadata.Name
+                  .metadata.DisplayName)}}
                   <span class="display"
                     >{{.metadata.DisplayName | escapeString}}</span
                   >
