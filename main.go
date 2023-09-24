@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
+	"github.com/rs/cors"
 	"github.com/rs/zerolog"
 )
 
@@ -90,20 +91,21 @@ func main() {
 	)
 
 	// routes
-	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
-	http.HandleFunc("/relays-archive.xml", renderArchive)
-	http.HandleFunc("/npubs-archive.xml", renderArchive)
-	http.HandleFunc("/services/oembed", renderOEmbed)
-	http.HandleFunc("/relays-archive/", renderArchive)
-	http.HandleFunc("/npubs-archive/", renderArchive)
-	http.HandleFunc("/njump/image/", generate)
-	http.HandleFunc("/njump/proxy/", proxy)
-	http.HandleFunc("/robots.txt", renderRobots)
-	http.HandleFunc("/try", renderTry)
-	http.HandleFunc("/", render)
+	mux := http.NewServeMux()
+	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
+	mux.HandleFunc("/relays-archive.xml", renderArchive)
+	mux.HandleFunc("/npubs-archive.xml", renderArchive)
+	mux.HandleFunc("/services/oembed", renderOEmbed)
+	mux.HandleFunc("/relays-archive/", renderArchive)
+	mux.HandleFunc("/npubs-archive/", renderArchive)
+	mux.HandleFunc("/njump/image/", generate)
+	mux.HandleFunc("/njump/proxy/", proxy)
+	mux.HandleFunc("/robots.txt", renderRobots)
+	mux.HandleFunc("/try", renderTry)
+	mux.HandleFunc("/", render)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
-	if err := http.ListenAndServe("0.0.0.0:"+s.Port, nil); err != nil {
+	if err := http.ListenAndServe("0.0.0.0:"+s.Port, cors.Default().Handler(mux)); err != nil {
 		log.Fatal().Err(err).Msg("")
 	}
 
