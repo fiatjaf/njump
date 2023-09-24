@@ -53,6 +53,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
 	event, err := getEvent(ctx, code)
 	if err != nil {
+		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
 		return nil, err
 	}
 
@@ -241,11 +242,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if strings.HasPrefix(code, "nostr:") {
 		http.Redirect(w, r, "/"+code[6:], http.StatusFound)
-	} else if strings.HasPrefix(code, "npub") {
+	} else if strings.HasPrefix(code, "npub") && strings.HasSuffix(code, ".xml") {
+		isProfileSitemap = true
 		code = code[:len(code)-4]
-		if strings.HasSuffix(code, ".xml") {
-			isProfileSitemap = true
-		}
 	}
 
 	if strings.HasPrefix(code, "note1") {
