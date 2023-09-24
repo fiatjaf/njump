@@ -90,17 +90,17 @@ func main() {
 	)
 
 	// routes
-	http.HandleFunc("/", render)
-	http.HandleFunc("/try", renderTry)
-	http.HandleFunc("/robots.txt", renderRobots)
+	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
+	http.HandleFunc("/relays-archive.xml", renderArchive)
+	http.HandleFunc("/npubs-archive.xml", renderArchive)
+	http.HandleFunc("/services/oembed", renderOEmbed)
+	http.HandleFunc("/relays-archive/", renderArchive)
+	http.HandleFunc("/npubs-archive/", renderArchive)
 	http.HandleFunc("/njump/image/", generate)
 	http.HandleFunc("/njump/proxy/", proxy)
-	http.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
-	http.HandleFunc("/services/oembed", renderOEmbed)
-	http.HandleFunc("/npubs-archive/", renderArchive)
-	http.HandleFunc("/relays-archive/", renderArchive)
-	http.HandleFunc("/npubs-archive.xml", renderArchive)
-	http.HandleFunc("/relays-archive.xml", renderArchive)
+	http.HandleFunc("/robots.txt", renderRobots)
+	http.HandleFunc("/try", renderTry)
+	http.HandleFunc("/", render)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
 	if err := http.ListenAndServe("0.0.0.0:"+s.Port, nil); err != nil {
