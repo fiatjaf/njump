@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {{if .npub}}
 	<url>
-		<loc>https://{{.CanonicalHost}}/{{.npub | escapeString}}</loc>
+		<loc>https://{{.s.CanonicalHost}}/{{.npub | escapeString}}</loc>
 		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
@@ -10,7 +10,7 @@
 {{end}}
 {{if .hostname}}
 	<url>
-		<loc>https://{{.CanonicalHost}}/r/{{.hostname | escapeString}}</loc>
+		<loc>https://{{.s.CanonicalHost}}/r/{{.hostname | escapeString}}</loc>
 		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
@@ -19,7 +19,7 @@
 {{if .lastNotes}}
 {{range .lastNotes}}
 	<url>
-		<loc>https://{{$.CanonicalHost}}/{{.Nevent | escapeString}}</loc>
+		<loc>https://{{.s.CanonicalHost}}/{{.Nevent | escapeString}}</loc>
 		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
 		<changefreq>never</changefreq>
 		<priority>0.5</priority>
@@ -29,7 +29,7 @@
 {{if .data}}
 {{range $element := .data }}
 	<url>
-		<loc>https://{{$.CanonicalHost}}/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}</loc>
+		<loc>https://{{.s.CanonicalHost}}/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}</loc>
 		<lastmod>{{$.modifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.5</priority>

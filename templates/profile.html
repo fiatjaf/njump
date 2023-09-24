@@ -2,8 +2,14 @@
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    <title>{{.metadata.Name | escapeString}} / {{.metadata.DisplayName | escapeString}} is on nostr</title>
-    <meta name="description" content="{{.npub | escapeString}} is {{.metadata.Name | escapeString}} / {{.metadata.DisplayName | escapeString}} public key on nostr" >
+    <title>
+      {{.metadata.Name | escapeString}} / {{.metadata.DisplayName |
+      escapeString}} is on nostr
+    </title>
+    <meta
+      name="description"
+      content="{{.npub | escapeString}} is {{.metadata.Name | escapeString}} / {{.metadata.DisplayName | escapeString}} public key on nostr"
+    />
     <meta property="og:title" content="{{.title | escapeString}}" />
     <meta property="og:site_name" content="{{.npub | escapeString}}" />
     {{ if .metadata.Picture }}
@@ -20,7 +26,10 @@
     {{end}}
     <meta property="twitter:card" content="summary" />
 
-    <link rel="canonical" href="https://{{.CanonicalHost}}/{{.npub | escapeString }}" />
+    <link
+      rel="canonical"
+      href="https://{{.s.CanonicalHost}}/{{.npub | escapeString }}"
+    />
     <link
       rel="sitemap"
       type="application/xml"
@@ -39,8 +48,8 @@
         <header class="column columnA">
           <div class="info-wrapper">
             <div class="name">
-              {{.metadata.Name | escapeString}}
-              {{if not (eq .metadata.Name .metadata.DisplayName)}}
+              {{.metadata.Name | escapeString}} {{if not (eq .metadata.Name
+              .metadata.DisplayName)}}
               <span class="display"
                 >{{.metadata.DisplayName | escapeString}}</span
               >
@@ -59,8 +68,8 @@
         <div class="column column_content">
           <header class="field info-wrapper">
             <h1 id="profile_name" class="name">
-              {{.metadata.Name | escapeString}}
-              {{if not (eq .metadata.Name .metadata.DisplayName)}}
+              {{.metadata.Name | escapeString}} {{if not (eq .metadata.Name
+              .metadata.DisplayName)}}
               <span class="display"
                 >{{.metadata.DisplayName | escapeString}}</span
               >
@@ -130,7 +139,9 @@
                 <div class="is_reply">- reply</div>
                 {{end}}
               </div>
-              <div class="content">{{.Content | escapeString | previewNotesFormatting}}</div>
+              <div class="content">
+                {{.Content | escapeString | previewNotesFormatting}}
+              </div>
             </a>
             {{end}}
           </nav>

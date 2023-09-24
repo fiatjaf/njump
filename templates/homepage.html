@@ -26,31 +26,33 @@
             (yet) working.
           </p>
           <p>
-            <i>njump</i> currently lives under njump.me, you can reach it
-            appending a nostr (<a
+            <i>njump</i> currently lives under {{ .s.CanonicalHost }}, you can
+            reach it appending a Nostr (<a
               href="https://github.com/nostr-protocol/nips/blob/master/19.md"
               >NIP-19</a
             >) entity (<code>npub</code>, <code>nevent</code>,
             <code>naddr</code>, etc) after the domain:
-            <span class="exampleUrl">njump.me/&lt;nip-19-entity&gt;</span>.
+            <span class="exampleUrl"
+              >{{ .s.CanonicalHost }}/&lt;nip-19-entity&gt;</span
+            >.
           </p>
           <p>
             For example, here's
             <a
-              href="https://njump.me/npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6"
+              href="/npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6"
               >a user</a
             >
             <a
-              href="https://njump.me/npub10000003zmk89narqpczy4ff6rnuht2wu05na7kpnh3mak7z2tqzsv8vwqk"
+              href="/npub10000003zmk89narqpczy4ff6rnuht2wu05na7kpnh3mak7z2tqzsv8vwqk"
               >profile</a
             >,
             <a
-              href="https://njump.me/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t"
+              href="/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t"
               >a note</a
             >
             and a
             <a
-              href="https://njump.me/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv"
+              href="/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv"
               >long blog post</a
             >.
           </p>
@@ -60,7 +62,7 @@
           <div class="try">
             <form action="/try" method="POST">
               <div class="tryForm">
-                <div>njump.me/</div>
+                <div>{{ .s.CanonicalHost }}/</div>
                 <input
                   id="nip19entity"
                   name="nip19entity"
@@ -138,11 +140,11 @@
               >NIP-05</a
             >
             inspired permalink:
-            <span class="exampleUrl">njump.me/&lt;nip-5&gt;</span>, for
-            example:
-            <a href="https://njump.me/nvk.org">https://njump.me/nvk.org</a> or
-            <a href="https://njump.me/mike@mikedilger.com"
-              >https://njump.me/mike@mikedilger.com</a
+            <span class="exampleUrl">{{ .s.CanonicalHost }}/&lt;nip-5&gt;</span
+            >, for example:
+            <a href="/nvk.org">https://{{ .s.CanonicalHost }}/nvk.org</a> or
+            <a href="/mike@mikedilger.com"
+              >https://{{ .s.CanonicalHost }}/mike@mikedilger.com</a
             >.
           </p>
           <p>
@@ -153,10 +155,11 @@
           <h2>Bonus 2: Relays view</h2>
           <p>
             You can have a view of the last content posted to a relay using
-            <span class="exampleUrl">njump.me/r/&lt;relay-host&gt;</span>, for
-            example:
-            <a href="https://njump.me/r/nostr.wine"
-              >https://njump.me/r/nostr.wine</a
+            <span class="exampleUrl"
+              >{{ .s.CanonicalHost }}/r/&lt;relay-host&gt;</span
+            >, for example:
+            <a href="/r/nostr.wine"
+              >https://{{ .s.CanonicalHost }}/r/nostr.wine</a
             >
           </p>
           <p>

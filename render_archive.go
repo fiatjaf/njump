@@ -86,7 +86,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		"paginationUrl": area,
 		"nextPage":      fmt.Sprint(nextPage),
 		"prevPage":      fmt.Sprint(prevPage),
-		"CanonicalHost": s.CanonicalHost,
+		"s":             s,
 	}
 
 	if len(data) != 0 {

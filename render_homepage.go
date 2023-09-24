@@ -37,6 +37,7 @@ func renderHomepage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := map[string]any{
+		"s":         s,
 		"npubs":     npubs,
 		"lastNotes": lastNotes,
 	}
