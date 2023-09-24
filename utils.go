@@ -76,7 +76,7 @@ var kindNames = map[int]string{
 	30078: "Application-specific Data",
 }
 
-var kindNIPS = map[int]string{
+var kindNIPs = map[int]string{
 	0:     "01",
 	1:     "01",
 	2:     "01",
