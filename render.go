@@ -242,8 +242,8 @@ func render(w http.ResponseWriter, r *http.Request) {
 	} else if strings.HasPrefix(code, "nostr:") {
 		http.Redirect(w, r, "/"+code[6:], http.StatusFound)
 	} else if strings.HasPrefix(code, "npub") {
-		code = code[:len(code)-4]
 		if strings.HasSuffix(code, ".xml") {
+			code = code[:len(code)-4]
 			isProfileSitemap = true
 		}
 	}
