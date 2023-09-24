@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"html"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 	"time"
@@ -397,9 +398,35 @@ func render(w http.ResponseWriter, r *http.Request) {
 		// we must do this because inside <blockquotes> we must treat <img>s different when telegram_instant_view
 	}
 
+	if data.typ == "telegram_instant_view" {
+		w.Header().Set("Cache-Control", "no-cache")
+	} else if strings.Contains(data.typ, "profile") && len(data.renderableLastNotes) != 0 {
+		w.Header().Set("Cache-Control", "max-age=3600")
+	} else if !strings.Contains(data.typ, "profile") && len(data.content) != 0 {
+		w.Header().Set("Cache-Control", "max-age=604800")
+	} else {
+		w.Header().Set("Cache-Control", "max-age=60")
+	}
+
 	// pretty JSON
 	eventJSON, _ := json.MarshalIndent(data.event, "", "  ")
 
+	// oembed discovery
+	oembed := ""
+	if data.typ == "note" {
+		oembed = (&url.URL{
+			Scheme: "https",
+			Host:   host,
+			Path:   "/services/oembed",
+			RawQuery: (url.Values{
+				"url": {fmt.Sprintf("https://%s/%s", host, code)},
+			}).Encode(),
+		}).String()
+		w.Header().Add("Link", "<"+oembed+"&format=json>; rel=\"alternate\"; type=\"application/json+oembed\"")
+		w.Header().Add("Link", "<"+oembed+"&format=xml>; rel=\"alternate\"; type=\"text/xml+oembed\"")
+	}
+
+	// template
 	params := map[string]any{
 		"createdAt":        data.createdAt,
 		"modifiedAt":       data.modifiedAt,
@@ -430,6 +457,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"lastNotes":        data.renderableLastNotes,
 		"parentNevent":     data.parentNevent,
 		"authorRelays":     data.authorRelays,
+		"oembed":           oembed,
 		"s":                s,
 	}
 
@@ -437,16 +465,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 	currentTemplate, ok := templateMapping[data.typ]
 	if !ok {
 		currentTemplate = "other.html"
-	}
-
-	if data.typ == "telegram_instant_view" {
-		w.Header().Set("Cache-Control", "no-cache")
-	} else if strings.Contains(data.typ, "profile") && len(data.renderableLastNotes) != 0 {
-		w.Header().Set("Cache-Control", "max-age=3600")
-	} else if !strings.Contains(data.typ, "profile") && len(data.content) != 0 {
-		w.Header().Set("Cache-Control", "max-age=604800")
-	} else {
-		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
 	if err := tmpl.ExecuteTemplate(w, currentTemplate, params); err != nil {

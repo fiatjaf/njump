@@ -42,8 +42,19 @@
       rel="canonical"
       href="https://{{.s.CanonicalHost}}/{{.nevent | escapeString }}"
     />
-
-    {{template "head_common.html"}}
+    <!---->
+    {{ if .oembed }}
+    <link
+      rel="alternate"
+      type="application/json+oembed"
+      href="{{.oembed}}&format=json"
+    />
+    <link
+      rel="alternate"
+      type="text/xml+oembed"
+      href="{{.oembed}}&format=xml"
+    />
+    {{ end }} {{template "head_common.html"}}
   </head>
 
   <body class="note">
