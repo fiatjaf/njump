@@ -339,7 +339,7 @@ func renderQuotesAsArrowPrefixedText(ctx context.Context, input string) []string
 
 		matchText := input[match[0]:match[1]]
 		submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
-		nip19 := submatch[2]
+		nip19 := submatch[0][6:]
 
 		event, err := getEvent(ctx, nip19)
 		if err != nil {
