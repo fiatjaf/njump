@@ -3,11 +3,11 @@ package main
 import (
 	"image"
 	"image/draw"
+	"os"
 	"strings"
 
 	"github.com/apatters/go-wordwrap"
 	"github.com/lukevers/freetype-go/freetype"
-	"golang.org/x/image/font/gofont/goregular"
 )
 
 const (
@@ -73,7 +73,8 @@ func drawImage(lines []string, style string) (image.Image, error) {
 
 	// create new freetype context to get ready for
 	// adding text.
-	font, _ := freetype.ParseFont(goregular.TTF)
+	fontData, _ := os.ReadFile("fonts/NotoSansJP.ttf")
+	font, _ := freetype.ParseFont(fontData)
 
 	c := freetype.NewContext()
 	c.SetDPI(300)
