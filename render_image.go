@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func generate(w http.ResponseWriter, r *http.Request) {
+func renderImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 
 	code := r.URL.Path[1+len("njump/image/"):]

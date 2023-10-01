@@ -98,7 +98,7 @@ func main() {
 	mux.HandleFunc("/services/oembed", renderOEmbed)
 	mux.HandleFunc("/relays-archive/", renderArchive)
 	mux.HandleFunc("/npubs-archive/", renderArchive)
-	mux.HandleFunc("/njump/image/", generate)
+	mux.HandleFunc("/njump/image/", renderImage)
 	mux.HandleFunc("/njump/proxy/", proxy)
 	mux.HandleFunc("/robots.txt", renderRobots)
 	mux.HandleFunc("/try", renderTry)
