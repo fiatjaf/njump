@@ -159,7 +159,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		image = imageMatch[0]
 	}
 
-	videoMatch := regexp.MustCompile(`https:\/\/[^ ]*\.(mp4|webm)`).FindStringSubmatch(event.Content)
+	videoMatch := regexp.MustCompile(`https:\/\/[^ ]*\.(mp4|mov|webm)`).FindStringSubmatch(event.Content)
 	var video string
 	if len(videoMatch) > 0 {
 		video = videoMatch[0]
@@ -169,6 +169,8 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	if video != "" {
 		if strings.HasSuffix(video, "mp4") {
 			videoType = "mp4"
+		} else if strings.HasSuffix(video, "mov") {
+			videoType = "mov"
 		} else {
 			videoType = "webm"
 		}
