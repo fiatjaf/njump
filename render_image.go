@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"image"
 	"image/draw"
@@ -8,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/apatters/go-wordwrap"
 	"github.com/lukevers/freetype-go/freetype"
@@ -18,6 +20,8 @@ const (
 	MAX_CHARS_PER_LINE       = 52
 	MAX_CHARS_PER_QUOTE_LINE = 48
 	FONT_SIZE                = 7
+
+	BLOCK = "▒"
 )
 
 func renderImage(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +41,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	lines := normalizeText(
 		replaceUserReferencesWithNames(r.Context(),
-			renderQuotesAsArrowPrefixedText(r.Context(),
+			renderQuotesAsBlockPrefixedText(r.Context(),
 				event.Content,
 			),
 		),
@@ -67,10 +71,10 @@ func normalizeText(input []string) []string {
 	for _, block := range input {
 		quoting := false
 		maxChars := MAX_CHARS_PER_LINE
-		if strings.HasPrefix(block, "> ") {
+		if strings.HasPrefix(block, BLOCK+" ") {
 			quoting = true
 			maxChars = MAX_CHARS_PER_QUOTE_LINE // on quote lines we tolerate less characters
-			block = block[2:]
+			block = block[len(BLOCK)+1:]
 			lines = append(lines, "") // add an empty line before each quote
 			l++
 		}
@@ -87,7 +91,7 @@ func normalizeText(input []string) []string {
 					subline = subline[0:maxChars-1] + "…"
 				}
 				if quoting {
-					subline = "> " + subline
+					subline = BLOCK + " " + subline
 				}
 
 				lines = append(lines, subline)
@@ -148,4 +152,52 @@ func drawText(c *freetype.Context, text string, line float64, paddingLeft int) e
 
 	_, err := c.DrawString(text, freetype.Pt(10+paddingLeft, offsetY))
 	return err
+}
+
+// replace nevent and note with their text, as an extra line prefixed by BLOCK
+// this returns a slice of lines
+func renderQuotesAsBlockPrefixedText(ctx context.Context, input string) []string {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	blocks := make([]string, 0, 8)
+	matches := nostrNoteNeventMatcher.FindAllStringSubmatchIndex(input, -1)
+
+	if len(matches) == 0 {
+		// no matches, just return text as it is
+		blocks = append(blocks, input)
+		return blocks
+	}
+
+	// one or more matches, return multiple lines
+	blocks = append(blocks, input[0:matches[0][0]])
+	i := -1 // matches iteration counter
+	b := 0  // current block index
+	for _, match := range matches {
+		i++
+
+		matchText := input[match[0]:match[1]]
+		submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
+		nip19 := submatch[0][6:]
+
+		event, err := getEvent(ctx, nip19)
+		if err != nil {
+			// error case concat this to previous block
+			blocks[b] += matchText
+			continue
+		}
+
+		// add a new block with the quoted text
+		blocks = append(blocks, BLOCK+" "+event.Content)
+
+		// increase block count
+		b++
+	}
+	// add remaining text after the last match
+	remainingText := input[matches[i][1]:]
+	if strings.TrimSpace(remainingText) != "" {
+		blocks = append(blocks, remainingText)
+	}
+
+	return blocks
 }

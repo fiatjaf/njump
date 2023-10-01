@@ -315,54 +315,6 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 	})
 }
 
-// replace nevent and note with their text, as an extra line prefixed by >
-// this returns a slice of lines
-func renderQuotesAsArrowPrefixedText(ctx context.Context, input string) []string {
-	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-	defer cancel()
-
-	blocks := make([]string, 0, 8)
-	matches := nostrNoteNeventMatcher.FindAllStringSubmatchIndex(input, -1)
-
-	if len(matches) == 0 {
-		// no matches, just return text as it is
-		blocks = append(blocks, input)
-		return blocks
-	}
-
-	// one or more matches, return multiple lines
-	blocks = append(blocks, input[0:matches[0][0]])
-	i := -1 // matches iteration counter
-	b := 0  // current block index
-	for _, match := range matches {
-		i++
-
-		matchText := input[match[0]:match[1]]
-		submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
-		nip19 := submatch[0][6:]
-
-		event, err := getEvent(ctx, nip19)
-		if err != nil {
-			// error case concat this to previous block
-			blocks[b] += matchText
-			continue
-		}
-
-		// add a new block with the quoted text
-		blocks = append(blocks, "> "+event.Content)
-
-		// increase block count
-		b++
-	}
-	// add remaining text after the last match
-	remainingText := input[matches[i][1]:]
-	if strings.TrimSpace(remainingText) != "" {
-		blocks = append(blocks, remainingText)
-	}
-
-	return blocks
-}
-
 func sanitizeXSS(html string) string {
 	p := bluemonday.UGCPolicy()
 	p.AllowStyling()
