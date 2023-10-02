@@ -27,13 +27,6 @@ if (clients_wrapper !== null) {
     elements.forEach(element => clients_wrapper.appendChild(element))
 
     counts.sort((a, b) => b[0] - a[0])
-    let tailsum = counts.slice(1).reduce((acc, c) => acc + c[0], 0)
-
-    if (location.hash !== '#noredirect') {
-      if (counts[0][0] - tailsum > 10) {
-        location.href = counts[0][2]
-      }
-    }
   }
 }
 
@@ -109,15 +102,16 @@ function syntaxHighlight(json) {
 
 function isElementInViewport(element) {
   // Get the position and dimensions of the element
-  const rect = element.getBoundingClientRect();
+  const rect = element.getBoundingClientRect()
 
   // Check if the element is within the viewport's boundaries
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
+  )
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -130,37 +124,36 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 })
 
-const desktop_name = document.querySelector('.column_content .name');
+const desktop_name = document.querySelector('.column_content .name')
 if (desktop_name) {
-  window.addEventListener('scroll', function() {
-    desktop_profile = document.querySelector('.column_content .info-wrapper');
+  window.addEventListener('scroll', function () {
+    desktop_profile = document.querySelector('.column_content .info-wrapper')
     if (window.getComputedStyle(desktop_profile).display === 'none') {
       return
     }
     columnA = document.querySelector('.columnA')
     if (columnA != null && isElementInViewport(desktop_name)) {
-      columnA.querySelector('.info-wrapper').style.display = 'none';
+      columnA.querySelector('.info-wrapper').style.display = 'none'
     } else {
-      document.querySelector('.info-wrapper').style.display = 'block';
+      document.querySelector('.info-wrapper').style.display = 'block'
     }
-  });
+  })
 }
 
 // Get all the npubs elements in last notes and link them
-const headerDivs = document.querySelectorAll('div.header');
-headerDivs.forEach((headerDiv) => {
-  const spanElements = headerDiv.querySelectorAll('span');
-  spanElements.forEach((span) => {
-    const href = span.getAttribute('href');
+const headerDivs = document.querySelectorAll('div.header')
+headerDivs.forEach(headerDiv => {
+  const spanElements = headerDiv.querySelectorAll('span')
+  spanElements.forEach(span => {
+    const href = span.getAttribute('href')
     if (href) {
-      span.addEventListener('click', () => {
-        event.preventDefault();
-        window.location.href = href;
-      });
+      span.addEventListener('click', ev => {
+        ev.preventDefault()
+        window.location.href = href
+      })
     }
-  });
-});
-
+  })
+})
 
 // Needed to apply proper print styles
 if (
