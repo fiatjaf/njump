@@ -7,8 +7,12 @@
       {{.nevent | escapeString}} by {{.metadata.Name | escapeString}} is this
       note nostr ”nevent"
     </title>
+
     <meta property="og:title" content="{{.title | escapeString}}" />
+    {{ if eq .style "twitter" }}
     <meta name="twitter:title" content="{{.twitterTitle | escapeString}}" />
+    {{ end }}
+
     <meta property="og:site_name" content="{{.authorLong | escapeString}}" />
     {{ if .textImageURL }}
     <meta name="twitter:card" content="summary_large_image" />
