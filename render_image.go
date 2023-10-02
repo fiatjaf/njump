@@ -33,7 +33,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	event, err := getEvent(r.Context(), code)
+	event, _, err := getEvent(r.Context(), code)
 	if err != nil {
 		http.Error(w, "error fetching event: "+err.Error(), 404)
 		return
@@ -180,7 +180,7 @@ func renderQuotesAsBlockPrefixedText(ctx context.Context, input string) []string
 		submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
 		nip19 := submatch[0][6:]
 
-		event, err := getEvent(ctx, nip19)
+		event, _, err := getEvent(ctx, nip19)
 		if err != nil {
 			// error case concat this to previous block
 			blocks[b] += matchText

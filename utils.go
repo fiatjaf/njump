@@ -179,7 +179,7 @@ func getPreviewStyle(r *http.Request) string {
 	case strings.Contains(ua, "iframely"):
 		return "iframely"
 	case strings.Contains(accept, "text/html"):
-		return ""
+		return "normal"
 	default:
 		return "unknown"
 	}
@@ -264,7 +264,7 @@ func shortenNostrURLs(input string) string {
 }
 
 func getNameFromNip19(ctx context.Context, nip19 string) string {
-	author, err := getEvent(ctx, nip19)
+	author, _, err := getEvent(ctx, nip19)
 	if err != nil {
 		return nip19
 	}
@@ -303,7 +303,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 		submatch := nostrNoteNeventMatcher.FindStringSubmatch(match)
 		nip19 := submatch[1]
 
-		event, err := getEvent(ctx, nip19)
+		event, _, err := getEvent(ctx, nip19)
 		if err != nil {
 			log.Warn().Str("nip19", nip19).Msg("failed to get nip19")
 			return nip19

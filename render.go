@@ -129,16 +129,20 @@ func render(w http.ResponseWriter, r *http.Request) {
 	}
 
 	seenOnRelays := ""
-	//  event.seenOn && event.seenOn.length > 0
-	//    ? `seen on [ ${event.seenOn.join(' ')} ]`
-	//    : ''
+	if len(data.relays) > 0 {
+		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(data.relays, ", "))
+	}
 
 	textImageURL := ""
 	description := ""
 	if useTextImage {
 		textImageURL = fmt.Sprintf("https://%s/njump/image/%s", host, code)
 		if subject != "" {
-			description = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
+			if seenOnRelays != "" {
+				description = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
+			} else {
+				description = subject
+			}
 		} else {
 			description = seenOnRelays
 		}
@@ -224,8 +228,9 @@ func render(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Link", "<"+oembed+"&format=xml>; rel=\"alternate\"; type=\"text/xml+oembed\"")
 	}
 
-	// template
+	// template stuff
 	params := map[string]any{
+		"style":            style,
 		"createdAt":        data.createdAt,
 		"modifiedAt":       data.modifiedAt,
 		"clients":          generateClientList(code, data.event),
@@ -253,6 +258,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"kindDescription":  data.kindDescription,
 		"kindNIP":          data.kindNIP,
 		"lastNotes":        data.renderableLastNotes,
+		"seenOn":           data.relays,
 		"parentNevent":     data.parentNevent,
 		"authorRelays":     data.authorRelays,
 		"oembed":           oembed,

@@ -1,6 +1,6 @@
 module git.fiatjaf.com/njump
 
-go 1.20
+go 1.21
 
 require (
 	github.com/apatters/go-wordwrap v1.0.0
@@ -9,7 +9,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lukevers/freetype-go v0.0.0-20150513150840-77e276735410
 	github.com/microcosm-cc/bluemonday v1.0.24
-	github.com/nbd-wtf/go-nostr v0.23.1
+	github.com/nbd-wtf/go-nostr v0.24.1
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/cors v1.10.0
 	github.com/rs/zerolog v1.29.1

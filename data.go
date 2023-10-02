@@ -25,6 +25,7 @@ type Event struct {
 type Data struct {
 	typ                 string
 	event               *nostr.Event
+	relays              []string
 	npub                string
 	npubShort           string
 	nevent              string
@@ -47,7 +48,7 @@ type Data struct {
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
 	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
-	event, err := getEvent(ctx, code)
+	event, relays, err := getEvent(ctx, code)
 	if err != nil {
 		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
 		return nil, err
@@ -143,7 +144,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	if event.Kind != 0 {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-		author, _ = getEvent(ctx, npub)
+		author, _, _ = getEvent(ctx, npub)
 		cancel()
 	}
 
@@ -191,6 +192,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	return &Data{
 		typ:                 typ,
 		event:               event,
+		relays:              relays,
 		npub:                npub,
 		npubShort:           npubShort,
 		nevent:              nevent,

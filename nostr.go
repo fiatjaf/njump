@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -49,6 +50,11 @@ var (
 	}
 )
 
+type CachedEvent struct {
+	Event  *nostr.Event `json:"e"`
+	Relays []string     `json:"r"`
+}
+
 func getRelay() string {
 	if serial == 0 {
 		serial = rand.Intn(len(everything))
@@ -57,18 +63,26 @@ func getRelay() string {
 	return everything[serial]
 }
 
-func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
+func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) {
 	if b, ok := cache.Get(code); ok {
-		v := &nostr.Event{}
-		err := json.Unmarshal(b, v)
-		return v, err
+		// at this point `b` may be a StoredEvent json or an old naked Event json
+		// TODO: after a week we can assume everything will be StoredEvent, so we can simplify this
+		v := CachedEvent{}
+		err := json.Unmarshal(b, &v)
+		if v.Event == nil {
+			v.Event = &nostr.Event{}
+			err = json.Unmarshal(b, v.Event)
+		}
+		return v.Event, v.Relays, err
 	}
+
+	withRelays := true
 
 	prefix, data, err := nip19.Decode(code)
 	if err != nil {
 		pp, _ := nip05.QueryIdentifier(ctx, code)
 		if pp == nil {
-			return nil, fmt.Errorf("failed to decode %w", err)
+			return nil, nil, fmt.Errorf("failed to decode %w", err)
 		}
 		data = *pp
 	}
@@ -86,6 +100,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 		filter.Kinds = []int{0}
 		relays = append(relays, profiles...)
 		relays = append(relays, v.Relays...)
+		withRelays = false
 	case nostr.EventPointer:
 		author = v.Author
 		filter.IDs = []string{v.ID}
@@ -115,12 +130,16 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 			filter.Authors = []string{v}
 			filter.Kinds = []int{0}
 			relays = append(relays, profiles...)
+			withRelays = false
 		}
 	}
 
 	if author != "" {
 		// fetch relays for author
 		authorRelays := relaysForPubkey(ctx, author, relays...)
+		if len(authorRelays) > 5 {
+			authorRelays = authorRelays[:5]
+		}
 		relays = append(relays, authorRelays...)
 	}
 
@@ -131,17 +150,52 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	relays = unique(relays)
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
-	if ie := pool.QuerySingle(ctx, relays, filter); ie.Event != nil {
-		b, err := json.Marshal(ie.Event)
-		if err != nil {
-			log.Error().Err(err).Stringer("event", ie.Event).Msg("error marshaling nson")
-			return ie.Event, nil
+
+	// actually fetch the event here
+	var result *nostr.Event
+	var successRelays []string = nil
+	if withRelays {
+		successRelays = make([]string, 0, len(relays))
+		countdown := 7.5
+		go func() {
+			for {
+				time.Sleep(500 * time.Millisecond)
+				if countdown <= 0 {
+					cancel()
+					break
+				}
+				countdown -= 0.5
+			}
+		}()
+
+		for ie := range pool.SubManyEoseNonUnique(ctx, relays, nostr.Filters{filter}) {
+			s := strings.TrimSuffix(
+				strings.TrimPrefix(
+					strings.TrimPrefix(
+						nostr.NormalizeURL(ie.Relay.URL),
+						"wss://",
+					),
+					"ws://",
+				),
+				"/",
+			)
+			successRelays = append(successRelays, s)
+			result = ie.Event
+			countdown = min(countdown, 1)
 		}
-		cache.SetWithTTL(code, []byte(b), time.Hour*24*7)
-		return ie.Event, nil
+	} else {
+		ie := pool.QuerySingle(ctx, relays, filter)
+		if ie != nil {
+			result = ie.Event
+		}
 	}
 
-	return nil, fmt.Errorf("couldn't find this %s", prefix)
+	if result == nil {
+		return nil, nil, fmt.Errorf("couldn't find this %s", prefix)
+	}
+
+	cache.SetJSONWithTTL(code, CachedEvent{Event: result, Relays: successRelays}, time.Hour*24*7)
+	return result, successRelays, nil
 }
 
 func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
