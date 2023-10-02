@@ -131,14 +131,14 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	relays = unique(relays)
 	ctx, cancel := context.WithTimeout(ctx, time.Second*8)
 	defer cancel()
-	if evt := pool.QuerySingle(ctx, relays, filter); evt != nil {
-		b, err := json.Marshal(evt)
+	if ie := pool.QuerySingle(ctx, relays, filter); ie.Event != nil {
+		b, err := json.Marshal(ie.Event)
 		if err != nil {
-			log.Error().Err(err).Stringer("event", evt).Msg("error marshaling nson")
-			return evt, nil
+			log.Error().Err(err).Stringer("event", ie.Event).Msg("error marshaling nson")
+			return ie.Event, nil
 		}
 		cache.SetWithTTL(code, []byte(b), time.Hour*24*7)
-		return evt, nil
+		return ie.Event, nil
 	}
 
 	return nil, fmt.Errorf("couldn't find this %s", prefix)
@@ -175,11 +175,11 @@ func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
 	lastNotes := make([]*nostr.Event, 0, 20)
 	for {
 		select {
-		case evt, more := <-ch:
+		case ie, more := <-ch:
 			if !more {
 				goto end
 			}
-			lastNotes = append(lastNotes, evt)
+			lastNotes = append(lastNotes, ie.Event)
 		case <-ctx.Done():
 			goto end
 		}

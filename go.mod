@@ -9,12 +9,11 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lukevers/freetype-go v0.0.0-20150513150840-77e276735410
 	github.com/microcosm-cc/bluemonday v1.0.24
-	github.com/nbd-wtf/go-nostr v0.20.0
+	github.com/nbd-wtf/go-nostr v0.23.1
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/cors v1.10.0
 	github.com/rs/zerolog v1.29.1
 	golang.org/x/exp v0.0.0-20221106115401-f9659909a136
-	golang.org/x/image v0.0.0-20190802002840-cff245a6509b
 	mvdan.cc/xurls/v2 v2.5.0
 )
 
@@ -40,7 +39,7 @@ require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/puzpuzpuz/xsync v1.5.2 // indirect
+	github.com/puzpuzpuz/xsync/v2 v2.5.0 // indirect
 	github.com/stretchr/testify v1.7.5 // indirect
 	github.com/tidwall/gjson v1.14.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
