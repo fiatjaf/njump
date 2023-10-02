@@ -83,12 +83,14 @@
           </header>
           <div class="published_at">{{.createdAt | escapeString}}</div>
 
-          {{ if .parentNevent }}
           <div class="reply_of">
-            In reply to {{ printf "%s%s" "nostr:" .parentNevent | escapeString |
-            basicFormatting }}
+            {{ if .parentNevent }} In reply to {{ printf "%s%s" "nostr:"
+            .parentNevent | escapeString | basicFormatting }} {{ end }}
           </div>
-          {{ end }}
+          <div class="reply_of">
+            {{ if .seenOn }} Seen on {{ range .seenOn }}
+            <a href="/r/{{.}}">{{.}}</a> {{ end }} {{ end }}
+          </div>
 
           <div class="field separator"></div>
 
