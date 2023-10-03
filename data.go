@@ -67,6 +67,19 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	var content string
 	var typ string
 
+	eventRelays := []string{}
+	for _, relay := range relays {
+		for _, excluded := range excludedRelays {
+			if strings.Contains(relay, excluded) {
+				continue
+			}
+		}
+		if strings.Contains(relay, "/npub1") {
+			continue // Skip relays with personalyzed query like filter.nostr.wine
+		}
+		eventRelays = append(eventRelays, trimProtocol(relay))
+	}
+
 	switch event.Kind {
 	case 0:
 		key := ""
@@ -192,7 +205,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	return &Data{
 		typ:                 typ,
 		event:               event,
-		relays:              relays,
+		relays:              eventRelays,
 		npub:                npub,
 		npubShort:           npubShort,
 		nevent:              nevent,
