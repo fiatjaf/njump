@@ -93,20 +93,22 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			key = "ln:" + event.PubKey
 		}
 
-		rawAuthorRelays := []string{}
-		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-		rawAuthorRelays = relaysForPubkey(ctx, event.PubKey)
-		cancel()
-		for _, relay := range rawAuthorRelays {
-			for _, excluded := range excludedRelays {
-				if strings.Contains(relay, excluded) {
-					continue
+		{
+			rawAuthorRelays := []string{}
+			ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+			rawAuthorRelays = relaysForPubkey(ctx, event.PubKey)
+			cancel()
+			for _, relay := range rawAuthorRelays {
+				for _, excluded := range excludedRelays {
+					if strings.Contains(relay, excluded) {
+						continue
+					}
 				}
+				if strings.Contains(relay, "/npub1") {
+					continue // Skip relays with personalyzed query like filter.nostr.wine
+				}
+				authorRelays = append(authorRelays, trimProtocol(relay))
 			}
-			if strings.Contains(relay, "/npub1") {
-				continue // Skip relays with personalyzed query like filter.nostr.wine
-			}
-			authorRelays = append(authorRelays, trimProtocol(relay))
 		}
 
 		var lastNotes []*nostr.Event
