@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"strings"
+	"net/url"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -169,17 +169,9 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 		}()
 
 		for ie := range pool.SubManyEoseNonUnique(ctx, relays, nostr.Filters{filter}) {
-			s := strings.TrimSuffix(
-				strings.TrimPrefix(
-					strings.TrimPrefix(
-						nostr.NormalizeURL(ie.Relay.URL),
-						"wss://",
-					),
-					"ws://",
-				),
-				"/",
-			)
-			successRelays = append(successRelays, s)
+			if pu, err := url.Parse(ie.Relay.URL); err == nil {
+				successRelays = append(successRelays, pu.Host+pu.RawPath)
+			}
 			result = ie.Event
 			countdown = min(countdown, 1)
 		}
