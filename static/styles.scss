@@ -470,10 +470,15 @@ iframe {
     }
     .field {
       margin-bottom: 1.5rem;
+      line-height: 1.3rem;
       a {
         padding-bottom: 0.05rem;
+        margin-right: 0.2rem;
         text-decoration: none;
         @include themed() {
+          &:hover {
+            color: $color-accent1;
+          }
           color: t($base7);
           border-bottom: 1px solid rgba(t($base7), 0.24);
         }

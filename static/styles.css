@@ -478,18 +478,26 @@ iframe {
 }
 .container .column_content .field {
   margin-bottom: 1.5rem;
+  line-height: 1.3rem;
 }
 .container .column_content .field a {
   padding-bottom: 0.05rem;
+  margin-right: 0.2rem;
   text-decoration: none;
 }
 .theme--default .container .column_content .field a {
   color: #373737;
   border-bottom: 1px solid rgba(55, 55, 55, 0.24);
 }
+.theme--default .container .column_content .field a:hover {
+  color: #e32a6d;
+}
 .theme--dark .container .column_content .field a {
   color: #fafafa;
   border-bottom: 1px solid rgba(250, 250, 250, 0.24);
+}
+.theme--dark .container .column_content .field a:hover {
+  color: #e32a6d;
 }
 .container .column_content .field a.nostr {
   border-bottom: none;
