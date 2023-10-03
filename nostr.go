@@ -21,18 +21,19 @@ var (
 
 	always = []string{
 		"wss://relay.nostr.band",
-		"wss://relay.primal.net",
 	}
 	everything = []string{
-		"wss://relay.nostr.bg",
+		"wss://nostr-pub.wellorder.net",
 		"wss://relay.damus.io",
+		"wss://relay.nostr.bg",
 		"wss://nostr.wine",
 		"wss://nos.lol",
 		"wss://nostr.mom",
 		"wss://atlas.nostr.land",
 		"wss://relay.snort.social",
 		"wss://offchain.pub",
-		"wss://nostr-pub.wellorder.net",
+		"wss://relay.primal.net",
+		"wss://public.relaying.io",
 	}
 	profiles = []string{
 		"wss://purplepag.es",
