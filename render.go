@@ -262,7 +262,6 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"parentNevent":     data.parentNevent,
 		"authorRelays":     data.authorRelays,
 		"oembed":           oembed,
-		"s":                s,
 	}
 
 	// if a mapping is not found fallback to raw
