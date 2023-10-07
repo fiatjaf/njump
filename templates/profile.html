@@ -78,7 +78,7 @@
           </header>
           <div class="field separator long"></div>
           <div class="field">
-            <a href="{{.metadata.Website | escapeString}}"
+            <a href="{{.metadata.Website | normalizeWebsiteURL | escapeString}}"
               >{{.metadata.Website | escapeString}}</a
             >
           </div>

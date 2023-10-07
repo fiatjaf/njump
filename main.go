@@ -82,6 +82,7 @@ func main() {
 		"escapeString":           html.EscapeString,
 		"sanitizeXSS":            sanitizeXSS,
 		"trimProtocol":           trimProtocol,
+		"normalizeWebsiteURL":    normalizeWebsiteURL,
 	}
 
 	tmpl = template.Must(

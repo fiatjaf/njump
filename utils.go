@@ -435,6 +435,13 @@ func trimProtocol(relay string) string {
 	return relay
 }
 
+func normalizeWebsiteURL(u string) string {
+	if strings.HasPrefix(u, "http") {
+		return u
+	}
+	return "https://" + u
+}
+
 func loadNpubsArchive(ctx context.Context) {
 	log.Debug().Msg("refreshing the npubs archive")
 
