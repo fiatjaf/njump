@@ -29,7 +29,7 @@
 <article>
   <h1>
     {{ if .subject }} {{.subject | escapeString}} {{ else }} {{.metadata.Name |
-    escapeString}} wrote: {{ end }}
+    escapeString}} on Nostr: {{ end }}
   </h1>
 
   {{ if .summary }}
