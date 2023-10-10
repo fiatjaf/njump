@@ -103,20 +103,22 @@ func normalizeText(input []string) []string {
 }
 
 func drawImage(lines []string, style string) (image.Image, error) {
-	width, height, paddingLeft := 700, 525, 0
+	width := 700
+	height := 525
+	paddingLeft := 0
 	switch style {
-	case "twitter":
-		height = 366
 	case "telegram":
 		paddingLeft = 15
+	case "twitter":
+		height = width * 268 / 512
 	}
 
 	// get the physical image ready with colors/size
 	fg, bg := image.Black, image.White
-	rgba := image.NewRGBA(image.Rect(0, 0, width, height))
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
 
 	// draw the empty image
-	draw.Draw(rgba, rgba.Bounds(), bg, image.Point{}, draw.Src)
+	draw.Draw(img, img.Bounds(), bg, image.Point{}, draw.Src)
 
 	// create new freetype context to get ready for
 	// adding text.
@@ -127,8 +129,8 @@ func drawImage(lines []string, style string) (image.Image, error) {
 	c.SetDPI(300)
 	c.SetFont(font)
 	c.SetFontSize(FONT_SIZE)
-	c.SetClip(rgba.Bounds())
-	c.SetDst(rgba)
+	c.SetClip(img.Bounds())
+	c.SetDst(img)
 	c.SetSrc(fg)
 	c.SetHinting(freetype.NoHinting)
 
@@ -141,7 +143,7 @@ func drawImage(lines []string, style string) (image.Image, error) {
 		count++
 	}
 
-	return rgba, nil
+	return img, nil
 }
 
 func drawText(c *freetype.Context, text string, line float64, paddingLeft int) error {
