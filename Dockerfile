@@ -14,10 +14,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
 FROM alpine:latest  
 
-# Set these to override the default values
-#ENV CANONICAL_HOST= (defaults to njump.me)
-#ENV PORT= (defaults to 2999)
-
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
