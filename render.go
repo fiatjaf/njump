@@ -136,7 +136,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 	textImageURL := ""
 	description := ""
 	if useTextImage {
-		textImageURL = fmt.Sprintf("https://%s/njump/image/%s", host, code)
+		textImageURL = fmt.Sprintf("https://%s/njump/image/%s?%s", host, code, r.URL.RawQuery)
 		if subject != "" {
 			if seenOnRelays != "" {
 				description = fmt.Sprintf("%s -- %s", subject, seenOnRelays)

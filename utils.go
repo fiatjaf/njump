@@ -160,6 +160,11 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 }
 
 func getPreviewStyle(r *http.Request) string {
+	if style := r.URL.Query().Get("style"); style != "" {
+		// debug mode
+		return style
+	}
+
 	ua := strings.ToLower(r.Header.Get("User-Agent"))
 	accept := r.Header.Get("Accept")
 
