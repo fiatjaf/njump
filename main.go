@@ -102,6 +102,7 @@ func main() {
 	mux.HandleFunc("/npubs-archive/", renderArchive)
 	mux.HandleFunc("/njump/image/", renderImage)
 	mux.HandleFunc("/njump/proxy/", proxy)
+	mux.HandleFunc("/favicon.ico", renderFavicon)
 	mux.HandleFunc("/robots.txt", renderRobots)
 	mux.HandleFunc("/try", renderTry)
 	mux.HandleFunc("/", render)
