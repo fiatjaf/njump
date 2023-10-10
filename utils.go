@@ -125,12 +125,11 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Snort", URL: "https://Snort.social/e/" + code},
 			{Name: "Coracle", URL: "https://coracle.social/" + code},
 			{Name: "Satellite", URL: "https://satellite.earth/thread/" + event.ID},
-			{Name: "Agora", URL: "https://agorasocial.app/" + event.ID},
+			{Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
+			{Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
+			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
-			{Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
-			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
-			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 		}
 	} else if event.Kind == 0 {
 		return []ClientReference{
@@ -139,12 +138,12 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{Name: "Snort", URL: "https://snort.social/p/" + code},
 			{Name: "Coracle", URL: "https://coracle.social/" + code},
 			{Name: "Satellite", URL: "https://satellite.earth/@" + code},
-			{Name: "Agora", URL: "https://agorasocial.app/people/" + event.PubKey},
+			{Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
+			{Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
+			{Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
 			{Name: "Iris", URL: "https://iris.to/" + code},
 			{Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
-			{Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
-			{Name: "Nostr.band", URL: "https://nostr.band/" + code},
-			{Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
+			{Name: "Nosotros", URL: "https://nosotros.app/" + code},
 		}
 	} else if event.Kind == 30023 || event.Kind == 30024 {
 		return []ClientReference{
