@@ -54,8 +54,16 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		return nil, err
 	}
 
+	relaysForNip19 := make([]string, 0, 3)
+	for i, relay := range relays {
+		relaysForNip19 = append(relaysForNip19, relay)
+		if i == 2 {
+			break
+		}
+	}
+
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
-	nevent, _ := nip19.EncodeEvent(event.ID, []string{}, event.PubKey)
+	nevent, _ := nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
 	naddr := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
@@ -75,7 +83,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			}
 		}
 		if strings.Contains(relay, "/npub1") {
-			continue // Skip relays with personalyzed query like filter.nostr.wine
+			continue // skip relays with personalyzed query like filter.nostr.wine
 		}
 		eventRelays = append(eventRelays, trimProtocol(relay))
 	}
@@ -105,7 +113,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 					}
 				}
 				if strings.Contains(relay, "/npub1") {
-					continue // Skip relays with personalyzed query like filter.nostr.wine
+					continue // skip relays with personalyzed query like filter.nostr.wine
 				}
 				authorRelays = append(authorRelays, trimProtocol(relay))
 			}
@@ -150,7 +158,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		if event.Kind >= 30000 && event.Kind < 40000 {
 			typ = "address"
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
-				naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), []string{})
+				naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
 			}
 		} else {
 			typ = "other"
