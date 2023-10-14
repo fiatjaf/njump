@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"regexp"
 	"strings"
 	"time"
 
@@ -177,26 +176,27 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 	kindNIP := kindNIPs[event.Kind]
 
-	imageMatch := regexp.MustCompile(`https:\/\/[^ ]*\.(gif|jpe?g|png|webp)`).FindStringSubmatch(event.Content)
+	urls := urlMatcher.FindAllString(event.Content, -1)
 	var image string
-	if len(imageMatch) > 0 {
-		image = imageMatch[0]
-	}
-
-	videoMatch := regexp.MustCompile(`https:\/\/[^ ]*\.(mp4|mov|webm)`).FindStringSubmatch(event.Content)
 	var video string
-	if len(videoMatch) > 0 {
-		video = videoMatch[0]
-	}
-
 	var videoType string
-	if video != "" {
-		if strings.HasSuffix(video, "mp4") {
-			videoType = "mp4"
-		} else if strings.HasSuffix(video, "mov") {
-			videoType = "mov"
-		} else {
-			videoType = "webm"
+	for _, url := range urls {
+		switch {
+		case imageExtensionMatcher.MatchString(url):
+			if image == "" {
+				image = url
+			}
+		case videoExtensionMatcher.MatchString(url):
+			if video == "" {
+				video = url
+				if strings.HasSuffix(video, "mp4") {
+					videoType = "mp4"
+				} else if strings.HasSuffix(video, "mov") {
+					videoType = "mov"
+				} else {
+					videoType = "webm"
+				}
+			}
 		}
 	}
 
