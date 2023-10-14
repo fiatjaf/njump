@@ -1,2 +1,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/njump/static/styles.css?v=20230914" />
+
+{{if eq .type "profile"}}
+<link rel="apple-touch-icon" sizes="180x180" href="/njump/static/favicon/profile/apple-touch-icon.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/njump/static/favicon/profile/favicon-32x32.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="/njump/static/favicon/profile/favicon-16x16.png?v=2">
+{{else}}
+<link rel="apple-touch-icon" sizes="180x180" href="/njump/static/favicon/event/apple-touch-icon.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/njump/static/favicon/event/favicon-32x32.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="/njump/static/favicon/event/favicon-16x16.png?v=2">
+{{end}}
+<link rel="manifest" href="/njump/static/favicon/site.webmanifest">
+<meta name="theme-color" content="#e42a6d">
