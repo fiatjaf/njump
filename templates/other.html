@@ -1,15 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
     {{ if eq .type "address" }}
     <title>Nostr Address {{.naddr | escapeString }}</title>
-    {{end}}
-    {{ if eq .type "other" }}
-    <title>Nostr Event {{.kindID}} - {{.kindDescription | escapeString }}</title>
-    {{end}}
-    
-    {{template "head_common.html" .}}
+    {{end}} {{ if eq .type "other" }}
+    <title>
+      Nostr Event {{.kindID}} - {{.kindDescription | escapeString }}
+    </title>
+    {{end}} {{template "head_common.html" .}}
   </head>
 
   <body class="other">

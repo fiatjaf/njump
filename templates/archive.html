@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
@@ -17,39 +17,42 @@
             {{.title}}
             <span class="display">&nbsp;</span>
           </div>
-          <div class="pic-wrapper">
-            
-          </div>
+          <div class="pic-wrapper"></div>
         </div>
 
         <div class="column column_content">
           <div class="field info-wrapper">
-            <h1 class="name">
-              {{.title}}
-            </h1>
+            <h1 class="name">{{.title}}</h1>
           </div>
           <div class="field separator long"></div>
 
           <div class="field last_notes">
             {{range $element := .data }}
-            <a href="/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}" class="note">
+            <a
+              href="/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}"
+              class="note"
+            >
               <div class="content">{{$element | escapeString}}</div>
             </a>
             {{end}}
           </div>
 
           {{if not (eq .prevPage "0")}}
-          <a href="/{{.paginationUrl}}/{{.prevPage | escapeString}}" class="pagination prev"><< Prev page</a>
+          <a
+            href="/{{.paginationUrl}}/{{.prevPage | escapeString}}"
+            class="pagination prev"
+            ><< Prev page</a
+          >
+          {{end}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{if not (eq .nextPage "0")}}
+          <a
+            href="/{{.paginationUrl}}/{{.nextPage | escapeString}}"
+            class="pagination next"
+            >Next page >></a
+          >
           {{end}}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          {{if not (eq .nextPage "0")}}
-          <a href="/{{.paginationUrl}}/{{.nextPage | escapeString}}" class="pagination next">Next page >></a>
-          {{end}}
-
         </div>
 
         <aside class="column column_clients"></aside>
-
       </div>
     </div>
 
