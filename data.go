@@ -145,7 +145,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	case 1, 7, 30023, 30024:
 		typ = "note"
-		content = strings.TrimSpace(event.Content)
+		content = event.Content
 		parentNevent = getParentNevent(event)
 	case 6:
 		typ = "note"
@@ -176,7 +176,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 	kindNIP := kindNIPs[event.Kind]
 
-	// match image or video urls
 	urls := urlMatcher.FindAllString(event.Content, -1)
 	var image string
 	var video string
@@ -199,17 +198,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 				}
 			}
 		}
-	}
-
-	// if these urls are at the end of the post, remove them from the content?
-	var strippedContent string
-	if image != "" && strings.HasSuffix(content, image) {
-		strippedContent = strings.TrimSpace(content[0 : len(content)-len(image)])
-	} else if video != "" && strings.HasSuffix(content, video) {
-		strippedContent = strings.TrimSpace(content[0 : len(content)-len(video)])
-	}
-	if strippedContent != "" {
-		content = strippedContent
 	}
 
 	npubShort := npub[:8] + "…" + npub[len(npub)-4:]
