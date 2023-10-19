@@ -8,3 +8,12 @@ njump has some special features to effectively share notes on platforms that off
 njump currently lives under [njump.me](https://njump.me), you can reach it appending a Nostr NIP-19 entity (npub, nevent, nprofile, naddr, etc.) or a NIP-05 address after the domain, e.g. `njump.me/nevent1xxxxxx...xxx` or `njump.me/xxxx@zzzzz.com`
 
 For more information about njump's philosophy and its use, read the presentation [on the homepage](https://njump.me).
+
+Docker
+=====
+
+To build and run in a Docker container:
+```bash
+docker build -t njump .
+docker run -e DOMAIN=njump.mydomain.com -p 2999:2999 njump
+```
