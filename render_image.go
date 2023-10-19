@@ -2,17 +2,19 @@ package main
 
 import (
 	"context"
+	"embed"
 	"fmt"
 	"image"
 	"image/draw"
 	"image/png"
 	"net/http"
-	"os"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/apatters/go-wordwrap"
 	"github.com/lukevers/freetype-go/freetype"
+	"github.com/lukevers/freetype-go/freetype/truetype"
 )
 
 const (
@@ -23,6 +25,9 @@ const (
 
 	BLOCK = "▒"
 )
+
+//go:embed fonts/*
+var fonts embed.FS
 
 func renderImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
@@ -39,15 +44,24 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get the font and language specifics based on the characters used
+	font, breakWords, err := getLanguage(event.Content)
+	if err != nil {
+		http.Error(w, "error getting font: "+err.Error(), 500)
+		return
+	}
+
+	// this turns the raw event.Content into a series of lines ready to drawn
 	lines := normalizeText(
 		replaceUserReferencesWithNames(r.Context(),
 			renderQuotesAsBlockPrefixedText(r.Context(),
 				event.Content,
 			),
 		),
+		breakWords,
 	)
 
-	img, err := drawImage(lines, getPreviewStyle(r))
+	img, err := drawImage(lines, font, getPreviewStyle(r))
 	if err != nil {
 		log.Printf("error writing image: %s", err)
 		http.Error(w, "error writing image!", 500)
@@ -64,7 +78,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func normalizeText(input []string) []string {
+func normalizeText(input []string, breakWords bool) []string {
 	lines := make([]string, 0, MAX_LINES)
 	l := 0 // global line counter
 
@@ -84,12 +98,47 @@ func normalizeText(input []string) []string {
 				return lines
 			}
 
-			line = wordwrap.Wrap(maxChars, strings.TrimSpace(line))
-			for _, subline := range strings.Split(line, "\n") {
+			// turn a single line into multiple if it is long enough -- carefully splitting on word ends
+			wrappedLines := strings.Split(wordwrap.Wrap(maxChars, strings.TrimSpace(line)), "\n")
+
+			// now we go over all these lines and further split them if necessary
+			// in japanese, for example, we must break the words otherwise nothing works
+			var sublines []string
+			if breakWords {
+				sublines = make([]string, 0, len(wrappedLines))
+				for _, wline := range wrappedLines {
+					// split until we have a bunch of lines all under maxChars
+					for {
+						if len(wline) > maxChars {
+							// we can't split exactly at maxChars because that would break utf-8 runes
+							// so we do this range mess to try to grab where the last rune in the line ends
+							subline := make([]rune, 0, maxChars)
+							var i int
+							var r rune
+							for i, r = range wline {
+								if i > maxChars {
+									break
+								}
+								subline = append(subline, r)
+							}
+							sublines = append(sublines, string(subline))
+							wline = wline[i:]
+						} else {
+							sublines = append(sublines, wline)
+							break
+						}
+					}
+				}
+			} else {
+				sublines = wrappedLines
+			}
+
+			for _, subline := range sublines {
 				// if a line has a word so big that it would overflow (like a nevent), hide it with an ellipsis
-				if len(subline) > maxChars {
+				if len([]rune(subline)) > maxChars {
 					subline = subline[0:maxChars-1] + "…"
 				}
+
 				if quoting {
 					subline = BLOCK + " " + subline
 				}
@@ -102,7 +151,7 @@ func normalizeText(input []string) []string {
 	return lines
 }
 
-func drawImage(lines []string, style string) (image.Image, error) {
+func drawImage(lines []string, font *truetype.Font, style string) (image.Image, error) {
 	width := 700
 	height := 525
 	paddingLeft := 0
@@ -120,11 +169,7 @@ func drawImage(lines []string, style string) (image.Image, error) {
 	// draw the empty image
 	draw.Draw(img, img.Bounds(), bg, image.Point{}, draw.Src)
 
-	// create new freetype context to get ready for
-	// adding text.
-	fontData, _ := os.ReadFile("fonts/NotoSansJP.ttf")
-	font, _ := freetype.ParseFont(fontData)
-
+	// create new freetype context to get ready for adding text.
 	c := freetype.NewContext()
 	c.SetDPI(300)
 	c.SetFont(font)
@@ -202,4 +247,58 @@ func renderQuotesAsBlockPrefixedText(ctx context.Context, input string) []string
 	}
 
 	return blocks
+}
+
+func getLanguage(text string) (*truetype.Font, bool, error) {
+	fontName := "fonts/NotoSans.ttf"
+	shouldBreakWords := false
+
+	for _, group := range []struct {
+		lang       *unicode.RangeTable
+		fontName   string
+		breakWords bool
+	}{
+		{
+			unicode.Katakana,
+			"fonts/NotoSansJP.ttf",
+			true,
+		},
+		{
+			unicode.Hiragana,
+			"fonts/NotoSansJP.ttf",
+			true,
+		},
+	} {
+		for _, rune := range text {
+			rune16 := uint16(rune)
+			for _, r16 := range group.lang.R16 {
+				if rune16 >= r16.Lo && rune16 <= r16.Hi {
+					fontName = group.fontName
+					shouldBreakWords = group.breakWords
+					goto gotLang
+				}
+			}
+			rune32 := uint32(rune)
+			for _, r32 := range group.lang.R32 {
+				if rune32 >= r32.Lo && rune32 <= r32.Hi {
+					fontName = group.fontName
+					shouldBreakWords = group.breakWords
+					goto gotLang
+				}
+			}
+		}
+	}
+
+gotLang:
+	fontData, err := fonts.ReadFile(fontName)
+	if err != nil {
+		return nil, false, err
+	}
+
+	font, err := freetype.ParseFont(fontData)
+	if err != nil {
+		return nil, false, err
+	}
+
+	return font, shouldBreakWords, nil
 }
