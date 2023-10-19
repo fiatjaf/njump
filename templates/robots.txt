@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://{{s.CanonicalHost}}/npubs-archive.xml
-Sitemap: https://{{s.CanonicalHost}}/relays-archive.xml

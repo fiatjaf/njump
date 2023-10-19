@@ -78,7 +78,6 @@ func main() {
 		"relay_sitemap":   "sitemap.xml",
 		"archive":         "archive.html",
 		"archive_sitemap": "sitemap.xml",
-		"robots":          "robots.txt",
 	}
 
 	funcMap := template.FuncMap{
