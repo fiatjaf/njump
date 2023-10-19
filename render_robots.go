@@ -10,7 +10,7 @@ func renderRobots(w http.ResponseWriter, r *http.Request) {
 
 	params := map[string]any{}
 
-	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
+	if err := tmpls.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
 	}

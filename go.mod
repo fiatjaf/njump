@@ -13,6 +13,7 @@ require (
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/cors v1.10.0
 	github.com/rs/zerolog v1.29.1
+	github.com/tylermmorton/tmpl v0.0.0-20230817025807-fd8b24ce5c3d
 	golang.org/x/exp v0.0.0-20221106115401-f9659909a136
 	mvdan.cc/xurls/v2 v2.5.0
 )

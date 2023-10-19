@@ -27,7 +27,7 @@ var templates embed.FS
 
 var (
 	s               Settings
-	tmpl            *template.Template
+	tmpls           *template.Template
 	templateMapping map[string]string
 	log             = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 )
@@ -69,17 +69,16 @@ func main() {
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
 	templateMapping = map[string]string{
-		"homepage":              "homepage.html",
-		"profile":               "profile.html",
-		"profile_sitemap":       "sitemap.xml",
-		"note":                  "note.html",
-		"telegram_instant_view": "telegram_instant_view.html",
-		"address":               "other.html",
-		"relay":                 "relay.html",
-		"relay_sitemap":         "sitemap.xml",
-		"archive":               "archive.html",
-		"archive_sitemap":       "sitemap.xml",
-		"robots":                "robots.txt",
+		"homepage":        "homepage.html",
+		"profile":         "profile.html",
+		"profile_sitemap": "sitemap.xml",
+		"note":            "note.html",
+		"address":         "other.html",
+		"relay":           "relay.html",
+		"relay_sitemap":   "sitemap.xml",
+		"archive":         "archive.html",
+		"archive_sitemap": "sitemap.xml",
+		"robots":          "robots.txt",
 	}
 
 	funcMap := template.FuncMap{
@@ -92,7 +91,7 @@ func main() {
 		"normalizeWebsiteURL":    normalizeWebsiteURL,
 	}
 
-	tmpl = template.Must(
+	tmpls = template.Must(
 		template.New("tmpl").
 			Funcs(funcMap).
 			ParseFS(templates, "templates/*"),

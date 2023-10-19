@@ -94,7 +94,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
-	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
+	if err := tmpls.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
 	}

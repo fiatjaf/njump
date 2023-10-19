@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
+	"html/template"
 	"net/http"
 	"net/url"
 	"strings"
@@ -266,13 +267,33 @@ func render(w http.ResponseWriter, r *http.Request) {
 		"oembed":           oembed,
 	}
 
+	// migrating to templ
+	if data.typ == "telegram_instant_view" {
+		err := TelegramInstantViewTemplate.Render(w, &TelegramInstantViewPage{
+			Video:       data.video,
+			VideoType:   data.videoType,
+			Image:       data.image,
+			Summary:     template.HTML(summary),
+			Content:     template.HTML(data.content),
+			Description: description,
+			Subject:     subject,
+			Metadata:    data.metadata,
+			AuthorLong:  data.authorLong,
+			CreatedAt:   data.createdAt,
+		})
+		if err != nil {
+			log.Error().Err(err).Msg("error rendering tmpl")
+		}
+		return
+	}
+
 	// if a mapping is not found fallback to raw
 	currentTemplate, ok := templateMapping[data.typ]
 	if !ok {
 		currentTemplate = "other.html"
 	}
 
-	if err := tmpl.ExecuteTemplate(w, currentTemplate, params); err != nil {
+	if err := tmpls.ExecuteTemplate(w, currentTemplate, params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
 	}

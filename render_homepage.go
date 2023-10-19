@@ -41,7 +41,7 @@ func renderHomepage(w http.ResponseWriter, r *http.Request) {
 		"lastNotes": lastNotes,
 	}
 
-	if err := tmpl.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
+	if err := tmpls.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
 		log.Error().Err(err).Msg("error rendering")
 		return
 	}
