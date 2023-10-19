@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
@@ -58,7 +58,7 @@
       type="text/xml+oembed"
       href="{{.oembed}}&format=xml"
     />
-    {{ end }} {{template "head_common.html"}}
+    {{ end }} {{template "head_common.html" .}}
   </head>
 
   <body class="note">

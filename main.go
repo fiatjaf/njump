@@ -16,7 +16,7 @@ import (
 
 type Settings struct {
 	Port          string `envconfig:"PORT" default:"2999"`
-	CanonicalHost string `envconfig:"CANONICAL_HOST" default:"njump.me"`
+	CanonicalHost string `envconfig:"DOMAIN" default:"njump.me"`
 }
 
 //go:embed static/*
@@ -51,8 +51,14 @@ func updateArchives(ctx context.Context) {
 func main() {
 	err := envconfig.Process("", &s)
 	if err != nil {
-		log.Fatal().Err(err).Msg("couldn't process envconfig.")
+		log.Fatal().Err(err).Msg("couldn't process envconfig")
+		return
+	} else {
+		if canonicalHost := os.Getenv("CANONICAL_HOST"); canonicalHost != "" {
+			s.CanonicalHost = canonicalHost
+		}
 	}
+
 	// initialize disk cache
 	defer cache.initialize()()
 

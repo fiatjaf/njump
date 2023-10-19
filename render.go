@@ -162,9 +162,11 @@ func render(w http.ResponseWriter, r *http.Request) {
 			if len(description) > 240 {
 				description = description[:240]
 			}
-			titleizedContent = strings.Replace(
-				strings.Replace(description, "\r\n", " ", -1),
-				"\n", " ", -1,
+			titleizedContent = strings.TrimSpace(
+				strings.Replace(
+					strings.Replace(description, "\r\n", " ", -1),
+					"\n", " ", -1,
+				),
 			)
 			if len(titleizedContent) <= 65 {
 				titleizedContent = "\"" + titleizedContent + "\""

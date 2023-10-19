@@ -1,22 +1,32 @@
-<div class="field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}}">
+<div
+  class='field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}}'
+>
   <div class="label">Published at</div>
   {{.createdAt | escapeString}}
 </div>
 
-<div class="field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}}">
+<div
+  class='field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}}'
+>
   <div class="label">Kind type</div>
-  {{.event.Kind}}
-  {{ if not (eq .kindNIP "")}}
-    - <a href="https://github.com/nostr-protocol/nips/blob/master/{{.kindNIP | escapeString}}.md">{{.kindDescription | escapeString}}</a>
+  {{.event.Kind}} {{ if not (eq .kindNIP "")}} -
+  <a
+    href="https://github.com/nostr-protocol/nips/blob/master/{{.kindNIP | escapeString}}.md"
+    >{{.kindDescription | escapeString}}</a
+  >
   {{ end }}
 </div>
 
-<div class="field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}}">
+<div
+  class='field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}}'
+>
   <div class="label">Address Code</div>
   <div>{{.nevent}}</div>
 </div>
 
-<div class="field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}} boxed">
+<div
+  class='field {{if not ( or (eq .type "other") (eq .type "address"))}}advanced{{end}} boxed'
+>
   <div class="label">Event JSON</div>
   <div class="json">{{.eventJSON}}</div>
 </div>
