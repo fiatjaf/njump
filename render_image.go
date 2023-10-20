@@ -268,6 +268,36 @@ func getLanguage(text string) (*truetype.Font, bool, error) {
 			"fonts/NotoSansJP.ttf",
 			true,
 		},
+		{
+			unicode.Han,
+			"fonts/NotoSansTC.ttf",
+			true,
+		},
+		{
+			unicode.Hangul,
+			"fonts/NotoSansKR.ttf",
+			true,
+		},
+		{
+			unicode.Arabic,
+			"fonts/NotoSansArabic.ttf",
+			false,
+		},
+		{
+			unicode.Hebrew,
+			"fonts/NotoSansHebrew.ttf",
+			false,
+		},
+		{
+			unicode.Bengali,
+			"fonts/NotoSansBengali.ttf",
+			false,
+		},
+		{
+			unicode.Thai,
+			"fonts/NotoSansThai.ttf",
+			false,
+		},
 	} {
 		for _, rune := range text {
 			rune16 := uint16(rune)
