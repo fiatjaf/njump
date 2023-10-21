@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"embed"
-	"html"
 	"net/http"
 	"os"
 	"text/template"
@@ -67,28 +66,6 @@ func main() {
 	ctx := context.Background()
 	go updateArchives(ctx)
 
-	// initialize templates
-	// use a mapping to expressly link the templates and share them between more kinds/types
-	templateMapping = map[string]string{
-		"profile_sitemap": "sitemap.xml",
-	}
-
-	funcMap := template.FuncMap{
-		"s":                      func() Settings { return s },
-		"basicFormatting":        func(input string) string { return basicFormatting(input, false, false) },
-		"previewNotesFormatting": previewNotesFormatting,
-		"escapeString":           html.EscapeString,
-		"sanitizeXSS":            sanitizeXSS,
-		"trimProtocol":           trimProtocol,
-		"normalizeWebsiteURL":    normalizeWebsiteURL,
-	}
-
-	tmpls = template.Must(
-		template.New("tmpl").
-			Funcs(funcMap).
-			ParseFS(templates, "templates/*"),
-	)
-
 	// routes
 	mux := http.NewServeMux()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
@@ -101,7 +78,10 @@ func main() {
 	mux.HandleFunc("/njump/proxy/", proxy)
 	mux.HandleFunc("/favicon.ico", renderFavicon)
 	mux.HandleFunc("/robots.txt", renderRobots)
-	mux.HandleFunc("/try", renderTry)
+	mux.HandleFunc("/r/", renderRelayPage)
+	mux.HandleFunc("/try", redirectFromFormSubmit)
+	mux.HandleFunc("/e/", redirectFromESlash)
+	mux.HandleFunc("/p/", redirectFromPSlash)
 	mux.HandleFunc("/", render)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)

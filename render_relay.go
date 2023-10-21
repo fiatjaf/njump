@@ -11,8 +11,14 @@ import (
 )
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {
-	code := r.URL.Path[1:]
-	hostname := code[2:]
+	hostname := r.URL.Path[3:]
+
+	if strings.HasPrefix(hostname, "wss:/") || strings.HasPrefix(hostname, "ws:/") {
+		hostname = trimProtocol(hostname)
+		http.Redirect(w, r, "/r/"+hostname, http.StatusFound)
+		return
+	}
+
 	isSitemap := false
 	numResults := 1000
 

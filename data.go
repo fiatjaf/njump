@@ -62,7 +62,6 @@ func (ee EnhancedEvent) ModifiedAtStr() string {
 
 type Data struct {
 	templateId          TemplateID
-	typ                 string
 	event               *nostr.Event
 	relays              []string
 	npub                string
@@ -112,7 +111,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	parentNevent := ""
 	authorRelays := []string{}
 	var content string
-	var typ string
 	var templateId TemplateID
 
 	eventRelays := []string{}
@@ -133,7 +131,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		key := ""
 		eventsToFetch := 100
 		if isProfileSitemap {
-			typ = "profile_sitemap"
 			key = "lns:" + event.PubKey
 			eventsToFetch = 50000
 		} else {
@@ -246,7 +243,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	return &Data{
 		templateId:          templateId,
-		typ:                 typ,
 		event:               event,
 		relays:              eventRelays,
 		npub:                npub,

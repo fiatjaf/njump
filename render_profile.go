@@ -1,0 +1,61 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"html"
+	"html/template"
+	"net/http"
+	"strings"
+)
+
+func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
+	fmt.Println(r.URL.Path, "@.", r.Header.Get("user-agent"))
+	w.Header().Set("Content-Type", "text/html")
+
+	isProfileSitemap := false
+	if strings.HasSuffix(code, ".xml") {
+		isProfileSitemap = true
+		code = code[:len(code)-4]
+	}
+
+	data, err := grabData(r.Context(), code, isProfileSitemap)
+	if err != nil {
+		w.Header().Set("Cache-Control", "max-age=60")
+		http.Error(w, "error fetching event: "+err.Error(), 404)
+		return
+	}
+
+	if len(data.renderableLastNotes) != 0 {
+		w.Header().Set("Cache-Control", "max-age=3600")
+	}
+
+	// pretty JSON
+	eventJSON, _ := json.MarshalIndent(data.event, "", "  ")
+
+	err = ProfileTemplate.Render(w, &ProfilePage{
+		HeadCommonPartial: HeadCommonPartial{IsProfile: true},
+		DetailsPartial: DetailsPartial{
+			HideDetails:     true,
+			CreatedAt:       data.createdAt,
+			KindDescription: data.kindDescription,
+			KindNIP:         data.kindNIP,
+			EventJSON:       string(eventJSON),
+			Kind:            data.event.Kind,
+		},
+		ClientsPartial: ClientsPartial{
+			Clients: generateClientList(code, data.event),
+		},
+
+		Metadata:                   data.metadata,
+		NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
+		RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false)),
+		Npub:                       data.npub,
+		AuthorRelays:               data.authorRelays,
+		LastNotes:                  data.renderableLastNotes,
+	})
+	if err != nil {
+		log.Error().Err(err).Msg("error rendering tmpl")
+	}
+	return
+}

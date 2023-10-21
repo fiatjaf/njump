@@ -14,8 +14,7 @@ import (
 type TemplateID int
 
 const (
-	Profile TemplateID = iota
-	Note
+	Note TemplateID = iota
 	LongForm
 	TelegramInstantView
 	Other
