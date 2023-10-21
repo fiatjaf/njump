@@ -65,7 +65,6 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 				},
 			},
 
-			Type:       "relay",
 			Info:       info,
 			Hostname:   hostname,
 			Proxy:      "https://" + hostname + "/njump/proxy?src=",
@@ -73,6 +72,13 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 			ModifiedAt: lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 		})
 	} else {
-		// ArchiveSitemapTemplate.Render TODO
+		w.Header().Add("content-type", "text/xml")
+		w.Write([]byte(XML_HEADER))
+		SitemapTemplate.Render(w, &SitemapPage{
+			Host:          s.Domain,
+			ModifiedAt:    lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
+			LastNotes:     renderableLastNotes,
+			RelayHostname: hostname,
+		})
 	}
 }

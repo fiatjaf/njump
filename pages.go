@@ -272,7 +272,6 @@ type RelayPage struct {
 	ClientsPartial    `tmpl:"clients"`
 	FooterPartial     `tmpl:"footer"`
 
-	Type       string
 	Info       *nip11.RelayInformationDocument
 	Hostname   string
 	Proxy      string
@@ -282,4 +281,32 @@ type RelayPage struct {
 
 func (*RelayPage) TemplateText() string {
 	return tmplRelay
+}
+
+var (
+	//go:embed templates/sitemap.xml
+	tmplSitemap     string
+	SitemapTemplate = tmpl.MustCompile(&SitemapPage{})
+)
+
+type SitemapPage struct {
+	Host       string
+	ModifiedAt string
+
+	// for the profile sitemap
+	Npub string
+
+	// for the relay sitemap
+	RelayHostname string
+
+	// for the profile and relay sitemaps
+	LastNotes []EnhancedEvent
+
+	// for the archive sitemap
+	PathPrefix string
+	Data       []string
+}
+
+func (*SitemapPage) TemplateText() string {
+	return tmplSitemap
 }

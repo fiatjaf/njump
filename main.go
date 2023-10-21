@@ -71,8 +71,6 @@ func main() {
 	// use a mapping to expressly link the templates and share them between more kinds/types
 	templateMapping = map[string]string{
 		"profile_sitemap": "sitemap.xml",
-		"relay_sitemap":   "sitemap.xml",
-		"archive_sitemap": "sitemap.xml",
 	}
 
 	funcMap := template.FuncMap{

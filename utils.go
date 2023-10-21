@@ -22,6 +22,8 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
+const XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+
 var (
 	urlSuffixMatcher         = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
 	nostrEveryMatcher        = regexp.MustCompile(`nostr:((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`)

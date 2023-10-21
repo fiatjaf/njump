@@ -35,7 +35,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	prefix := ""
-	path_prefix := ""
+	pathPrefix := ""
 	title := ""
 	area := ""
 	if strings.HasPrefix(r.URL.Path[1:], "npubs-archive") {
@@ -44,11 +44,11 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 
 	if area == "npubs-archive" {
 		prefix = "pa"
-		path_prefix = ""
+		pathPrefix = ""
 		title = "Nostr npubs archive"
 	} else {
 		prefix = "ra"
-		path_prefix = "r/"
+		pathPrefix = "r/"
 		title = "Nostr relays archive"
 	}
 
@@ -89,7 +89,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
 
 			Title:         title,
-			PathPrefix:    path_prefix,
+			PathPrefix:    pathPrefix,
 			Data:          data,
 			ModifiedAt:    modifiedAt,
 			PaginationUrl: area,
@@ -97,6 +97,13 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 			PrevPage:      fmt.Sprint(prevPage),
 		})
 	} else {
-		// ArchiveSitemapTemplate.Render TODO
+		w.Header().Add("content-type", "text/xml")
+		w.Write([]byte(XML_HEADER))
+		SitemapTemplate.Render(w, &SitemapPage{
+			Host:       s.Domain,
+			ModifiedAt: modifiedAt,
+			PathPrefix: pathPrefix,
+			Data:       data,
+		})
 	}
 }
