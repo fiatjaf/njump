@@ -134,7 +134,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			key = "lns:" + event.PubKey
 			eventsToFetch = 50000
 		} else {
-			templateId = Profile
 			key = "ln:" + event.PubKey
 		}
 
