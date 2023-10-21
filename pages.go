@@ -54,7 +54,7 @@ var (
 	DetailsTemplate = tmpl.MustCompile(&DetailsPartial{})
 )
 
-//tmpl:bind footer.html
+//tmpl:bind details.html
 type DetailsPartial struct {
 	HideDetails     bool
 	CreatedAt       string
@@ -67,6 +67,21 @@ type DetailsPartial struct {
 
 func (*DetailsPartial) TemplateText() string {
 	return tmplDetails
+}
+
+var (
+	//go:embed templates/clients.html
+	tmplClients     string
+	ClientsTemplate = tmpl.MustCompile(&ClientsPartial{})
+)
+
+//tmpl:bind clients.html
+type ClientsPartial struct {
+	Clients []ClientReference
+}
+
+func (*ClientsPartial) TemplateText() string {
+	return tmplClients
 }
 
 var (
@@ -150,4 +165,44 @@ type OtherPage struct {
 
 func (*OtherPage) TemplateText() string {
 	return tmplOther
+}
+
+var (
+	//go:embed templates/note.html
+	tmplNote     string
+	NoteTemplate = tmpl.MustCompile(&NotePage{})
+)
+
+type NotePage struct {
+	HeadCommonPartial `tmpl:"head_common"`
+	TopPartial        `tmpl:"top"`
+	DetailsPartial    `tmpl:"details"`
+	ClientsPartial    `tmpl:"clients"`
+	FooterPartial     `tmpl:"footer"`
+
+	AuthorLong       string
+	Content          template.HTML
+	CreatedAt        string
+	Description      string
+	Image            string
+	Metadata         nostr.ProfileMetadata
+	Nevent           string
+	Npub             string
+	NpubShort        string
+	Oembed           string
+	ParentLink       template.HTML
+	Proxy            string
+	SeenOn           []string
+	Style            string
+	Subject          string
+	TextImageURL     string
+	Title            string
+	TitleizedContent string
+	TwitterTitle     string
+	Video            string
+	VideoType        string
+}
+
+func (*NotePage) TemplateText() string {
+	return tmplNote
 }

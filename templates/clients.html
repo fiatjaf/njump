@@ -1,6 +1,6 @@
 <aside class="column column_clients">
   <div class="title open-list">
-    <span class="text">Open {{.type}} in</span>
+    <span class="text">Open in</span>
     <span class="open">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -33,10 +33,10 @@
     </span>
   </div>
   <div class="clients_wrapper">
-    {{range .clients}}
+    {{range .Clients}}
     <div class="btn">
       <a class="client" data-client="{{.Name}}" href="{{.URL}}"
-        ><span>Open {{$.type}} in</span> {{.Name}}</a
+        ><span>Open in</span> {{.Name}}</a
       >
     </div>
     {{end}}

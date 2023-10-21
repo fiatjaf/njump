@@ -1,122 +1,112 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    <title>{{.titleizedContent}}</title>
-    <title>
-      {{.nevent | escapeString}} by {{.metadata.Name | escapeString}} is this
-      note nostr ”nevent"
-    </title>
+    <title>{{.TitleizedContent}}</title>
+    <title>{{.Nevent}} by {{.Metadata.Name}} is this note nostr ”nevent"</title>
 
-    <meta property="og:title" content="{{.title | escapeString}}" />
-    {{ if eq .style "twitter" }}
-    <meta name="twitter:title" content="{{.twitterTitle | escapeString}}" />
+    <meta property="og:title" content="{{.Title}}" />
+    {{ if eq .Style "twitter" }}
+    <meta name="twitter:title" content="{{.TwitterTitle}}" />
     {{ end }}
 
-    <meta property="og:site_name" content="{{.authorLong | escapeString}}" />
-    {{ if .textImageURL }}
+    <meta property="og:site_name" content="{{.AuthorLong}}" />
+    {{ if not (eq "" .TextImageURL) }}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@nostrprotocol" />
-    <meta property="og:image" content="{{.textImageURL | escapeString}}" />
-    <meta name="twitter:image" content="{{.textImageURL | escapeString}}" />
+    <meta property="og:image" content="{{.TextImageURL}}" />
+    <meta name="twitter:image" content="{{.TextImageURL}}" />
     {{ else }}
     <!---->
     <meta property="twitter:card" content="summary" />
-    {{ if .image }}
-    <meta property="og:image" content="{{.image | escapeString}}" />
-    <meta name="twitter:image" content="{{.proxy}}{{.image | escapeString}}" />
-    {{ end }} {{ if .video }}
-    <meta property="og:video" content="{{.video | escapeString}}" />
-    <meta property="og:video:secure_url" content="{{.video | escapeString}}" />
-    <meta
-      property="og:video:type"
-      content="video/{{.videoType | escapeString}}"
-    />
+    {{ if not (eq "" .Image) }}
+    <meta property="og:image" content="{{.Image}}" />
+    <meta name="twitter:image" content="{{.Proxy}}{{.Image}}" />
+    {{ end }} {{ if not (eq "" .Video) }}
+    <meta property="og:video" content="{{.Video}}" />
+    <meta property="og:video:secure_url" content="{{.Video}}" />
+    <meta property="og:video:type" content="video/{{.VideoType}}" />
     {{ end }} {{ end }}
     <!---->
-    {{ if .description }}
-    <meta property="og:description" content="{{.description | escapeString}}" />
-    <meta
-      name="twitter:description"
-      content="{{.description | escapeString}}"
-    />
+    {{ if not (eq "" .Description) }}
+    <meta property="og:description" content="{{.Description}}" />
+    <meta name="twitter:description" content="{{.Description}}" />
     {{ end }}
 
-    <link
-      rel="canonical"
-      href="https://{{s.CanonicalHost}}/{{.nevent | escapeString }}"
-    />
+    <link rel="canonical" href="https://njump.me/{{.Nevent }}" />
     <!---->
-    {{ if .oembed }}
+    {{ if not (eq "" .Oembed) }}
     <link
       rel="alternate"
       type="application/json+oembed"
-      href="{{.oembed}}&format=json"
+      href="{{.Oembed}}&format=json"
     />
     <link
       rel="alternate"
       type="text/xml+oembed"
-      href="{{.oembed}}&format=xml"
+      href="{{.Oembed}}&format=xml"
     />
-    {{ end }} {{template "head_common.html" .}}
+    {{ end }}
+
+    <!---->
+    {{template "head_common" .}}
   </head>
 
   <body class="note">
-    {{template "top.html" .}}
+    {{template "top" .}}
 
     <div class="container_wrapper">
       <div class="container">
         <div class="column column_content">
           <header class="profile_intro">
-            <a href="/{{.npub | escapeString}}">
+            <a href="/{{.Npub}}">
               <div class="pic-wrapper">
-                <img class="pic" src="{{.metadata.Picture | escapeString}}" />
+                <img class="pic" src="{{.Metadata.Picture}}" />
               </div>
               <div class="info-wrapper">
                 <div class="name">
-                  {{.metadata.Name | escapeString}} {{if not (eq .metadata.Name
-                  .metadata.DisplayName)}}
-                  <span class="display"
-                    >{{.metadata.DisplayName | escapeString}}</span
-                  >
+                  {{.Metadata.Name}}
+                  <!---->
+                  {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
+                  <span class="display">{{.Metadata.DisplayName}}</span>
                   {{end}}
                 </div>
-                <div class="npub">{{.npubShort | escapeString}}</div>
+                <div class="npub">{{.NpubShort}}</div>
               </div>
             </a>
           </header>
-          <div class="published_at">{{.createdAt | escapeString}}</div>
+          <div class="published_at">{{.CreatedAt}}</div>
 
           <div class="reply_of">
-            {{ if .parentNevent }} In reply to {{ printf "%s%s" "nostr:"
-            .parentNevent | escapeString | basicFormatting }} {{ end }}
+            {{ if not (eq "" .ParentLink) }} In reply to {{ .ParentLink }} {{
+            end }}
           </div>
 
           <div class="field separator"></div>
 
           <article class="field content">
-            {{ if (not (eq .subject ""))}}
-            <h1>{{.subject | escapeString}}</h1>
+            {{ if (not (eq "" .Subject))}}
+            <h1>{{.Subject}}</h1>
             {{ else }}
             <h1 class="h">
-              {{.metadata.Name | escapeString}} on Nostr: {{.titleizedContent}}
+              {{.Metadata.Name}} on Nostr: {{.TitleizedContent}}
             </h1>
             {{ end }}
             <!-- main content -->
-            {{ .content }}
+            {{ .Content }}
           </article>
 
           <div class="field separator"></div>
 
           <div class="field">
             <div class="label">Author Public key</div>
-            {{.npub | escapeString}}
+            {{.Npub}}
           </div>
 
-          {{ if .seenOn }}
+          {{ if not (eq 0 (len .SeenOn)) }}
           <div class="field">
             <div class="label">Seen on</div>
-            {{ range .seenOn }}<a href="/r/{{.}}">{{.}}</a>
+            {{ range .SeenOn }}<a href="/r/{{.}}">{{.}}</a>
             {{ end }}
           </div>
           {{ end }}
@@ -131,19 +121,17 @@
             <label for="advanced-switch">Show more details</label>
           </div>
 
-          {{template "details.html" .}}
+          {{template "details" .}}
 
           <div class="field separator"></div>
         </div>
 
-        {{template "column_clients.html" .}}
+        {{template "clients" .ClientsPartial}}
       </div>
     </div>
 
-    {{template "footer.html"}}
+    {{template "footer" .}}
 
-    <script>
-      {{template "scripts.js"}}
-    </script>
+    <script src="/njump/static/scripts.js"></script>
   </body>
 </html>

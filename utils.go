@@ -226,45 +226,35 @@ func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacemen
 	})
 }
 
-func replaceNostrURLs(matcher *regexp.Regexp, input string, style string) string {
-	// Match and replace npup1, nprofile1, note1, nevent1, etc
-	input = matcher.ReplaceAllStringFunc(input, func(match string) string {
+func replaceNostrURLsWithTags(matcher *regexp.Regexp, input string) string {
+	// match and replace npup1, nprofile1, note1, nevent1, etc
+	return matcher.ReplaceAllStringFunc(input, func(match string) string {
 		nip19 := match[len("nostr:"):]
 		first_chars := nip19[:8]
 		last_chars := nip19[len(nip19)-4:]
-		replacement := ""
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
-			if style == "tags" {
-				ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
-				defer cancel()
-				name := getNameFromNip19(ctx, nip19)
-				replacement = fmt.Sprintf(`<a href="/%s" class="nostr" ><strong>%s</strong> (<i>%s</i>)</a>`, nip19, name, first_chars+"…"+last_chars)
-			} else if style == "short" {
-				replacement = "@" + first_chars + "…" + last_chars
-			} else {
-				replacement = nip19
-			}
-			return replacement
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
+			defer cancel()
+			name := getNameFromNip19(ctx, nip19)
+			return fmt.Sprintf(`<a href="/%s" class="nostr" ><strong>%s</strong> (<i>%s</i>)</a>`, nip19, name, first_chars+"…"+last_chars)
 		} else {
-			if style == "tags" {
-				replacement = fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, nip19, first_chars+"…"+last_chars)
-			} else if style == "short" {
-				replacement = "#" + first_chars + "…" + last_chars
-			} else {
-				replacement = nip19
-			}
-			return replacement
+			return fmt.Sprintf(`<a href="/%s" class="nostr">%s</a>`, nip19, first_chars+"…"+last_chars)
 		}
 	})
-	return input
-}
-
-func replaceNostrURLsWithTags(matcher *regexp.Regexp, input string) string {
-	return replaceNostrURLs(matcher, input, "tags")
 }
 
 func shortenNostrURLs(input string) string {
-	return replaceNostrURLs(nostrEveryMatcher, input, "short")
+	// match and replace npup1, nprofile1, note1, nevent1, etc
+	return nostrEveryMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		nip19 := match[len("nostr:"):]
+		first_chars := nip19[:8]
+		last_chars := nip19[len(nip19)-4:]
+		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
+			return "@" + first_chars + "…" + last_chars
+		} else {
+			return "#" + first_chars + "…" + last_chars
+		}
+	})
 }
 
 func getNameFromNip19(ctx context.Context, nip19 string) string {

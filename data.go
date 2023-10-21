@@ -146,11 +146,11 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			return nil, err
 		}
 	case 1, 7, 30023, 30024:
-		typ = "note"
+		templateId = Note
 		content = event.Content
 		parentNevent = getParentNevent(event)
 	case 6:
-		typ = "note"
+		templateId = Note
 		if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
 			original_nevent, _ := nip19.EncodeEvent((*reposted)[1], []string{}, "")
 			content = "Repost of nostr:" + original_nevent

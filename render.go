@@ -218,7 +218,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 
 	// oembed discovery
 	oembed := ""
-	if data.typ == "note" {
+	if data.templateId == Note {
 		oembed = (&url.URL{
 			Scheme: "https",
 			Host:   host,
@@ -289,11 +289,50 @@ func render(w http.ResponseWriter, r *http.Request) {
 			AuthorLong:  data.authorLong,
 			CreatedAt:   data.createdAt,
 		})
+	case Note:
+		err = NoteTemplate.Render(w, &NotePage{
+			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
+			DetailsPartial: DetailsPartial{
+				HideDetails:     true,
+				CreatedAt:       data.createdAt,
+				KindDescription: data.kindDescription,
+				KindNIP:         data.kindNIP,
+				EventJSON:       string(eventJSON),
+				Kind:            data.event.Kind,
+			},
+			ClientsPartial: ClientsPartial{
+				Clients: generateClientList(code, data.event),
+			},
+
+			AuthorLong:  data.authorLong,
+			Content:     template.HTML(data.content),
+			CreatedAt:   data.createdAt,
+			Description: description,
+			Image:       data.image,
+			Metadata:    data.metadata,
+			Nevent:      data.nevent,
+			Npub:        data.npub,
+			NpubShort:   data.npubShort,
+			Oembed:      oembed,
+			ParentLink: template.HTML(
+				replaceNostrURLsWithTags(nostrNoteNeventMatcher, "nostr:"+data.parentNevent),
+			),
+			Proxy:            "https://" + host + "/njump/proxy?src=",
+			SeenOn:           data.relays,
+			Style:            style,
+			Subject:          subject,
+			TextImageURL:     textImageURL,
+			Title:            title,
+			TitleizedContent: titleizedContent,
+			TwitterTitle:     twitterTitle,
+			Video:            data.video,
+			VideoType:        data.videoType,
+		})
 	case Other:
 		err = OtherTemplate.Render(w, &OtherPage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
 			DetailsPartial: DetailsPartial{
-				HideDetails:     false,
+				HideDetails:     true,
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,
 				KindNIP:         data.kindNIP,
