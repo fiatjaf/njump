@@ -1,113 +1,92 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    <title>
-      {{.metadata.Name | escapeString}} / {{.metadata.DisplayName |
-      escapeString}} is on nostr
-    </title>
+    <title>{{.Metadata.Name}} / {{.Metadata.DisplayName}} is on nostr</title>
     <meta
       name="description"
-      content="{{.npub | escapeString}} is {{.metadata.Name | escapeString}} / {{.metadata.DisplayName | escapeString}} public key on nostr"
+      content="{{.Npub}} is {{.Metadata.Name}} / {{.Metadata.DisplayName}} public key on nostr"
     />
-    <meta property="og:title" content="{{.title | escapeString}}" />
-    <meta property="og:site_name" content="{{.npub | escapeString}}" />
-    {{ if .metadata.Picture }}
-    <meta property="og:image" content="{{.metadata.Picture | escapeString}}" />
-    <meta
-      property="twitter:image"
-      content="{{.proxy}}{{.metadata.Picture | escapeString}}"
-    />
-    {{end}} {{ if .metadata.About }}
-    <meta
-      property="og:description"
-      content="{{.metadata.About | escapeString}}"
-    />
+    <meta property="og:title" content="{{.Title}}" />
+    <meta property="og:site_name" content="{{.Npub}}" />
+    {{ if not (eq "" .Metadata.Picture) }}
+    <meta property="og:image" content="{{.Metadata.Picture}}" />
+    <meta property="twitter:image" content="{{.Proxy}}{{.Metadata.Picture}}" />
+    {{end}} {{ if not (eq "" .Metadata.About) }}
+    <meta property="og:description" content="{{.Metadata.About}}" />
     {{end}}
     <meta property="twitter:card" content="summary" />
 
-    <link
-      rel="canonical"
-      href="https://{{s.Domain}}/{{.npub | escapeString }}"
-    />
+    <link rel="canonical" href="https://njump.me/{{.Npub}}" />
     <link
       rel="sitemap"
       type="application/xml"
-      title="Sitemap for {{.npub | escapeString}}"
-      href="/{{.npub | escapeString}}.xml"
+      title="Sitemap for {{.Npub}}"
+      href="/{{.Npub}}.Xml"
     />
 
-    {{template "head_common.html" .}}
+    {{template "head_common" .}}
   </head>
 
   <body class="profile">
-    {{template "top.html" .}}
+    {{template "top" .}}
 
     <div class="container_wrapper">
       <div class="container">
         <header class="column columnA">
           <div class="info-wrapper">
             <div class="name">
-              {{.metadata.Name | escapeString}} {{if not (eq .metadata.Name
-              .metadata.DisplayName)}}
-              <span class="display"
-                >{{.metadata.DisplayName | escapeString}}</span
-              >
+              {{.Metadata.Name}} {{if not (eq .Metadata.Name
+              .Metadata.DisplayName)}}
+              <span class="display">{{.Metadata.DisplayName}}</span>
               {{end}}
             </div>
           </div>
           <div class="pic-wrapper">
-            <img class="pic" src="{{.metadata.Picture | escapeString}}" />
+            <img class="pic" src="{{.Metadata.Picture}}" />
           </div>
           <div class="last_update">
             Last update:<br />
-            {{.createdAt | escapeString}}
+            {{.CreatedAt}}
           </div>
         </header>
 
         <div class="column column_content">
           <header class="field info-wrapper">
             <h1 id="profile_name" class="name">
-              {{.metadata.Name | escapeString}} {{if not (eq .metadata.Name
-              .metadata.DisplayName)}}
-              <span class="display"
-                >{{.metadata.DisplayName | escapeString}}</span
-              >
+              {{.Metadata.Name}} {{if not (eq .Metadata.Name
+              .Metadata.DisplayName)}}
+              <span class="display">{{.Metadata.DisplayName}}</span>
               {{end}}
             </h1>
           </header>
           <div class="field separator long"></div>
           <div class="field">
-            <a href="{{.metadata.Website | normalizeWebsiteURL | escapeString}}"
-              >{{.metadata.Website | escapeString}}</a
-            >
+            <a href="{{.NormalizedAuthorWebsiteURL}}">{{.Metadata.Website}}</a>
           </div>
-          <div class="field about">
-            {{.metadata.About | escapeString | basicFormatting}}
-          </div>
+          <div class="field about">{{.RenderedAuthorAboutText}}</div>
           <div class="field separator"></div>
           <div class="field">
             <div class="label">Public key</div>
-            {{.npub | escapeString}}
+            {{.Npub}}
           </div>
           <div class="field">
             <div class="label">NIP-05</div>
-            {{.metadata.NIP05 | escapeString}}
+            {{.Metadata.NIP05}}
           </div>
           <div class="field">
             <div class="label">LN Address</div>
-            {{.metadata.LUD16 | escapeString}}
+            {{.Metadata.LUD16}}
           </div>
 
+          {{ if not (eq 0 (len .AuthorRelays)) }}
           <div class="field">
             <div class="label">Posting on these relays</div>
-            {{if .authorRelays}} {{range $index, $element := .authorRelays}}
-            <a href="/r/{{$element | escapeString}}" class="button"
-              >{{$element}}</a
-            >
-            {{end}} {{else}} No relays found, sorry! Try to reload to search
-            again. {{end}}
+            {{range $index, $element := .AuthorRelays}}
+            <a href="/r/{{$element}}" class="button">{{$element}}</a>
+            {{end}}
           </div>
+          {{ end }}
 
           <div class="field advanced-switch-wrapper">
             <input
@@ -119,29 +98,26 @@
             <label for="advanced-switch">Show more details</label>
           </div>
 
-          {{template "details.html" .}}
+          {{template "details" .}}
 
           <div class="field last_update">
             Last update:<br />
-            {{.createdAt | escapeString}}
+            {{.CreatedAt}}
           </div>
 
+          {{if not (eq 0 (len .LastNotes))}}
           <div class="field separator"></div>
-
-          {{if .lastNotes}}
           <nav class="field last_notes">
             <h2>Last Notes</h2>
-            {{range .lastNotes}}
-            <a href="/{{.Nevent | escapeString}}" class="note">
+            {{range $i, $element := .LastNotes}}
+            <a href="/{{.Nevent}}" class="note">
               <div class="header">
-                <div class="published_at">{{.CreatedAt | escapeString}}</div>
-                {{if not (eq .ParentNevent "")}}
+                <div class="published_at">{{$element.CreatedAt}}</div>
+                {{if $element.IsReply}}
                 <div class="is_reply">- reply</div>
                 {{end}}
               </div>
-              <div class="content">
-                {{.Content | escapeString | previewNotesFormatting}}
-              </div>
+              <div class="content">{{$element.Preview}}</div>
             </a>
             {{end}}
           </nav>
@@ -150,14 +126,12 @@
           <div class="field separator"></div>
         </div>
 
-        {{template "column_clients.html" .}}
+        {{template "clients" .ClientsPartial}}
       </div>
     </div>
 
-    {{template "footer.html"}}
+    {{template "footer" .}}
 
-    <script>
-      {{template "scripts.js"}}
-    </script>
+    <script src="/njump/static/scripts.js"></script>
   </body>
 </html>

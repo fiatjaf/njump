@@ -4,21 +4,38 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"html"
+	"html/template"
 	"strings"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-type Event struct {
-	Npub         string
-	NpubShort    string
-	Nevent       string
-	Content      string
-	CreatedAt    string
-	ModifiedAt   string
-	ParentNevent string
+type LastNotesItem struct {
+	Npub       string
+	NpubShort  string
+	Nevent     string
+	Content    string
+	CreatedAt  string
+	ModifiedAt string
+	IsReply    bool
+}
+
+func (i LastNotesItem) Preview() template.HTML {
+	lines := strings.Split(html.EscapeString(i.Content), "\n")
+	var processedLines []string
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		processedLine := shortenNostrURLs(line)
+		processedLines = append(processedLines, processedLine)
+	}
+
+	return template.HTML(strings.Join(processedLines, "<br/>"))
 }
 
 type Data struct {
@@ -37,7 +54,7 @@ type Data struct {
 	authorRelays        []string
 	authorLong          string
 	authorShort         string
-	renderableLastNotes []*Event
+	renderableLastNotes []LastNotesItem
 	kindDescription     string
 	kindNIP             string
 	video               string
@@ -69,7 +86,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 
 	author := event
-	var renderableLastNotes []*Event
+	var renderableLastNotes []LastNotesItem
 	parentNevent := ""
 	authorRelays := []string{}
 	var content string
@@ -98,7 +115,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			key = "lns:" + event.PubKey
 			eventsToFetch = 50000
 		} else {
-			typ = "profile"
+			templateId = Profile
 			key = "ln:" + event.PubKey
 		}
 
@@ -131,15 +148,15 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			}
 		}
 
-		renderableLastNotes = make([]*Event, len(lastNotes))
-		for i, n := range lastNotes {
-			nevent, _ := nip19.EncodeEvent(n.ID, []string{}, n.PubKey)
-			renderableLastNotes[i] = &Event{
-				Nevent:       nevent,
-				Content:      n.Content,
-				CreatedAt:    time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05"),
-				ModifiedAt:   time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),
-				ParentNevent: getParentNevent(n),
+		renderableLastNotes = make([]LastNotesItem, len(lastNotes))
+		for i, levt := range lastNotes {
+			nevent, _ := nip19.EncodeEvent(levt.ID, []string{}, levt.PubKey)
+			renderableLastNotes[i] = LastNotesItem{
+				Nevent:     nevent,
+				Content:    levt.Content,
+				CreatedAt:  time.Unix(int64(levt.CreatedAt), 0).Format("2006-01-02 15:04:05"),
+				ModifiedAt: time.Unix(int64(levt.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),
+				IsReply:    nip10.GetImmediateReply(levt.Tags) != nil,
 			}
 		}
 		if err != nil {

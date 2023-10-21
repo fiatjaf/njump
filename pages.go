@@ -226,3 +226,35 @@ type NotePage struct {
 func (*NotePage) TemplateText() string {
 	return tmplNote
 }
+
+var (
+	//go:embed templates/profile.html
+	tmplProfile     string
+	ProfileTemplate = tmpl.MustCompile(&ProfilePage{})
+)
+
+type ProfilePage struct {
+	HeadCommonPartial `tmpl:"head_common"`
+	TopPartial        `tmpl:"top"`
+	DetailsPartial    `tmpl:"details"`
+	ClientsPartial    `tmpl:"clients"`
+	FooterPartial     `tmpl:"footer"`
+
+	AuthorRelays               []string
+	Content                    string
+	CreatedAt                  string
+	Domain                     string
+	LastNotes                  []LastNotesItem
+	Metadata                   nostr.ProfileMetadata
+	NormalizedAuthorWebsiteURL string
+	RenderedAuthorAboutText    template.HTML
+	Nevent                     string
+	Npub                       string
+	IsReply                    string
+	Proxy                      string
+	Title                      string
+}
+
+func (*ProfilePage) TemplateText() string {
+	return tmplProfile
+}

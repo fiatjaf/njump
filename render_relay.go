@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip11"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
@@ -43,24 +44,24 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 			Limit: events_num,
 		})
 	}
-	renderableLastNotes := make([]*Event, len(lastNotes))
+	renderableLastNotes := make([]LastNotesItem, len(lastNotes))
 	lastEventAt := time.Now()
 	relay := []string{"wss://" + hostname}
-	for i, n := range lastNotes {
-		nevent, _ := nip19.EncodeEvent(n.ID, relay, n.PubKey)
-		npub, _ := nip19.EncodePublicKey(n.PubKey)
+	for i, levt := range lastNotes {
+		nevent, _ := nip19.EncodeEvent(levt.ID, relay, levt.PubKey)
+		npub, _ := nip19.EncodePublicKey(levt.PubKey)
 		npubShort := npub[:8] + "…" + npub[len(npub)-4:]
-		renderableLastNotes[i] = &Event{
-			Npub:         npub,
-			NpubShort:    npubShort,
-			Nevent:       nevent,
-			Content:      n.Content,
-			CreatedAt:    time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02 15:04:05"),
-			ModifiedAt:   time.Unix(int64(n.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),
-			ParentNevent: getParentNevent(n),
+		renderableLastNotes[i] = LastNotesItem{
+			Npub:       npub,
+			NpubShort:  npubShort,
+			Nevent:     nevent,
+			Content:    levt.Content,
+			CreatedAt:  time.Unix(int64(levt.CreatedAt), 0).Format("2006-01-02 15:04:05"),
+			ModifiedAt: time.Unix(int64(levt.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),
+			IsReply:    nip10.GetImmediateReply(levt.Tags) != nil,
 		}
 		if i == 0 {
-			lastEventAt = time.Unix(int64(n.CreatedAt), 0)
+			lastEventAt = time.Unix(int64(levt.CreatedAt), 0)
 		}
 	}
 

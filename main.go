@@ -70,7 +70,6 @@ func main() {
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
 	templateMapping = map[string]string{
-		"profile":         "profile.html",
 		"profile_sitemap": "sitemap.xml",
 		"relay":           "relay.html",
 		"relay_sitemap":   "sitemap.xml",

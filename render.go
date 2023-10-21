@@ -328,6 +328,28 @@ func render(w http.ResponseWriter, r *http.Request) {
 			Video:            data.video,
 			VideoType:        data.videoType,
 		})
+	case Profile:
+		err = ProfileTemplate.Render(w, &ProfilePage{
+			HeadCommonPartial: HeadCommonPartial{IsProfile: true},
+			DetailsPartial: DetailsPartial{
+				HideDetails:     true,
+				CreatedAt:       data.createdAt,
+				KindDescription: data.kindDescription,
+				KindNIP:         data.kindNIP,
+				EventJSON:       string(eventJSON),
+				Kind:            data.event.Kind,
+			},
+			ClientsPartial: ClientsPartial{
+				Clients: generateClientList(code, data.event),
+			},
+
+			Metadata:                   data.metadata,
+			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
+			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false)),
+			Npub:                       data.npub,
+			AuthorRelays:               data.authorRelays,
+			LastNotes:                  data.renderableLastNotes,
+		})
 	case Other:
 		err = OtherTemplate.Render(w, &OtherPage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
