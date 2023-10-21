@@ -26,7 +26,7 @@
             (yet) working.
           </p>
           <p>
-            <i>njump</i> currently lives under {{ s.CanonicalHost }}, you can
+            <i>njump</i> currently lives under {{ s.Domain }}, you can
             reach it appending a Nostr
             <a href="https://github.com/nostr-protocol/nips/blob/master/19.md"
               >NIP-19</a
@@ -34,7 +34,7 @@
             entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>,
             etc) after the domain:
             <span class="exampleUrl"
-              >{{ s.CanonicalHost }}/&lt;nip-19-entity&gt;</span
+              >{{ s.Domain }}/&lt;nip-19-entity&gt;</span
             >.
           </p>
           <p>
@@ -63,7 +63,7 @@
           <div class="try">
             <form action="/try" method="POST">
               <div class="tryForm">
-                <div>{{ s.CanonicalHost }}/</div>
+                <div>{{ s.Domain }}/</div>
                 <input
                   id="nip19entity"
                   name="nip19entity"
@@ -141,11 +141,11 @@
               >NIP-05</a
             >
             inspired permalink:
-            <span class="exampleUrl">{{ s.CanonicalHost }}/&lt;nip-5&gt;</span>,
+            <span class="exampleUrl">{{ s.Domain }}/&lt;nip-5&gt;</span>,
             for example:
-            <a href="/nvk.org">https://{{ s.CanonicalHost }}/nvk.org</a> or
+            <a href="/nvk.org">https://{{ s.Domain }}/nvk.org</a> or
             <a href="/mike@mikedilger.com"
-              >https://{{ s.CanonicalHost }}/mike@mikedilger.com</a
+              >https://{{ s.Domain }}/mike@mikedilger.com</a
             >.
           </p>
           <p>
@@ -168,10 +168,10 @@
           <p>
             You can have a view of the last content posted to a relay using
             <span class="exampleUrl"
-              >{{ s.CanonicalHost }}/r/&lt;relay-host&gt;</span
+              >{{ s.Domain }}/r/&lt;relay-host&gt;</span
             >, for example:
             <a href="/r/nostr.wine"
-              >https://{{ s.CanonicalHost }}/r/nostr.wine</a
+              >https://{{ s.Domain }}/r/nostr.wine</a
             >
           </p>
           <p>

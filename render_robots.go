@@ -12,5 +12,5 @@ Allow: /
 
 Sitemap: https://{{%s}}/npubs-archive.xml
 Sitemap: https://{{%s}}/relays-archive.xml
-`, s.CanonicalHost, s.CanonicalHost)
+`, s.Domain, s.Domain)
 }

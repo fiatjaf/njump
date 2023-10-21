@@ -17,7 +17,7 @@ import (
 type Settings struct {
 	Port          string `envconfig:"PORT" default:"2999"`
 	DiskCachePath string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-cache"`
-	CanonicalHost string `envconfig:"DOMAIN" default:"njump.me"`
+	Domain string `envconfig:"DOMAIN" default:"njump.me"`
 }
 
 //go:embed static/*
@@ -56,7 +56,7 @@ func main() {
 		return
 	} else {
 		if canonicalHost := os.Getenv("CANONICAL_HOST"); canonicalHost != "" {
-			s.CanonicalHost = canonicalHost
+			s.Domain = canonicalHost
 		}
 	}
 
