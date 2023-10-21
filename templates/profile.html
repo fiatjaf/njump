@@ -109,15 +109,15 @@
           <div class="field separator"></div>
           <nav class="field last_notes">
             <h2>Last Notes</h2>
-            {{range $i, $element := .LastNotes}}
-            <a href="/{{.Nevent}}" class="note">
+            {{range $i, $ee := .LastNotes}}
+            <a href="/{{$ee.Nevent}}" class="note">
               <div class="header">
-                <div class="published_at">{{$element.CreatedAt}}</div>
-                {{if $element.IsReply}}
+                <div class="published_at">{{$ee.CreatedAtStr}}</div>
+                {{if $ee.IsReply}}
                 <div class="is_reply">- reply</div>
                 {{end}}
               </div>
-              <div class="content">{{$element.Preview}}</div>
+              <div class="content">{{$ee.Preview}}</div>
             </a>
             {{end}}
           </nav>

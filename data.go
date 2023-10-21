@@ -14,18 +14,17 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-type LastNotesItem struct {
-	Npub       string
-	NpubShort  string
-	Nevent     string
-	Content    string
-	CreatedAt  string
-	ModifiedAt string
-	IsReply    bool
+type EnhancedEvent struct {
+	event  *nostr.Event
+	relays []string
 }
 
-func (i LastNotesItem) Preview() template.HTML {
-	lines := strings.Split(html.EscapeString(i.Content), "\n")
+func (ee EnhancedEvent) IsReply() bool {
+	return nip10.GetImmediateReply(ee.event.Tags) != nil
+}
+
+func (ee EnhancedEvent) Preview() template.HTML {
+	lines := strings.Split(html.EscapeString(ee.event.Content), "\n")
 	var processedLines []string
 	for _, line := range lines {
 		if strings.TrimSpace(line) == "" {
@@ -36,6 +35,29 @@ func (i LastNotesItem) Preview() template.HTML {
 	}
 
 	return template.HTML(strings.Join(processedLines, "<br/>"))
+}
+
+func (ee EnhancedEvent) Npub() string {
+	npub, _ := nip19.EncodePublicKey(ee.event.PubKey)
+	return npub
+}
+
+func (ee EnhancedEvent) NpubShort() string {
+	npub := ee.Npub()
+	return npub[:8] + "…" + npub[len(npub)-4:]
+}
+
+func (ee EnhancedEvent) Nevent() string {
+	nevent, _ := nip19.EncodeEvent(ee.event.ID, ee.relays, ee.event.PubKey)
+	return nevent
+}
+
+func (ee EnhancedEvent) CreatedAtStr() string {
+	return time.Unix(int64(ee.event.CreatedAt), 0).Format("2006-01-02 15:04:05")
+}
+
+func (ee EnhancedEvent) ModifiedAtStr() string {
+	return time.Unix(int64(ee.event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 }
 
 type Data struct {
@@ -54,7 +76,7 @@ type Data struct {
 	authorRelays        []string
 	authorLong          string
 	authorShort         string
-	renderableLastNotes []LastNotesItem
+	renderableLastNotes []EnhancedEvent
 	kindDescription     string
 	kindNIP             string
 	video               string
@@ -86,7 +108,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 
 	author := event
-	var renderableLastNotes []LastNotesItem
+	var renderableLastNotes []EnhancedEvent
 	parentNevent := ""
 	authorRelays := []string{}
 	var content string
@@ -148,16 +170,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			}
 		}
 
-		renderableLastNotes = make([]LastNotesItem, len(lastNotes))
+		renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
 		for i, levt := range lastNotes {
-			nevent, _ := nip19.EncodeEvent(levt.ID, []string{}, levt.PubKey)
-			renderableLastNotes[i] = LastNotesItem{
-				Nevent:     nevent,
-				Content:    levt.Content,
-				CreatedAt:  time.Unix(int64(levt.CreatedAt), 0).Format("2006-01-02 15:04:05"),
-				ModifiedAt: time.Unix(int64(levt.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00"),
-				IsReply:    nip10.GetImmediateReply(levt.Tags) != nil,
-			}
+			renderableLastNotes[i] = EnhancedEvent{levt, []string{}}
 		}
 		if err != nil {
 			return nil, err

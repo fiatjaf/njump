@@ -7,6 +7,7 @@ import (
 	"html/template"
 
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip11"
 	"github.com/tylermmorton/tmpl"
 )
 
@@ -244,7 +245,7 @@ type ProfilePage struct {
 	Content                    string
 	CreatedAt                  string
 	Domain                     string
-	LastNotes                  []LastNotesItem
+	LastNotes                  []EnhancedEvent
 	Metadata                   nostr.ProfileMetadata
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
@@ -257,4 +258,28 @@ type ProfilePage struct {
 
 func (*ProfilePage) TemplateText() string {
 	return tmplProfile
+}
+
+var (
+	//go:embed templates/relay.html
+	tmplRelay     string
+	RelayTemplate = tmpl.MustCompile(&RelayPage{})
+)
+
+type RelayPage struct {
+	HeadCommonPartial `tmpl:"head_common"`
+	TopPartial        `tmpl:"top"`
+	ClientsPartial    `tmpl:"clients"`
+	FooterPartial     `tmpl:"footer"`
+
+	Type       string
+	Info       *nip11.RelayInformationDocument
+	Hostname   string
+	Proxy      string
+	LastNotes  []EnhancedEvent
+	ModifiedAt string
+}
+
+func (*RelayPage) TemplateText() string {
+	return tmplRelay
 }

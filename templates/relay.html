@@ -1,123 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    <title>
-      Nostr Relay {{.hostname | escapeString}} - {{.info.Name | escapeString}}
-    </title>
-    <meta
-      property="og:title"
-      content="{{.hostname | escapeString}} - nostr relay"
-    />
-    <meta
-      name="twitter:title"
-      content="{{.hostname | escapeString}} - nostr relay"
-    />
-    <meta
-      property="og:site_name"
-      content="{{.hostname | escapeString}} - nostr relay"
-    />
-    {{ if .info.Icon }}
-    <meta property="og:image" content="{{.info.Icon | escapeString}}" />
-    <meta
-      property="twitter:image"
-      content="{{.proxy}}{{.info.Icon | escapeString}}"
-    />
-    {{end}} {{ if .info.Description }}
-    <meta
-      property="og:description"
-      content="{{.info.Description | escapeString}}"
-    />
-    <meta
-      name="twitter:description"
-      content="{{.info.Description | escapeString}}"
-    />
+    <title>Nostr Relay {{.Hostname}} - {{.Info.Name}}</title>
+    <meta property="og:title" content="{{.Hostname}} - nostr relay" />
+    <meta name="twitter:title" content="{{.Hostname}} - nostr relay" />
+    <meta property="og:site_name" content="{{.Hostname}} - nostr relay" />
+    {{ if not (eq "" .Info.Icon) }}
+    <meta property="og:image" content="{{.Info.Icon}}" />
+    <meta property="twitter:image" content="{{.Proxy}}{{.Info.Icon}}" />
+    {{end}} {{ if not (eq "" .Info.Description) }}
+    <meta property="og:description" content="{{.Info.Description}}" />
+    <meta name="twitter:description" content="{{.Info.Description}}" />
     {{end}}
     <meta property="twitter:card" content="summary" />
 
     <link
       rel="sitemap"
       type="application/xml"
-      title="Sitemap for {{.hostname | escapeString}}"
-      href="/r/{{.hostname | escapeString}}.xml"
+      title="Sitemap for {{.Hostname}}"
+      href="/r/{{.Hostname}}.xml"
     />
 
-    {{template "head_common.html" .}}
+    {{template "head_common" .}}
   </head>
 
   <body class="profile">
-    {{template "top.html" .}}
+    {{template "top" .}}
 
     <div class="container_wrapper">
       <div class="container">
         <div class="column columnA">
           <div class="info-wrapper">
-            {{.info.Name | escapeString}}
+            {{.Info.Name}}
             <span class="display">&nbsp;</span>
           </div>
           <div class="pic-wrapper">
-            <img class="pic" src="{{.info.Icon | escapeString}}" />
+            <img class="pic" src="{{.Info.Icon}}" />
           </div>
         </div>
 
         <div class="column column_content">
           <div class="field info-wrapper">
-            <h1 class="name">{{.info.Name | escapeString}}</h1>
+            <h1 class="name">{{.Info.Name}}</h1>
           </div>
           <div class="field separator long"></div>
 
-          <div class="field">wss://{{.hostname | escapeString}}</div>
-          <div class="field about">
-            {{.info.Description | escapeString | basicFormatting}}
-          </div>
+          <div class="field">wss://{{.Hostname}}</div>
+          <div class="field about">{{.Info.Description}}</div>
           <div class="field separator long"></div>
 
-          {{if .info.PubKey}}
+          {{ if not (eq "" .Info.PubKey) }}
           <div class="field">
             <div class="label">Public Key</div>
-            {{.info.PubKey | escapeString}}
+            {{.Info.PubKey}}
           </div>
-          {{end}} {{if .info.Contact}}
+          {{ end }}
+          <!---->
+          {{ if not (eq "" .Info.Contact) }}
           <div class="field">
             <div class="label">Contact</div>
-            <a href="{{.info.Contact | escapeString}}"
-              >{{.info.Contact | escapeString}}</a
-            >
+            <a href="{{.Info.Contact}}">{{.Info.Contact}}</a>
           </div>
-          {{end}}
+          {{ end }}
 
           <div class="field separator"></div>
 
           <div class="field last_notes">
             <h2>Last Notes</h2>
-            {{range .lastNotes}}
-            <a href="/{{.Nevent | escapeString}}" class="note">
+            {{range $i, $ee := .LastNotes}}
+            <a href="/{{$ee.Nevent}}" class="note">
               <div class="header">
-                <div class="published_at">{{.CreatedAt | escapeString}}</div>
+                <div class="published_at">{{$ee.CreatedAtStr}}</div>
                 <br />
-                {{if not (eq .ParentNevent "")}}
+                {{if $ee.IsReply}}
                 <div class="is_reply">- reply</div>
                 {{end}}
                 <div class="npub">
-                  by <span href="/{{.Npub}}">{{.NpubShort}}</span>
+                  by <span href="/{{$ee.Npub}}">{{$ee.NpubShort}}</span>
                 </div>
               </div>
-              <div class="content">
-                {{.Content | escapeString | previewNotesFormatting}}
-              </div>
+              <div class="content">{{$ee.Preview}}</div>
             </a>
             {{end}}
           </div>
         </div>
 
-        {{template "column_clients.html" .}}
+        {{template "clients" .ClientsPartial}}
       </div>
     </div>
 
-    {{template "footer.html"}}
-
-    <script>
-      {{template "scripts.js"}}
-    </script>
+    {{template "footer" .}}
   </body>
 </html>
