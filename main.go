@@ -5,7 +5,6 @@ import (
 	"embed"
 	"net/http"
 	"os"
-	"text/template"
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
@@ -26,10 +25,8 @@ var static embed.FS
 var templates embed.FS
 
 var (
-	s               Settings
-	tmpls           *template.Template
-	templateMapping map[string]string
-	log             = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
+	s   Settings
+	log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 )
 
 func updateArchives(ctx context.Context) {
