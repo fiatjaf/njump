@@ -15,9 +15,6 @@ import (
 )
 
 func renderEvent(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
-	w.Header().Set("Content-Type", "text/html")
-
 	code := r.URL.Path[1:] // hopefully a nip19 code
 
 	// it's the homepage
@@ -35,6 +32,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		renderProfile(w, r, code)
 		return
 	}
+
+	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
 
 	// force note1 to become nevent1
 	if strings.HasPrefix(code, "note1") {
@@ -188,6 +187,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		// we must do this because inside <blockquotes> we must treat <img>s different when telegram_instant_view
 	}
 
+	w.Header().Set("Content-Type", "text/html")
 	if data.templateId == TelegramInstantView {
 		w.Header().Set("Cache-Control", "no-cache")
 	} else if len(data.content) != 0 {
