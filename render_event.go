@@ -14,7 +14,7 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-func render(w http.ResponseWriter, r *http.Request) {
+func renderEvent(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
 	w.Header().Set("Content-Type", "text/html")
 

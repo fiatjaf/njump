@@ -82,7 +82,7 @@ func main() {
 	mux.HandleFunc("/try", redirectFromFormSubmit)
 	mux.HandleFunc("/e/", redirectFromESlash)
 	mux.HandleFunc("/p/", redirectFromPSlash)
-	mux.HandleFunc("/", render)
+	mux.HandleFunc("/", renderEvent)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
 	if err := http.ListenAndServe("0.0.0.0:"+s.Port, cors.Default().Handler(mux)); err != nil {
