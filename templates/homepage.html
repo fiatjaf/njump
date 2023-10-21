@@ -72,9 +72,7 @@
                 <button>VIEW</button>
               </div>
             </form>
-            <div id="pickRandomEntityLink">
-              or pick <a href="#">some random content</a>
-            </div>
+            <div>or pick <a href="/random">some random content</a></div>
           </div>
 
           <p>
@@ -190,29 +188,5 @@
     </div>
 
     {{template "footer" .}}
-
-    <script>
-      // JavaScript object with a list of 50 names
-      const entitiesList = [
-          {{range $element := .Npubs }}
-          "{{ $element }}",
-          {{end}}
-          {{range $element := .LastNotes }}
-          "{{ $element }}",
-          {{end}}
-      ];
-
-      // Function to generate a random name from the list
-      function pickRandomEntity(event) {
-          event.preventDefault();
-          const randomIndex = Math.floor(Math.random() * entitiesList.length);
-          const randomEntity = entitiesList[randomIndex];
-          document.getElementById("nip19entity").value = randomEntity;
-      }
-
-      // Add a click event listener to the link
-      const pickRandomEntityLink = document.getElementById("pickRandomEntityLink");
-      pickRandomEntityLink.addEventListener("click", pickRandomEntity);
-    </script>
   </body>
 </html>

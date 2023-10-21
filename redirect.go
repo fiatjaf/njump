@@ -1,19 +1,49 @@
 package main
 
 import (
+	"context"
+	"math/rand"
 	"net/http"
+	"time"
 
+	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-func redirectFromFormSubmit(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, "failed to parse form data", http.StatusBadRequest)
+func redirectToRandom(w http.ResponseWriter, r *http.Request) {
+	// 50% of chance of picking a pubkey
+	if ra := rand.Intn(2); ra == 0 {
+		set := make([]string, 0, 50)
+		for _, pubkey := range cache.GetPaginatedkeys("pa", 1, 50) {
+			set = append(set, pubkey)
+		}
+		if s := len(set); s > 0 {
+			pick := set[rand.Intn(s)]
+			http.Redirect(w, r, "/p/"+pick, http.StatusFound)
+			return
+		}
+	}
+
+	// otherwise try to pick an event
+	const RELAY = "wss://nostr.wine"
+	ctx, cancel := context.WithTimeout(r.Context(), time.Second*5)
+	defer cancel()
+	var lastEvents []*nostr.Event
+	if relay, err := pool.EnsureRelay(RELAY); err == nil {
+		lastEvents, _ = relay.QuerySync(ctx, nostr.Filter{
+			Kinds: []int{1},
+			Limit: 50,
+		})
+	}
+	if s := len(lastEvents); s > 0 {
+		pick := lastEvents[rand.Intn(s)]
+		nevent, _ := nip19.EncodeEvent(pick.ID, []string{RELAY}, pick.PubKey)
+		http.Redirect(w, r, "/"+nevent, http.StatusFound)
 		return
 	}
-	nip19entity := r.FormValue("nip19entity")
-	http.Redirect(w, r, "/"+nip19entity, http.StatusFound)
+
+	// go to a hardcoded place
+	http.Redirect(w, r, "/npub1sg6plzptd64u62a878hep2kev88swjh3tw00gjsfl8f237lmu63q0uf63m", http.StatusFound)
 }
 
 func redirectFromPSlash(w http.ResponseWriter, r *http.Request) {

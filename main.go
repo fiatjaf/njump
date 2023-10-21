@@ -76,7 +76,7 @@ func main() {
 	mux.HandleFunc("/favicon.ico", renderFavicon)
 	mux.HandleFunc("/robots.txt", renderRobots)
 	mux.HandleFunc("/r/", renderRelayPage)
-	mux.HandleFunc("/try", redirectFromFormSubmit)
+	mux.HandleFunc("/random", redirectToRandom)
 	mux.HandleFunc("/e/", redirectFromESlash)
 	mux.HandleFunc("/p/", redirectFromPSlash)
 	mux.HandleFunc("/", renderEvent)
