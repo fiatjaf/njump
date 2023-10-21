@@ -73,7 +73,6 @@ func main() {
 		"profile":         "profile.html",
 		"profile_sitemap": "sitemap.xml",
 		"note":            "note.html",
-		"address":         "other.html",
 		"relay":           "relay.html",
 		"relay_sitemap":   "sitemap.xml",
 		"archive":         "archive.html",

@@ -14,11 +14,11 @@ import (
 func renderArchive(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Path[1:]
 	hostname := code[2:]
-	typ := "archive"
 	resultsPerPage := 50
+	isSitemap := false
 
 	if strings.HasSuffix(hostname, ".xml") {
-		typ = "archive_sitemap"
+		isSitemap = true
 		resultsPerPage = 5000
 	}
 
@@ -78,24 +78,25 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	currentTime := time.Now()
 	modifiedAt := currentTime.Add(-randomDuration).Format("2006-01-02T15:04:05Z07:00")
 
-	params := map[string]any{
-		"title":         title,
-		"pathPrefix":    path_prefix,
-		"data":          data,
-		"modifiedAt":    modifiedAt,
-		"paginationUrl": area,
-		"nextPage":      fmt.Sprint(nextPage),
-		"prevPage":      fmt.Sprint(prevPage),
-	}
-
 	if len(data) != 0 {
 		w.Header().Set("Cache-Control", "max-age=3600")
 	} else {
 		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
-	if err := tmpls.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
-		log.Error().Err(err).Msg("error rendering")
-		return
+	if !isSitemap {
+		ArchiveTemplate.Render(w, &ArchivePage{
+			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
+
+			Title:         title,
+			PathPrefix:    path_prefix,
+			Data:          data,
+			ModifiedAt:    modifiedAt,
+			PaginationUrl: area,
+			NextPage:      fmt.Sprint(nextPage),
+			PrevPage:      fmt.Sprint(prevPage),
+		})
+	} else {
+		// ArchiveSitemapTemplate.Render TODO
 	}
 }

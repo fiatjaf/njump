@@ -1,10 +1,9 @@
-const type = '{{.type}}'
 let counts = []
 let clients = document.querySelectorAll('.client')
 for (let i = 0; i < clients.length; i++) {
   let name = clients[i].innerText
   let url = clients[i].href
-  let key = 'nj:' + type + ':' + name
+  let key = 'nj:' + name
   let count = parseInt(localStorage.getItem(key) || 0)
   clients[i].parentNode.setAttribute('count', count)
   clients[i].parentNode.setAttribute('title', 'Used ' + count + ' times')

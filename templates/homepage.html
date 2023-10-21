@@ -1,15 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
     <title>njump - the nostr static gateway</title>
     <meta name="description" content="" />
 
-    {{template "head_common.html" .}}
+    {{template "head_common" .}}
   </head>
 
   <body class="homepage">
-    {{template "top.html" .}}
+    {{template "top" .}}
 
     <div class="container_wrapper">
       <div class="container">
@@ -195,7 +195,7 @@
       </div>
     </div>
 
-    {{template "footer.html"}}
+    {{template "footer" .}}
 
     <script>
       // JavaScript object with a list of 50 names
@@ -219,8 +219,6 @@
       // Add a click event listener to the link
       const pickRandomEntityLink = document.getElementById("pickRandomEntityLink");
       pickRandomEntityLink.addEventListener("click", pickRandomEntity);
-
-      {{template "scripts.js"}}
     </script>
   </body>
 </html>

@@ -1,25 +1,26 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="theme--default">
   <meta charset="UTF-8" />
   <head>
-    {{ if eq .type "address" }}
-    <title>Nostr Address {{.naddr | escapeString }}</title>
-    {{end}} {{ if eq .type "other" }}
-    <title>
-      Nostr Event {{.kindID}} - {{.kindDescription | escapeString }}
-    </title>
-    {{end}} {{template "head_common.html" .}}
+    {{ if .IsParameterizedReplaceable }}
+    <title>Nostr Entity {{.Naddr}}</title>
+    {{ else }}
+    <title>Nostr Event {{.Kind}} - {{.KindDescription }}</title>
+    {{ end }}
+
+    <!---->
+    {{template "head_common" .}}
   </head>
 
   <body class="other">
-    {{template "top.html" .}}
+    {{template "top" .}}
 
     <div class="container_wrapper">
       <div class="container">
         <div class="column column_content">
           <header class="profile_intro">
             <div class="info-wrapper">
-              <div class="kind_desc">{{.kindDescription | escapeString}}</div>
+              <div class="kind_desc">{{.KindDescription}}</div>
             </div>
           </header>
 
@@ -27,20 +28,18 @@
 
           <div class="field">
             <div class="label">Author Public key</div>
-            <a href="/{{.npub | escapeString}}">{{.npub | escapeString}}</a>
+            <a href="/{{.Npub}}">{{.Npub}}</a>
           </div>
 
-          {{template "details.html" .}}
+          {{template "details" .DetailsPartial}}
 
           <div class="field separator"></div>
         </div>
       </div>
     </div>
 
-    {{template "footer.html"}}
+    {{template "footer" .}}
 
-    <script>
-      {{template "scripts.js"}}
-    </script>
+    <script src="/njump/static/scripts.js"></script>
   </body>
 </html>

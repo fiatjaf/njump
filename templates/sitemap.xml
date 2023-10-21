@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{{if .npub}}
+<urlset xmlns="http://www.Sitemaps.Org/schemas/sitemap/0.9">
+{{if .Npub}}
 	<url>
-		<loc>https://{{s.CanonicalHost}}/{{.npub | escapeString}}</loc>
-		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
+		<loc>https://{{s.CanonicalHost}}/{{.Npub | escapeString}}</loc>
+		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
 	</url>
 {{end}}
-{{if .hostname}}
+{{if .Hostname}}
 	<url>
-		<loc>https://{{s.CanonicalHost}}/r/{{.hostname | escapeString}}</loc>
-		<lastmod>{{.modifiedAt | escapeString}}</lastmod>
+		<loc>https://{{s.CanonicalHost}}/r/{{.Hostname | escapeString}}</loc>
+		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
 	</url>
 {{end}}
-{{if .lastNotes}}
-{{range .lastNotes}}
+{{if .LastNotes}}
+{{range .LastNotes}}
 	<url>
 		<loc>https://{{s.CanonicalHost}}/{{.Nevent | escapeString}}</loc>
 		<lastmod>{{.ModifiedAt | escapeString}}</lastmod>
@@ -26,11 +26,11 @@
 	</url>
 {{end}}
 {{end}}
-{{if .data}}
-{{range $element := .data }}
+{{if .Data}}
+{{range $element := .Data }}
 	<url>
-		<loc>https://{{s.CanonicalHost}}/{{$.pathPrefix}}{{$element | trimProtocol | escapeString}}</loc>
-		<lastmod>{{$.modifiedAt | escapeString}}</lastmod>
+		<loc>https://{{s.CanonicalHost}}/{{$.PathPrefix}}{{$element | trimProtocol | escapeString}}</loc>
+		<lastmod>{{$.ModifiedAt | escapeString}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.5</priority>
 	</url>

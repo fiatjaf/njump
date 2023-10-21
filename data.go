@@ -22,6 +22,7 @@ type Event struct {
 }
 
 type Data struct {
+	templateId          TemplateID
 	typ                 string
 	event               *nostr.Event
 	relays              []string
@@ -73,6 +74,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	authorRelays := []string{}
 	var content string
 	var typ string
+	var templateId TemplateID
 
 	eventRelays := []string{}
 	for _, relay := range relays {
@@ -155,12 +157,10 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	default:
 		if event.Kind >= 30000 && event.Kind < 40000 {
-			typ = "address"
+			templateId = Other
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
 				naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
 			}
-		} else {
-			typ = "other"
 		}
 	}
 
@@ -213,6 +213,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	return &Data{
+		templateId:          templateId,
 		typ:                 typ,
 		event:               event,
 		relays:              eventRelays,

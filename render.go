@@ -93,7 +93,7 @@ func render(w http.ResponseWriter, r *http.Request) {
 			(data.event.Kind == 1 && len(data.event.Content) > 650) || // or very long notes
 			// or shorter notes that should be using text-to-image stuff but are not because they have video or images
 			(data.event.Kind == 1 && len(data.event.Content) > 133 && !useTextImage) {
-			data.typ = "telegram_instant_view"
+			data.templateId = TelegramInstantView
 			useTextImage = false
 		}
 	} else if style == "slack" || style == "discord" {
@@ -231,45 +231,53 @@ func render(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Link", "<"+oembed+"&format=xml>; rel=\"alternate\"; type=\"text/xml+oembed\"")
 	}
 
-	// template stuff
-	params := map[string]any{
-		"style":            style,
-		"createdAt":        data.createdAt,
-		"modifiedAt":       data.modifiedAt,
-		"clients":          generateClientList(code, data.event),
-		"type":             data.typ,
-		"title":            title,
-		"titleizedContent": titleizedContent,
-		"twitterTitle":     twitterTitle,
-		"npub":             data.npub,
-		"npubShort":        data.npubShort,
-		"nevent":           data.nevent,
-		"naddr":            data.naddr,
-		"metadata":         data.metadata,
-		"authorLong":       data.authorLong,
-		"subject":          subject,
-		"description":      description,
-		"summary":          summary,
-		"event":            data.event,
-		"eventJSON":        string(eventJSON),
-		"content":          data.content,
-		"textImageURL":     textImageURL,
-		"videoType":        data.videoType,
-		"image":            data.image,
-		"video":            data.video,
-		"proxy":            "https://" + host + "/njump/proxy?src=",
-		"kindDescription":  data.kindDescription,
-		"kindNIP":          data.kindNIP,
-		"lastNotes":        data.renderableLastNotes,
-		"seenOn":           data.relays,
-		"parentNevent":     data.parentNevent,
-		"authorRelays":     data.authorRelays,
-		"oembed":           oembed,
+	if currentTemplate, ok := templateMapping[data.typ]; ok {
+		// template stuff
+		params := map[string]any{
+			"style":            style,
+			"createdAt":        data.createdAt,
+			"modifiedAt":       data.modifiedAt,
+			"clients":          generateClientList(code, data.event),
+			"type":             data.typ,
+			"title":            title,
+			"titleizedContent": titleizedContent,
+			"twitterTitle":     twitterTitle,
+			"npub":             data.npub,
+			"npubShort":        data.npubShort,
+			"nevent":           data.nevent,
+			"naddr":            data.naddr,
+			"metadata":         data.metadata,
+			"authorLong":       data.authorLong,
+			"subject":          subject,
+			"description":      description,
+			"summary":          summary,
+			"event":            data.event,
+			"eventJSON":        string(eventJSON),
+			"content":          data.content,
+			"textImageURL":     textImageURL,
+			"videoType":        data.videoType,
+			"image":            data.image,
+			"video":            data.video,
+			"proxy":            "https://" + host + "/njump/proxy?src=",
+			"kindDescription":  data.kindDescription,
+			"kindNIP":          data.kindNIP,
+			"lastNotes":        data.renderableLastNotes,
+			"seenOn":           data.relays,
+			"parentNevent":     data.parentNevent,
+			"authorRelays":     data.authorRelays,
+			"oembed":           oembed,
+		}
+
+		if err := tmpls.ExecuteTemplate(w, currentTemplate, params); err != nil {
+			log.Error().Err(err).Msg("error rendering")
+			return
+		}
 	}
 
 	// migrating to templ
-	if data.typ == "telegram_instant_view" {
-		err := TelegramInstantViewTemplate.Render(w, &TelegramInstantViewPage{
+	switch data.templateId {
+	case TelegramInstantView:
+		err = TelegramInstantViewTemplate.Render(w, &TelegramInstantViewPage{
 			Video:       data.video,
 			VideoType:   data.videoType,
 			Image:       data.image,
@@ -281,22 +289,28 @@ func render(w http.ResponseWriter, r *http.Request) {
 			AuthorLong:  data.authorLong,
 			CreatedAt:   data.createdAt,
 		})
-		if err != nil {
-			log.Error().Err(err).Msg("error rendering tmpl")
-		}
-		return
+	case Other:
+		err = OtherTemplate.Render(w, &OtherPage{
+			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
+			DetailsPartial: DetailsPartial{
+				HideDetails:     false,
+				CreatedAt:       data.createdAt,
+				KindDescription: data.kindDescription,
+				KindNIP:         data.kindNIP,
+				EventJSON:       string(eventJSON),
+				Kind:            data.event.Kind,
+			},
+
+			IsParameterizedReplaceable: data.event.Kind >= 30000 && data.event.Kind < 40000,
+			Naddr:                      data.naddr,
+			Npub:                       data.npub,
+			Kind:                       data.event.Kind,
+			KindDescription:            data.kindDescription,
+		})
 	}
 
-	// if a mapping is not found fallback to raw
-	currentTemplate, ok := templateMapping[data.typ]
-	if !ok {
-		currentTemplate = "other.html"
+	if err != nil {
+		log.Error().Err(err).Msg("error rendering tmpl")
 	}
-
-	if err := tmpls.ExecuteTemplate(w, currentTemplate, params); err != nil {
-		log.Error().Err(err).Msg("error rendering")
-		return
-	}
-
 	return
 }
