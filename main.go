@@ -17,7 +17,7 @@ import (
 type Settings struct {
 	Port          string `envconfig:"PORT" default:"2999"`
 	DiskCachePath string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-cache"`
-	Domain string `envconfig:"DOMAIN" default:"njump.me"`
+	Domain        string `envconfig:"DOMAIN" default:"njump.me"`
 }
 
 //go:embed static/*
@@ -70,12 +70,10 @@ func main() {
 	// initialize templates
 	// use a mapping to expressly link the templates and share them between more kinds/types
 	templateMapping = map[string]string{
-		"homepage":        "homepage.html",
 		"profile":         "profile.html",
 		"profile_sitemap": "sitemap.xml",
 		"relay":           "relay.html",
 		"relay_sitemap":   "sitemap.xml",
-		"archive":         "archive.html",
 		"archive_sitemap": "sitemap.xml",
 	}
 
