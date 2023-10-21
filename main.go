@@ -16,6 +16,7 @@ import (
 
 type Settings struct {
 	Port          string `envconfig:"PORT" default:"2999"`
+	DiskCachePath string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-cache"`
 	CanonicalHost string `envconfig:"DOMAIN" default:"njump.me"`
 }
 

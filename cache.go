@@ -17,9 +17,9 @@ type Cache struct {
 }
 
 func (c *Cache) initialize() func() {
-	db, err := badger.Open(badger.DefaultOptions("/tmp/njump-cache"))
+	db, err := badger.Open(badger.DefaultOptions(s.DiskCachePath))
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to open badger at /tmp/njump-cache")
+		log.Fatal().Err(err).Str("path", s.DiskCachePath).Msg("failed to open badger")
 	}
 	c.DB = db
 
