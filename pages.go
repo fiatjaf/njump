@@ -121,6 +121,26 @@ func (*TelegramInstantViewPage) TemplateText() string {
 }
 
 var (
+	//go:embed templates/homepage.html
+	tmplHomePage     string
+	HomePageTemplate = tmpl.MustCompile(&HomePage{})
+)
+
+type HomePage struct {
+	HeadCommonPartial `tmpl:"head_common"`
+	TopPartial        `tmpl:"top"`
+	FooterPartial     `tmpl:"footer"`
+
+	Host      string
+	Npubs     []string
+	LastNotes []string
+}
+
+func (*HomePage) TemplateText() string {
+	return tmplHomePage
+}
+
+var (
 	//go:embed templates/archive.html
 	tmplArchive     string
 	ArchiveTemplate = tmpl.MustCompile(&ArchivePage{})

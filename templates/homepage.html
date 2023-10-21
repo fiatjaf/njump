@@ -26,16 +26,14 @@
             (yet) working.
           </p>
           <p>
-            <i>njump</i> currently lives under {{ s.Domain }}, you can
-            reach it appending a Nostr
+            <i>njump</i> currently lives under {{ .Host }}, you can reach it
+            appending a Nostr
             <a href="https://github.com/nostr-protocol/nips/blob/master/19.md"
               >NIP-19</a
             >
             entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>,
             etc) after the domain:
-            <span class="exampleUrl"
-              >{{ s.Domain }}/&lt;nip-19-entity&gt;</span
-            >.
+            <span class="exampleUrl">{{ .Host }}/&lt;nip-19-entity&gt;</span>.
           </p>
           <p>
             For example, here's
@@ -63,7 +61,7 @@
           <div class="try">
             <form action="/try" method="POST">
               <div class="tryForm">
-                <div>{{ s.Domain }}/</div>
+                <div>{{ .Host }}/</div>
                 <input
                   id="nip19entity"
                   name="nip19entity"
@@ -141,11 +139,10 @@
               >NIP-05</a
             >
             inspired permalink:
-            <span class="exampleUrl">{{ s.Domain }}/&lt;nip-5&gt;</span>,
-            for example:
-            <a href="/nvk.org">https://{{ s.Domain }}/nvk.org</a> or
+            <span class="exampleUrl">{{ .Host }}/&lt;nip-5&gt;</span>, for
+            example: <a href="/nvk.org">https://{{ .Host }}/nvk.org</a> or
             <a href="/mike@mikedilger.com"
-              >https://{{ s.Domain }}/mike@mikedilger.com</a
+              >https://{{ .Host }}/mike@mikedilger.com</a
             >.
           </p>
           <p>
@@ -167,12 +164,9 @@
           <h2>Relays view</h2>
           <p>
             You can have a view of the last content posted to a relay using
-            <span class="exampleUrl"
-              >{{ s.Domain }}/r/&lt;relay-host&gt;</span
-            >, for example:
-            <a href="/r/nostr.wine"
-              >https://{{ s.Domain }}/r/nostr.wine</a
-            >
+            <span class="exampleUrl">{{ .Host }}/r/&lt;relay-host&gt;</span>,
+            for example:
+            <a href="/r/nostr.wine">https://{{ .Host }}/r/nostr.wine</a>
           </p>
           <p>
             Some basic infos (<a
@@ -200,11 +194,11 @@
     <script>
       // JavaScript object with a list of 50 names
       const entitiesList = [
-          {{range $element := .npubs }}
-          "{{ $element | escapeString}}",
+          {{range $element := .Npubs }}
+          "{{ $element }}",
           {{end}}
-          {{range $element := .lastNotes }}
-          "{{ $element | escapeString}}",
+          {{range $element := .LastNotes }}
+          "{{ $element }}",
           {{end}}
       ];
 

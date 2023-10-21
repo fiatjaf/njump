@@ -10,7 +10,6 @@ import (
 )
 
 func renderHomepage(w http.ResponseWriter, r *http.Request) {
-	typ := "homepage"
 	w.Header().Set("Cache-Control", "max-age=3600")
 
 	npubsHex := cache.GetPaginatedkeys("pa", 1, 50)
@@ -36,13 +35,14 @@ func renderHomepage(w http.ResponseWriter, r *http.Request) {
 		lastNotes = append(lastNotes, nevent)
 	}
 
-	params := map[string]any{
-		"npubs":     npubs,
-		"lastNotes": lastNotes,
-	}
+	err := HomePageTemplate.Render(w, &HomePage{
+		HeadCommonPartial: HeadCommonPartial{IsProfile: false},
 
-	if err := tmpls.ExecuteTemplate(w, templateMapping[typ], params); err != nil {
-		log.Error().Err(err).Msg("error rendering")
-		return
+		Host:      s.Domain,
+		Npubs:     npubs,
+		LastNotes: lastNotes,
+	})
+	if err != nil {
+		log.Error().Err(err).Msg("error rendering tmpl")
 	}
 }
