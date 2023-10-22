@@ -1,6 +1,10 @@
 <header class="top">
   <a href="https://nostr.com" class="nostr_link">What is <span>Nostr</span>?</a>
-  <div class="theme-toggle">
+  <div
+    class="theme-toggle"
+    _="on click tell <html /> toggle between .theme--dark and .theme--default then get your @class then get it[0].split('--')[1].split(' ')[0] then set localStorage.theme to it
+       on load tell <html /> get localStorage.theme then if it is 'dark' add .theme--dark then remove .theme--default else if it is not 'default' then log it then get window.matchMedia('(prefers-color-scheme: dark)').matches then if it is true add .theme--dark then remove .theme--default end"
+  >
     <svg
       aria-hidden="true"
       data-prefix="fas"
@@ -30,55 +34,7 @@
   </div>
 </header>
 
-<script>
-  function toggleTheme() {
-    const htmlElement = document.documentElement
-    const isDarkMode = htmlElement.classList.contains('theme--dark')
-
-    // Toggle theme classes on the html element
-    htmlElement.classList.toggle('theme--dark', !isDarkMode)
-    htmlElement.classList.toggle('theme--default', isDarkMode)
-
-    // Save preference in a cookie that expires at the end of the session
-    const expiryDate = new Date()
-    document.cookie = `themePreference=${isDarkMode ? 'light' : 'dark'};`
-  }
-
-  // Check if the OS prefers dark mode
-  const prefersDarkMode =
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-
-  // Load preference from the cookie if it exists
-  const themePreference = document.cookie.replace(
-    /(?:(?:^|.*;\s*)themePreference\s*\=\s*([^;]*).*$)|^.*$/,
-    '$1'
-  )
-  const isDarkMode =
-    themePreference === 'dark' || (themePreference === '' && prefersDarkMode)
-
-  // Apply theme based on the preference
-  const htmlElement = document.documentElement
-  htmlElement.classList.toggle('theme--dark', isDarkMode)
-  htmlElement.classList.toggle('theme--default', !isDarkMode)
-
-  // Add click event listener to the theme toggle button
-  const themeToggleButton = document.querySelector('.theme-toggle')
-  themeToggleButton.addEventListener('click', toggleTheme)
-
-  // const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  // if (prefersDarkMode) {
-  //   document.documentElement.classList.add('theme--dark');
-  // }
-
-  window.addEventListener('beforeprint', function () {
-    const htmlElement = document.documentElement
-    htmlElement.classList.remove('theme--dark')
-    htmlElement.classList.add('theme--default')
-  })
-  window.addEventListener('afterprint', function () {
-    const htmlElement = document.documentElement
-    htmlElement.classList.toggle('theme--dark', isDarkMode)
-    htmlElement.classList.toggle('theme--default', !isDarkMode)
-  })
+<script type="text/hyperscript">
+  on beforeprint from window tell <html /> remove .theme--dark add .theme--default
+  on afterprint from window tell <html /> add .theme--dark remove .theme--default
 </script>
