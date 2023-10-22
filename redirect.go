@@ -11,7 +11,7 @@ import (
 )
 
 func redirectToFavicon(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/static/favicon/android-chrome-192x192.png", http.StatusFound)
+	http.Redirect(w, r, "/njump/static/favicon/android-chrome-192x192.png", http.StatusFound)
 }
 
 func redirectToRandom(w http.ResponseWriter, r *http.Request) {
