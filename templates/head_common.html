@@ -42,5 +42,7 @@
 <meta name="theme-color" content="#e42a6d" />
 <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 <script type="text/hyperscript">
-  on load repeat for div in .content if div's offsetHeight == 160 add .gradient to it
+  on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.includes('Chrome')] then if it[0] is true and it[1] is false add .safari to <body /> end
+
+  on load repeat for div in .content if div's offsetHeight == 160 add .gradient to it end end
 </script>

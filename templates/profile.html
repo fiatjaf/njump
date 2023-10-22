@@ -34,7 +34,10 @@
     <div class="container_wrapper">
       <div class="container">
         <header class="column columnA">
-          <div class="info-wrapper">
+          <div
+            class="info-wrapper"
+            _="on scroll from window get #profile_name then call it.getBoundingClientRect() then if result.top is less than result.height / -2 set me.style.display to 'block' otherwise set me.style.display to 'none' end"
+          >
             <div class="name">
               {{.Metadata.Name}} {{if not (eq .Metadata.Name
               .Metadata.DisplayName)}}
@@ -44,10 +47,6 @@
           </div>
           <div class="pic-wrapper">
             <img class="pic" src="{{.Metadata.Picture}}" />
-          </div>
-          <div class="last_update">
-            Last update:<br />
-            {{.CreatedAt}}
           </div>
         </header>
 
@@ -123,7 +122,5 @@
     </div>
 
     {{template "footer" .}}
-
-    <script src="/njump/static/scripts.js"></script>
   </body>
 </html>
