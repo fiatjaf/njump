@@ -36,7 +36,7 @@
         <header class="column columnA">
           <div
             class="info-wrapper"
-            _="on scroll from window get #profile_name then call it.getBoundingClientRect() then if result.top is less than result.height / -2 set me.style.display to 'block' otherwise set me.style.display to 'none' end"
+            _="on scroll from window get #profile_name then measure its top, height then if top is less than height / -2 set my *display to 'block' otherwise set my *display to 'none' end"
           >
             <div class="name">
               {{.Metadata.Name}} {{if not (eq .Metadata.Name
