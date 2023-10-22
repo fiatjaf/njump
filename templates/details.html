@@ -1,3 +1,16 @@
+<div
+  class="field advanced-switch-wrapper"
+  _="on load make a URLSearchParams from location.search then get it.get('details') then if it is 'yes' add @checked to #advanced-switch then add .visible to .advanced"
+>
+  <input
+    type="checkbox"
+    id="advanced-switch"
+    _="on change toggle .visible on .advanced"
+  />
+  <label for="advanced-switch">X</label>
+  <label for="advanced-switch">Show more details</label>
+</div>
+
 <div class="field {{if .HideDetails}}advanced{{end}}">
   <div class="label">Published at</div>
   {{.CreatedAt}}
@@ -19,5 +32,36 @@
 
 <div class="field {{if .HideDetails}}advanced{{end}} boxed">
   <div class="label">Event JSON</div>
-  <div class="json">{{.EventJSON}}</div>
+  <div class="json" _="on load call syntaxHighlight(me)">{{- .EventJSON}}</div>
 </div>
+
+<script>
+  function syntaxHighlight(elt) {
+    elt.innerHTML = elt.innerHTML
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(
+        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        function (match, p1) {
+          var cls = 'number'
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'key'
+            } else {
+              if (p1.length < 100) {
+                cls = 'string'
+              } else {
+                cls = 'string content'
+              }
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'boolean'
+          } else if (/null/.test(match)) {
+            cls = 'null'
+          }
+          return '<span class="' + cls + '">' + match + '</span>'
+        }
+      )
+  }
+</script>

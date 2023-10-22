@@ -66,9 +66,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		RelayTemplate.Render(w, &RelayPage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
 			ClientsPartial: ClientsPartial{
-				Clients: []ClientReference{
-					{Name: "Coracle", URL: "https://coracle.social/relays/" + hostname},
-				},
+				Clients: generateRelayBrowserClientList(hostname),
 			},
 
 			Info:       info,

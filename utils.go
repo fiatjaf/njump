@@ -116,6 +116,7 @@ var kindNIPs = map[int]string{
 }
 
 type ClientReference struct {
+	ID   string
 	Name string
 	URL  string
 }
@@ -123,41 +124,46 @@ type ClientReference struct {
 func generateClientList(code string, event *nostr.Event) []ClientReference {
 	if event.Kind == 1 || event.Kind == 6 {
 		return []ClientReference{
-			{Name: "native client", URL: "nostr:" + code},
-			{Name: "Snort", URL: "https://Snort.social/e/" + code},
-			{Name: "Coracle", URL: "https://coracle.social/" + code},
-			{Name: "Satellite", URL: "https://satellite.earth/thread/" + event.ID},
-			{Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
-			{Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
-			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
-			{Name: "Iris", URL: "https://iris.to/" + code},
-			{Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
+			{ID: "native", Name: "your native client", URL: "nostr:" + code},
+			{ID: "snort", Name: "Snort", URL: "https://Snort.social/e/" + code},
+			{ID: "satellite", Name: "Satellite", URL: "https://satellite.earth/thread/" + event.ID},
+			{ID: "coracle", Name: "Coracle", URL: "https://coracle.social/" + code},
+			{ID: "primal", Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
+			{ID: "nostter", Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
+			{ID: "highlighter", Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
+			{ID: "iris", Name: "Iris", URL: "https://iris.to/" + code},
+			{ID: "yosup", Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
 		}
 	} else if event.Kind == 0 {
 		return []ClientReference{
-			{Name: "Your native client", URL: "nostr:" + code},
-			{Name: "Nosta", URL: "https://nosta.me/" + code},
-			{Name: "Snort", URL: "https://snort.social/p/" + code},
-			{Name: "Coracle", URL: "https://coracle.social/" + code},
-			{Name: "Satellite", URL: "https://satellite.earth/@" + code},
-			{Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
-			{Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
-			{Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
-			{Name: "Iris", URL: "https://iris.to/" + code},
-			{Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
-			{Name: "Nosotros", URL: "https://nosotros.app/" + code},
+			{ID: "native", Name: "your native client", URL: "nostr:" + code},
+			{ID: "nosta", Name: "Nosta", URL: "https://nosta.me/" + code},
+			{ID: "snort", Name: "Snort", URL: "https://snort.social/p/" + code},
+			{ID: "satellite", Name: "Satellite", URL: "https://satellite.earth/@" + code},
+			{ID: "coracle", Name: "Coracle", URL: "https://coracle.social/" + code},
+			{ID: "primal", Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
+			{ID: "nostter", Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
+			{ID: "highlighter", Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
+			{ID: "iris", Name: "Iris", URL: "https://iris.to/" + code},
+			{ID: "yosup", Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
+			{ID: "nosotros", Name: "Nosotros", URL: "https://nosotros.app/" + code},
 		}
 	} else if event.Kind == 30023 || event.Kind == 30024 {
 		return []ClientReference{
-			{Name: "Your native client", URL: "nostr:" + code},
-			{Name: "YakiHonne", URL: "https://yakihonne.com/article/" + code},
-			{Name: "Habla", URL: "https://habla.news/a/" + code},
-			{Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
-			{Name: "Blogstack", URL: "https://blogstack.io/" + code},
+			{ID: "native", Name: "your native client", URL: "nostr:" + code},
+			{ID: "yakihonne", Name: "YakiHonne", URL: "https://yakihonne.com/article/" + code},
+			{ID: "habla", Name: "Habla", URL: "https://habla.news/a/" + code},
+			{ID: "highlighter", Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
+			{ID: "blogstack", Name: "Blogstack", URL: "https://blogstack.io/" + code},
 		}
 	}
-
 	return nil
+}
+
+func generateRelayBrowserClientList(host string) []ClientReference {
+	return []ClientReference{
+		{ID: "coracle", Name: "Coracle", URL: "https://coracle.social/relays/" + host},
+	}
 }
 
 func getPreviewStyle(r *http.Request) string {

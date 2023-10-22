@@ -1,5 +1,8 @@
-<aside class="column column_clients">
-  <div class="title open-list">
+<aside
+  class="column column_clients"
+  _="on click toggle .up on .column_clients then toggle .lock on <body />"
+>
+  <div class="title">
     <span class="text">Open in</span>
     <span class="open">
       <svg
@@ -32,13 +35,27 @@
       </svg>
     </span>
   </div>
-  <div class="clients_wrapper">
+  <div
+    class="clients_wrapper"
+    _="on load wait 1s then get my children get sortByCount(it) then repeat for c in it call me.appendChild(c)"
+  >
     {{range .Clients}}
-    <div class="btn">
-      <a class="client" data-client="{{.Name}}" href="{{.URL}}"
-        ><span>Open in</span> {{.Name}}</a
-      >
+    <div
+      class="btn"
+      _="on load get localStorage['nj:{{.ID}}'] or 0 then set @count to it then set @title to `used ${it} times`
+         on click increment localStorage['nj:{{.ID}}']"
+    >
+      <a href="{{.URL}}"><span>Open in</span> {{.Name}}</a>
     </div>
     {{end}}
   </div>
 </aside>
+
+<script>
+  function sortByCount(children) {
+    return Array.from(children).sort(
+      (a, b) =>
+        parseInt(b.getAttribute('count')) - parseInt(a.getAttribute('count'))
+    )
+  }
+</script>
