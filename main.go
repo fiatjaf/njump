@@ -73,12 +73,12 @@ func main() {
 	mux.HandleFunc("/npubs-archive/", renderArchive)
 	mux.HandleFunc("/njump/image/", renderImage)
 	mux.HandleFunc("/njump/proxy/", proxy)
-	mux.HandleFunc("/favicon.ico", renderFavicon)
 	mux.HandleFunc("/robots.txt", renderRobots)
 	mux.HandleFunc("/r/", renderRelayPage)
 	mux.HandleFunc("/random", redirectToRandom)
 	mux.HandleFunc("/e/", redirectFromESlash)
 	mux.HandleFunc("/p/", redirectFromPSlash)
+	mux.HandleFunc("/favicon.ico", redirectToFavicon)
 	mux.HandleFunc("/", renderEvent)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)

@@ -10,6 +10,10 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
+func redirectToFavicon(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/static/favicon/android-chrome-192x192.png", http.StatusFound)
+}
+
 func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 	// 50% of chance of picking a pubkey
 	if ra := rand.Intn(2); ra == 0 {
