@@ -12,16 +12,6 @@ function isElementInViewport(element) {
   )
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  var contentDivs = document.getElementsByClassName('content')
-  for (var i = 0; i < contentDivs.length; i++) {
-    var contentDiv = contentDivs[i]
-    if (contentDiv.offsetHeight == 160) {
-      contentDiv.classList.add('gradient')
-    }
-  }
-})
-
 const desktop_name = document.querySelector('.column_content .name')
 if (desktop_name) {
   window.addEventListener('scroll', function () {

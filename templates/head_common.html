@@ -41,3 +41,6 @@
 <link rel="manifest" href="/njump/static/favicon/site.webmanifest" />
 <meta name="theme-color" content="#e42a6d" />
 <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+<script type="text/hyperscript">
+  on load repeat for div in .content if div's offsetHeight == 160 add .gradient to it
+</script>
