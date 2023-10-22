@@ -66,14 +66,8 @@ func getRelay() string {
 
 func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) {
 	if b, ok := cache.Get(code); ok {
-		// at this point `b` may be a StoredEvent json or an old naked Event json
-		// TODO: after a week we can assume everything will be StoredEvent, so we can simplify this
 		v := CachedEvent{}
 		err := json.Unmarshal(b, &v)
-		if v.Event == nil {
-			v.Event = &nostr.Event{}
-			err = json.Unmarshal(b, v.Event)
-		}
 		return v.Event, v.Relays, err
 	}
 
