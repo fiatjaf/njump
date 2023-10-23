@@ -25,10 +25,12 @@
   {{ end }}
 </div>
 
+{{ if not (eq "" .Nevent) }}
 <div class="field {{if .HideDetails}}advanced{{end}}">
   <div class="label">Address Code</div>
   <div>{{.Nevent}}</div>
 </div>
+{{ end }}
 
 <div class="field {{if .HideDetails}}advanced{{end}} boxed">
   <div class="label">Event JSON</div>
