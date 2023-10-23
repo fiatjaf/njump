@@ -11,31 +11,41 @@
   <body class="homepage">
     {{template "top" .}}
 
-    <div class="container_wrapper">
-      <div class="container">
+    <div
+      class="block sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0"
+    >
+      <div
+        class="flex w-full sm:w-8/12 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
+      >
         <div>
-          <h2>What is njump?</h2>
+          <h2 class="text-2xl">What is njump?</h2>
 
-          <p>
+          <p class="leading-5 my-3">
             <i>njump</i> is a HTTP
-            <a href="https://github.com/nostr-protocol/nostr">Nostr</a> gateway
-            that allows you to browse profiles, notes and relays; it is an easy
-            way to preview a resource and then open it with your preferred
-            client. The typical use of <i>njump</i> is to share a resource
-            outside the Nostr world, where the <code>nostr:</code> schema is not
-            (yet) working.
+            <a class="underline" href="https://github.com/nostr-protocol/nostr"
+              >Nostr</a
+            >
+            gateway that allows you to browse profiles, notes and relays; it is
+            an easy way to preview a resource and then open it with your
+            preferred client. The typical use of <i>njump</i> is to share a
+            resource outside the Nostr world, where the
+            <code>nostr:</code> schema is not (yet) working.
           </p>
-          <p>
+          <p class="leading-5 my-3">
             <i>njump</i> currently lives under {{ .Host }}, you can reach it
             appending a Nostr
-            <a href="https://github.com/nostr-protocol/nips/blob/master/19.md"
+            <a
+              class="underline"
+              href="https://github.com/nostr-protocol/nips/blob/master/19.md"
               >NIP-19</a
             >
             entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>,
             etc) after the domain:
-            <span class="exampleUrl">{{ .Host }}/&lt;nip-19-entity&gt;</span>.
+            <span class="rounded px-1 bg-lavender dark:bg-garnet"
+              >{{ .Host }}/&lt;nip-19-entity&gt;</span
+            >.
           </p>
-          <p>
+          <p class="leading-5 my-3">
             For example, here's
             <a
               href="/npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6"
@@ -56,32 +66,44 @@
             >.
           </p>
 
-          <h2>Try it now, jump to some Nostr content</h2>
+          <h2 class="text-xl">Try it now, jump to some Nostr content</h2>
 
-          <div class="try">
-            <form action="/try" method="POST">
-              <div class="tryForm">
-                <div>{{ .Host }}/</div>
+          <div
+            class="my-3 mb-8 p-4 pb-3 sm:p-6 sm:pb-4 rounded-lg bg-zinc-100 dark:bg-neutral-800"
+          >
+            <form
+              _="on submit halt the event's default then go to url `/${event.target.code.value}`"
+            >
+              <div
+                class="flex items-center flex-wrap sm:flex-nowrap justify-center sm:justify-normal"
+              >
+                <div class="text-xl mb-1.5 sm:mb-0">{{ .Host }}/</div>
                 <input
-                  id="nip19entity"
-                  name="nip19entity"
-                  type="text"
+                  name="code"
                   placeholder="paste a npub / nprofile / nevent / ..."
                   autofocus
+                  class="basis-full sm:basis-11/12 w-full text-base p-2 ml-0 sm:ml-1 border-0 rounded-lg sm:rounded-s-lg focus:outline-0 bg-white text-gray-700 dark:bg-zinc-900 dark:text-neutral-50 placeholder:text-gray-300 dark:placeholder:text-gray-400"
                 />
-                <button>VIEW</button>
+                <button
+                  class="uppercase basis-full sm:basis-2/12 w-full text-base p-2 rounded-lg sm:rounded-s-lg text-white ml-0 sm:-ml-4 border-0 bg-strongpink"
+                >
+                  View
+                </button>
               </div>
             </form>
-            <div>or pick <a href="/random">some random content</a></div>
+            <div class="mt-3 sm:mt-1 text-sm text-center sm:text-left">
+              or pick
+              <a class="underline" href="/random">some random content</a>
+            </div>
           </div>
 
-          <p>
+          <p class="leading-5 my-3">
             There are several reasons to choose <i>njump</i> when sharing Nostr
             content outside of Nostr:
           </p>
 
-          <h2>Clean, fast and solid</h2>
-          <p>
+          <h2 class="text-2xl">Clean, fast and solid</h2>
+          <p class="leading-5 my-3">
             Pages by <i>njump</i> are extremely lightweight and fast to load
             because there isn't any client side javascript involved; they are
             minimalistic with the right attention to typography, focusing the
@@ -91,13 +113,13 @@
             onboard new users!
           </p>
 
-          <h2>Good preview</h2>
-          <p>
+          <h2 class="text-2xl">Good preview</h2>
+          <p class="leading-5 my-3">
             <i>njump</i> renders everything on the server-side, so it is able to
             generate useful rich previews that work on Telegram, Discord,
             Twitter and other places.
           </p>
-          <p>
+          <p class="leading-5 my-3">
             When opening the URL directly in a browser, visitors will find
             referenced content like images, video and links to referenced Nostr
             events displayed in a simple but effective way. It shows the note
@@ -105,23 +127,25 @@
             for printing or exporting to PDF.
           </p>
 
-          <h2>Cooperative (jump-out)</h2>
-          <p>
+          <h2 class="text-2xl">Cooperative (jump-out)</h2>
+          <p class="leading-5 my-3">
             <i>njump</i> is not interested capturing users at all, on the
             contrary it invites them to "jump" to the Nostr resource by picking
             from a list of web clients or with a <code>nostr:</code> for native
             clients. It even remembers the most used one for each visitor and
             puts it on the top for fast clicking or tap.
           </p>
-          <p>
-            <a href="https://github.com/nostr-protocol/nips/blob/master/89.md"
+          <p class="leading-5 my-3">
+            <a
+              class="underline"
+              href="https://github.com/nostr-protocol/nips/blob/master/89.md"
               >NIP-89</a
             >
             support coming!
           </p>
 
-          <h2>Search friendly (jump-in)</h2>
-          <p>
+          <h2 class="text-2xl">Search friendly (jump-in)</h2>
+          <p class="leading-5 my-3">
             This is crucial: <i>njump</i> pages are static so search engines can
             index them, this means that <i>njump</i> can help others to discover
             great content on Nostr, jump in and join us! <i>njump</i> is the
@@ -130,26 +154,31 @@
             you also help Nostr flourish.
           </p>
 
-          <h2>Share NIP-05 profiles</h2>
-          <p>
+          <h2 class="text-2xl">Share NIP-05 profiles</h2>
+          <p class="leading-5 my-3">
             Now you can share your own profile with a pretty
-            <a href="https://github.com/nostr-protocol/nips/blob/master/05.md"
+            <a
+              class="underline"
+              href="https://github.com/nostr-protocol/nips/blob/master/05.md"
               >NIP-05</a
             >
             inspired permalink:
-            <span class="exampleUrl">{{ .Host }}/&lt;nip-5&gt;</span>, for
-            example: <a href="/nvk.org">https://{{ .Host }}/nvk.org</a> or
-            <a href="/mike@mikedilger.com"
+            <span class="rounded px-1 bg-lavender dark:bg-garnet"
+              >{{ .Host }}/&lt;nip-5&gt;</span
+            >, for example:
+            <a class="underline" href="/nvk.org">https://{{ .Host }}/nvk.org</a>
+            or
+            <a class="underline" href="/mike@mikedilger.com"
               >https://{{ .Host }}/mike@mikedilger.com</a
             >.
           </p>
-          <p>
+          <p class="leading-5 my-3">
             A profile shows the basic metadata infos, the used "outbox" relays
             and the last notes.
           </p>
 
-          <h2>Share on Twitter and Telegram</h2>
-          <p>
+          <h2 class="text-2xl">Share on Twitter and Telegram</h2>
+          <p class="leading-5 my-3">
             Now you can quickly and effortlessly share Nostr notes on Twitter
             and Telegram, and maybe on many other "social platforms": just drop
             a link, and njump will render the note text using the preview image
@@ -157,16 +186,18 @@
             On Telegram we have also the Instant View to access long content
             in-app!
           </p>
-          <p></p>
 
-          <h2>Relays view</h2>
-          <p>
+          <h2 class="text-2xl">Relays view</h2>
+          <p class="leading-5 my-3">
             You can have a view of the last content posted to a relay using
-            <span class="exampleUrl">{{ .Host }}/r/&lt;relay-host&gt;</span>,
-            for example:
-            <a href="/r/nostr.wine">https://{{ .Host }}/r/nostr.wine</a>
+            <span class="rounded px-1 bg-lavender dark:bg-garnet"
+              >{{ .Host }}/r/&lt;relay-host&gt;</span
+            >, for example:
+            <a class="underline" href="/r/nostr.wine"
+              >https://{{ .Host }}/r/nostr.wine</a
+            >
           </p>
-          <p>
+          <p class="leading-5 my-3">
             Some basic infos (<a
               href="https://github.com/nostr-protocol/nips/blob/master/11.md"
               >NIP-11</a
@@ -175,13 +206,13 @@
             to join a relay.
           </p>
 
-          <h2>Inspector tool</h2>
-          <p>
+          <h2 class="text-2xl">Inspector tool</h2>
+          <p class="leading-5 my-3">
             You know, we are all programmers, including our moms, so for every
             <i>njump</i> page you can toggle the "Show more details" switch and
             inspect the full event JSON. Without installing other tools (like
-            <a href="https://github.com/fiatjaf/nak">nak</a>) this is probably
-            the fastest way to access that.
+            <a class="underline" href="https://github.com/fiatjaf/nak">nak</a>)
+            this is probably the fastest way to access that.
           </p>
         </div>
       </div>
