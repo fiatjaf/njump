@@ -70,7 +70,7 @@ type Data struct {
 	naddr               string
 	createdAt           string
 	modifiedAt          string
-	parentNevent        string
+	parentLink          template.HTML
 	metadata            nostr.ProfileMetadata
 	authorRelays        []string
 	authorLong          string
@@ -108,7 +108,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	author := event
 	var renderableLastNotes []EnhancedEvent
-	parentNevent := ""
+	var parentLink template.HTML
 	authorRelays := []string{}
 	var content string
 	var templateId TemplateID
@@ -176,7 +176,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	case 1, 7, 30023, 30024:
 		templateId = Note
 		content = event.Content
-		parentNevent = getParentNevent(event)
+		if parentNevent := getParentNevent(event); parentNevent != "" {
+			parentLink = template.HTML(replaceNostrURLsWithTags(nostrNoteNeventMatcher, "nostr:"+parentNevent))
+		}
 	case 6:
 		templateId = Note
 		if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
@@ -251,7 +253,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		authorRelays:        authorRelays,
 		createdAt:           createdAt,
 		modifiedAt:          modifiedAt,
-		parentNevent:        parentNevent,
+		parentLink:          parentLink,
 		metadata:            metadata,
 		authorLong:          authorLong,
 		authorShort:         authorShort,
