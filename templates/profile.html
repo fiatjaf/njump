@@ -49,8 +49,10 @@
               {{end}}
             </div>
           </div>
-          <div class="pic-wrapper">
-            <img class="pic" src="{{.Metadata.Picture}}" />
+          <div
+            class="max-w-full imgclip overflow-hidden basis-2/5 sm:basis-auto"
+          >
+            <img class="block w-full h-auto" src="{{.Metadata.Picture}}" />
           </div>
         </header>
 

@@ -59,6 +59,13 @@
     }
   }
 </script>
+<style type="text/tailwindcss">
+  @layer utilities {
+    .imgclip {
+      clip-path: url(#svg-shape);
+    }
+  }
+</style>
 
 <script type="text/hyperscript">
   on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.includes('Chrome')] then if it[0] is true and it[1] is false add .safari to <body /> end

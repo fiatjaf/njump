@@ -245,22 +245,6 @@ iframe {
   }
 }
 
-.pic-wrapper {
-  max-width: 100%;
-  overflow: hidden;
-  -webkit-clip-path: url(#svg-shape);
-  clip-path: url(#svg-shape);
-  @media (max-width: 580px) {
-    flex-basis: 40%;
-  }
-  img.pic {
-    display: block;
-    max-width: 100%;
-    width: 100%;
-    height: auto;
-  }
-}
-
 .columnA {
   position: -webkit-sticky;
   position: sticky;
@@ -878,16 +862,6 @@ body.other {
             display: block-inline;
             font-size: 0.9rem;
           }
-        }
-      }
-      .pic-wrapper {
-        flex-basis: 16%;
-        margin-right: 1rem;
-        @media (max-width: 580px) {
-          margin-right: 0.5rem;
-        }
-        @media print {
-          flex-basis: 10%;
         }
       }
     }

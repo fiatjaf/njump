@@ -64,8 +64,10 @@
         <div class="column column_content">
           <header class="profile_intro">
             <a href="/{{.Npub}}">
-              <div class="pic-wrapper">
-                <img class="pic" src="{{.Metadata.Picture}}" />
+              <div
+                class="mr-2 sm:mr-4 basis-2/5 sm:basis-1/6 print:basis-1-12 max-w-full imgclip overflow-hidden"
+              >
+                <img class="block w-full h-auto" src="{{.Metadata.Picture}}" />
               </div>
               <div class="info-wrapper">
                 <div class="name">
