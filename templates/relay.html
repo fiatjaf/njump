@@ -77,14 +77,14 @@
 
           {{ if not (eq "" .Info.PubKey) }}
           <div class="leading-5 mb-6">
-            <div class="label">Public Key</div>
+            <div class="text-sm text-strongpink">Public Key</div>
             {{.Info.PubKey}}
           </div>
           {{ end }}
           <!---->
           {{ if not (eq "" .Info.Contact) }}
           <div class="leading-5 mb-6">
-            <div class="label">Contact</div>
+            <div class="text-sm text-strongpink">Contact</div>
             <a href="{{.Info.Contact}}">{{.Info.Contact}}</a>
           </div>
           {{ end }}
@@ -101,7 +101,7 @@
               href="/{{$ee.Nevent}}"
             >
               <div
-                class="flex flex-row flex-wrap -ml-2.5 mb-1.5 pl-2.5 pb-1 border-solid border-b-4 border-b-gray-100 dark:border-b-neutral-800"
+                class="flex flex-row -ml-2.5 mb-1.5 pl-2.5 pb-1 border-solid border-b-4 border-b-gray-100 dark:border-b-neutral-800"
               >
                 <div class="text-sm text-strongpink">{{$ee.CreatedAtStr}}</div>
                 <br />
@@ -113,7 +113,7 @@
                 <div class="text-xs ml-auto text-zinc-700 dark:text-neutral-50">
                   by
                   <span
-                    class="px-1 bg-lavender dark:bg-garnet hover:bg-strongpink dark:hover:bg-strongpink hover:text-white"
+                    class="px-1 rounded bg-lavender dark:bg-garnet hover:bg-strongpink dark:hover:bg-strongpink hover:text-white"
                     href="/{{$ee.Npub}}"
                     >{{$ee.NpubShort}}</span
                   >

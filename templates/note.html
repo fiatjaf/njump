@@ -116,13 +116,13 @@
           ></div>
 
           <div class="leading-5 mb-6">
-            <div class="label">Author Public key</div>
+            <div class="text-sm text-strongpink">Author Public key</div>
             {{.Npub}}
           </div>
 
           {{ if not (eq 0 (len .SeenOn)) }}
           <div class="leading-5 mb-6">
-            <div class="label">Seen on</div>
+            <div class="text-sm text-strongpink">Seen on</div>
             {{ range .SeenOn }}<a href="/r/{{.}}">{{.}}</a>
             {{ end }}
           </div>

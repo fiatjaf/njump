@@ -245,12 +245,6 @@ body {
       border: 1px solid $color-accent1;
     }
   }
-  .label {
-    font-size: 0.8rem;
-    @include themed() {
-      color: t($accent1);
-    }
-  }
   blockquote {
     @include themed() {
       border-left: 0.5rem solid t($over-bg);

@@ -86,21 +86,21 @@
             class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/3"
           ></div>
           <div class="leading-5 mb-6">
-            <div class="label">Public key</div>
+            <div class="text-sm text-strongpink">Public key</div>
             {{.Npub}}
           </div>
           <div class="leading-5 mb-6">
-            <div class="label">NIP-05</div>
+            <div class="text-sm text-strongpink">NIP-05</div>
             {{.Metadata.NIP05}}
           </div>
           <div class="leading-5 mb-6">
-            <div class="label">LN Address</div>
+            <div class="text-sm text-strongpink">LN Address</div>
             {{.Metadata.LUD16}}
           </div>
 
           {{ if not (eq 0 (len .AuthorRelays)) }}
           <div class="leading-5 mb-6">
-            <div class="label">Posting on these relays</div>
+            <div class="text-sm text-strongpink">Posting on these relays</div>
             {{range $index, $element := .AuthorRelays}}
             <a href="/r/{{$element}}" class="button">{{$element}}</a>
             {{end}}

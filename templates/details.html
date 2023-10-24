@@ -35,12 +35,12 @@
 
 <div id="hidden-fields" class="{{if .HideDetails}}hidden{{end}}">
   <div class="leading-5 mb-6">
-    <div class="label">Published at</div>
+    <div class="text-sm text-strongpink">Published at</div>
     {{.CreatedAt}}
   </div>
 
   <div class="leading-5 mb-6">
-    <div class="label">Kind type</div>
+    <div class="text-sm text-strongpink">Kind type</div>
     {{.Kind}} {{ if not (eq .KindNIP "")}} -
     <a href="https://github.com/nostr-protocol/nips/blob/master/{{.KindNIP}}.md"
       >{{.KindDescription}}</a
@@ -50,7 +50,7 @@
 
   {{ if not (eq "" .Nevent) }}
   <div class="leading-5 mb-6">
-    <div class="label">Address Code</div>
+    <div class="text-sm text-strongpink">Address Code</div>
     <div>{{.Nevent}}</div>
   </div>
   {{ end }}
