@@ -47,7 +47,7 @@
         </div>
 
         <div class="column column_content">
-          <header class="field hidden sm:flex sm:items-center">
+          <header class="leading-5 mb-6 hidden sm:flex sm:items-center">
             <h1>
               <div id="relay_name" class="text-2xl">{{.Info.Name}}</div>
             </h1>
@@ -56,21 +56,34 @@
           <div
             class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/2"
           ></div>
-          <div class="field">wss://{{.Hostname}}</div>
-          <div class="field about">{{.Info.Description}}</div>
+          <div class="leading-5 mb-6">
+            <a
+              class="border-b-2 pb-0.5 border-b-gray-300 hover:text-strongpink"
+              href="https://{{.Hostname}}"
+              target="_blank"
+              _="on mouseenter set my innerText to my.innerText.replace('wss://', 'https://')
+                 on mouseleave set my innerText to my.innerText.replace('https://', 'wss://')"
+              >wss://{{.Hostname}}</a
+            >
+          </div>
+          <div
+            class="leading-5 mb-6 prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light"
+          >
+            {{.Info.Description}}
+          </div>
           <div
             class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/2"
           ></div>
 
           {{ if not (eq "" .Info.PubKey) }}
-          <div class="field">
+          <div class="leading-5 mb-6">
             <div class="label">Public Key</div>
             {{.Info.PubKey}}
           </div>
           {{ end }}
           <!---->
           {{ if not (eq "" .Info.Contact) }}
-          <div class="field">
+          <div class="leading-5 mb-6">
             <div class="label">Contact</div>
             <a href="{{.Info.Contact}}">{{.Info.Contact}}</a>
           </div>
@@ -80,7 +93,7 @@
             class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/3"
           ></div>
 
-          <div class="field">
+          <div class="leading-5 mb-6">
             <h2 class="text-strongpink text-2xl">Last Notes</h2>
             {{range $i, $ee := .LastNotes}}
             <a

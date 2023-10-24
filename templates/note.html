@@ -98,7 +98,7 @@
           ></div>
 
           <article
-            class="field | prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light;"
+            class="leading-5 mb-6 prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light"
           >
             {{ if (not (eq "" .Subject))}}
             <h1 class="text-2xl">{{.Subject}}</h1>
@@ -115,13 +115,13 @@
             class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/3"
           ></div>
 
-          <div class="field">
+          <div class="leading-5 mb-6">
             <div class="label">Author Public key</div>
             {{.Npub}}
           </div>
 
           {{ if not (eq 0 (len .SeenOn)) }}
-          <div class="field">
+          <div class="leading-5 mb-6">
             <div class="label">Seen on</div>
             {{ range .SeenOn }}<a href="/r/{{.}}">{{.}}</a>
             {{ end }}

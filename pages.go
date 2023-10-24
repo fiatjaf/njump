@@ -156,8 +156,8 @@ type ArchivePage struct {
 	Data          []string
 	ModifiedAt    string
 	PaginationUrl string
-	NextPage      string
-	PrevPage      string
+	NextPage      int
+	PrevPage      int
 }
 
 func (*ArchivePage) TemplateText() string {

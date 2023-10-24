@@ -1,42 +1,50 @@
 {{ if .HideDetails }}
 <div
-  class="field advanced-switch-wrapper"
-  _="on load make a URLSearchParams from location.search then get it.get('details') then if it is 'yes' add @checked to #advanced-switch then add .visible to .advanced"
+  class="leading-5 mb-6 advanced-switch-wrapper"
+  _="on load make a URLSearchParams from location.search then get it.get('details') then if it is 'yes' add @checked to #advanced-switch then remove .hidden from #hidden-fields"
 >
   <input
     type="checkbox"
     id="advanced-switch"
-    _="on change toggle .visible on .advanced"
+    _="on change toggle .hidden on #hidden-fields"
   />
   <label for="advanced-switch">X</label>
   <label for="advanced-switch">Show more details</label>
 </div>
 {{ end }}
 
-<div class="field {{if .HideDetails}}advanced{{end}}">
-  <div class="label">Published at</div>
-  {{.CreatedAt}}
-</div>
+<div id="hidden-fields" class="{{if .HideDetails}}hidden{{end}}">
+  <div class="leading-5 mb-6">
+    <div class="label">Published at</div>
+    {{.CreatedAt}}
+  </div>
 
-<div class="field {{if .HideDetails}}advanced{{end}}">
-  <div class="label">Kind type</div>
-  {{.Kind}} {{ if not (eq .KindNIP "")}} -
-  <a href="https://github.com/nostr-protocol/nips/blob/master/{{.KindNIP}}.md"
-    >{{.KindDescription}}</a
-  >
+  <div class="leading-5 mb-6">
+    <div class="label">Kind type</div>
+    {{.Kind}} {{ if not (eq .KindNIP "")}} -
+    <a href="https://github.com/nostr-protocol/nips/blob/master/{{.KindNIP}}.md"
+      >{{.KindDescription}}</a
+    >
+    {{ end }}
+  </div>
+
+  {{ if not (eq "" .Nevent) }}
+  <div class="leading-5 mb-6">
+    <div class="label">Address Code</div>
+    <div>{{.Nevent}}</div>
+  </div>
   {{ end }}
-</div>
 
-{{ if not (eq "" .Nevent) }}
-<div class="field {{if .HideDetails}}advanced{{end}}">
-  <div class="label">Address Code</div>
-  <div>{{.Nevent}}</div>
-</div>
-{{ end }}
-
-<div class="field {{if .HideDetails}}advanced{{end}} boxed">
-  <div class="label">Event JSON</div>
-  <div class="json" _="on load call syntaxHighlight(me)">{{- .EventJSON}}</div>
+  <div class="leading-5 mb-6 px-4 pb-4 -mx-4 bg-gray-100 dark:bg-gray-700">
+    <div
+      class="px-4 py-1 -mx-4 text-gray-100 dark:text-gray-400 bg-gray-300 dark:bg-gray-800"
+    >
+      Event JSON
+    </div>
+    <div class="json" _="on load call syntaxHighlight(me)">
+      {{- .EventJSON}}
+    </div>
+  </div>
 </div>
 
 <script>

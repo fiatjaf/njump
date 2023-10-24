@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -93,8 +92,8 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 			Data:          data,
 			ModifiedAt:    modifiedAt,
 			PaginationUrl: area,
-			NextPage:      fmt.Sprint(nextPage),
-			PrevPage:      fmt.Sprint(prevPage),
+			NextPage:      nextPage,
+			PrevPage:      prevPage,
 		})
 	} else {
 		w.Header().Add("content-type", "text/xml")

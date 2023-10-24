@@ -241,243 +241,201 @@ body {
   flex-shrink: 0;
   word-wrap: break-word;
 
-  .field {
-    a.nostr {
+  a.nostr {
+    @include themed() {
+      background-color: t($hrefbg);
+    }
+    border-bottom: none;
+  }
+  a.button {
+    display: inline-block;
+    max-width: 100%;
+    padding: 2px 8px;
+    margin-top: 0.6em;
+    margin-right: 0.2em;
+    border-bottom: 0;
+    border: 1px solid $color-base4;
+    border-radius: 8px;
+    &:hover {
+      color: $color-base1;
+      background-color: $color-accent1;
+      border: 1px solid $color-accent1;
+    }
+  }
+  .label {
+    font-size: 0.8rem;
+    @include themed() {
+      color: t($accent1);
+    }
+  }
+  blockquote {
+    @include themed() {
+      border-left: 0.5rem solid t($over-bg);
+    }
+    padding: 0.5rem 0 0.5rem 1rem;
+    margin: 2rem 0;
+    font-style: italic;
+    &.mention {
+      border-left: 0.5rem solid $color-accent1;
+      padding: 0rem 0 0.5rem 1rem;
+      div {
+        @include themed() {
+          padding: 0.5rem 0.5rem 0.5rem 1rem;
+          margin: 0 0 1rem -1rem;
+          background-color: t($over-bg);
+        }
+      }
+    }
+    p {
+      margin: 0 0 0.5rem 0;
+    }
+  }
+  cite {
+    font-size: 0.8em;
+  }
+  strong {
+    font-weight: 400;
+  }
+  ol,
+  ul {
+    margin: 0;
+    padding: 0 0 0 1rem;
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+  sup {
+    font-size: 0.6rem;
+    vertical-align: baseline;
+    position: relative;
+    top: -0.8em;
+    margin: 0 0.3rem 0 0.1rem;
+  }
+  hr {
+    display: none;
+  }
+  .footnotes {
+    padding-top: 1rem;
+    margin-top: 2rem;
+    @include themed() {
+      border-top: 6px solid t($over-bg);
+    }
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+  }
+  &.advanced-switch-wrapper {
+    display: flex;
+    align-items: center;
+    input[type='checkbox'] {
+      height: 0;
+      width: 0;
+      visibility: hidden;
+      display: none;
+    }
+    @media print {
+      display: none;
+    }
+    label:first-of-type {
+      cursor: pointer;
+      text-indent: -9999px;
+      width: 2.6rem;
+      height: 1.2rem;
       @include themed() {
-        background-color: t($hrefbg);
+        background: t($over-bg);
       }
-      border-bottom: none;
-    }
-    a.button {
       display: inline-block;
-      max-width: 100%;
-      padding: 2px 8px;
-      margin-top: 0.6em;
-      margin-right: 0.2em;
-      border-bottom: 0;
-      border: 1px solid $color-base4;
-      border-radius: 8px;
-      &:hover {
-        color: $color-base1;
-        background-color: $color-accent1;
-        border: 1px solid $color-accent1;
+      border-radius: 100px;
+      position: relative;
+      margin-right: 0.5rem;
+      @media (max-width: 580px) {
+        width: 3rem;
+        height: 1.4rem;
       }
     }
-    .label {
+
+    label:first-of-type:after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 1rem;
+      height: 1rem;
+      @include themed() {
+        background: t($base7);
+      }
+      border-radius: 1rem;
+      transition: 0.2s;
+      @media (max-width: 580px) {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+    }
+
+    input:checked + label {
+      @include themed() {
+        background: t($accent1);
+      }
+    }
+
+    input:checked + label:first-of-type:after {
+      left: calc(100% - 2px);
+      transform: translateX(-100%);
+      @include themed() {
+        background: t($base1);
+      }
+    }
+
+    label:first-of-type:active:after {
+      width: 2rem;
+    }
+    label:last-of-type {
+      cursor: pointer;
       font-size: 0.8rem;
+      @include themed() {
+        border-bottom: 1px solid rgba(t($base7), 0.24);
+        padding-bottom: 0.1rem;
+      }
+    }
+  }
+  .json {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin-top: 1rem;
+    .key {
+      display: inline-block;
       @include themed() {
         color: t($accent1);
       }
     }
-    &.advanced {
-      display: none;
-      &.visible {
-        display: block;
-      }
-    }
-    &.boxed {
-      padding: 0 1rem 1rem;
-      margin-left: -1rem;
-      margin-right: -1rem;
+    .string {
       @include themed() {
-        background: t($boxed-bg);
-      }
-      .label {
-        padding: 0.2rem 1rem;
-        margin: 0 -1rem;
-        @include themed() {
-          color: t($boxed-title);
-        }
-        @include themed() {
-          background: t($boxed-bg-title);
-        }
+        color: t($base7);
       }
     }
-    pre {
-      overflow-x: scroll;
+    .number {
+      color: darkorange;
+    }
+    .boolean {
       @include themed() {
-        background: t($over-bg);
+        color: t($base7);
       }
-      padding: 1rem;
     }
-    blockquote {
+    .null {
       @include themed() {
-        border-left: 0.5rem solid t($over-bg);
-      }
-      padding: 0.5rem 0 0.5rem 1rem;
-      margin: 2rem 0;
-      font-style: italic;
-      &.mention {
-        border-left: 0.5rem solid $color-accent1;
-        padding: 0rem 0 0.5rem 1rem;
-        div {
-          @include themed() {
-            padding: 0.5rem 0.5rem 0.5rem 1rem;
-            margin: 0 0 1rem -1rem;
-            background-color: t($over-bg);
-          }
-        }
-      }
-      p {
-        margin: 0 0 0.5rem 0;
-      }
-    }
-    cite {
-      font-size: 0.8em;
-    }
-    strong {
-      font-weight: 400;
-    }
-    ol,
-    ul {
-      margin: 0;
-      padding: 0 0 0 1rem;
-      li {
-        margin-bottom: 0.5rem;
-      }
-    }
-    sup {
-      font-size: 0.6rem;
-      vertical-align: baseline;
-      position: relative;
-      top: -0.8em;
-      margin: 0 0.3rem 0 0.1rem;
-    }
-    hr {
-      display: none;
-    }
-    .footnotes {
-      padding-top: 1rem;
-      margin-top: 2rem;
-      @include themed() {
-        border-top: 6px solid t($over-bg);
-      }
-      font-size: 0.9rem;
-      line-height: 1.2rem;
-    }
-    &.advanced-switch-wrapper {
-      display: flex;
-      align-items: center;
-      input[type='checkbox'] {
-        height: 0;
-        width: 0;
-        visibility: hidden;
-        display: none;
-      }
-      @media print {
-        display: none;
-      }
-      label:first-of-type {
-        cursor: pointer;
-        text-indent: -9999px;
-        width: 2.6rem;
-        height: 1.2rem;
-        @include themed() {
-          background: t($over-bg);
-        }
-        display: inline-block;
-        border-radius: 100px;
-        position: relative;
-        margin-right: 0.5rem;
-        @media (max-width: 580px) {
-          width: 3rem;
-          height: 1.4rem;
-        }
-      }
-
-      label:first-of-type:after {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 1rem;
-        height: 1rem;
-        @include themed() {
-          background: t($base7);
-        }
-        border-radius: 1rem;
-        transition: 0.2s;
-        @media (max-width: 580px) {
-          width: 1.2rem;
-          height: 1.2rem;
-        }
-      }
-
-      input:checked + label {
-        @include themed() {
-          background: t($accent1);
-        }
-      }
-
-      input:checked + label:first-of-type:after {
-        left: calc(100% - 2px);
-        transform: translateX(-100%);
-        @include themed() {
-          background: t($base1);
-        }
-      }
-
-      label:first-of-type:active:after {
-        width: 2rem;
-      }
-      label:last-of-type {
-        cursor: pointer;
-        font-size: 0.8rem;
-        @include themed() {
-          border-bottom: 1px solid rgba(t($base7), 0.24);
-          padding-bottom: 0.1rem;
-        }
-      }
-    }
-    .json {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 0.9rem;
-      white-space: pre-wrap;
-      word-break: break-all;
-      margin-top: 1rem;
-      .key {
-        display: inline-block;
-        @include themed() {
-          color: t($accent1);
-        }
-      }
-      .string {
-        @include themed() {
-          color: t($base7);
-        }
-      }
-      .number {
-        color: darkorange;
-      }
-      .boolean {
-        @include themed() {
-          color: t($base7);
-        }
-      }
-      .null {
-        @include themed() {
-          color: t($base7);
-        }
-      }
-    }
-    &.last_update {
-      display: none;
-      @media (max-width: 580px) {
-        display: block;
-        font-size: 0.8em;
-        @include themed() {
-          color: t($base4);
-        }
+        color: t($base7);
       }
     }
   }
-  a.pagination {
-    color: $color-accent1;
-    &.next {
-      float: right;
-    }
-    &.prev {
-      float: left;
+  &.last_update {
+    display: none;
+    @media (max-width: 580px) {
+      display: block;
+      font-size: 0.8em;
+      @include themed() {
+        color: t($base4);
+      }
     }
   }
 }

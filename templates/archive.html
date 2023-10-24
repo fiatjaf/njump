@@ -21,11 +21,11 @@
         </div>
 
         <div class="column column_content">
-          <div class="field">
+          <div class="leading-5 mb-6">
             <h1 class="text-xl">{{.Title}}</h1>
           </div>
 
-          <div class="field">
+          <div class="leading-5 mb-6">
             {{range $element := .Data }}
             <a href="/{{$.PathPrefix}}{{$element}}">
               <div>{{$element}}</div>
@@ -33,12 +33,13 @@
             {{end}}
           </div>
 
-          {{if not (eq .PrevPage "0")}}
-          <a href="/{{.PaginationUrl}}/{{.PrevPage}}" class="pagination prev"
+          <div class="flex justify-between">
+          {{if not (eq .PrevPage 0)}}
+          <a href="/{{.PaginationUrl}}/{{.PrevPage}}"
             ><< Prev page</a
           >
-          {{end}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{if not (eq .NextPage "0")}}
-          <a href="/{{.PaginationUrl}}/{{.NextPage}}" class="pagination next"
+          {{end}} {{if not (eq .NextPage 0)}}
+          <a href="/{{.PaginationUrl}}/{{.NextPage}}"
             >Next page >></a
           >
           {{end}}
