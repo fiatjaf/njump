@@ -126,6 +126,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 		return []ClientReference{
 			{ID: "native", Name: "your native client", URL: "nostr:" + code},
 			{ID: "snort", Name: "Snort", URL: "https://Snort.social/e/" + code},
+			{ID: "nostrudel", Name: "Nostrudel", URL: "https://nostrudel.ninja/#/n/" + code},
 			{ID: "satellite", Name: "Satellite", URL: "https://satellite.earth/thread/" + event.ID},
 			{ID: "coracle", Name: "Coracle", URL: "https://coracle.social/" + code},
 			{ID: "primal", Name: "Primal", URL: "https://primal.net/thread/" + event.ID},
@@ -142,6 +143,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{ID: "satellite", Name: "Satellite", URL: "https://satellite.earth/@" + code},
 			{ID: "coracle", Name: "Coracle", URL: "https://coracle.social/" + code},
 			{ID: "primal", Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
+			{ID: "nostrudel", Name: "Nostrudel", URL: "https://nostrudel.ninja/#/u/" + code},
 			{ID: "nostter", Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
 			{ID: "highlighter", Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
 			{ID: "iris", Name: "Iris", URL: "https://iris.to/" + code},
