@@ -31,21 +31,21 @@
   <body class="profile">
     {{template "top" .}}
 
-    <div
-      class="block sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0"
-    >
+    <div class="sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0">
       <div
-        class="flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
+        class="w-full sm:flex sm:w-9/12 sm:px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
       >
         <header class="column columnA">
           <div
-            class="info-wrapper"
-            _="on scroll from window get #profile_name then measure its top, height then if top is less than height / -2 set my *display to 'block' otherwise set my *display to 'none' end"
+            class="text-left basis-2/3 overflow-hidden hidden flex items-center"
+            _="on load or scroll from window or resize from window get #profile_name then measure its top, height then if top is less than height / -2 or height is 0 add .flex then remove .hidden otherwise remove .flex then add .hidden"
           >
-            <div class="name">
-              {{.Metadata.Name}} {{if not (eq .Metadata.Name
-              .Metadata.DisplayName)}}
-              <span class="display">{{.Metadata.DisplayName}}</span>
+            <div>
+              <div class="text-2xl">{{.Metadata.Name}}</div>
+              {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
+              <div class="text-xl text-neutral-300 dark:text-slate-400">
+                {{.Metadata.DisplayName}}
+              </div>
               {{end}}
             </div>
           </div>
@@ -57,11 +57,13 @@
         </header>
 
         <div class="column column_content">
-          <header class="field info-wrapper">
-            <h1 id="profile_name" class="name">
-              {{.Metadata.Name}} {{if not (eq .Metadata.Name
-              .Metadata.DisplayName)}}
-              <span class="display">{{.Metadata.DisplayName}}</span>
+          <header class="field hidden sm:flex sm:items-center">
+            <h1>
+              <div id="profile_name" class="text-2xl">{{.Metadata.Name}}</div>
+              {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
+              <div class="text-xl text-neutral-300 dark:text-slate-400">
+                {{.Metadata.DisplayName}}
+              </div>
               {{end}}
             </h1>
           </header>
@@ -105,7 +107,7 @@
           {{if not (eq 0 (len .LastNotes))}}
           <div class="field separator"></div>
           <nav class="field last_notes">
-            <h2>Last Notes</h2>
+            <h2 class="text-strongpink text-2xl">Last Notes</h2>
             {{range $i, $ee := .LastNotes}}
             <a href="/{{$ee.Nevent}}" class="note">
               <div class="header">
@@ -114,7 +116,12 @@
                 <div class="is_reply">- reply</div>
                 {{end}}
               </div>
-              <div class="content">{{$ee.Preview}}</div>
+              <div
+                class="basis-full max-h-40 overflow-hidden mt-0.5"
+                _="on load if my scrollHeight > my offsetHeight add .gradient"
+              >
+                {{$ee.Preview}}
+              </div>
             </a>
             {{end}}
           </nav>

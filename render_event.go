@@ -270,7 +270,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		err = OtherTemplate.Render(w, &OtherPage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
 			DetailsPartial: DetailsPartial{
-				HideDetails:     true,
+				HideDetails:     false,
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,
 				KindNIP:         data.kindNIP,

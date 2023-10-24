@@ -1,3 +1,4 @@
+{{ if .HideDetails }}
 <div
   class="field advanced-switch-wrapper"
   _="on load make a URLSearchParams from location.search then get it.get('details') then if it is 'yes' add @checked to #advanced-switch then add .visible to .advanced"
@@ -10,6 +11,7 @@
   <label for="advanced-switch">X</label>
   <label for="advanced-switch">Show more details</label>
 </div>
+{{ end }}
 
 <div class="field {{if .HideDetails}}advanced{{end}}">
   <div class="label">Published at</div>

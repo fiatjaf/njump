@@ -54,7 +54,18 @@
           strongpink: '#e32a6d',
           crimson: '#bc1150',
           garnet: '#42091e'
-        }
+        },
+        typography: ({theme}) => ({
+          /* for markdown html content */
+          DEFAULT: {
+            css: {
+              '--tw-prose-headings': theme('colors.strongpink'),
+              '--tw-prose-invert-headings': theme('colors.strongpink'),
+              '--tw-prose-links': theme('colors.gray[700]'),
+              '--tw-prose-invert-links': theme('colors.neutral[50]')
+            }
+          }
+        })
       }
     }
   }
@@ -64,11 +75,16 @@
     .imgclip {
       clip-path: url(#svg-shape);
     }
+    .gradient {
+      mask-image: linear-gradient(
+        to bottom,
+        rgb(0, 0, 0) 50%,
+        rgba(0, 0, 0, 0) 100%
+      );
+    }
   }
 </style>
 
 <script type="text/hyperscript">
   on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.includes('Chrome')] then if it[0] is true and it[1] is false add .safari to <body /> end
-
-  on load repeat for div in .content if div's offsetHeight == 160 add .gradient to it end end
 </script>

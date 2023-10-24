@@ -17,22 +17,18 @@
         class="flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
       >
         <div class="column columnA">
-          <div class="info-wrapper">
-            {{.Title}}
-            <span class="display">&nbsp;</span>
-          </div>
+          <div class="text-2xl">{{.Title}}</div>
         </div>
 
         <div class="column column_content">
-          <div class="field info-wrapper">
-            <h1 class="name">{{.Title}}</h1>
+          <div class="field">
+            <h1 class="text-xl">{{.Title}}</h1>
           </div>
-          <div class="field separator long"></div>
 
           <div class="field last_notes">
             {{range $element := .Data }}
             <a href="/{{$.PathPrefix}}{{$element}}" class="note">
-              <div class="content">{{$element}}</div>
+              <div>{{$element}}</div>
             </a>
             {{end}}
           </div>

@@ -55,29 +55,34 @@
   <body class="note">
     {{template "top" .}}
 
-    <div
-      class="block sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0"
-    >
+    <div class="sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0">
       <div
-        class="flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
+        class="sm:flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
       >
         <div class="column column_content">
-          <header class="profile_intro">
-            <a href="/{{.Npub}}">
+          <header class="max-w-full mb-4">
+            <a class="flex items-center flex-wrap" href="/{{.Npub}}">
               <div
-                class="mr-2 sm:mr-4 basis-2/5 sm:basis-1/6 print:basis-1-12 max-w-full imgclip overflow-hidden"
+                class="mr-2 sm:mr-4 basis-1/6 print:basis-1-12 max-w-full imgclip overflow-hidden"
               >
                 <img class="block w-full h-auto" src="{{.Metadata.Picture}}" />
               </div>
-              <div class="info-wrapper">
-                <div class="name">
+              <div class="block sm:grow print:text-base">
+                <div class="text-sm sm:text-2xl">
                   {{.Metadata.Name}}
                   <!---->
                   {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
-                  <span class="display">{{.Metadata.DisplayName}}</span>
+                  <span
+                    class="text-sm sm:text-xl text-neutral-300 dark:text-slate-400"
+                    >{{.Metadata.DisplayName}}</span
+                  >
                   {{end}}
                 </div>
-                <div class="npub">{{.NpubShort}}</div>
+                <div
+                  class="text-sm sm:text-base text-neutral-300 dark:text-slate-400"
+                >
+                  {{.NpubShort}}
+                </div>
               </div>
             </a>
           </header>
@@ -90,11 +95,13 @@
 
           <div class="field separator"></div>
 
-          <article class="field content">
+          <article
+            class="field | prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light;"
+          >
             {{ if (not (eq "" .Subject))}}
-            <h1>{{.Subject}}</h1>
+            <h1 class="text-2xl">{{.Subject}}</h1>
             {{ else }}
-            <h1 class="h">
+            <h1 class="hidden">
               {{.Metadata.Name}} on Nostr: {{.TitleizedContent}}
             </h1>
             {{ end }}

@@ -28,16 +28,16 @@
   <body class="profile">
     {{template "top" .}}
 
-    <div
-      class="block sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0"
-    >
+    <div class="sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0">
       <div
-        class="flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
+        class="sm:flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
       >
         <div class="column columnA">
-          <div class="info-wrapper">
+          <div
+            class="text-left basis-2/3 overflow-hidden hidden flex items-center text-2xl sm:break-all"
+            _="on load or scroll from window or resize from window get #relay_name then measure its top, height then if top is less than height / -2 or height is 0 add .flex then remove .hidden otherwise remove .flex then add .hidden"
+          >
             {{.Info.Name}}
-            <span class="display">&nbsp;</span>
           </div>
           <div
             class="max-w-full imgclip overflow-hidden basis-2/5 sm:basis-auto"
@@ -47,11 +47,13 @@
         </div>
 
         <div class="column column_content">
-          <div class="field info-wrapper">
-            <h1 class="name">{{.Info.Name}}</h1>
-          </div>
-          <div class="field separator long"></div>
+          <header class="field hidden sm:flex sm:items-center">
+            <h1>
+              <div id="relay_name" class="text-2xl">{{.Info.Name}}</div>
+            </h1>
+          </header>
 
+          <div class="field separator long"></div>
           <div class="field">wss://{{.Hostname}}</div>
           <div class="field about">{{.Info.Description}}</div>
           <div class="field separator long"></div>
@@ -73,7 +75,7 @@
           <div class="field separator"></div>
 
           <div class="field last_notes">
-            <h2>Last Notes</h2>
+            <h2 class="text-strongpink text-2xl">Last Notes</h2>
             {{range $i, $ee := .LastNotes}}
             <a href="/{{$ee.Nevent}}" class="note">
               <div class="header">
@@ -86,7 +88,12 @@
                   by <span href="/{{$ee.Npub}}">{{$ee.NpubShort}}</span>
                 </div>
               </div>
-              <div class="content">{{$ee.Preview}}</div>
+              <div
+                class="basis-full max-h-40 overflow-hidden mt-0.5"
+                _="on load if my scrollHeight >= my offsetHeight add .gradient"
+              >
+                {{$ee.Preview}}
+              </div>
             </a>
             {{end}}
           </div>
