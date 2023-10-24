@@ -223,17 +223,6 @@ body {
     align-items: center;
     margin-top: 0rem;
   }
-  .last_update {
-    font-size: 0.8em;
-    margin-top: 0.5rem;
-    text-align: center;
-    @include themed() {
-      color: t($base4);
-    }
-    @media (max-width: 580px) {
-      display: none;
-    }
-  }
 }
 
 .column_content {
@@ -323,80 +312,6 @@ body {
     font-size: 0.9rem;
     line-height: 1.2rem;
   }
-  &.advanced-switch-wrapper {
-    display: flex;
-    align-items: center;
-    input[type='checkbox'] {
-      height: 0;
-      width: 0;
-      visibility: hidden;
-      display: none;
-    }
-    @media print {
-      display: none;
-    }
-    label:first-of-type {
-      cursor: pointer;
-      text-indent: -9999px;
-      width: 2.6rem;
-      height: 1.2rem;
-      @include themed() {
-        background: t($over-bg);
-      }
-      display: inline-block;
-      border-radius: 100px;
-      position: relative;
-      margin-right: 0.5rem;
-      @media (max-width: 580px) {
-        width: 3rem;
-        height: 1.4rem;
-      }
-    }
-
-    label:first-of-type:after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 1rem;
-      height: 1rem;
-      @include themed() {
-        background: t($base7);
-      }
-      border-radius: 1rem;
-      transition: 0.2s;
-      @media (max-width: 580px) {
-        width: 1.2rem;
-        height: 1.2rem;
-      }
-    }
-
-    input:checked + label {
-      @include themed() {
-        background: t($accent1);
-      }
-    }
-
-    input:checked + label:first-of-type:after {
-      left: calc(100% - 2px);
-      transform: translateX(-100%);
-      @include themed() {
-        background: t($base1);
-      }
-    }
-
-    label:first-of-type:active:after {
-      width: 2rem;
-    }
-    label:last-of-type {
-      cursor: pointer;
-      font-size: 0.8rem;
-      @include themed() {
-        border-bottom: 1px solid rgba(t($base7), 0.24);
-        padding-bottom: 0.1rem;
-      }
-    }
-  }
   .json {
     font-family: 'Courier New', Courier, monospace;
     font-size: 0.9rem;
@@ -425,16 +340,6 @@ body {
     .null {
       @include themed() {
         color: t($base7);
-      }
-    }
-  }
-  &.last_update {
-    display: none;
-    @media (max-width: 580px) {
-      display: block;
-      font-size: 0.8em;
-      @include themed() {
-        color: t($base4);
       }
     }
   }

@@ -1,15 +1,35 @@
 {{ if .HideDetails }}
-<div
-  class="leading-5 mb-6 advanced-switch-wrapper"
-  _="on load make a URLSearchParams from location.search then get it.get('details') then if it is 'yes' add @checked to #advanced-switch then remove .hidden from #hidden-fields"
->
+<div class="leading-5 mb-6 flex items-center print:hidden" _="">
   <input
     type="checkbox"
     id="advanced-switch"
-    _="on change toggle .hidden on #hidden-fields"
+    class="hidden"
+    _="on load make a URLSearchParams from location.search then get it.get('details') then if it is 'yes' set my.checked to true then trigger switch on me end
+       on change or switch log my checked then if my checked is true
+         remove .hidden from #hidden-fields
+         tell the next <label /> from me
+           add .bg-strongpink .after:translate-x-full
+           remove .bg-gray-300 .dark:bg-zinc
+         end
+       otherwise
+         add .hidden to #hidden-fields
+         tell the next <label /> from me
+           remove .bg-strongpink .after:translate-x-full
+           add .bg-gray-300 .dark:bg-zinc
+         end
+       end
+    "
   />
-  <label for="advanced-switch">X</label>
-  <label for="advanced-switch">Show more details</label>
+  <label
+    for="advanced-switch"
+    class="bg-gray-300 dark:bg-zinc-800 -indent-96 cursor-pointer w-9 h-5 inline-block relative mr-2 rounded-full after:content-[&quot;&quot;] after:absolute after:w-4 after:h-4 after:transition after:rounded-2xl after:inset-0.5 after:bg-zinc-50 dark:after:bg-gray-700"
+    >&nbsp;</label
+  >
+  <label
+    for="advanced-switch"
+    class="cursor-pointer text-sm pb-0.5 border-b-2 pb-0.5 border-b-gray-300"
+    >Show more details</label
+  >
 </div>
 {{ end }}
 
