@@ -230,12 +230,6 @@ body {
   flex-shrink: 0;
   word-wrap: break-word;
 
-  a.nostr {
-    @include themed() {
-      background-color: t($hrefbg);
-    }
-    border-bottom: none;
-  }
   a.button {
     display: inline-block;
     max-width: 100%;
