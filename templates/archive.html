@@ -25,9 +25,9 @@
             <h1 class="text-xl">{{.Title}}</h1>
           </div>
 
-          <div class="field last_notes">
+          <div class="field">
             {{range $element := .Data }}
-            <a href="/{{$.PathPrefix}}{{$element}}" class="note">
+            <a href="/{{$.PathPrefix}}{{$element}}">
               <div>{{$element}}</div>
             </a>
             {{end}}

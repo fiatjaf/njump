@@ -80,22 +80,34 @@
             class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/3"
           ></div>
 
-          <div class="field last_notes">
+          <div class="field">
             <h2 class="text-strongpink text-2xl">Last Notes</h2>
             {{range $i, $ee := .LastNotes}}
-            <a href="/{{$ee.Nevent}}" class="note">
-              <div class="header">
-                <div class="published_at">{{$ee.CreatedAtStr}}</div>
+            <a
+              class="block no-underline my-8 hover:border-solid hover:pl-4 hover:-ml-6 hover:border-l-8 hover:border-l-gray-100 dark:hover:border-l-neutral-800"
+              href="/{{$ee.Nevent}}"
+            >
+              <div
+                class="flex flex-row flex-wrap -ml-2.5 mb-1.5 pl-2.5 pb-1 border-solid border-b-4 border-b-gray-100 dark:border-b-neutral-800"
+              >
+                <div class="text-sm text-strongpink">{{$ee.CreatedAtStr}}</div>
                 <br />
                 {{if $ee.IsReply}}
-                <div class="is_reply">- reply</div>
+                <div class="text-xs ml-2 text-gray-300 dark:text-gray-400">
+                  - reply
+                </div>
                 {{end}}
-                <div class="npub">
-                  by <span href="/{{$ee.Npub}}">{{$ee.NpubShort}}</span>
+                <div class="text-xs ml-auto text-zinc-700 dark:text-neutral-50">
+                  by
+                  <span
+                    class="px-1 bg-lavender dark:bg-garnet hover:bg-strongpink dark:hover:bg-strongpink hover:text-white"
+                    href="/{{$ee.Npub}}"
+                    >{{$ee.NpubShort}}</span
+                  >
                 </div>
               </div>
               <div
-                class="basis-full max-h-40 overflow-hidden mt-0.5"
+                class="basis-full max-h-40 overflow-hidden mt-0.5 hover:text-strongpink"
                 _="on load if my scrollHeight >= my offsetHeight add .gradient"
               >
                 {{$ee.Preview}}
