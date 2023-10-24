@@ -67,12 +67,16 @@
               {{end}}
             </h1>
           </header>
-          <div class="field separator long"></div>
+          <div
+            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/2"
+          ></div>
           <div class="field">
             <a href="{{.NormalizedAuthorWebsiteURL}}">{{.Metadata.Website}}</a>
           </div>
           <div class="field about">{{.RenderedAuthorAboutText}}</div>
-          <div class="field separator"></div>
+          <div
+            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/3"
+          ></div>
           <div class="field">
             <div class="label">Public key</div>
             {{.Npub}}
@@ -105,7 +109,9 @@
           </div>
 
           {{if not (eq 0 (len .LastNotes))}}
-          <div class="field separator"></div>
+          <div
+            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/3"
+          ></div>
           <nav class="field last_notes">
             <h2 class="text-strongpink text-2xl">Last Notes</h2>
             {{range $i, $ee := .LastNotes}}
@@ -127,7 +133,9 @@
           </nav>
           {{end}}
 
-          <div class="field separator"></div>
+          <div
+            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-stone-800 w-1/3"
+          ></div>
         </div>
 
         {{template "clients" .ClientsPartial}}

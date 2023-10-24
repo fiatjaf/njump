@@ -241,20 +241,6 @@ body {
   flex-shrink: 0;
   word-wrap: break-word;
 
-  .separator {
-    height: 6px;
-    width: 30%;
-    margin-left: -0.6rem;
-    @include themed() {
-      background: t($over-bg);
-    }
-    &.long {
-      width: 50%;
-    }
-    @media (max-width: 580px) {
-      margin-left: -1rem;
-    }
-  }
   .field {
     margin-bottom: 1.5rem;
     line-height: 1.3rem;

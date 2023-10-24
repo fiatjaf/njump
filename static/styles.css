@@ -187,25 +187,6 @@ body {
   flex-shrink: 0;
   word-wrap: break-word;
 }
-.column_content .separator {
-  height: 6px;
-  width: 30%;
-  margin-left: -0.6rem;
-}
-.theme--default .column_content .separator {
-  background: #f3f3f3;
-}
-.theme--dark .column_content .separator {
-  background: #2d2d2d;
-}
-.column_content .separator.long {
-  width: 50%;
-}
-@media (max-width: 580px) {
-  .column_content .separator {
-    margin-left: -1rem;
-  }
-}
 .column_content .field {
   margin-bottom: 1.5rem;
   line-height: 1.3rem;
