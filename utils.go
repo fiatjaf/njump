@@ -135,7 +135,6 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{ID: "nostter", Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
 			{ID: "highlighter", Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
 			{ID: "iris", Name: "Iris", URL: "https://iris.to/" + code},
-			{ID: "yosup", Name: "Yosup", URL: "https://yosup.app/thread/" + event.ID},
 		}
 	} else if event.Kind == 0 {
 		return []ClientReference{
@@ -147,10 +146,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{ID: "primal", Name: "Primal", URL: "https://primal.net/profile/" + event.PubKey},
 			{ID: "nostrudel", Name: "Nostrudel", URL: "https://nostrudel.ninja/#/u/" + code},
 			{ID: "nostter", Name: "Nostter", URL: "https://nostter.vercel.app/" + code},
-			{ID: "highlighter", Name: "Highlighter", URL: "https://highlighter.com/p/" + event.PubKey},
 			{ID: "iris", Name: "Iris", URL: "https://iris.to/" + code},
-			{ID: "yosup", Name: "Yosup", URL: "https://yosup.app/profile/" + event.PubKey},
-			{ID: "nosotros", Name: "Nosotros", URL: "https://nosotros.app/" + code},
 		}
 	} else if event.Kind == 30023 || event.Kind == 30024 {
 		return []ClientReference{
