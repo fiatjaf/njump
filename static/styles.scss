@@ -117,34 +117,6 @@ body {
     color: #000000 !important;
   }
 }
-.background {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow: hidden;
-  z-index: -1;
-  &::after {
-    content: '';
-    position: absolute;
-    @include themed() {
-      background: t($bg-down);
-    }
-    width: 140%;
-    height: 100%;
-    transform: rotate(-20deg);
-    transform-origin: bottom;
-    bottom: -40%;
-    @media (max-width: 580px) {
-      width: 200%;
-      bottom: -40%;
-    }
-  }
-  @media print {
-    display: none;
-  }
-}
 
 .theme-toggle {
   position: fixed;

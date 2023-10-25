@@ -38,42 +38,6 @@ body {
   }
 }
 
-.background {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow: hidden;
-  z-index: -1;
-}
-.background::after {
-  content: "";
-  position: absolute;
-  width: 140%;
-  height: 100%;
-  transform: rotate(-20deg);
-  transform-origin: bottom;
-  bottom: -40%;
-}
-.theme--default .background::after {
-  background: #fafafa;
-}
-.theme--dark .background::after {
-  background: #181818;
-}
-@media (max-width: 580px) {
-  .background::after {
-    width: 200%;
-    bottom: -40%;
-  }
-}
-@media print {
-  .background {
-    display: none;
-  }
-}
-
 .theme-toggle {
   position: fixed;
   top: 1rem;
