@@ -504,14 +504,18 @@ func eventToHTML(evt *nostr.Event) template.HTML {
 			tagsHTML += "\n      <span class=" + cls + ">" + html.EscapeString(string(itemJSON))
 			if i < len(tag)-1 {
 				tagsHTML += ","
+			} else {
+				tagsHTML += "\n    "
 			}
 		}
-		tagsHTML += "\n    ]"
+		tagsHTML += "]"
 		if t < len(evt.Tags)-1 {
 			tagsHTML += ","
+		} else {
+			tagsHTML += "\n  "
 		}
 	}
-	tagsHTML += "\n  ]"
+	tagsHTML += "]"
 
 	contentJSON, _ := json.Marshal(evt.Content)
 
