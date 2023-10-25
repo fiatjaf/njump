@@ -118,44 +118,6 @@ body {
   }
 }
 
-.theme-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  width: 1rem;
-  height: 1rem;
-  @include themed() {
-    color: t($theme-toggle);
-  }
-  border-radius: 50%;
-  cursor: pointer;
-  @media (max-width: 580px) {
-    position: relative;
-    float: right;
-    top: 0;
-    right: 0;
-  }
-  @media print {
-    display: none;
-  }
-}
-
-.sun {
-  display: none;
-}
-.moon {
-  display: block;
-}
-
-.theme--dark {
-  .sun {
-    display: block;
-  }
-  .moon {
-    display: none;
-  }
-}
-
 .columnA {
   position: -webkit-sticky;
   position: sticky;

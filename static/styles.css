@@ -38,50 +38,6 @@ body {
   }
 }
 
-.theme-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.theme--default .theme-toggle {
-  color: #f3f3f3;
-}
-.theme--dark .theme-toggle {
-  color: #3d3d3d;
-}
-@media (max-width: 580px) {
-  .theme-toggle {
-    position: relative;
-    float: right;
-    top: 0;
-    right: 0;
-  }
-}
-@media print {
-  .theme-toggle {
-    display: none;
-  }
-}
-
-.sun {
-  display: none;
-}
-
-.moon {
-  display: block;
-}
-
-.theme--dark .sun {
-  display: block;
-}
-.theme--dark .moon {
-  display: none;
-}
-
 .columnA {
   position: -webkit-sticky;
   position: sticky;
