@@ -165,36 +165,11 @@ body {
     margin-top: 0rem;
   }
 }
-.columnA .last_update {
-  font-size: 0.8em;
-  margin-top: 0.5rem;
-  text-align: center;
-}
-.theme--default .columnA .last_update {
-  color: #c9c9c9;
-}
-.theme--dark .columnA .last_update {
-  color: #969696;
-}
-@media (max-width: 580px) {
-  .columnA .last_update {
-    display: none;
-  }
-}
 
 .column_content {
   flex-grow: 0;
   flex-shrink: 0;
   word-wrap: break-word;
-}
-.column_content a.nostr {
-  border-bottom: none;
-}
-.theme--default .column_content a.nostr {
-  background-color: #fdf0f5;
-}
-.theme--dark .column_content a.nostr {
-  background-color: #42091e;
 }
 .column_content a.button {
   display: inline-block;
@@ -210,15 +185,6 @@ body {
   color: #ffffff;
   background-color: #e32a6d;
   border: 1px solid #e32a6d;
-}
-.column_content .label {
-  font-size: 0.8rem;
-}
-.theme--default .column_content .label {
-  color: #e32a6d;
-}
-.theme--dark .column_content .label {
-  color: #e32a6d;
 }
 .column_content blockquote {
   padding: 0.5rem 0 0.5rem 1rem;
@@ -284,43 +250,6 @@ body {
 }
 .theme--dark .column_content .footnotes {
   border-top: 6px solid #2d2d2d;
-}
-.column_content .json {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.9rem;
-  white-space: pre-wrap;
-  word-break: break-all;
-  margin-top: 1rem;
-}
-.column_content .json .key {
-  display: inline-block;
-}
-.theme--default .column_content .json .key {
-  color: #e32a6d;
-}
-.theme--dark .column_content .json .key {
-  color: #e32a6d;
-}
-.theme--default .column_content .json .string {
-  color: #373737;
-}
-.theme--dark .column_content .json .string {
-  color: #fafafa;
-}
-.column_content .json .number {
-  color: darkorange;
-}
-.theme--default .column_content .json .boolean {
-  color: #373737;
-}
-.theme--dark .column_content .json .boolean {
-  color: #fafafa;
-}
-.theme--default .column_content .json .null {
-  color: #373737;
-}
-.theme--dark .column_content .json .null {
-  color: #fafafa;
 }
 
 .column_clients {

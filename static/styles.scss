@@ -300,37 +300,6 @@ body {
     font-size: 0.9rem;
     line-height: 1.2rem;
   }
-  .json {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    white-space: pre-wrap;
-    word-break: break-all;
-    margin-top: 1rem;
-    .key {
-      display: inline-block;
-      @include themed() {
-        color: t($accent1);
-      }
-    }
-    .string {
-      @include themed() {
-        color: t($base7);
-      }
-    }
-    .number {
-      color: darkorange;
-    }
-    .boolean {
-      @include themed() {
-        color: t($base7);
-      }
-    }
-    .null {
-      @include themed() {
-        color: t($base7);
-      }
-    }
-  }
 }
 
 .column_clients {

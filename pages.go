@@ -58,7 +58,7 @@ var (
 type DetailsPartial struct {
 	HideDetails     bool
 	CreatedAt       string
-	EventJSON       string
+	EventJSON       template.HTML
 	Nevent          string
 	Kind            int
 	KindNIP         string

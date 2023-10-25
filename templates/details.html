@@ -61,39 +61,6 @@
     >
       Event JSON
     </div>
-    <div class="json" _="on load call syntaxHighlight(me)">
-      {{- .EventJSON}}
-    </div>
+    <div>{{- .EventJSON}}</div>
   </div>
 </div>
-
-<script>
-  function syntaxHighlight(elt) {
-    elt.innerHTML = elt.innerHTML
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(
-        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-        function (match, p1) {
-          var cls = 'number'
-          if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-              cls = 'key'
-            } else {
-              if (p1.length < 100) {
-                cls = 'string'
-              } else {
-                cls = 'string content'
-              }
-            }
-          } else if (/true|false/.test(match)) {
-            cls = 'boolean'
-          } else if (/null/.test(match)) {
-            cls = 'null'
-          }
-          return '<span class="' + cls + '">' + match + '</span>'
-        }
-      )
-  }
-</script>

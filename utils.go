@@ -2,7 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	html "html"
+	"html/template"
 	"io"
 	"net/http"
 	"regexp"
@@ -11,7 +14,6 @@ import (
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
-	"github.com/gomarkdown/markdown/html"
 	mdhtml "github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/microcosm-cc/bluemonday"
@@ -380,7 +382,7 @@ func mdToHTML(md string, usingTelegramInstantView bool) string {
 		parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock | parser.Footnotes)
 	doc := p.Parse([]byte(md))
 
-	var customNodeHook html.RenderNodeFunc = nil
+	var customNodeHook mdhtml.RenderNodeFunc = nil
 	if usingTelegramInstantView {
 		// telegram instant view really doesn't like when there is an image inside a paragraph (like <p><img></p>)
 		// so we use this custom thing to stop all paragraphs before the images, print the images then start a new
@@ -390,12 +392,12 @@ func mdToHTML(md string, usingTelegramInstantView bool) string {
 				if entering {
 					src := img.Destination
 					w.Write([]byte(`</p><img src="`))
-					html.EscLink(w, src)
+					mdhtml.EscLink(w, src)
 					w.Write([]byte(`" alt="`))
 				} else {
 					if img.Title != nil {
 						w.Write([]byte(`" title="`))
-						html.EscapeHTML(w, img.Title)
+						mdhtml.EscapeHTML(w, img.Title)
 					}
 					w.Write([]byte(`" /><p>`))
 				}
@@ -491,4 +493,43 @@ func loadRelaysArchive(ctx context.Context) {
 		log.Debug().Msgf("adding relay %s", relay)
 		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
 	}
+}
+
+func eventToHTML(evt *nostr.Event) template.HTML {
+	tagsHTML := "["
+	for t, tag := range evt.Tags {
+		tagsHTML += "\n    ["
+		for i, item := range tag {
+			cls := `"text-zinc-500 dark:text-zinc-50"`
+			if i == 0 {
+				cls = `"text-amber-500 dark:text-amber-200"`
+			}
+			itemJSON, _ := json.Marshal(item)
+			tagsHTML += "\n      <span class=" + cls + ">" + html.EscapeString(string(itemJSON))
+			if i < len(tag)-1 {
+				tagsHTML += ","
+			}
+		}
+		tagsHTML += "\n    ]"
+		if t < len(evt.Tags)-1 {
+			tagsHTML += ","
+		}
+	}
+	tagsHTML += "\n  ]"
+
+	contentJSON, _ := json.Marshal(evt.Content)
+
+	keyCls := "text-purple-700 dark:text-purple-300"
+
+	return template.HTML(fmt.Sprintf(
+		`{
+  <span class="`+keyCls+`">"id":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
+  <span class="`+keyCls+`">"pubkey":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
+  <span class="`+keyCls+`">"created_at":</span> <span class="text-green-600">%d</span>,
+  <span class="`+keyCls+`">"kind":</span> <span class="text-amber-500 dark:text-amber-200">%d</span>,
+  <span class="`+keyCls+`">"tags":</span> %s,
+  <span class="`+keyCls+`">"content":</span> <span class="text-zinc-500 dark:text-zinc-50">%s</span>,
+  <span class="`+keyCls+`">"sig":</span> <span class="text-zinc-500 dark:text-zinc-50 content">"%s"</span>
+}`, evt.ID, evt.PubKey, evt.CreatedAt, evt.Kind, tagsHTML, html.EscapeString(string(contentJSON)), evt.Sig),
+	)
 }

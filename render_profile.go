@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"html"
 	"html/template"
@@ -30,9 +29,6 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		w.Header().Set("Cache-Control", "max-age=3600")
 	}
 
-	// pretty JSON
-	eventJSON, _ := json.MarshalIndent(data.event, "", "  ")
-
 	if !isSitemap {
 		err = ProfileTemplate.Render(w, &ProfilePage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: true},
@@ -41,7 +37,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,
 				KindNIP:         data.kindNIP,
-				EventJSON:       string(eventJSON),
+				EventJSON:       eventToHTML(data.event),
 				Kind:            data.event.Kind,
 			},
 			ClientsPartial: ClientsPartial{

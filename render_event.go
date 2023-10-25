@@ -196,9 +196,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=60")
 	}
 
-	// pretty JSON
-	eventJSON, _ := json.MarshalIndent(data.event, "", "  ")
-
 	// oembed discovery
 	oembed := ""
 	if data.templateId == Note {
@@ -237,7 +234,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,
 				KindNIP:         data.kindNIP,
-				EventJSON:       string(eventJSON),
+				EventJSON:       eventToHTML(data.event),
 				Kind:            data.event.Kind,
 			},
 			ClientsPartial: ClientsPartial{
@@ -274,7 +271,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,
 				KindNIP:         data.kindNIP,
-				EventJSON:       string(eventJSON),
+				EventJSON:       eventToHTML(data.event),
 				Kind:            data.event.Kind,
 			},
 
