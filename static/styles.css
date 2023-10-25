@@ -1,43 +1,3 @@
-
-html {
-  font-size: 19px;
-  font-weight: 300;
-}
-@media (max-width: 580px) {
-  html {
-    font-size: 18px;
-  }
-}
-@media print {
-  html {
-    font-size: 17px;
-    margin: 0;
-  }
-}
-
-body {
-  margin: 0;
-  margin-bottom: 4rem;
-}
-.theme--default body {
-  color: #373737;
-}
-.theme--dark body {
-  color: #fafafa;
-}
-.theme--default body {
-  background: #ffffff;
-}
-.theme--dark body {
-  background: #1e1e1e;
-}
-@media print {
-  body {
-    margin: 0;
-    color: #000000 !important;
-  }
-}
-
 .column_content {
   flex-grow: 0;
   flex-shrink: 0;
@@ -154,16 +114,6 @@ body.other .column_content {
   body.other .column_content {
     flex-basis: 100%;
     max-width: 100%;
-  }
-}
-
-@media print {
-  @page {
-    margin: 2cm 3cm;
-  }
-  /* Safari specific styles */
-  body.safari {
-    margin: 1cm 3cm;
   }
 }
 

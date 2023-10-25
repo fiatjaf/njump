@@ -91,33 +91,6 @@ $theme-map: null;
   @return map-get($theme-map, $key);
 }
 
-/*# sourceMappingURL=styles.css.map */
-html {
-  font-size: 19px;
-  font-weight: 300;
-  @media (max-width: 580px) {
-    font-size: 18px;
-  }
-  @media print {
-    font-size: 17px;
-    margin: 0;
-  }
-}
-body {
-  @include themed() {
-    color: t($base7);
-  }
-  @include themed() {
-    background: t($bg-up);
-  }
-  margin: 0;
-  margin-bottom: 4rem;
-  @media print {
-    margin: 0;
-    color: #000000 !important;
-  }
-}
-
 .column_content {
   flex-grow: 0;
   flex-shrink: 0;
@@ -221,15 +194,5 @@ body.other {
       flex-basis: 100%;
       max-width: 100%;
     }
-  }
-}
-
-@media print {
-  @page {
-    margin: 2cm 3cm;
-  }
-  /* Safari specific styles */
-  body.safari {
-    margin: 1cm 3cm;
   }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="theme--default">
+<html class="theme--default text-lg sm:text-xl font-light print:text-base">
   <meta charset="UTF-8" />
   <head>
     <title>{{.Title}}</title>
@@ -7,7 +7,7 @@
     {{template "head_common" .}}
   </head>
 
-  <body class="profile">
+  <body class="profile | mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-stone-900">
     {{template "top" .}}
 
     <div
