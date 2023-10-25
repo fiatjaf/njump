@@ -35,7 +35,9 @@
       <div
         class="w-full sm:flex sm:w-9/12 sm:px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
       >
-        <header class="column columnA">
+        <header
+          class="flex items-center sm:items-start relative sm:sticky self-start basis-1/4 sm:mt-8 top-auto sm:top-8"
+        >
           <div
             class="text-left basis-2/3 overflow-hidden hidden flex items-center"
             _="on load or scroll from window or resize from window get #profile_name then measure its top, height then if top is less than height / -2 or height is 0 add .flex then remove .hidden otherwise remove .flex then add .hidden"

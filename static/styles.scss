@@ -118,25 +118,6 @@ body {
   }
 }
 
-.columnA {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 2rem;
-  align-self: flex-start;
-  flex-basis: 25%;
-  max-width: 25%;
-  word-wrap: break-word;
-  margin-top: 2rem;
-  @media (max-width: 580px) {
-    display: flex;
-    position: relative;
-    max-width: none;
-    top: auto;
-    align-items: center;
-    margin-top: 0rem;
-  }
-}
-
 .column_content {
   flex-grow: 0;
   flex-shrink: 0;
