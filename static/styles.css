@@ -82,33 +82,6 @@ body {
   display: none;
 }
 
-.top {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 0;
-  justify-content: left;
-}
-@media (max-width: 580px) {
-  .top {
-    display: block;
-    width: 90%;
-    padding: 1rem;
-    font-size: 0.8rem;
-  }
-}
-@media print {
-  .top {
-    display: block;
-  }
-}
-.theme--default .top span {
-  color: #e32a6d;
-}
-.theme--dark .top span {
-  color: #e32a6d;
-}
-
 .columnA {
   position: -webkit-sticky;
   position: sticky;

@@ -156,28 +156,6 @@ body {
   }
 }
 
-.top {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 0;
-  justify-content: left;
-  @media (max-width: 580px) {
-    display: block;
-    width: 90%;
-    padding: 1rem;
-    font-size: 0.8rem;
-  }
-  @media print {
-    display: block;
-  }
-  span {
-    @include themed() {
-      color: t($accent1);
-    }
-  }
-}
-
 .columnA {
   position: -webkit-sticky;
   position: sticky;
