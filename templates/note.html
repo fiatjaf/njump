@@ -72,25 +72,24 @@
                   {{.Metadata.Name}}
                   <!---->
                   {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
-                  <span
-                    class="text-sm sm:text-xl text-neutral-300 dark:text-slate-400"
+                  <span class="text-sm sm:text-xl text-slate-400"
                     >{{.Metadata.DisplayName}}</span
                   >
                   {{end}}
                 </div>
-                <div
-                  class="text-sm sm:text-base text-neutral-300 dark:text-slate-400"
-                >
+                <div class="text-sm sm:text-base text-slate-400">
                   {{.NpubShort}}
                 </div>
               </div>
             </a>
           </header>
-          <div class="published_at">{{.CreatedAt}}</div>
+          <div class="w-full text-right text-sm text-slate-400">
+            {{.CreatedAt}}
+          </div>
 
-          <div class="reply_of">
-            {{ if not (eq "" .ParentLink) }} In reply to {{ .ParentLink }} {{
-            end }}
+          <div class="w-full text-right text-sm text-slate-400">
+            {{ if not (eq "" .ParentLink) }} In reply to
+            <span class="text-strongpink">{{ .ParentLink }}</span> {{ end }}
           </div>
 
           <div

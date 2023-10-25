@@ -328,45 +328,6 @@ body.other {
       flex-basis: 100%;
       max-width: 100%;
     }
-    .profile_intro {
-      display: flex;
-      max-width: 100%;
-      align-items: center;
-      margin-bottom: 1rem;
-      @media print {
-        margin-bottom: 1rem;
-      }
-      a {
-        display: inherit;
-        width: 100%;
-        align-items: inherit;
-        margin: 1rem 0 1rem 0;
-        text-decoration: none;
-        flex-wrap: wrap;
-        @media (max-width: 580px) {
-          margin-top: -0rem;
-          margin-bottom: -0.5rem;
-        }
-      }
-    }
-    .published_at,
-    .reply_of {
-      width: 100%;
-      text-align: right;
-      align-self: end;
-      font-size: 0.8rem;
-      @include themed() {
-        color: t($base5);
-      }
-      a {
-        @include themed() {
-          color: t($accent1);
-        }
-      }
-    }
-    .reply_of {
-      margin-top: 0.2rem;
-    }
   }
 }
 

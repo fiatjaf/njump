@@ -43,7 +43,7 @@
             <div>
               <div class="text-2xl">{{.Metadata.Name}}</div>
               {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
-              <div class="text-xl text-neutral-300 dark:text-slate-400">
+              <div class="text-xl text-slate-400">
                 {{.Metadata.DisplayName}}
               </div>
               {{end}}
@@ -61,7 +61,7 @@
             <h1>
               <div id="profile_name" class="text-2xl">{{.Metadata.Name}}</div>
               {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
-              <div class="text-xl text-neutral-300 dark:text-slate-400">
+              <div class="text-xl text-slate-400">
                 {{.Metadata.DisplayName}}
               </div>
               {{end}}
