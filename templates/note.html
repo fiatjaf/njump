@@ -53,7 +53,7 @@
   </head>
 
   <body
-    class="note | mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-stone-900"
+    class="mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-neutral-800"
   >
     {{template "top" .}}
 
@@ -61,7 +61,7 @@
       <div
         class="sm:flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-20 print:w-full"
       >
-        <div class="column column_content">
+        <div class="break-words w-full sm:w-9/12 print:w-full">
           <header class="max-w-full mb-4">
             <a class="flex items-center flex-wrap" href="/{{.Npub}}">
               <div
@@ -99,7 +99,7 @@
           ></div>
 
           <article
-            class="leading-5 mb-6 prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light"
+            class="leading-5 mb-6 prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-blockquote:py-2 prose-blockquote:border-l-8 prose-blockquote:border-solid prose-blockquote:border-l-gray-100 dark:prose-blockquote:border-l-zinc-800 prose-p:m-0 prose-p:mb-2 prose-cite:text-sm prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-li:mb-2 prose"
           >
             {{ if (not (eq "" .Subject))}}
             <h1 class="text-2xl">{{.Subject}}</h1>

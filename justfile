@@ -10,8 +10,5 @@ deploy: build
 refresh_build: scss prettier
     go build -tags=nocache -o ./tmp/main .
 
-scss:
-    sass static/styles.scss static/styles.css
-
 prettier:
-    prettier -w static/*.css static/*.scss templates/*.html
+    prettier -w templates/*.html

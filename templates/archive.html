@@ -7,7 +7,7 @@
     {{template "head_common" .}}
   </head>
 
-  <body class="profile | mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-stone-900">
+  <body class="mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-neutral-800">
     {{template "top" .}}
 
     <div
@@ -20,7 +20,7 @@
           <div class="text-2xl">{{.Title}}</div>
         </div>
 
-        <div class="column column_content">
+        <div class="break-words w-full sm:w-1/2 print:w-full break-all">
           <div class="leading-5 mb-6">
             <h1 class="text-xl">{{.Title}}</h1>
           </div>
