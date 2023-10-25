@@ -5,7 +5,7 @@
   <div
     class="theme-toggle"
     _="on click tell <html /> toggle between .theme--dark and .theme--default then get your @class then get it[0].split('--')[1].split(' ')[0] then set localStorage.theme to it
-       on load tell <html /> get localStorage.theme then if it is 'dark' add .theme--dark then remove .theme--default else if it is not 'default' then log it then get window.matchMedia('(prefers-color-scheme: dark)').matches then if it is true add .theme--dark then remove .theme--default end"
+       on load tell <html /> get localStorage.theme then if it is 'dark' add .theme--dark then remove .theme--default else if it is not 'default' then get window.matchMedia('(prefers-color-scheme: dark)').matches then if it is true add .theme--dark then remove .theme--default end"
   >
     <svg
       aria-hidden="true"
