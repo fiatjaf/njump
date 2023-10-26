@@ -211,7 +211,18 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Link", "<"+oembed+"&format=xml>; rel=\"alternate\"; type=\"text/xml+oembed\"")
 	}
 
-	// migrating to templ
+	detailsData := DetailsPartial{
+		HideDetails:     true,
+		CreatedAt:       data.createdAt,
+		KindDescription: data.kindDescription,
+		KindNIP:         data.kindNIP,
+		EventJSON:       eventToHTML(data.event),
+		Kind:            data.event.Kind,
+		SeenOn:          data.relays,
+		Npub:            data.npub,
+		Nprofile:        data.nprofile,
+	}
+
 	switch data.templateId {
 	case TelegramInstantView:
 		err = TelegramInstantViewTemplate.Render(w, &TelegramInstantViewPage{
@@ -229,14 +240,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	case Note:
 		err = NoteTemplate.Render(w, &NotePage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
-			DetailsPartial: DetailsPartial{
-				HideDetails:     true,
-				CreatedAt:       data.createdAt,
-				KindDescription: data.kindDescription,
-				KindNIP:         data.kindNIP,
-				EventJSON:       eventToHTML(data.event),
-				Kind:            data.event.Kind,
-			},
+			DetailsPartial:    detailsData,
 			ClientsPartial: ClientsPartial{
 				Clients: generateClientList(code, data.event),
 			},
@@ -253,7 +257,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Oembed:           oembed,
 			ParentLink:       data.parentLink,
 			Proxy:            "https://" + host + "/njump/proxy?src=",
-			SeenOn:           data.relays,
 			Style:            style,
 			Subject:          subject,
 			TextImageURL:     textImageURL,
@@ -265,19 +268,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Other:
 		err = OtherTemplate.Render(w, &OtherPage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
-			DetailsPartial: DetailsPartial{
-				HideDetails:     false,
-				CreatedAt:       data.createdAt,
-				KindDescription: data.kindDescription,
-				KindNIP:         data.kindNIP,
-				EventJSON:       eventToHTML(data.event),
-				Kind:            data.event.Kind,
-			},
-
+			HeadCommonPartial:          HeadCommonPartial{IsProfile: false},
+			DetailsPartial:             detailsData,
 			IsParameterizedReplaceable: data.event.Kind >= 30000 && data.event.Kind < 40000,
 			Naddr:                      data.naddr,
-			Npub:                       data.npub,
 			Kind:                       data.event.Kind,
 			KindDescription:            data.kindDescription,
 		})

@@ -112,26 +112,7 @@
             {{ .Content }}
           </article>
 
-          <div
-            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-zinc-700 w-1/3"
-          ></div>
-
-          <div class="leading-5 mb-6">
-            <div class="text-sm text-strongpink">Author Public key</div>
-            {{.Npub}}
-          </div>
-
-          {{ if not (eq 0 (len .SeenOn)) }}
-          <div class="leading-5 mb-6">
-            <div class="text-sm text-strongpink">Seen on</div>
-            {{ range .SeenOn }}<a href="/r/{{.}}">{{.}}</a>
-            {{ end }}
-          </div>
-          {{ end }}
-
-          <!---->
-
-          {{template "details" .}}
+          {{template "details" .DetailsPartial}}
 
           <div
             class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-zinc-700 w-1/3"

@@ -60,6 +60,9 @@ type DetailsPartial struct {
 	CreatedAt       string
 	EventJSON       template.HTML
 	Nevent          string
+	Nprofile        string
+	Npub            string
+	SeenOn          []string
 	Kind            int
 	KindNIP         string
 	KindDescription string
@@ -178,7 +181,6 @@ type OtherPage struct {
 
 	IsParameterizedReplaceable bool
 	Naddr                      string
-	Npub                       string
 	Kind                       int
 	KindDescription            string
 }
@@ -250,6 +252,7 @@ type ProfilePage struct {
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
 	Npub                       string
+	Nprofile                   string
 	IsReply                    string
 	Proxy                      string
 	Title                      string
