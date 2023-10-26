@@ -28,12 +28,11 @@ var (
 
 //tmpl:bind head_common.html
 type HeadCommonPartial struct {
-	IsProfile bool
+	IsProfile          bool
+	TailwindDebugStuff template.HTML
 }
 
-func (*HeadCommonPartial) TemplateText() string {
-	return tmplHeadCommon
-}
+func (*HeadCommonPartial) TemplateText() string { return tmplHeadCommon }
 
 var (
 	//go:embed templates/top.html
@@ -44,9 +43,7 @@ var (
 //tmpl:bind top.html
 type TopPartial struct{}
 
-func (*TopPartial) TemplateText() string {
-	return tmplTop
-}
+func (*TopPartial) TemplateText() string { return tmplTop }
 
 var (
 	//go:embed templates/details.html
@@ -68,9 +65,7 @@ type DetailsPartial struct {
 	KindDescription string
 }
 
-func (*DetailsPartial) TemplateText() string {
-	return tmplDetails
-}
+func (*DetailsPartial) TemplateText() string { return tmplDetails }
 
 var (
 	//go:embed templates/clients.html
@@ -83,9 +78,7 @@ type ClientsPartial struct {
 	Clients []ClientReference
 }
 
-func (*ClientsPartial) TemplateText() string {
-	return tmplClients
-}
+func (*ClientsPartial) TemplateText() string { return tmplClients }
 
 var (
 	//go:embed templates/footer.html
@@ -96,9 +89,7 @@ var (
 //tmpl:bind footer.html
 type FooterPartial struct{}
 
-func (*FooterPartial) TemplateText() string {
-	return tmplFooter
-}
+func (*FooterPartial) TemplateText() string { return tmplFooter }
 
 var (
 	//go:embed templates/telegram_instant_view.html
@@ -119,9 +110,7 @@ type TelegramInstantViewPage struct {
 	CreatedAt   string
 }
 
-func (*TelegramInstantViewPage) TemplateText() string {
-	return tmplTelegramInstantView
-}
+func (*TelegramInstantViewPage) TemplateText() string { return tmplTelegramInstantView }
 
 var (
 	//go:embed templates/homepage.html
@@ -139,9 +128,7 @@ type HomePage struct {
 	LastNotes []string
 }
 
-func (*HomePage) TemplateText() string {
-	return tmplHomePage
-}
+func (*HomePage) TemplateText() string { return tmplHomePage }
 
 var (
 	//go:embed templates/archive.html
@@ -163,9 +150,7 @@ type ArchivePage struct {
 	PrevPage      int
 }
 
-func (*ArchivePage) TemplateText() string {
-	return tmplArchive
-}
+func (*ArchivePage) TemplateText() string { return tmplArchive }
 
 var (
 	//go:embed templates/other.html
@@ -185,9 +170,7 @@ type OtherPage struct {
 	KindDescription            string
 }
 
-func (*OtherPage) TemplateText() string {
-	return tmplOther
-}
+func (*OtherPage) TemplateText() string { return tmplOther }
 
 var (
 	//go:embed templates/note.html
@@ -225,9 +208,7 @@ type NotePage struct {
 	VideoType        string
 }
 
-func (*NotePage) TemplateText() string {
-	return tmplNote
-}
+func (*NotePage) TemplateText() string { return tmplNote }
 
 var (
 	//go:embed templates/profile.html
@@ -258,9 +239,7 @@ type ProfilePage struct {
 	Title                      string
 }
 
-func (*ProfilePage) TemplateText() string {
-	return tmplProfile
-}
+func (*ProfilePage) TemplateText() string { return tmplProfile }
 
 var (
 	//go:embed templates/relay.html
@@ -281,9 +260,7 @@ type RelayPage struct {
 	ModifiedAt string
 }
 
-func (*RelayPage) TemplateText() string {
-	return tmplRelay
-}
+func (*RelayPage) TemplateText() string { return tmplRelay }
 
 var (
 	//go:embed templates/sitemap.xml
@@ -309,6 +286,4 @@ type SitemapPage struct {
 	Data       []string
 }
 
-func (*SitemapPage) TemplateText() string {
-	return tmplSitemap
-}
+func (*SitemapPage) TemplateText() string { return tmplSitemap }

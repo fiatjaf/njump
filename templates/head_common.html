@@ -39,53 +39,13 @@
 {{end}}
 <meta name="theme-color" content="#e42a6d" />
 <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<script>
-  tailwind.config = {
-    darkMode: ['class', '.theme--dark'],
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['Helvetica', 'ui-sans-serif', 'system-ui']
-        },
-        colors: {
-          lavender: '#fdf0f5',
-          strongpink: '#e32a6d',
-          crimson: '#bc1150',
-          garnet: '#42091e'
-        },
-        typography: ({theme}) => ({
-          /* for markdown html content */
-          DEFAULT: {
-            css: {
-              '--tw-prose-headings': theme('colors.strongpink'),
-              '--tw-prose-invert-headings': theme('colors.strongpink'),
-              '--tw-prose-links': theme('colors.gray[700]'),
-              '--tw-prose-invert-links': theme('colors.neutral[50]')
-            }
-          }
-        })
-      }
-    }
-  }
-</script>
-<style type="text/tailwindcss">
-  @layer utilities {
-    .imgclip {
-      clip-path: url(#svg-shape);
-    }
-    .gradient {
-      mask-image: linear-gradient(
-        to bottom,
-        rgb(0, 0, 0) 50%,
-        rgba(0, 0, 0, 0) 100%
-      );
-    }
-    .safari {
-      margin: 1cm 3cm;
-    }
-  }
-</style>
+{{ if not (eq "" .TailwindDebugStuff) }} {{ .TailwindDebugStuff }} {{ else }}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="/njump/static/tailwind-bundle.min.css"
+/>
+{{ end }}
 <style>
   @media print {
     @page {

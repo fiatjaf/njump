@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer utilities {
+  .imgclip {
+    clip-path: url(#svg-shape);
+  }
+  .gradient {
+    mask-image: linear-gradient(
+      to bottom,
+      rgb(0, 0, 0) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+  .safari {
+    margin: 1cm 3cm;
+  }
+}

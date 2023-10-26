@@ -31,7 +31,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 
 	if !isSitemap {
 		err = ProfileTemplate.Render(w, &ProfilePage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: true},
+			HeadCommonPartial: HeadCommonPartial{IsProfile: true, TailwindDebugStuff: tailwindDebugStuff},
 			DetailsPartial: DetailsPartial{
 				HideDetails:     true,
 				CreatedAt:       data.createdAt,

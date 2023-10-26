@@ -64,7 +64,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 
 	if !isSitemap {
 		RelayTemplate.Render(w, &RelayPage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
+			HeadCommonPartial: HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
 			ClientsPartial: ClientsPartial{
 				Clients: generateRelayBrowserClientList(hostname),
 			},

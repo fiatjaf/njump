@@ -3,8 +3,11 @@ package main
 import (
 	"context"
 	"embed"
+	"fmt"
+	"html/template"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
@@ -14,8 +17,9 @@ import (
 
 type Settings struct {
 	Port          string `envconfig:"PORT" default:"2999"`
-	DiskCachePath string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-cache"`
 	Domain        string `envconfig:"DOMAIN" default:"njump.me"`
+	DiskCachePath string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-cache"`
+	TailwindDebug bool   `envconfig:"TAILWIND_DEBUG"`
 }
 
 //go:embed static/*
@@ -25,8 +29,9 @@ var static embed.FS
 var templates embed.FS
 
 var (
-	s   Settings
-	log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
+	s                  Settings
+	log                = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
+	tailwindDebugStuff template.HTML
 )
 
 func updateArchives(ctx context.Context) {
@@ -54,6 +59,25 @@ func main() {
 		if canonicalHost := os.Getenv("CANONICAL_HOST"); canonicalHost != "" {
 			s.Domain = canonicalHost
 		}
+	}
+
+	// if we're in tailwind debug mode, initialize the runtime tailwind stuff
+	if s.TailwindDebug {
+		configb, err := os.ReadFile("tailwind.config.js")
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to load tailwind.config.js")
+			return
+		}
+		config := strings.Replace(string(configb), "module.exports", "tailwind.config", 1)
+
+		styleb, err := os.ReadFile("tailwind.css")
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to load tailwind.css")
+			return
+		}
+		style := string(styleb)
+
+		tailwindDebugStuff = template.HTML(fmt.Sprintf("<script src=\"https://cdn.tailwindcss.com?plugins=typography\"></script><script>\n%s</script><style type=\"text/tailwindcss\">%s</style>", config, style))
 	}
 
 	// initialize disk cache

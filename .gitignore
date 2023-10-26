@@ -3,3 +3,4 @@ local/
 tmp/
 node_modules/
 .sass-cache/
+static/tailwind-bundle.min.css

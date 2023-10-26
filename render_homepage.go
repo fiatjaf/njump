@@ -7,7 +7,7 @@ import (
 func renderHomepage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=3600")
 	err := HomePageTemplate.Render(w, &HomePage{
-		HeadCommonPartial: HeadCommonPartial{IsProfile: false},
+		HeadCommonPartial: HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
 		Host:              s.Domain,
 	})
 	if err != nil {

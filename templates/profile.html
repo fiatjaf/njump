@@ -25,7 +25,7 @@
       href="/{{.Npub}}.Xml"
     />
 
-    {{template "head_common" .}}
+    {{template "head_common" .HeadCommonPartial}}
   </head>
 
   <body
@@ -108,11 +108,11 @@
 
           {{ if not (eq 0 (len .AuthorRelays)) }}
           <div class="leading-5 mb-6">
-            <div class="text-sm text-strongpink">Posting on these relays</div>
+            <div class="text-sm text-strongpink">Publishing to</div>
             {{range $index, $element := .AuthorRelays}}
             <a
               href="/r/{{$element}}"
-              class="inline-block max-w-full border mr-1 mt-2.5 px-2 py-0.5 rounded-lg border-slate-300 hover:text-white hover:bg-strongpink hover:border hover:border-solid hover:border-strongpink"
+              class="inline-block text-sm max-w-full border mr-1 mt-2 px-2 py-0.5 rounded-lg border-slate-300 hover:text-white hover:bg-strongpink hover:border hover:border-solid hover:border-strongpink"
               >{{$element}}</a
             >
             {{end}}

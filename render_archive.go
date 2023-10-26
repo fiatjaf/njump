@@ -85,7 +85,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 
 	if !isSitemap {
 		ArchiveTemplate.Render(w, &ArchivePage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
+			HeadCommonPartial: HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
 
 			Title:         title,
 			PathPrefix:    pathPrefix,

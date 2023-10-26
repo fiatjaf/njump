@@ -239,7 +239,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Note:
 		err = NoteTemplate.Render(w, &NotePage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: false},
+			HeadCommonPartial: HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
 			DetailsPartial:    detailsData,
 			ClientsPartial: ClientsPartial{
 				Clients: generateClientList(code, data.event),
@@ -268,7 +268,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Other:
 		err = OtherTemplate.Render(w, &OtherPage{
-			HeadCommonPartial:          HeadCommonPartial{IsProfile: false},
+			HeadCommonPartial:          HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
 			DetailsPartial:             detailsData,
 			IsParameterizedReplaceable: data.event.Kind >= 30000 && data.event.Kind < 40000,
 			Naddr:                      data.naddr,
