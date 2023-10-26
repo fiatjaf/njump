@@ -266,7 +266,7 @@ func shortenNostrURLs(input string) string {
 }
 
 func getNameFromNip19(ctx context.Context, nip19 string) string {
-	author, _, err := getEvent(ctx, nip19)
+	author, _, err := getEvent(ctx, nip19, nil)
 	if err != nil {
 		return nip19
 	}
@@ -305,7 +305,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 		submatch := nostrNoteNeventMatcher.FindStringSubmatch(match)
 		nip19 := submatch[1]
 
-		event, _, err := getEvent(ctx, nip19)
+		event, _, err := getEvent(ctx, nip19, nil)
 		if err != nil {
 			log.Warn().Str("nip19", nip19).Msg("failed to get nip19")
 			return nip19
@@ -532,4 +532,11 @@ func eventToHTML(evt *nostr.Event) template.HTML {
   <span class="`+keyCls+`">"sig":</span> <span class="text-zinc-500 dark:text-zinc-50 content">"%s"</span>
 }`, evt.ID, evt.PubKey, evt.CreatedAt, evt.Kind, tagsHTML, html.EscapeString(string(contentJSON)), evt.Sig),
 	)
+}
+
+func limitAt[V any](list []V, n int) []V {
+	if len(list) < n {
+		return list
+	}
+	return list[0:n]
 }

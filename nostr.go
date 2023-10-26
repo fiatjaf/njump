@@ -64,14 +64,18 @@ func getRelay() string {
 	return everything[serial]
 }
 
-func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) {
+func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Event, []string, error) {
 	if b, ok := cache.Get(code); ok {
 		v := CachedEvent{}
 		err := json.Unmarshal(b, &v)
 		return v.Event, v.Relays, err
 	}
 
-	withRelays := true
+	withRelays := false
+
+	if len(relayHints) > 0 {
+		withRelays = true
+	}
 
 	prefix, data, err := nip19.Decode(code)
 	if err != nil {
@@ -86,6 +90,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 
 	var filter nostr.Filter
 	relays := make([]string, 0, 25)
+	relays = append(relays, relayHints...)
 	relays = append(relays, always...)
 
 	switch v := data.(type) {
@@ -95,13 +100,14 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 		filter.Kinds = []int{0}
 		relays = append(relays, profiles...)
 		relays = append(relays, v.Relays...)
-		withRelays = false
+		withRelays = true
 	case nostr.EventPointer:
 		author = v.Author
 		filter.IDs = []string{v.ID}
 		relays = append(relays, getRelay())
 		relays = append(relays, getRelay())
 		relays = append(relays, v.Relays...)
+		withRelays = true
 	case nostr.EntityPointer:
 		author = v.PublicKey
 		filter.Authors = []string{v.PublicKey}
@@ -114,6 +120,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 		relays = append(relays, getRelay())
 		relays = append(relays, getRelay())
 		relays = append(relays, v.Relays...)
+		withRelays = true
 	case string:
 		if prefix == "note" {
 			filter.IDs = []string{v}
@@ -125,7 +132,6 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 			filter.Authors = []string{v}
 			filter.Kinds = []int{0}
 			relays = append(relays, profiles...)
-			withRelays = false
 		}
 	}
 

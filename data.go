@@ -66,6 +66,7 @@ type Data struct {
 	relays              []string
 	npub                string
 	npubShort           string
+	nprofile            string
 	nevent              string
 	naddr               string
 	createdAt           string
@@ -86,7 +87,7 @@ type Data struct {
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
 	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
-	event, relays, err := getEvent(ctx, code)
+	event, relays, err := getEvent(ctx, code, nil)
 	if err != nil {
 		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
 		return nil, err
@@ -101,6 +102,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
+	nprofile := ""
 	nevent, _ := nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
 	naddr := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
@@ -196,7 +198,10 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	if event.Kind != 0 {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-		author, _, _ = getEvent(ctx, npub)
+		author, relays, _ = getEvent(ctx, npub, relaysForNip19)
+		if len(relays) > 0 {
+			nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
+		}
 		cancel()
 	}
 
@@ -248,6 +253,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		relays:              eventRelays,
 		npub:                npub,
 		npubShort:           npubShort,
+		nprofile:            nprofile,
 		nevent:              nevent,
 		naddr:               naddr,
 		authorRelays:        authorRelays,
