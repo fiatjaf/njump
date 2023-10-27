@@ -12,6 +12,9 @@ module.exports = {
         crimson: '#bc1150',
         garnet: '#42091e'
       },
+      borderWidth: {
+        '05rem': '0.5rem', // You can define custom border widths in rem units
+      },
       typography: ({theme}) => ({
         /* for markdown html content */
         DEFAULT: {
