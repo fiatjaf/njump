@@ -48,6 +48,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	host := r.Header.Get("X-Forwarded-Host")
+	if host == "" {
+		host = r.Host
+	}
+
 	style := getPreviewStyle(r)
 
 	data, err := grabData(r.Context(), code, false)
