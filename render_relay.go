@@ -1,12 +1,10 @@
 package main
 
 import (
-	"context"
 	"net/http"
 	"strings"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip11"
 )
 
@@ -20,16 +18,11 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	isSitemap := false
-	numResults := 1000
 
 	if strings.HasSuffix(hostname, ".xml") {
 		hostname = hostname[:len(hostname)-4]
-		numResults = 5000
 		isSitemap = true
 	}
-
-	ctx, cancel := context.WithTimeout(r.Context(), time.Second*5)
-	defer cancel()
 
 	// relay metadata
 	info, _ := nip11.Fetch(r.Context(), hostname)
@@ -40,13 +33,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// last notes
-	var lastNotes []*nostr.Event
-	if relay, err := pool.EnsureRelay(hostname); err == nil {
-		lastNotes, _ = relay.QuerySync(ctx, nostr.Filter{
-			Kinds: []int{1},
-			Limit: numResults,
-		})
-	}
+	lastNotes := relayLastNotes(r.Context(), hostname, isSitemap)
 	renderableLastNotes := make([]EnhancedEvent, len(lastNotes))
 	lastEventAt := time.Now()
 	if len(lastNotes) > 0 {

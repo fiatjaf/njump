@@ -130,15 +130,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	switch event.Kind {
 	case 0:
-		key := ""
-		eventsToFetch := 100
-		if isProfileSitemap {
-			key = "lns:" + event.PubKey
-			eventsToFetch = 50000
-		} else {
-			key = "ln:" + event.PubKey
-		}
-
 		{
 			rawAuthorRelays := []string{}
 			ctx, cancel := context.WithTimeout(ctx, time.Second*4)
@@ -157,17 +148,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			}
 		}
 
-		var lastNotes []*nostr.Event
-
-		if ok := cache.GetJSON(key, &lastNotes); !ok {
-			ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-			lastNotes = getLastNotes(ctx, code, eventsToFetch)
-			cancel()
-			if len(lastNotes) > 0 {
-				cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
-			}
-		}
-
+		lastNotes := authorLastNotes(ctx, event.PubKey, authorRelays, isProfileSitemap)
 		renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
 		for i, levt := range lastNotes {
 			renderableLastNotes[i] = EnhancedEvent{levt, []string{}}

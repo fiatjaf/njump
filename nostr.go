@@ -191,18 +191,20 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	return result, successRelays, nil
 }
 
-func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
-	if limit <= 0 {
-		limit = 10
+func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSitemap bool) []*nostr.Event {
+	key := ""
+	limit := 100
+	if isSitemap {
+		key = "lns:" + pubkey
+		limit = 50000
+	} else {
+		key = "ln:" + pubkey
 	}
 
-	pp := sdk.InputToProfile(ctx, code)
-	if pp == nil {
-		return nil
+	lastNotes := make([]*nostr.Event, 0, limit)
+	if ok := cache.GetJSON(key, &lastNotes); ok {
+		return lastNotes
 	}
-
-	pubkeyRelays := relaysForPubkey(ctx, pp.PublicKey, pp.Relays...)
-	relays := append(pp.Relays, pubkeyRelays...)
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 	defer cancel()
@@ -214,12 +216,11 @@ func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
 	ch := pool.SubManyEose(ctx, relays, nostr.Filters{
 		{
 			Kinds:   []int{nostr.KindTextNote},
-			Authors: []string{pp.PublicKey},
+			Authors: []string{pubkey},
 			Limit:   limit,
 		},
 	})
 
-	lastNotes := make([]*nostr.Event, 0, 20)
 	for {
 		select {
 		case ie, more := <-ch:
@@ -234,7 +235,41 @@ func getLastNotes(ctx context.Context, code string, limit int) []*nostr.Event {
 
 end:
 	slices.SortFunc(lastNotes, func(a, b *nostr.Event) bool { return a.CreatedAt > b.CreatedAt })
+	if len(lastNotes) > 0 {
+		cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
+	}
+	return lastNotes
+}
 
+func relayLastNotes(ctx context.Context, relayUrl string, isSitemap bool) []*nostr.Event {
+	key := ""
+	limit := 1000
+	if isSitemap {
+		key = "rlns:" + nostr.NormalizeURL(relayUrl)
+		limit = 5000
+	} else {
+		key = "rln:" + nostr.NormalizeURL(relayUrl)
+	}
+
+	lastNotes := make([]*nostr.Event, 0, limit)
+	if ok := cache.GetJSON(key, &lastNotes); ok {
+		return lastNotes
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+	defer cancel()
+
+	if relay, err := pool.EnsureRelay(relayUrl); err == nil {
+		lastNotes, _ = relay.QuerySync(ctx, nostr.Filter{
+			Kinds: []int{1},
+			Limit: limit,
+		})
+	}
+
+	slices.SortFunc(lastNotes, func(a, b *nostr.Event) bool { return a.CreatedAt > b.CreatedAt })
+	if len(lastNotes) > 0 {
+		cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
+	}
 	return lastNotes
 }
 
