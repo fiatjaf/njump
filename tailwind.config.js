@@ -15,6 +15,9 @@ module.exports = {
       borderWidth: {
         '05rem': '0.5rem', // You can define custom border widths in rem units
       },
+      gap: {
+        '48vw': '4.8vw',
+      },
       typography: ({theme}) => ({
         /* for markdown html content */
         DEFAULT: {
