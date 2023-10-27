@@ -9,7 +9,7 @@
   </head>
 
   <body
-    class="mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-neutral-800 text-xl"
+    class="mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-neutral-800"
   >
     {{template "top" .}}
 
@@ -20,9 +20,9 @@
         class="flex w-full sm:w-2/3 px-4 justify-between overflow-visible gap-10 lg:gap-48vw max-w-screen-2xl print:w-full"
       >
         <div>
-          <h2 class="text-strongpink text-2xl">What is njump?</h2>
+          <h2 class="text-strongpink text-2xl">What mt-7 is njump?</h2>
 
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             <i>njump</i> is a HTTP
             <a class="underline" href="https://github.com/nostr-protocol/nostr"
               >Nostr</a
@@ -33,7 +33,7 @@
             resource outside the Nostr world, where the
             <code>nostr:</code> schema is not (yet) working.
           </p>
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             <i>njump</i> currently lives under {{ .Host }}, you can reach it
             appending a Nostr
             <a
@@ -47,7 +47,7 @@
               >{{ .Host }}/&lt;nip-19-entity&gt;</span
             >.
           </p>
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             For example, here's
             <a
               href="/npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6"
@@ -106,13 +106,13 @@
             </div>
           </div>
 
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             There are several reasons to choose <i>njump</i> when sharing Nostr
             content outside of Nostr:
           </p>
 
-          <h2 class="text-strongpink text-2xl">Clean, fast and solid</h2>
-          <p class="leading-6 my-3">
+          <h2 class="text-strongpink text-2xl mt-7">Clean, fast and solid</h2>
+          <p class="leading-5 my-3">
             Pages by <i>njump</i> are extremely lightweight and fast to load
             because there isn't any client side javascript involved; they are
             minimalistic with the right attention to typography, focusing the
@@ -122,13 +122,13 @@
             onboard new users!
           </p>
 
-          <h2 class="text-strongpink text-2xl">Good preview</h2>
-          <p class="leading-6 my-3">
+          <h2 class="text-strongpink text-2xl mt-7">Good preview</h2>
+          <p class="leading-5 my-3">
             <i>njump</i> renders everything on the server-side, so it is able to
             generate useful rich previews that work on Telegram, Discord,
             Twitter and other places.
           </p>
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             When opening the URL directly in a browser, visitors will find
             referenced content like images, video and links to referenced Nostr
             events displayed in a simple but effective way. It shows the note
@@ -136,15 +136,15 @@
             for printing or exporting to PDF.
           </p>
 
-          <h2 class="text-strongpink text-2xl">Cooperative (jump-out)</h2>
-          <p class="leading-6 my-3">
+          <h2 class="text-strongpink text-2xl mt-7">Cooperative (jump-out)</h2>
+          <p class="leading-5 my-3">
             <i>njump</i> is not interested capturing users at all, on the
             contrary it invites them to "jump" to the Nostr resource by picking
             from a list of web clients or with a <code>nostr:</code> for native
             clients. It even remembers the most used one for each visitor and
             puts it on the top for fast clicking or tap.
           </p>
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             <a
               class="underline"
               href="https://github.com/nostr-protocol/nips/blob/master/89.md"
@@ -153,8 +153,8 @@
             support coming!
           </p>
 
-          <h2 class="text-strongpink text-2xl">Search friendly (jump-in)</h2>
-          <p class="leading-6 my-3">
+          <h2 class="text-strongpink text-2xl mt-7">Search friendly (jump-in)</h2>
+          <p class="leading-5 my-3">
             This is crucial: <i>njump</i> pages are static so search engines can
             index them, this means that <i>njump</i> can help others to discover
             great content on Nostr, jump in and join us! <i>njump</i> is the
@@ -163,8 +163,8 @@
             you also help Nostr flourish.
           </p>
 
-          <h2 class="text-strongpink text-2xl">Share NIP-05 profiles</h2>
-          <p class="leading-6 my-3">
+          <h2 class="text-strongpink text-2xl mt-7">Share NIP-05 profiles</h2>
+          <p class="leading-5 my-3">
             Now you can share your own profile with a pretty
             <a
               class="underline"
@@ -181,15 +181,15 @@
               >https://{{ .Host }}/mike@mikedilger.com</a
             >.
           </p>
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             A profile shows the basic metadata infos, the used "outbox" relays
             and the last notes.
           </p>
 
-          <h2 class="text-strongpink text-2xl">
+          <h2 class="text-strongpink text-2xl mt-7">
             Share on Twitter and Telegram
           </h2>
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             Now you can quickly and effortlessly share Nostr notes on Twitter
             and Telegram, and maybe on many other "social platforms": just drop
             a link, and njump will render the note text using the preview image
@@ -198,8 +198,8 @@
             in-app!
           </p>
 
-          <h2 class="text-strongpink text-2xl">Relays view</h2>
-          <p class="leading-6 my-3">
+          <h2 class="text-strongpink text-2xl mt-7">Relays view</h2>
+          <p class="leading-5 my-3">
             You can have a view of the last content posted to a relay using
             <span class="rounded px-1 bg-lavender dark:bg-garnet"
               >{{ .Host }}/r/&lt;relay-host&gt;</span
@@ -208,7 +208,7 @@
               >https://{{ .Host }}/r/nostr.wine</a
             >
           </p>
-          <p class="leading-6 my-3">
+          <p class="leading-5 my-3">
             Some basic infos (<a
               href="https://github.com/nostr-protocol/nips/blob/master/11.md"
               >NIP-11</a
@@ -217,8 +217,8 @@
             to join a relay.
           </p>
 
-          <h2 class="text-strongpink text-2xl">Inspector tool</h2>
-          <p class="leading-6 my-3">
+          <h2 class="text-strongpink text-2xl mt-7">Inspector tool</h2>
+          <p class="leading-5 my-3">
             You know, we are all programmers, including our moms, so for every
             <i>njump</i> page you can toggle the "Show more details" switch and
             inspect the full event JSON. Without installing other tools (like
