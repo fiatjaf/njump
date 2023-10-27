@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 @layer utilities {
+  html, body {
+    font-size: 19px;
+  }
   .imgclip {
     clip-path: url(#svg-shape);
   }
