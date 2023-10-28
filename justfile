@@ -1,3 +1,5 @@
+export PATH := "./node_modules/.bin:" + env_var('PATH')
+
 dev:
     TAILWIND_DEBUG=true go run .
 

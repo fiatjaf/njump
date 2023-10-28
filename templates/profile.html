@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html class="theme--default text-lg sm:text-xl font-light print:text-base">
+<!doctype html>
+<html class="theme--default text-lg font-light print:text-base sm:text-xl">
   <meta charset="UTF-8" />
   <head>
     <title>{{.Metadata.Name}} / {{.Metadata.DisplayName}} is on nostr</title>
@@ -29,19 +29,19 @@
   </head>
 
   <body
-    class="mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-neutral-800"
+    class="mb-16 bg-white text-gray-600 dark:bg-neutral-800 dark:text-neutral-50 print:text-black"
   >
     {{template "top" .}}
 
-    <div class="sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0">
+    <div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
       <div
-        class="w-full sm:flex sm:w-9/12 sm:px-4 justify-between overflow-visible gap-10 lg:gap-48vw max-w-screen-2xl print:w-full"
+        class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-9/12 sm:px-4 lg:gap-48vw"
       >
         <header
-          class="flex sm:block items-center sm:items-start relative sm:sticky self-start basis-1/4 sm:mt-8 top-auto sm:top-8"
+          class="relative top-auto flex basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:block sm:items-start"
         >
           <div
-            class="text-left basis-[64%] overflow-hidden hidden items-center"
+            class="hidden basis-[64%] items-center overflow-hidden text-left"
             _="on load or scroll from window or resize from window get #profile_name then measure its top, height then if top is less than height / -2 or height is 0 remove .hidden otherwise add .hidden"
           >
             <div class="mb-3 sm:text-center">
@@ -54,14 +54,14 @@
             </div>
           </div>
           <div
-            class="max-w-[40%] sm:max-w-full imgclip overflow-hidden basis-2/5 sm:basis-auto"
+            class="imgclip max-w-[40%] basis-2/5 overflow-hidden sm:max-w-full sm:basis-auto"
           >
-            <img class="block w-full h-auto" src="{{.Metadata.Picture}}" />
+            <img class="block h-auto w-full" src="{{.Metadata.Picture}}" />
           </div>
         </header>
 
-        <div class="break-words w-full sm:w-1/2 print:w-full">
-          <header class="leading-5 mb-6 hidden sm:flex sm:items-center">
+        <div class="w-full break-words print:w-full sm:w-1/2">
+          <header class="mb-6 hidden leading-5 sm:flex sm:items-center">
             <h1>
               <div id="profile_name" class="text-2xl">{{.Metadata.Name}}</div>
               {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
@@ -72,47 +72,47 @@
             </h1>
           </header>
           <div
-            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-zinc-700 w-1/2"
+            class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
-          <div class="leading-5 mb-6">
+          <div class="mb-6 leading-5">
             <a
-              class="border-b-2 pb-0.5 border-b-gray-300 hover:text-strongpink"
+              class="border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink"
               href="{{.NormalizedAuthorWebsiteURL}}"
               >{{.Metadata.Website}}</a
             >
           </div>
           <div
-            class="leading-5 mb-6 prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light"
+            class="prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light mb-6 leading-5"
           >
             {{.RenderedAuthorAboutText}}
           </div>
           <div
-            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-zinc-700 w-1/3"
+            class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
-          <div class="leading-5 mb-6">
+          <div class="mb-6 leading-5">
             <div class="text-sm text-strongpink">Public Key</div>
             {{.Npub}}
           </div>
-          <div class="leading-5 mb-6">
+          <div class="mb-6 leading-5">
             <div class="text-sm text-strongpink">NIP-05 Address</div>
             {{.Metadata.NIP05}}
           </div>
-          <div class="leading-5 mb-6">
+          <div class="mb-6 leading-5">
             <div class="text-sm text-strongpink">NIP-57 Address</div>
             {{.Metadata.LUD16}}
           </div>
-          <div class="leading-5 mb-6">
+          <div class="mb-6 leading-5">
             <div class="text-sm text-strongpink">Profile Code</div>
             {{.Nprofile}}
           </div>
 
           {{ if not (eq 0 (len .AuthorRelays)) }}
-          <div class="leading-5 mb-6">
+          <div class="mb-6 leading-5">
             <div class="text-sm text-strongpink">Publishing to</div>
             {{range $index, $element := .AuthorRelays}}
             <a
               href="/r/{{$element}}"
-              class="inline-block max-w-full border mr-1 mt-2 px-2 py-0.5 rounded-lg border-slate-300 hover:text-white hover:bg-strongpink hover:border hover:border-solid hover:border-strongpink"
+              class="mr-1 mt-2 inline-block max-w-full rounded-lg border border-slate-300 px-2 py-0.5 hover:border hover:border-solid hover:border-strongpink hover:bg-strongpink hover:text-white"
               >{{$element}}</a
             >
             {{end}}
@@ -127,27 +127,27 @@
 
           {{if not (eq 0 (len .LastNotes))}}
           <div
-            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-zinc-700 w-1/3"
+            class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
-          <nav class="leading-5 mb-6">
-            <h2 class="text-strongpink text-2xl">Last Notes</h2>
+          <nav class="mb-6 leading-5">
+            <h2 class="text-2xl text-strongpink">Last Notes</h2>
             {{range $i, $ee := .LastNotes}}
             <a
-              class="block no-underline my-8 hover:pl-4 hover:-ml-6 hover:border-solid hover:border-l-05rem hover:border-l-gray-100 dark:hover:border-l-zinc-700"
+              class="my-8 block no-underline hover:-ml-6 hover:border-l-05rem hover:border-solid hover:border-l-gray-100 hover:pl-4 dark:hover:border-l-zinc-700"
               href="/{{$ee.Nevent}}"
             >
               <div
-                class="flex flex-row flex-wrap -ml-2.5 mb-1.5 pl-2.5 pb-1 border-solid border-b-4 border-b-gray-100 dark:border-b-neutral-800"
+                class="-ml-2.5 mb-1.5 flex flex-row flex-wrap border-b-4 border-solid border-b-gray-100 pb-1 pl-2.5 dark:border-b-neutral-800"
               >
                 <div class="text-sm text-strongpink">{{$ee.CreatedAtStr}}</div>
                 {{if $ee.IsReply}}
-                <div class="text-sm ml-2 text-gray-300 dark:text-gray-400">
+                <div class="ml-2 text-sm text-gray-300 dark:text-gray-400">
                   - reply
                 </div>
                 {{end}}
               </div>
               <div
-                class="basis-full max-h-40 overflow-hidden mt-0.5 hover:text-strongpink"
+                class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink"
                 _="on load if my scrollHeight > my offsetHeight add .gradient"
               >
                 {{$ee.Preview}}
@@ -158,7 +158,7 @@
           {{end}}
 
           <div
-            class="h-1.5 mb-6 -ml-4 sm:-ml-2.5 bg-zinc-100 dark:bg-zinc-700 w-1/3"
+            class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
         </div>
 

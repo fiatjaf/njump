@@ -1,5 +1,5 @@
 <aside
-  class="fixed sm:sticky w-full sm:w-auto transition-all duration-500 left-0 sm:left-auto top-auto sm:top-8 bottom-0 sm:bottom-auto self-start basis-3/12 mt-4 print:hidden"
+  class="fixed bottom-0 left-0 top-auto mt-4 w-full basis-3/12 self-start transition-all duration-500 print:hidden sm:sticky sm:bottom-auto sm:left-auto sm:top-8 sm:w-auto"
   _="on click
        toggle .hidden on #open
        toggle .hidden on #close
@@ -7,7 +7,7 @@
        toggle .hidden on <.client:not(:first-child) />"
 >
   <div
-    class="text-sm text-center mb-4 absolute top-0 right-0 sm:relative w-10 sm:w-auto h-10 sm:h-auto"
+    class="absolute right-0 top-0 mb-4 h-10 w-10 text-center text-sm sm:relative sm:h-auto sm:w-auto"
   >
     <span class="hidden sm:block">Open in</span>
     <span id="open" class="inline sm:hidden">
@@ -17,7 +17,7 @@
         height="20"
         fill="currentColor"
         viewBox="0 0 20 20"
-        class="w-1/2 h-1/2 block m-auto mt-[28%]"
+        class="m-auto mt-[28%] block h-1/2 w-1/2"
       >
         <path
           fill="#fafafa"
@@ -34,7 +34,7 @@
         height="16"
         fill="currentColor"
         viewBox="0 0 31 16"
-        class="w-1/2 h-1/2 block m-auto mt-[28%]"
+        class="m-auto mt-[28%] block h-1/2 w-1/2"
       >
         <path
           fill="#fafafa"
@@ -55,15 +55,17 @@
   >
     {{range .Clients}}
     <div
-      class="client | hidden sm:mb-3 sm:flex items-center bg-zinc-700 first-of-type:bg-strongpink first-of-type:rounded-t-lg sm:rounded-lg sm:first-of-type:rounded-lg hover:bg-zinc-800 border-b first-of-type:border-0 sm:border-0 border-zinc-800"
+      class="client | hidden items-center border-b border-zinc-800 bg-zinc-700 first-of-type:rounded-t-lg first-of-type:border-0 first-of-type:bg-strongpink hover:bg-zinc-800 sm:mb-3 sm:flex sm:rounded-lg sm:border-0 sm:first-of-type:rounded-lg"
       _="on load get localStorage['nj:{{.ID}}'] or 0 then set @count to it then set @title to `used ${it} times`
          on click increment localStorage['nj:{{.ID}}']"
     >
       <a
-        class="block sm:inline basis-full leading-4 text-left sm:text-center text-[17px] text-white no-underline px-3 py-3 sm:py-1.5 sm:py-1.5 font-normal sm:font-light"
+        class="block basis-full px-3 py-3 text-left text-[17px] font-normal leading-4 text-white no-underline sm:inline sm:py-1.5 sm:py-1.5 sm:text-center sm:font-light"
         href="{{.URL}}"
       >
-        <span class="inline text-white sm:hidden basis-1/5 ml-1.5">Open in</span>
+        <span class="ml-1.5 inline basis-1/5 text-white sm:hidden"
+          >Open in</span
+        >
         {{.Name}}
       </a>
     </div>

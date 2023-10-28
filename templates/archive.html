@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html class="theme--default text-lg sm:text-xl font-light print:text-base">
+<!doctype html>
+<html class="theme--default text-lg font-light print:text-base sm:text-xl">
   <meta charset="UTF-8" />
   <head>
     <title>{{.Title}}</title>
@@ -7,41 +7,42 @@
     {{template "head_common" .HeadCommonPartial}}
   </head>
 
-  <body class="mb-16 print:text-black text-gray-600 dark:text-neutral-50 bg-white dark:bg-neutral-800">
+  <body
+    class="mb-16 bg-white text-gray-600 dark:bg-neutral-800 dark:text-neutral-50 print:text-black"
+  >
     {{template "top" .}}
 
     <div
-      class="block sm:flex sm:justify-center sm:items-center mx-auto px-4 sm:px-0"
+      class="mx-auto block px-4 sm:flex sm:items-center sm:justify-center sm:px-0"
     >
       <div
-        class="flex w-full sm:w-9/12 px-4 justify-between overflow-visible gap-10 lg:gap-48vw max-w-screen-2xl print:w-full"
+        class="flex w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:w-9/12 lg:gap-48vw"
       >
-        <div class="flex items-center sm:items-start relative sm:sticky self-start basis-1/4 sm:mt-8 top-auto sm:top-8">
+        <div
+          class="relative top-auto flex basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:items-start"
+        >
           <div class="text-2xl">{{.Title}}</div>
         </div>
 
-        <div class="break-words w-full sm:w-1/2 print:w-full break-all">
-          <div class="leading-5 mb-6">
+        <div class="w-full break-words break-all print:w-full sm:w-1/2">
+          <div class="mb-6 leading-5">
             <h1 class="text-xl">{{.Title}}</h1>
           </div>
 
-          <div class="leading-5 mb-6">
+          <div class="mb-6 leading-5">
             {{range $element := .Data }}
-            <a href="/{{$.PathPrefix}}{{$element}}">
-              <div>{{$element}}</div>
+            <a class="block" href="/{{$.PathPrefix}}{{$element}}">
+              {{$element}}
             </a>
             {{end}}
           </div>
 
           <div class="flex justify-between">
-          {{if not (eq .PrevPage 0)}}
-          <a href="/{{.PaginationUrl}}/{{.PrevPage}}"
-            ><< Prev page</a
-          >
-          {{end}} {{if not (eq .NextPage 0)}}
-          <a href="/{{.PaginationUrl}}/{{.NextPage}}"
-            >Next page >></a
-          >
+            {{if not (eq .PrevPage 0)}}
+            <a href="/{{.PaginationUrl}}/{{.PrevPage}}">&lt;&lt; Prev page</a>
+            {{end}} {{if not (eq .NextPage 0)}}
+            <a href="/{{.PaginationUrl}}/{{.NextPage}}">Next page &gt;&gt;</a>
+          </div>
           {{end}}
         </div>
       </div>
