@@ -57,9 +57,9 @@
 
     <div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
       <div
-        class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:flex sm:w-9/12 lg:gap-48vw"
+        class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-9/12 sm:px-4 lg:gap-48vw"
       >
-        <div class="w-full break-words print:w-full sm:w-9/12">
+        <div class="w-full break-words print:w-full">
           <header class="mb-4 max-w-full">
             <a class="flex flex-wrap items-center" href="/{{.Npub}}">
               <div
@@ -68,7 +68,7 @@
                 <img class="block h-auto w-full" src="{{.Metadata.Picture}}" />
               </div>
               <div class="block print:text-base sm:grow">
-                <div class="text-sm sm:text-2xl">
+                <div class="text-sm leading-4 sm:text-2xl">
                   {{.Metadata.Name}}
                   <!---->
                   {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
@@ -77,7 +77,7 @@
                   >
                   {{end}}
                 </div>
-                <div class="text-sm text-stone-400 sm:text-base">
+                <div class="text-sm leading-4 text-stone-400 sm:text-base">
                   {{.NpubShort}}
                 </div>
               </div>
