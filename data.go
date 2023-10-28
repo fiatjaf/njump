@@ -68,7 +68,9 @@ type Data struct {
 	npubShort           string
 	nprofile            string
 	nevent              string
+	neventNaked         string
 	naddr               string
+	naddrNaked          string
 	createdAt           string
 	modifiedAt          string
 	parentLink          template.HTML
@@ -104,7 +106,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	nprofile := ""
 	nevent, _ := nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
+	neventNaked, _ := nip19.EncodeEvent(event.ID, nil, event.PubKey)
 	naddr := ""
+	naddrNaked := ""
 	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 
@@ -173,6 +177,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			templateId = Other
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
 				naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
+				naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), nil)
 			}
 		}
 	}
@@ -236,7 +241,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		npubShort:           npubShort,
 		nprofile:            nprofile,
 		nevent:              nevent,
+		neventNaked:         neventNaked,
 		naddr:               naddr,
+		naddrNaked:          naddrNaked,
 		authorRelays:        authorRelays,
 		createdAt:           createdAt,
 		modifiedAt:          modifiedAt,

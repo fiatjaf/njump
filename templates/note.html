@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html class="theme--default text-lg sm:text-xl font-light print:text-base">
+<!doctype html>
+<html class="theme--default text-lg font-light print:text-base sm:text-xl">
   <meta charset="UTF-8" />
   <head>
     <title>{{.TitleizedContent}}</title>
-    <title>{{.Nevent}} by {{.Metadata.Name}} is this note nostr ”nevent"</title>
 
     <meta property="og:title" content="{{.Title}}" />
     {{ if eq .Style "twitter" }}
@@ -33,7 +32,6 @@
     <meta name="twitter:description" content="{{.Description}}" />
     {{ end }}
 
-    <link rel="canonical" href="https://njump.me/{{.Nevent }}" />
     <!---->
     {{ if not (eq "" .Oembed) }}
     <link

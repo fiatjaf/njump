@@ -30,6 +30,8 @@ var (
 type HeadCommonPartial struct {
 	IsProfile          bool
 	TailwindDebugStuff template.HTML
+	NaddrNaked         string
+	NeventNaked        string
 }
 
 func (*HeadCommonPartial) TemplateText() string { return tmplHeadCommon }
@@ -164,10 +166,9 @@ type OtherPage struct {
 	DetailsPartial    `tmpl:"details"`
 	FooterPartial     `tmpl:"footer"`
 
-	IsParameterizedReplaceable bool
-	Naddr                      string
-	Kind                       int
-	KindDescription            string
+	Naddr           string
+	Kind            int
+	KindDescription string
 }
 
 func (*OtherPage) TemplateText() string { return tmplOther }
@@ -191,7 +192,6 @@ type NotePage struct {
 	Description      string
 	Image            string
 	Metadata         nostr.ProfileMetadata
-	Nevent           string
 	Npub             string
 	NpubShort        string
 	Oembed           string

@@ -36,8 +36,6 @@
   sizes="16x16"
   href="/njump/static/favicon/event/favicon-16x16.png?v=2"
 />
-{{end}}
-<meta name="theme-color" content="#e42a6d" />
 <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 {{ if not (eq "" .TailwindDebugStuff) }} {{ .TailwindDebugStuff }} {{ else }}
 <link
@@ -53,7 +51,14 @@
     }
   }
 </style>
-
+<meta name="theme-color" content="#e42a6d" />
+{{ if eq "" .NaddrNaked }}
+<link rel="canonical" href="https://njump.me/{{.NaddrNaked}}" />
+{{ else }}
+<link rel="canonical" href="https://njump.me/{{.NeventNaked}}" />
+{{ end }}
+<!---->
+{{ end }}
 <script type="text/hyperscript">
   on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.includes('Chrome')] then if it[0] is true and it[1] is false add .safari to <body /> end
 </script>

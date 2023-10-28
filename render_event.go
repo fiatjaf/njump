@@ -243,8 +243,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Note:
 		err = NoteTemplate.Render(w, &NotePage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
-			DetailsPartial:    detailsData,
+			HeadCommonPartial: HeadCommonPartial{
+				IsProfile:          false,
+				TailwindDebugStuff: tailwindDebugStuff,
+				NaddrNaked:         data.naddrNaked,
+				NeventNaked:        data.neventNaked,
+			},
+			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
 				Clients: generateClientList(code, data.event),
 			},
@@ -255,7 +260,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Description:      description,
 			Image:            data.image,
 			Metadata:         data.metadata,
-			Nevent:           data.nevent,
 			Npub:             data.npub,
 			NpubShort:        data.npubShort,
 			Oembed:           oembed,
@@ -272,12 +276,16 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Other:
 		err = OtherTemplate.Render(w, &OtherPage{
-			HeadCommonPartial:          HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
-			DetailsPartial:             detailsData,
-			IsParameterizedReplaceable: data.event.Kind >= 30000 && data.event.Kind < 40000,
-			Naddr:                      data.naddr,
-			Kind:                       data.event.Kind,
-			KindDescription:            data.kindDescription,
+			HeadCommonPartial: HeadCommonPartial{
+				IsProfile:          false,
+				TailwindDebugStuff: tailwindDebugStuff,
+				NaddrNaked:         data.naddrNaked,
+				NeventNaked:        data.neventNaked,
+			},
+			DetailsPartial:  detailsData,
+			Naddr:           data.naddr,
+			Kind:            data.event.Kind,
+			KindDescription: data.kindDescription,
 		})
 	}
 
