@@ -4,3 +4,5 @@ tmp/
 node_modules/
 .sass-cache/
 static/tailwind-bundle.min.css
+yarn.lock
+package-lock.json

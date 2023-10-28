@@ -8,3 +8,5 @@ singleQuote: true
 trailingComma: none
 useTabs: false
 bracketSpacing: false
+plugins:
+  - prettier-plugin-tailwindcss
