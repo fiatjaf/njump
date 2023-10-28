@@ -2,7 +2,7 @@
 <html class="theme--default text-lg font-light print:text-base sm:text-xl">
   <meta charset="UTF-8" />
   <head>
-    {{ if .IsParameterizedReplaceable }}
+    {{ if not (eq "" .Naddr) }}
     <title>Nostr Entity {{.Naddr}}</title>
     {{ else }}
     <title>Nostr Event {{.Kind}} - {{.KindDescription }}</title>
