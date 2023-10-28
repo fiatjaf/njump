@@ -7,7 +7,7 @@
        toggle .hidden on <.client:not(:first-child) />"
 >
   <div
-    class="text-sm text-center mb-4 absolute top-0 right-0 sm:relative w-9 sm:w-auto h-9 sm:h-auto"
+    class="text-sm text-center mb-4 absolute top-0 right-0 sm:relative w-10 sm:w-auto h-10 sm:h-auto"
   >
     <span class="hidden sm:block">Open in</span>
     <span id="open" class="inline sm:hidden">
@@ -51,21 +51,19 @@
          get first in me
            then tell it
              remove .hidden
-             add .rounded-t-lg .bg-strongpink .hover:bg-crimson to <a /> in you
-             remove .sm:rounded-lg
        "
   >
     {{range .Clients}}
     <div
-      class="client | hidden sm:mb-3 sm:flex items-center"
+      class="client | hidden sm:mb-3 sm:flex items-center bg-zinc-700 first-of-type:bg-strongpink first-of-type:rounded-t-lg sm:rounded-lg sm:first-of-type:rounded-lg hover:bg-zinc-800 border-b first-of-type:border-0 sm:border-0 border-zinc-800"
       _="on load get localStorage['nj:{{.ID}}'] or 0 then set @count to it then set @title to `used ${it} times`
          on click increment localStorage['nj:{{.ID}}']"
     >
       <a
-        class="block sm:inline basis-full text-left sm:text-center text-sm text-white bg-zinc-700 no-underline px-3 py-2 sm:py-1.5 sm:rounded-lg hover:bg-gray-700"
+        class="block sm:inline basis-full leading-4 text-left sm:text-center text-[17px] text-white no-underline px-3 py-3 sm:py-1.5 sm:py-1.5 font-normal sm:font-light"
         href="{{.URL}}"
       >
-        <span class="inline text-white hidden basis-1/5 ml-1.5">Open in</span>
+        <span class="inline text-white sm:hidden basis-1/5 ml-1.5">Open in</span>
         {{.Name}}
       </a>
     </div>

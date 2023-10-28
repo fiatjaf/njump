@@ -126,7 +126,7 @@ type ClientReference struct {
 func generateClientList(code string, event *nostr.Event) []ClientReference {
 	if event.Kind == 1 || event.Kind == 6 {
 		return []ClientReference{
-			{ID: "native", Name: "your native client", URL: "nostr:" + code},
+			{ID: "native", Name: "Your native client", URL: "nostr:" + code},
 			{ID: "snort", Name: "Snort", URL: "https://Snort.social/e/" + code},
 			{ID: "nostrudel", Name: "Nostrudel", URL: "https://nostrudel.ninja/#/n/" + code},
 			{ID: "satellite", Name: "Satellite", URL: "https://satellite.earth/thread/" + event.ID},
@@ -138,7 +138,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 		}
 	} else if event.Kind == 0 {
 		return []ClientReference{
-			{ID: "native", Name: "your native client", URL: "nostr:" + code},
+			{ID: "native", Name: "Your native client", URL: "nostr:" + code},
 			{ID: "nosta", Name: "Nosta", URL: "https://nosta.me/" + code},
 			{ID: "snort", Name: "Snort", URL: "https://snort.social/p/" + code},
 			{ID: "satellite", Name: "Satellite", URL: "https://satellite.earth/@" + code},
@@ -150,7 +150,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 		}
 	} else if event.Kind == 30023 || event.Kind == 30024 {
 		return []ClientReference{
-			{ID: "native", Name: "your native client", URL: "nostr:" + code},
+			{ID: "native", Name: "Your native client", URL: "nostr:" + code},
 			{ID: "yakihonne", Name: "YakiHonne", URL: "https://yakihonne.com/article/" + code},
 			{ID: "habla", Name: "Habla", URL: "https://habla.news/a/" + code},
 			{ID: "highlighter", Name: "Highlighter", URL: "https://highlighter.com/a/" + code},
