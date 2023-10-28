@@ -61,6 +61,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if data.event.Kind == 0 {
+		// it's a NIP-05 profile
+		renderProfile(w, r, data.npub)
+		return
+	}
+
 	var subject string
 	var summary string
 	for _, tag := range data.event.Tags {
