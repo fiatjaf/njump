@@ -1,4 +1,4 @@
-module git.fiatjaf.com/njump
+module github.com/fiatjaf/njump
 
 go 1.21
 
