@@ -38,23 +38,23 @@
         class="w-full sm:flex sm:w-9/12 sm:px-4 justify-between overflow-visible gap-10 lg:gap-48vw max-w-screen-2xl print:w-full"
       >
         <header
-          class="flex flex-col items-center sm:items-start relative sm:sticky self-start basis-1/4 sm:mt-8 top-auto sm:top-8"
+          class="flex sm:block items-center sm:items-start relative sm:sticky self-start basis-1/4 sm:mt-8 top-auto sm:top-8"
         >
           <div
-            class="text-left basis-2/3 overflow-hidden hidden flex items-center"
-            _="on load or scroll from window or resize from window get #profile_name then measure its top, height then if top is less than height / -2 or height is 0 add .flex then remove .hidden otherwise remove .flex then add .hidden"
+            class="text-left basis-[64%] overflow-hidden hidden items-center"
+            _="on load or scroll from window or resize from window get #profile_name then measure its top, height then if top is less than height / -2 or height is 0 remove .hidden otherwise add .hidden"
           >
-            <div class="mb-3">
-              <div class="text-2xl text-center">{{.Metadata.Name}}</div>
+            <div class="mb-3 sm:text-center">
+              <div class="text-2xl">{{.Metadata.Name}}</div>
               {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
-              <div class="text-base text-stone-400 text-center">
+              <div class="text-base text-stone-400">
                 {{.Metadata.DisplayName}}
               </div>
               {{end}}
             </div>
           </div>
           <div
-            class="max-w-full imgclip overflow-hidden basis-2/5 sm:basis-auto"
+            class="max-w-[40%] sm:max-w-full imgclip overflow-hidden basis-2/5 sm:basis-auto"
           >
             <img class="block w-full h-auto" src="{{.Metadata.Picture}}" />
           </div>
