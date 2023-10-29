@@ -9,7 +9,7 @@ module.exports = {
       fontSize: {
         xs: '0.7rem',
         sm: '0.8rem',
-        '2xl': ['1.5rem', '1.1rem'],
+        '2xl': ['1.5rem', '1.1rem']
       },
       colors: {
         lavender: '#fdf0f5',
@@ -18,10 +18,10 @@ module.exports = {
         garnet: '#42091e'
       },
       borderWidth: {
-        '05rem': '0.5rem', // You can define custom border widths in rem units
+        '05rem': '0.5rem' // you can define custom border widths in rem units
       },
       gap: {
-        '48vw': '4.8vw',
+        '48vw': '4.8vw'
       },
       typography: ({theme}) => ({
         /* for markdown html content */
@@ -35,5 +35,6 @@ module.exports = {
         }
       })
     }
-  }
+  },
+  plugins: [require('@tailwindcss/typography')]
 }

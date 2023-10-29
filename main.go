@@ -68,7 +68,13 @@ func main() {
 			log.Fatal().Err(err).Msg("failed to load tailwind.config.js")
 			return
 		}
-		config := strings.Replace(string(configb), "module.exports", "tailwind.config", 1)
+		config := strings.Replace(
+			strings.Replace(
+				string(configb),
+				"plugins: [require('@tailwindcss/typography')]", "", 1,
+			),
+			"module.exports", "tailwind.config", 1,
+		)
 
 		styleb, err := os.ReadFile("tailwind.css")
 		if err != nil {
