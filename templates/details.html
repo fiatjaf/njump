@@ -10,6 +10,34 @@
 </div>
 {{ end }}
 
+{{ if not (eq "" .Summary) }}
+<div class="mb-6 leading-5">
+  <div class="text-sm text-strongpink">Summary</div>
+  {{.Summary}}
+</div>
+{{ end }}
+
+{{ if not (eq "" .Dim) }}
+<div class="mb-6 leading-5">
+  <div class="text-sm text-strongpink">Dimension</div>
+  {{.Dim}}
+</div>
+{{ end }}
+
+{{ if not (eq "" .Size) }}
+<div class="mb-6 leading-5">
+  <div class="text-sm text-strongpink">Size</div>
+  {{.Size}} bytes
+</div>
+{{ end }}
+
+{{ if not (eq "" .Magnet) }}
+<div class="mb-6 leading-5">
+  <div class="text-sm text-strongpink">Magnet URL</div>
+  {{.Magnet}}
+</div>
+{{ end }}
+
 <!---->
 
 {{ if not (eq 0 (len .SeenOn)) }}

@@ -1,0 +1,137 @@
+<!doctype html>
+<html class="theme--default text-lg font-light print:text-base sm:text-xl">
+  <meta charset="UTF-8" />
+  <head>
+    <title>{{.TitleizedContent}}</title>
+
+    <meta property="og:title" content="{{.Title}}" />
+    {{ if eq .Style "twitter" }}
+    <meta name="twitter:title" content="{{.TwitterTitle}}" />
+    {{ end }}
+
+    <meta property="og:site_name" content="{{.AuthorLong}}" />
+    {{ if not (eq "" .TextImageURL) }}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@nostrprotocol" />
+    <meta property="og:image" content="{{.TextImageURL}}" />
+    <meta name="twitter:image" content="{{.TextImageURL}}" />
+    {{ else }}
+    <!---->
+    <meta property="twitter:card" content="summary" />
+    {{ if not (eq "" .Image) }}
+    <meta property="og:image" content="{{.Image}}" />
+    <meta name="twitter:image" content="{{.Proxy}}{{.Image}}" />
+    {{ end }} {{ if not (eq "" .Video) }}
+    <meta property="og:video" content="{{.Video}}" />
+    <meta property="og:video:secure_url" content="{{.Video}}" />
+    <meta property="og:video:type" content="video/{{.VideoType}}" />
+    {{ end }} {{ end }}
+    <!---->
+    {{ if not (eq "" .Description) }}
+    <meta property="og:description" content="{{.Description}}" />
+    <meta name="twitter:description" content="{{.Description}}" />
+    {{ end }}
+
+    <!---->
+    {{ if not (eq "" .Oembed) }}
+    <link
+      rel="alternate"
+      type="application/json+oembed"
+      href="{{.Oembed}}&format=json"
+    />
+    <link
+      rel="alternate"
+      type="text/xml+oembed"
+      href="{{.Oembed}}&format=xml"
+    />
+    {{ end }}
+
+    <!---->
+    {{template "head_common" .HeadCommonPartial}}
+  </head>
+
+  <body
+    class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
+  >
+    {{template "top" .}}
+
+    <div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
+      <div
+        class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-9/12 sm:px-4 lg:gap-48vw"
+      >
+        <div class="w-full break-words print:w-full">
+          <header class="mb-4 max-w-full">
+            <a class="flex flex-wrap items-center" href="/{{.Npub}}">
+              <div
+                class="print:basis-1-12 imgclip mr-2 max-w-full basis-1/6 overflow-hidden sm:mr-4"
+              >
+                <img class="block h-auto w-full" src="{{.Metadata.Picture}}" />
+              </div>
+              <div class="block print:text-base sm:grow">
+                <div class="text-sm leading-4 sm:text-2xl">
+                  {{.Metadata.Name}}
+                  <!---->
+                  {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
+                  <span class="text-sm text-stone-400 sm:text-xl"
+                    >{{.Metadata.DisplayName}}</span
+                  >
+                  {{end}}
+                </div>
+                <div class="text-sm leading-4 text-stone-400 sm:text-base">
+                  {{.NpubShort}}
+                </div>
+              </div>
+            </a>
+          </header>
+          <div class="w-full text-right text-sm text-stone-400">
+            {{.CreatedAt}}
+          </div>
+
+          <div class="w-full text-right text-sm text-stone-400">
+            {{ if not (eq "" .ParentLink) }} in reply to
+            <span class="text-strongpink">{{ .ParentLink }}</span> {{ end }}
+          </div>
+
+          <div
+            class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
+          ></div>
+
+          <article
+            class="prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-blockquote:py-2 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-gray-100 dark:prose-blockquote:border-l-zinc-800 prose-p:m-0 prose-p:mb-2 prose-cite:text-sm prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-li:mb-2 prose mb-6 leading-5"
+          >
+            {{ if (not (eq "" .Subject))}}
+            <h1 class="text-2xl">{{.Subject}}</h1>
+            {{ else }}
+            <h1 class="hidden">
+              {{.Metadata.Name}} on Nostr: {{.TitleizedContent}}
+            </h1>
+            {{ end }}
+            <!-- main content -->
+
+            {{ if (not (eq "" .Image))}}
+              <img src="{{ .Image }}" alt="{{ .Alt }}" />
+              {{ else if (eq "image" .MType)}}
+              <img src="{{ .Url }}" alt="{{ .Alt }}" />
+              {{ else if (eq "video" .MType)}}
+              <video controls width="100%%" class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700">
+                <source src="{{ .Url }}" alt="{{ .Alt }}"></video>
+            {{ end }}
+
+            <a href="{{ .Url }}" target="_new" class="block not-prose bg-strongpink mb-3 rounded-lg border-0 block basis-full px-4 text-[17px] font-normal text-white no-underline py-2 text-center font-light mx-auto w-2/6 text-center">Download file</a>
+
+          </article>
+
+          {{template "details" .DetailsPartial}}
+
+          <div
+            class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
+          ></div>
+        </div>
+
+        {{template "clients" .ClientsPartial}}
+      </div>
+    </div>
+
+    {{template "footer" .}}
+  </body>
+</html>

@@ -17,6 +17,7 @@ const (
 	Note TemplateID = iota
 	LongForm
 	TelegramInstantView
+	FileMetadata
 	Other
 )
 
@@ -65,6 +66,10 @@ type DetailsPartial struct {
 	Kind            int
 	KindNIP         string
 	KindDescription string
+	Magnet          string
+	Dim             string
+	Size            string
+	Summary         string
 }
 
 func (*DetailsPartial) TemplateText() string { return tmplDetails }
@@ -240,6 +245,59 @@ type ProfilePage struct {
 }
 
 func (*ProfilePage) TemplateText() string { return tmplProfile }
+
+var (
+	//go:embed templates/file_metadata.html
+	tmplFileMetadata     string
+	FileMetadataTemplate = tmpl.MustCompile(&FileMetadataPage{})
+)
+
+type FileMetadataPage struct {
+	HeadCommonPartial `tmpl:"head_common"`
+	TopPartial        `tmpl:"top"`
+	DetailsPartial    `tmpl:"details"`
+	ClientsPartial    `tmpl:"clients"`
+	FooterPartial     `tmpl:"footer"`
+
+	AuthorLong       string
+	Content          template.HTML
+	CreatedAt        string
+	Description      string
+	Metadata         nostr.ProfileMetadata
+	Npub             string
+	NpubShort        string
+	Oembed           string
+	ParentLink       template.HTML
+	Proxy            string
+	SeenOn           []string
+	Style            string
+	Subject          string
+	TextImageURL     string
+	Title            string
+	TitleizedContent string
+	TwitterTitle     string
+	Video            string
+	VideoType        string
+
+	// Specific Metadata
+	Url       string
+	M         string
+	Aes256Gcm string
+	X         string
+	Size      string
+	Dim       string
+	Magnet    string
+	I         string
+	Blurhash  string
+	Thumb     string
+	Image     string
+	Summary   string
+	Alt       string
+
+	MType string // The first part of the mime type M
+}
+
+func (*FileMetadataPage) TemplateText() string { return tmplFileMetadata }
 
 var (
 	//go:embed templates/relay.html

@@ -156,6 +156,12 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 			{ID: "highlighter", Name: "Highlighter", URL: template.URL("https://highlighter.com/a/" + code)},
 			{ID: "blogstack", Name: "Blogstack", URL: template.URL("https://blogstack.io/" + code)},
 		}
+	} else if event.Kind == 1063 {
+		return []ClientReference{
+			{ID: "native", Name: "Your native client", URL: template.URL("nostr:" + code)},
+			{ID: "snort", Name: "Snort", URL: template.URL("https://snort.social/p/" + code)},
+			{ID: "coracle", Name: "Coracle", URL: template.URL("https://coracle.social/" + code)},
+		}
 	}
 	return nil
 }

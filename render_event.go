@@ -231,6 +231,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		SeenOn:          data.relays,
 		Npub:            data.npub,
 		Nprofile:        data.nprofile,
+		Magnet:          data.kind1063Metadata["magnet"],
+		Dim:             data.kind1063Metadata["dim"],
+		Size:            data.kind1063Metadata["size"],
+		Summary:         data.kind1063Metadata["summary"],
 	}
 
 	switch data.templateId {
@@ -279,6 +283,48 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			TwitterTitle:     twitterTitle,
 			Video:            data.video,
 			VideoType:        data.videoType,
+		})
+	case FileMetadata:
+		thisImage := data.kind1063Metadata["image"]
+		if thisImage == "" && data.image != "" {
+			thisImage = data.image
+		}
+		err = FileMetadataTemplate.Render(w, &FileMetadataPage{
+			HeadCommonPartial: HeadCommonPartial{
+				IsProfile:          false,
+				TailwindDebugStuff: tailwindDebugStuff,
+				NaddrNaked:         data.naddrNaked,
+				NeventNaked:        data.neventNaked,
+			},
+			DetailsPartial: detailsData,
+			ClientsPartial: ClientsPartial{
+				Clients: generateClientList(code, data.event),
+			},
+
+			AuthorLong:       data.authorLong,
+			CreatedAt:        data.createdAt,
+			Metadata:         data.metadata,
+			Description:      description,
+			Npub:             data.npub,
+			NpubShort:        data.npubShort,
+			Style:            style,
+			Subject:          subject,
+			TextImageURL:     textImageURL,
+			Title:            title,
+			TitleizedContent: titleizedContent,
+			TwitterTitle:     twitterTitle,
+			Video:            data.video,
+			VideoType:        data.videoType,
+			Url:              data.kind1063Metadata["url"],
+			M:                data.kind1063Metadata["m"],
+			Aes256Gcm:        data.kind1063Metadata["aes-256-gcm"],
+			X:                data.kind1063Metadata["x"],
+			I:                data.kind1063Metadata["i"],
+			Blurhash:         data.kind1063Metadata["blurhash"],
+			Thumb:            data.kind1063Metadata["thumb"],
+			Image:            thisImage,
+			Alt:              data.kind1063Metadata["alt"],
+			MType:            strings.Split(data.kind1063Metadata["m"], "/")[0],
 		})
 	case Other:
 		err = OtherTemplate.Render(w, &OtherPage{

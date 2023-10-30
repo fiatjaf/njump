@@ -85,6 +85,7 @@ type Data struct {
 	videoType           string
 	image               string
 	content             string
+	kind1063Metadata    map[string]string
 }
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
@@ -118,6 +119,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	authorRelays := []string{}
 	var content string
 	var templateId TemplateID
+	var kind1063Metadata map[string]string
 
 	eventRelays := []string{}
 	for _, relay := range relays {
@@ -172,6 +174,41 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			original_nevent, _ := nip19.EncodeEvent((*reposted)[1], []string{}, "")
 			content = "Repost of nostr:" + original_nevent
 		}
+	case 1063:
+		templateId = FileMetadata
+		kind1063Metadata = make(map[string]string)
+
+		keysToExtract := []string{
+			"url",
+			"m",
+			"aes-256-gcm",
+			"x",
+			"size",
+			"dim",
+			"magnet",
+			"i",
+			"blurhash",
+			"thumb",
+			"image",
+			"summary",
+			"alt",
+		}
+
+		for _, tag := range event.Tags {
+			if len(tag) == 2 {
+				key := tag[0]
+				value := tag[1]
+
+				// Check if the key is in the list of keys to extract
+				for _, k := range keysToExtract {
+					if key == k {
+						kind1063Metadata[key] = value
+						break
+					}
+				}
+			}
+		}
+
 	default:
 		if event.Kind >= 30000 && event.Kind < 40000 {
 			templateId = Other
@@ -197,25 +234,34 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 	kindNIP := kindNIPs[event.Kind]
 
-	urls := urlMatcher.FindAllString(event.Content, -1)
 	var image string
 	var video string
 	var videoType string
-	for _, url := range urls {
-		switch {
-		case imageExtensionMatcher.MatchString(url):
-			if image == "" {
-				image = url
-			}
-		case videoExtensionMatcher.MatchString(url):
-			if video == "" {
-				video = url
-				if strings.HasSuffix(video, "mp4") {
-					videoType = "mp4"
-				} else if strings.HasSuffix(video, "mov") {
-					videoType = "mov"
-				} else {
-					videoType = "webm"
+	if event.Kind == 1063 {
+		if strings.HasPrefix(kind1063Metadata["m"], "image") {
+			image = kind1063Metadata["url"]
+		} else if strings.HasPrefix(kind1063Metadata["m"], "video") {
+			video = kind1063Metadata["url"]
+			videoType = strings.Split(kind1063Metadata["m"], "/")[1]
+		}
+	} else {
+		urls := urlMatcher.FindAllString(event.Content, -1)
+		for _, url := range urls {
+			switch {
+			case imageExtensionMatcher.MatchString(url):
+				if image == "" {
+					image = url
+				}
+			case videoExtensionMatcher.MatchString(url):
+				if video == "" {
+					video = url
+					if strings.HasSuffix(video, "mp4") {
+						videoType = "mp4"
+					} else if strings.HasSuffix(video, "mov") {
+						videoType = "mov"
+					} else {
+						videoType = "webm"
+					}
 				}
 			}
 		}
@@ -258,5 +304,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		videoType:           videoType,
 		image:               image,
 		content:             content,
+		kind1063Metadata:    kind1063Metadata,
 	}, nil
 }
