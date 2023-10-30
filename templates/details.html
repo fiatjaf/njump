@@ -4,7 +4,7 @@
 ></div>
 
 {{ if not (eq "" .Npub) }}
-<div class="mb-6 leading-5">
+<div class="mb-6 leading-5 break-all">
   <div class="text-sm text-strongpink">Author Public Key</div>
   {{.Npub}}
 </div>
@@ -92,7 +92,7 @@
   </div>
 
   {{ if not (eq "" .Nprofile) }}
-  <div class="mb-6 leading-5">
+  <div class="mb-6 leading-5 break-all">
     <div class="text-sm text-strongpink">Author Profile Code</div>
     {{.Nprofile}}
   </div>
