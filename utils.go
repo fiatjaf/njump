@@ -346,7 +346,7 @@ func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstan
 	for i, line := range lines {
 		line = replaceURLsWithTags(line,
 			imageReplacementTemplate,
-			`<video controls width="100%%" class='max-h-[90vh]'><source src="%s"></video>`,
+			`<video controls width="100%%" class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"><source src="%s"></video>`,
 		)
 
 		line = replaceNostrURLsWithTags(nostrMatcher, line)
