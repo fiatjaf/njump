@@ -5,7 +5,7 @@
     <title>{{.TitleizedContent}}</title>
 
     <meta property="og:title" content="{{.Title}}" />
-    {{ if eq .Style "twitter" }}
+    {{ if .IsTwitter }}
     <meta name="twitter:title" content="{{.TwitterTitle}}" />
     {{ end }}
 
@@ -97,7 +97,7 @@
           ></div>
 
           <article
-            class="prose dark:prose-invert sm:prose-a:text-justify prose-headings:font-light prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-blockquote:py-2 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-gray-100 dark:prose-blockquote:border-l-zinc-800 prose-p:m-0 prose-p:mb-2 prose-cite:text-sm prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-li:mb-2 prose mb-6 leading-5"
+            class="prose-cite:text-sm prose prose mb-6 leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-gray-100 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-zinc-800 sm:prose-a:text-justify"
           >
             {{ if (not (eq "" .Subject))}}
             <h1 class="text-2xl">{{.Subject}}</h1>

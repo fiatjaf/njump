@@ -203,7 +203,7 @@ type NotePage struct {
 	ParentLink       template.HTML
 	Proxy            string
 	SeenOn           []string
-	Style            string
+	IsTwitter        bool
 	Subject          string
 	TextImageURL     string
 	Title            string

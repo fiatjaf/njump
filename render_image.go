@@ -151,14 +151,14 @@ func normalizeText(input []string, breakWords bool) []string {
 	return lines
 }
 
-func drawImage(lines []string, font *truetype.Font, style string) (image.Image, error) {
+func drawImage(lines []string, font *truetype.Font, style Style) (image.Image, error) {
 	width := 700
 	height := 525
 	paddingLeft := 0
 	switch style {
-	case "telegram":
+	case StyleTelegram:
 		paddingLeft = 15
-	case "twitter":
+	case StyleTwitter:
 		height = width * 268 / 512
 	}
 

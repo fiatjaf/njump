@@ -81,7 +81,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	useTextImage := (data.event.Kind == 1 || data.event.Kind == 30023) &&
 		data.image == "" && data.video == "" && len(data.event.Content) > 133
 
-	if style == "telegram" || r.URL.Query().Get("tgiv") == "true" {
+	if style == StyleTelegram || r.URL.Query().Get("tgiv") == "true" {
 		// do telegram instant preview (only works on telegram mobile apps, not desktop)
 		if data.event.Kind == 30023 || // do it for longform articles
 			(data.event.Kind == 1 && len(data.event.Content) > 650) || // or very long notes
@@ -90,7 +90,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			data.templateId = TelegramInstantView
 			useTextImage = false
 		}
-	} else if style == "slack" || style == "discord" {
+	} else if style == StyleSlack || style == StyleDiscord {
 		useTextImage = false
 	}
 
@@ -261,7 +261,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(code, data.event),
+				Clients: generateClientList(style, code, data.event),
 			},
 
 			AuthorLong:       data.authorLong,
@@ -275,7 +275,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Oembed:           oembed,
 			ParentLink:       data.parentLink,
 			Proxy:            "https://" + host + "/njump/proxy?src=",
-			Style:            style,
+			IsTwitter:        style == StyleTwitter,
 			Subject:          subject,
 			TextImageURL:     textImageURL,
 			Title:            title,

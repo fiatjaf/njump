@@ -123,7 +123,7 @@ type ClientReference struct {
 	URL  template.URL
 }
 
-func generateClientList(code string, event *nostr.Event) []ClientReference {
+func generateClientList(style Style, code string, event *nostr.Event) []ClientReference {
 	if event.Kind == 1 || event.Kind == 6 {
 		return []ClientReference{
 			{ID: "native", Name: "Your native client", URL: template.URL("nostr:" + code)},
@@ -172,10 +172,26 @@ func generateRelayBrowserClientList(host string) []ClientReference {
 	}
 }
 
-func getPreviewStyle(r *http.Request) string {
+type Style string
+
+const (
+	StyleTelegram   Style = "telegram"
+	StyleTwitter          = "twitter"
+	StyleIos              = "ios"
+	StyleAndroid          = "android"
+	StyleMattermost       = "mattermost"
+	StyleSlack            = "slack"
+	StyleDiscord          = "discord"
+	StyleWhatsapp         = "whatsapp"
+	StyleIframely         = "iframely"
+	StyleNormal           = "normal"
+	StyleUnknown          = "unknown"
+)
+
+func getPreviewStyle(r *http.Request) Style {
 	if style := r.URL.Query().Get("style"); style != "" {
 		// debug mode
-		return style
+		return Style(style)
 	}
 
 	ua := strings.ToLower(r.Header.Get("User-Agent"))
@@ -183,23 +199,27 @@ func getPreviewStyle(r *http.Request) string {
 
 	switch {
 	case strings.Contains(ua, "telegrambot"):
-		return "telegram"
+		return StyleTelegram
 	case strings.Contains(ua, "twitterbot"):
-		return "twitter"
+		return StyleTwitter
+	case strings.Contains(ua, "iphone"), strings.Contains(ua, "ipad"), strings.Contains(ua, "ipod"):
+		return StyleIos
+	case strings.Contains(ua, "android"):
+		return StyleAndroid
 	case strings.Contains(ua, "mattermost"):
-		return "mattermost"
+		return StyleMattermost
 	case strings.Contains(ua, "slack"):
-		return "slack"
+		return StyleSlack
 	case strings.Contains(ua, "discord"):
-		return "discord"
+		return StyleDiscord
 	case strings.Contains(ua, "whatsapp"):
-		return "whatsapp"
+		return StyleWhatsapp
 	case strings.Contains(ua, "iframely"):
-		return "iframely"
+		return StyleIframely
 	case strings.Contains(accept, "text/html"):
-		return "normal"
+		return StyleNormal
 	default:
-		return "unknown"
+		return StyleUnknown
 	}
 }
 
