@@ -126,7 +126,7 @@ type Style string
 const (
 	StyleTelegram   Style = "telegram"
 	StyleTwitter          = "twitter"
-	StyleIos              = "ios"
+	StyleIOS              = "ios"
 	StyleAndroid          = "android"
 	StyleMattermost       = "mattermost"
 	StyleSlack            = "slack"
@@ -152,7 +152,7 @@ func getPreviewStyle(r *http.Request) Style {
 	case strings.Contains(ua, "twitterbot"):
 		return StyleTwitter
 	case strings.Contains(ua, "iphone"), strings.Contains(ua, "ipad"), strings.Contains(ua, "ipod"):
-		return StyleIos
+		return StyleIOS
 	case strings.Contains(ua, "android"):
 		return StyleAndroid
 	case strings.Contains(ua, "mattermost"):
