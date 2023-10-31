@@ -90,18 +90,30 @@ type Data struct {
 }
 
 type Kind1063Metadata struct {
-	magnet    string
-	dim       string
-	size      string
-	summary   string
-	image     string
-	url       string
-	aes256gcm string
-	m         string
-	x         string
-	i         string
-	blurhash  string
-	thumb     string
+	Magnet    string
+	Dim       string
+	Size      string
+	Summary   string
+	Image     string
+	URL       string
+	AES256GCM string
+	M         string
+	X         string
+	I         string
+	Blurhash  string
+	Thumb     string
+}
+
+func (fm Kind1063Metadata) IsVideo() bool { return strings.Split(fm.M, "/")[0] == "video" }
+func (fm Kind1063Metadata) IsImage() bool { return strings.Split(fm.M, "/")[0] == "image" }
+func (fm Kind1063Metadata) DisplayImage() string {
+	if fm.Image != "" {
+		return fm.Image
+	} else if fm.IsImage() {
+		return fm.URL
+	} else {
+		return ""
+	}
 }
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
@@ -197,40 +209,40 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		data.kind1063Metadata = &Kind1063Metadata{}
 
 		if tag := event.Tags.GetFirst([]string{"url", ""}); tag != nil {
-			data.kind1063Metadata.url = (*tag)[1]
+			data.kind1063Metadata.URL = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"m", ""}); tag != nil {
-			data.kind1063Metadata.m = (*tag)[1]
+			data.kind1063Metadata.M = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"aes-256-gcm", ""}); tag != nil {
-			data.kind1063Metadata.aes256gcm = (*tag)[1]
+			data.kind1063Metadata.AES256GCM = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"x", ""}); tag != nil {
-			data.kind1063Metadata.x = (*tag)[1]
+			data.kind1063Metadata.X = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"size", ""}); tag != nil {
-			data.kind1063Metadata.size = (*tag)[1]
+			data.kind1063Metadata.Size = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"dim", ""}); tag != nil {
-			data.kind1063Metadata.dim = (*tag)[1]
+			data.kind1063Metadata.Dim = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"magnet", ""}); tag != nil {
-			data.kind1063Metadata.magnet = (*tag)[1]
+			data.kind1063Metadata.Magnet = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"i", ""}); tag != nil {
-			data.kind1063Metadata.i = (*tag)[1]
+			data.kind1063Metadata.I = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"blurhash", ""}); tag != nil {
-			data.kind1063Metadata.blurhash = (*tag)[1]
+			data.kind1063Metadata.Blurhash = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"thumb", ""}); tag != nil {
-			data.kind1063Metadata.thumb = (*tag)[1]
+			data.kind1063Metadata.Thumb = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
-			data.kind1063Metadata.image = (*tag)[1]
+			data.kind1063Metadata.Image = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
-			data.kind1063Metadata.summary = (*tag)[1]
+			data.kind1063Metadata.Summary = (*tag)[1]
 		}
 	default:
 		if event.Kind >= 30000 && event.Kind < 40000 {
@@ -258,11 +270,11 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data.kindNIP = kindNIPs[event.Kind]
 
 	if event.Kind == 1063 {
-		if strings.HasPrefix(data.kind1063Metadata.m, "image") {
-			data.image = data.kind1063Metadata.url
-		} else if strings.HasPrefix(data.kind1063Metadata.m, "video") {
-			data.video = data.kind1063Metadata.url
-			data.videoType = strings.Split(data.kind1063Metadata.m, "/")[1]
+		if data.kind1063Metadata.IsImage() {
+			data.image = data.kind1063Metadata.URL
+		} else if data.kind1063Metadata.IsVideo() {
+			data.video = data.kind1063Metadata.URL
+			data.videoType = strings.Split(data.kind1063Metadata.M, "/")[1]
 		}
 	} else {
 		urls := urlMatcher.FindAllString(event.Content, -1)

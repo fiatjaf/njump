@@ -4,41 +4,47 @@
 ></div>
 
 {{ if not (eq "" .Npub) }}
-<div class="mb-6 leading-5 break-all">
+<div class="mb-6 break-all leading-5">
   <div class="text-sm text-strongpink">Author Public Key</div>
   {{.Npub}}
 </div>
 {{ end }}
 
-{{ if not (eq "" .Summary) }}
+<!------>
+
+{{ if not (eq nil .FileMetadata) }}
+<!---->
+{{ if not (eq "" .FileMetadata.Summary) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Summary</div>
-  {{.Summary}}
+  {{.FileMetadata.Summary}}
 </div>
 {{ end }}
-
-{{ if not (eq "" .Dim) }}
+<!---->
+{{ if not (eq "" .FileMetadata.Dim) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Dimension</div>
-  {{.Dim}}
+  {{.FileMetadata.Dim}}
 </div>
 {{ end }}
-
-{{ if not (eq "" .Size) }}
+<!---->
+{{ if not (eq "" .FileMetadata.Size) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Size</div>
-  {{.Size}} bytes
+  {{.FileMetadata.Size}} bytes
 </div>
 {{ end }}
-
-{{ if not (eq "" .Magnet) }}
+<!---->
+{{ if not (eq "" .FileMetadata.Magnet) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Magnet URL</div>
-  {{.Magnet}}
+  {{.FileMetadata.Magnet}}
 </div>
 {{ end }}
-
 <!---->
+{{ end }}
+
+<!------>
 
 {{ if not (eq 0 (len .SeenOn)) }}
 <div class="mb-6 leading-5">
@@ -120,7 +126,7 @@
   </div>
 
   {{ if not (eq "" .Nprofile) }}
-  <div class="mb-6 leading-5 break-all">
+  <div class="mb-6 break-all leading-5">
     <div class="text-sm text-strongpink">Author Profile Code</div>
     {{.Nprofile}}
   </div>

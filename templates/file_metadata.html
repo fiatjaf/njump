@@ -65,22 +65,22 @@
             {{ end }}
             <!-- main content -->
 
-            {{ if (not (eq "" .Image))}}
-            <img src="{{ .Image }}" alt="{{ .Alt }}" />
-            {{ else if (eq "image" .MType)}}
-            <img src="{{ .Url }}" alt="{{ .Alt }}" />
-            {{ else if (eq "video" .MType)}}
+            {{ if (not (eq "" .FileMetadata.Image))}}
+            <img src="{{ .FileMetadata.Image }}" alt="{{ .Alt }}" />
+            {{ else if .IsImage }}
+            <img src="{{ .FileMetadata.URL }}" alt="{{ .Alt }}" />
+            {{ else if .IsVideo }}
             <video
               controls
               width="100%%"
               class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"
             >
-              <source src="{{ .Url }}" alt="{{ .Alt }}" />
+              <source src="{{ .FileMetadata.URL }}" alt="{{ .Alt }}" />
             </video>
             {{ end }}
 
             <a
-              href="{{ .Url }}"
+              href="{{ .FileMetadata.URL }}"
               target="_new"
               class="not-prose mx-auto mb-3 block block w-2/6 basis-full rounded-lg border-0 bg-strongpink px-4 py-2 text-center text-center text-[17px] font-light font-normal text-white no-underline"
               >Download file</a

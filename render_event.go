@@ -231,10 +231,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		SeenOn:          data.relays,
 		Npub:            data.npub,
 		Nprofile:        data.nprofile,
-		Magnet:          data.kind1063Metadata.magnet,
-		Dim:             data.kind1063Metadata.dim,
-		Size:            data.kind1063Metadata.size,
-		Summary:         data.kind1063Metadata.summary,
+
+		// kind-specific stuff
+		FileMetadata: data.kind1063Metadata,
 	}
 
 	switch data.templateId {
@@ -288,10 +287,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			TitleizedContent: titleizedContent,
 		})
 	case FileMetadata:
-		thisImage := data.kind1063Metadata.image
-		if thisImage == "" && data.image != "" {
-			thisImage = data.image
-		}
 		err = FileMetadataTemplate.Render(w, &FileMetadataPage{
 			OpenGraphPartial: OpenGraphPartial{
 				IsTwitter:        style == StyleTwitter,
@@ -302,7 +297,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				TextImageURL:     textImageURL,
 				Video:            data.video,
 				VideoType:        data.videoType,
-				Image:            thisImage,
+				Image:            data.kind1063Metadata.DisplayImage(),
 				Description:      description,
 				AuthorLong:       data.authorLong,
 			},
@@ -324,16 +319,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Style:            style,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
-			Url:              data.kind1063Metadata.url,
-			M:                data.kind1063Metadata.m,
-			Aes256Gcm:        data.kind1063Metadata.aes256gcm,
-			X:                data.kind1063Metadata.x,
-			I:                data.kind1063Metadata.i,
-			Blurhash:         data.kind1063Metadata.blurhash,
-			Thumb:            data.kind1063Metadata.thumb,
-			Image:            thisImage,
 			Alt:              data.alt,
-			MType:            strings.Split(data.kind1063Metadata.m, "/")[0],
+
+			FileMetadata: *data.kind1063Metadata,
+			IsImage:      data.kind1063Metadata.IsImage(),
+			IsVideo:      data.kind1063Metadata.IsVideo(),
 		})
 	case Other:
 		err = OtherTemplate.Render(w, &OtherPage{

@@ -90,10 +90,9 @@ type DetailsPartial struct {
 	Kind            int
 	KindNIP         string
 	KindDescription string
-	Magnet          string
-	Dim             string
-	Size            string
-	Summary         string
+
+	// kind-specific stuff
+	FileMetadata *Kind1063Metadata
 }
 
 func (*DetailsPartial) TemplateText() string { return tmplDetails }
@@ -284,23 +283,11 @@ type FileMetadataPage struct {
 	Style            Style
 	Subject          string
 	TitleizedContent string
+	Alt              string
 
-	// Specific Metadata
-	Url       string
-	M         string
-	Aes256Gcm string
-	X         string
-	Size      string
-	Dim       string
-	Magnet    string
-	I         string
-	Blurhash  string
-	Thumb     string
-	Image     string
-	Summary   string
-	Alt       string
-
-	MType string // The first part of the mime type M
+	FileMetadata Kind1063Metadata
+	IsImage      bool
+	IsVideo      bool
 }
 
 func (*FileMetadataPage) TemplateText() string { return tmplFileMetadata }
