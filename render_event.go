@@ -253,8 +253,22 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Note:
 		err = NoteTemplate.Render(w, &NotePage{
+			OpenGraphPartial: OpenGraphPartial{
+				IsTwitter:        style == StyleTwitter,
+				Proxy:            "https://" + host + "/njump/proxy?src=",
+				Title:            title,
+				TwitterTitle:     twitterTitle,
+				TitleizedContent: titleizedContent,
+				TextImageURL:     textImageURL,
+				Image:            data.image,
+				Video:            data.video,
+				VideoType:        data.videoType,
+				Description:      description,
+				AuthorLong:       data.authorLong,
+			},
 			HeadCommonPartial: HeadCommonPartial{
 				IsProfile:          false,
+				Oembed:             oembed,
 				TailwindDebugStuff: tailwindDebugStuff,
 				NaddrNaked:         data.naddrNaked,
 				NeventNaked:        data.neventNaked,
@@ -264,25 +278,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				Clients: generateClientList(style, code, data.event),
 			},
 
-			AuthorLong:       data.authorLong,
 			Content:          template.HTML(data.content),
 			CreatedAt:        data.createdAt,
-			Description:      description,
-			Image:            data.image,
 			Metadata:         data.metadata,
 			Npub:             data.npub,
 			NpubShort:        data.npubShort,
-			Oembed:           oembed,
 			ParentLink:       data.parentLink,
-			Proxy:            "https://" + host + "/njump/proxy?src=",
-			IsTwitter:        style == StyleTwitter,
 			Subject:          subject,
-			TextImageURL:     textImageURL,
-			Title:            title,
 			TitleizedContent: titleizedContent,
-			TwitterTitle:     twitterTitle,
-			Video:            data.video,
-			VideoType:        data.videoType,
 		})
 	case FileMetadata:
 		thisImage := data.kind1063Metadata.image
@@ -290,6 +293,19 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			thisImage = data.image
 		}
 		err = FileMetadataTemplate.Render(w, &FileMetadataPage{
+			OpenGraphPartial: OpenGraphPartial{
+				IsTwitter:        style == StyleTwitter,
+				Proxy:            "https://" + host + "/njump/proxy?src=",
+				TitleizedContent: titleizedContent,
+				TwitterTitle:     twitterTitle,
+				Title:            title,
+				TextImageURL:     textImageURL,
+				Video:            data.video,
+				VideoType:        data.videoType,
+				Image:            thisImage,
+				Description:      description,
+				AuthorLong:       data.authorLong,
+			},
 			HeadCommonPartial: HeadCommonPartial{
 				IsProfile:          false,
 				TailwindDebugStuff: tailwindDebugStuff,
@@ -301,20 +317,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				Clients: generateClientList(style, code, data.event),
 			},
 
-			AuthorLong:       data.authorLong,
 			CreatedAt:        data.createdAt,
 			Metadata:         data.metadata,
-			Description:      description,
 			Npub:             data.npub,
 			NpubShort:        data.npubShort,
 			Style:            style,
 			Subject:          subject,
-			TextImageURL:     textImageURL,
-			Title:            title,
 			TitleizedContent: titleizedContent,
-			TwitterTitle:     twitterTitle,
-			Video:            data.video,
-			VideoType:        data.videoType,
 			Url:              data.kind1063Metadata.url,
 			M:                data.kind1063Metadata.m,
 			Aes256Gcm:        data.kind1063Metadata.aes256gcm,

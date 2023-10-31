@@ -1,5 +1,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+{{ if not (eq "" .Oembed) }}
+<link
+  rel="alternate"
+  type="application/json+oembed"
+  href="{{.Oembed}}&format=json"
+/>
+<link rel="alternate" type="text/xml+oembed" href="{{.Oembed}}&format=xml" />
+{{ end }}
+
+<!---->
+
 {{if .IsProfile}}
 <link
   rel="apple-touch-icon"

@@ -1,0 +1,29 @@
+<title>{{.TitleizedContent}}</title>
+
+<meta property="og:title" content="{{.Title}}" />
+{{ if .IsTwitter }}
+<meta name="twitter:title" content="{{.TwitterTitle}}" />
+{{ end }}
+
+<meta property="og:site_name" content="{{.AuthorLong}}" />
+{{ if not (eq "" .TextImageURL) }}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@nostrprotocol" />
+<meta property="og:image" content="{{.TextImageURL}}" />
+<meta name="twitter:image" content="{{.TextImageURL}}" />
+{{ else }}
+<!---->
+<meta property="twitter:card" content="summary" />
+{{ if not (eq "" .Image) }}
+<meta property="og:image" content="{{.Image}}" />
+<meta name="twitter:image" content="{{.Proxy}}{{.Image}}" />
+{{ end }} {{ if not (eq "" .Video) }}
+<meta property="og:video" content="{{.Video}}" />
+<meta property="og:video:secure_url" content="{{.Video}}" />
+<meta property="og:video:type" content="video/{{.VideoType}}" />
+{{ end }} {{ end }}
+<!---->
+{{ if not (eq "" .Description) }}
+<meta property="og:description" content="{{.Description}}" />
+<meta name="twitter:description" content="{{.Description}}" />
+{{ end }}

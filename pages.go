@@ -22,6 +22,29 @@ const (
 )
 
 var (
+	//go:embed templates/opengraph.html
+	tmplOpenGraph     string
+	OpenGraphTemplate = tmpl.MustCompile(&OpenGraphPartial{})
+)
+
+//tmpl:bind head_common.html
+type OpenGraphPartial struct {
+	IsTwitter        bool
+	TitleizedContent string
+	Title            string
+	TwitterTitle     string
+	Proxy            string
+	AuthorLong       string
+	TextImageURL     string
+	Video            string
+	VideoType        string
+	Image            string
+	Description      string
+}
+
+func (*OpenGraphPartial) TemplateText() string { return tmplOpenGraph }
+
+var (
 	//go:embed templates/head_common.html
 	tmplHeadCommon     string
 	HeadCommonTemplate = tmpl.MustCompile(&HeadCommonPartial{})
@@ -33,6 +56,7 @@ type HeadCommonPartial struct {
 	TailwindDebugStuff template.HTML
 	NaddrNaked         string
 	NeventNaked        string
+	Oembed             string
 }
 
 func (*HeadCommonPartial) TemplateText() string { return tmplHeadCommon }
@@ -185,32 +209,22 @@ var (
 )
 
 type NotePage struct {
+	OpenGraphPartial  `tmpl:"opengraph"`
 	HeadCommonPartial `tmpl:"head_common"`
 	TopPartial        `tmpl:"top"`
 	DetailsPartial    `tmpl:"details"`
 	ClientsPartial    `tmpl:"clients"`
 	FooterPartial     `tmpl:"footer"`
 
-	AuthorLong       string
 	Content          template.HTML
 	CreatedAt        string
-	Description      string
-	Image            string
 	Metadata         nostr.ProfileMetadata
 	Npub             string
 	NpubShort        string
-	Oembed           string
 	ParentLink       template.HTML
-	Proxy            string
 	SeenOn           []string
-	IsTwitter        bool
 	Subject          string
-	TextImageURL     string
-	Title            string
 	TitleizedContent string
-	TwitterTitle     string
-	Video            string
-	VideoType        string
 }
 
 func (*NotePage) TemplateText() string { return tmplNote }
@@ -253,31 +267,23 @@ var (
 )
 
 type FileMetadataPage struct {
+	OpenGraphPartial  `tmpl:"opengraph"`
 	HeadCommonPartial `tmpl:"head_common"`
 	TopPartial        `tmpl:"top"`
 	DetailsPartial    `tmpl:"details"`
 	ClientsPartial    `tmpl:"clients"`
 	FooterPartial     `tmpl:"footer"`
 
-	AuthorLong       string
 	Content          template.HTML
 	CreatedAt        string
-	Description      string
 	Metadata         nostr.ProfileMetadata
 	Npub             string
 	NpubShort        string
-	Oembed           string
 	ParentLink       template.HTML
-	Proxy            string
 	SeenOn           []string
 	Style            Style
 	Subject          string
-	TextImageURL     string
-	Title            string
 	TitleizedContent string
-	TwitterTitle     string
-	Video            string
-	VideoType        string
 
 	// Specific Metadata
 	Url       string
