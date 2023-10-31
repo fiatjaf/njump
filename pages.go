@@ -270,7 +270,7 @@ type FileMetadataPage struct {
 	ParentLink       template.HTML
 	Proxy            string
 	SeenOn           []string
-	Style            string
+	Style            Style
 	Subject          string
 	TextImageURL     string
 	Title            string

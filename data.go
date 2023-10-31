@@ -85,7 +85,23 @@ type Data struct {
 	videoType           string
 	image               string
 	content             string
-	kind1063Metadata    map[string]string
+	alt                 string
+	kind1063Metadata    *Kind1063Metadata
+}
+
+type Kind1063Metadata struct {
+	magnet    string
+	dim       string
+	size      string
+	summary   string
+	image     string
+	url       string
+	aes256gcm string
+	m         string
+	x         string
+	i         string
+	blurhash  string
+	thumb     string
 }
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
@@ -119,7 +135,8 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	authorRelays := []string{}
 	var content string
 	var templateId TemplateID
-	var kind1063Metadata map[string]string
+	var alt string
+	var kind1063Metadata *Kind1063Metadata
 
 	eventRelays := []string{}
 	for _, relay := range relays {
@@ -132,6 +149,10 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			continue // skip relays with personalyzed query like filter.nostr.wine
 		}
 		eventRelays = append(eventRelays, trimProtocol(relay))
+	}
+
+	if tag := event.Tags.GetFirst([]string{"alt", ""}); tag != nil {
+		alt = (*tag)[1]
 	}
 
 	switch event.Kind {
@@ -176,39 +197,44 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	case 1063:
 		templateId = FileMetadata
-		kind1063Metadata = make(map[string]string)
+		kind1063Metadata = &Kind1063Metadata{}
 
-		keysToExtract := []string{
-			"url",
-			"m",
-			"aes-256-gcm",
-			"x",
-			"size",
-			"dim",
-			"magnet",
-			"i",
-			"blurhash",
-			"thumb",
-			"image",
-			"summary",
-			"alt",
+		if tag := event.Tags.GetFirst([]string{"url", ""}); tag != nil {
+			kind1063Metadata.url = (*tag)[1]
 		}
-
-		for _, tag := range event.Tags {
-			if len(tag) == 2 {
-				key := tag[0]
-				value := tag[1]
-
-				// Check if the key is in the list of keys to extract
-				for _, k := range keysToExtract {
-					if key == k {
-						kind1063Metadata[key] = value
-						break
-					}
-				}
-			}
+		if tag := event.Tags.GetFirst([]string{"m", ""}); tag != nil {
+			kind1063Metadata.m = (*tag)[1]
 		}
-
+		if tag := event.Tags.GetFirst([]string{"aes-256-gcm", ""}); tag != nil {
+			kind1063Metadata.aes256gcm = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"x", ""}); tag != nil {
+			kind1063Metadata.x = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"size", ""}); tag != nil {
+			kind1063Metadata.size = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"dim", ""}); tag != nil {
+			kind1063Metadata.dim = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"magnet", ""}); tag != nil {
+			kind1063Metadata.magnet = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"i", ""}); tag != nil {
+			kind1063Metadata.i = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"blurhash", ""}); tag != nil {
+			kind1063Metadata.blurhash = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"thumb", ""}); tag != nil {
+			kind1063Metadata.thumb = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
+			kind1063Metadata.image = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
+			kind1063Metadata.summary = (*tag)[1]
+		}
 	default:
 		if event.Kind >= 30000 && event.Kind < 40000 {
 			templateId = Other
@@ -238,11 +264,11 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	var video string
 	var videoType string
 	if event.Kind == 1063 {
-		if strings.HasPrefix(kind1063Metadata["m"], "image") {
-			image = kind1063Metadata["url"]
-		} else if strings.HasPrefix(kind1063Metadata["m"], "video") {
-			video = kind1063Metadata["url"]
-			videoType = strings.Split(kind1063Metadata["m"], "/")[1]
+		if strings.HasPrefix(kind1063Metadata.m, "image") {
+			image = kind1063Metadata.url
+		} else if strings.HasPrefix(kind1063Metadata.m, "video") {
+			video = kind1063Metadata.url
+			videoType = strings.Split(kind1063Metadata.m, "/")[1]
 		}
 	} else {
 		urls := urlMatcher.FindAllString(event.Content, -1)
@@ -304,6 +330,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		videoType:           videoType,
 		image:               image,
 		content:             content,
+		alt:                 alt,
 		kind1063Metadata:    kind1063Metadata,
 	}, nil
 }
