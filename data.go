@@ -120,23 +120,20 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	}
 
-	npub, _ := nip19.EncodePublicKey(event.PubKey)
-	nprofile := ""
-	nevent, _ := nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
-	neventNaked, _ := nip19.EncodeEvent(event.ID, nil, event.PubKey)
-	naddr := ""
-	naddrNaked := ""
-	createdAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
-	modifiedAt := time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
+	data := &Data{
+		event: event,
+	}
+
+	data.npub, _ = nip19.EncodePublicKey(event.PubKey)
+	data.nevent, _ = nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
+	data.neventNaked, _ = nip19.EncodeEvent(event.ID, nil, event.PubKey)
+	data.naddr = ""
+	data.naddrNaked = ""
+	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
+	data.modifiedAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 
 	author := event
-	var renderableLastNotes []EnhancedEvent
-	var parentLink template.HTML
-	authorRelays := []string{}
-	var content string
-	var templateId TemplateID
-	var alt string
-	var kind1063Metadata *Kind1063Metadata
+	data.authorRelays = []string{}
 
 	eventRelays := []string{}
 	for _, relay := range relays {
@@ -152,7 +149,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	if tag := event.Tags.GetFirst([]string{"alt", ""}); tag != nil {
-		alt = (*tag)[1]
+		data.alt = (*tag)[1]
 	}
 
 	switch event.Kind {
@@ -171,85 +168,85 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 				if strings.Contains(relay, "/npub1") {
 					continue // skip relays with personalyzed query like filter.nostr.wine
 				}
-				authorRelays = append(authorRelays, trimProtocol(relay))
+				data.authorRelays = append(data.authorRelays, trimProtocol(relay))
 			}
 		}
 
-		lastNotes := authorLastNotes(ctx, event.PubKey, authorRelays, isProfileSitemap)
-		renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
+		lastNotes := authorLastNotes(ctx, event.PubKey, data.authorRelays, isProfileSitemap)
+		data.renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
 		for i, levt := range lastNotes {
-			renderableLastNotes[i] = EnhancedEvent{levt, []string{}}
+			data.renderableLastNotes[i] = EnhancedEvent{levt, []string{}}
 		}
 		if err != nil {
 			return nil, err
 		}
 	case 1, 7, 30023, 30024:
-		templateId = Note
-		content = event.Content
+		data.templateId = Note
+		data.content = event.Content
 		if parentNevent := getParentNevent(event); parentNevent != "" {
-			parentLink = template.HTML(replaceNostrURLsWithTags(nostrNoteNeventMatcher, "nostr:"+parentNevent))
+			data.parentLink = template.HTML(replaceNostrURLsWithTags(nostrNoteNeventMatcher, "nostr:"+parentNevent))
 		}
 	case 6:
-		templateId = Note
+		data.templateId = Note
 		if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
 			original_nevent, _ := nip19.EncodeEvent((*reposted)[1], []string{}, "")
-			content = "Repost of nostr:" + original_nevent
+			data.content = "Repost of nostr:" + original_nevent
 		}
 	case 1063:
-		templateId = FileMetadata
-		kind1063Metadata = &Kind1063Metadata{}
+		data.templateId = FileMetadata
+		data.kind1063Metadata = &Kind1063Metadata{}
 
 		if tag := event.Tags.GetFirst([]string{"url", ""}); tag != nil {
-			kind1063Metadata.url = (*tag)[1]
+			data.kind1063Metadata.url = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"m", ""}); tag != nil {
-			kind1063Metadata.m = (*tag)[1]
+			data.kind1063Metadata.m = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"aes-256-gcm", ""}); tag != nil {
-			kind1063Metadata.aes256gcm = (*tag)[1]
+			data.kind1063Metadata.aes256gcm = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"x", ""}); tag != nil {
-			kind1063Metadata.x = (*tag)[1]
+			data.kind1063Metadata.x = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"size", ""}); tag != nil {
-			kind1063Metadata.size = (*tag)[1]
+			data.kind1063Metadata.size = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"dim", ""}); tag != nil {
-			kind1063Metadata.dim = (*tag)[1]
+			data.kind1063Metadata.dim = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"magnet", ""}); tag != nil {
-			kind1063Metadata.magnet = (*tag)[1]
+			data.kind1063Metadata.magnet = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"i", ""}); tag != nil {
-			kind1063Metadata.i = (*tag)[1]
+			data.kind1063Metadata.i = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"blurhash", ""}); tag != nil {
-			kind1063Metadata.blurhash = (*tag)[1]
+			data.kind1063Metadata.blurhash = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"thumb", ""}); tag != nil {
-			kind1063Metadata.thumb = (*tag)[1]
+			data.kind1063Metadata.thumb = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
-			kind1063Metadata.image = (*tag)[1]
+			data.kind1063Metadata.image = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
-			kind1063Metadata.summary = (*tag)[1]
+			data.kind1063Metadata.summary = (*tag)[1]
 		}
 	default:
 		if event.Kind >= 30000 && event.Kind < 40000 {
-			templateId = Other
+			data.templateId = Other
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
-				naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
-				naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), nil)
+				data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
+				data.naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), nil)
 			}
 		}
 	}
 
 	if event.Kind != 0 {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-		author, relays, _ = getEvent(ctx, npub, relaysForNip19)
+		author, relays, _ = getEvent(ctx, data.npub, relaysForNip19)
 		if len(relays) > 0 {
-			nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
+			data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
 		}
 		cancel()
 	}
@@ -258,79 +255,49 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	if kindDescription == "" {
 		kindDescription = fmt.Sprintf("Kind %d", event.Kind)
 	}
-	kindNIP := kindNIPs[event.Kind]
+	data.kindNIP = kindNIPs[event.Kind]
 
-	var image string
-	var video string
-	var videoType string
 	if event.Kind == 1063 {
-		if strings.HasPrefix(kind1063Metadata.m, "image") {
-			image = kind1063Metadata.url
-		} else if strings.HasPrefix(kind1063Metadata.m, "video") {
-			video = kind1063Metadata.url
-			videoType = strings.Split(kind1063Metadata.m, "/")[1]
+		if strings.HasPrefix(data.kind1063Metadata.m, "image") {
+			data.image = data.kind1063Metadata.url
+		} else if strings.HasPrefix(data.kind1063Metadata.m, "video") {
+			data.video = data.kind1063Metadata.url
+			data.videoType = strings.Split(data.kind1063Metadata.m, "/")[1]
 		}
 	} else {
 		urls := urlMatcher.FindAllString(event.Content, -1)
 		for _, url := range urls {
 			switch {
 			case imageExtensionMatcher.MatchString(url):
-				if image == "" {
-					image = url
+				if data.image == "" {
+					data.image = url
 				}
 			case videoExtensionMatcher.MatchString(url):
-				if video == "" {
-					video = url
-					if strings.HasSuffix(video, "mp4") {
-						videoType = "mp4"
-					} else if strings.HasSuffix(video, "mov") {
-						videoType = "mov"
+				if data.video == "" {
+					data.video = url
+					if strings.HasSuffix(data.video, "mp4") {
+						data.videoType = "mp4"
+					} else if strings.HasSuffix(data.video, "mov") {
+						data.videoType = "mov"
 					} else {
-						videoType = "webm"
+						data.videoType = "webm"
 					}
 				}
 			}
 		}
 	}
 
-	npubShort := npub[:8] + "…" + npub[len(npub)-4:]
-	authorLong := npub
-	authorShort := npubShort
+	data.npubShort = data.npub[:8] + "…" + data.npub[len(data.npub)-4:]
+	data.authorLong = data.npub
+	data.authorShort = data.npubShort
 
 	var metadata nostr.ProfileMetadata
 	if author != nil {
 		if err := json.Unmarshal([]byte(author.Content), &metadata); err == nil {
-			authorLong = fmt.Sprintf("%s (%s)", metadata.Name, npub)
-			authorShort = fmt.Sprintf("%s (%s)", metadata.Name, npubShort)
+			data.authorLong = fmt.Sprintf("%s (%s)", metadata.Name, data.npub)
+			data.authorShort = fmt.Sprintf("%s (%s)", metadata.Name, data.npubShort)
 		}
 	}
 
-	return &Data{
-		templateId:          templateId,
-		event:               event,
-		relays:              eventRelays,
-		npub:                npub,
-		npubShort:           npubShort,
-		nprofile:            nprofile,
-		nevent:              nevent,
-		neventNaked:         neventNaked,
-		naddr:               naddr,
-		naddrNaked:          naddrNaked,
-		authorRelays:        authorRelays,
-		createdAt:           createdAt,
-		modifiedAt:          modifiedAt,
-		parentLink:          parentLink,
-		metadata:            metadata,
-		authorLong:          authorLong,
-		authorShort:         authorShort,
-		renderableLastNotes: renderableLastNotes,
-		kindNIP:             kindNIP,
-		kindDescription:     kindDescription,
-		video:               video,
-		videoType:           videoType,
-		image:               image,
-		content:             content,
-		alt:                 alt,
-		kind1063Metadata:    kind1063Metadata,
-	}, nil
+	return data, nil
 }
