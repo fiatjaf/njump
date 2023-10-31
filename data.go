@@ -201,8 +201,8 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	case 6:
 		data.templateId = Note
 		if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
-			original_nevent, _ := nip19.EncodeEvent((*reposted)[1], []string{}, "")
-			data.content = "Repost of nostr:" + original_nevent
+			originalNevent, _ := nip19.EncodeEvent((*reposted)[1], []string{}, "")
+			data.content = "Repost of nostr:" + originalNevent
 		}
 	case 1063:
 		data.templateId = FileMetadata
@@ -303,11 +303,10 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data.authorLong = data.npub
 	data.authorShort = data.npubShort
 
-	var metadata nostr.ProfileMetadata
 	if author != nil {
-		if err := json.Unmarshal([]byte(author.Content), &metadata); err == nil {
-			data.authorLong = fmt.Sprintf("%s (%s)", metadata.Name, data.npub)
-			data.authorShort = fmt.Sprintf("%s (%s)", metadata.Name, data.npubShort)
+		if err := json.Unmarshal([]byte(author.Content), &data.metadata); err == nil {
+			data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
+			data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
 		}
 	}
 
