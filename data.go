@@ -251,9 +251,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		cancel()
 	}
 
-	kindDescription := kindNames[event.Kind]
-	if kindDescription == "" {
-		kindDescription = fmt.Sprintf("Kind %d", event.Kind)
+	data.kindDescription = kindNames[event.Kind]
+	if data.kindDescription == "" {
+		data.kindDescription = fmt.Sprintf("Kind %d", event.Kind)
 	}
 	data.kindNIP = kindNIPs[event.Kind]
 
