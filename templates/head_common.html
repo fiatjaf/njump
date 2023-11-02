@@ -65,7 +65,7 @@
 </style>
 <meta name="theme-color" content="#e42a6d" />
 
-{{ if eq "" .NaddrNaked }}
+{{ if not (eq "" .NaddrNaked) }}
 <link rel="canonical" href="https://njump.me/{{.NaddrNaked}}" />
 {{ else }}
 <link rel="canonical" href="https://njump.me/{{.NeventNaked}}" />
