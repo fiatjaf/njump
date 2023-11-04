@@ -129,37 +129,40 @@
           {{template "details" .DetailsPartial}}
 
           <!---->
-
           {{if not (eq 0 (len .LastNotes))}}
-          <div
-            class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
-          ></div>
-          <nav class="mb-6 leading-5">
-            <h2 class="text-2xl text-strongpink">Last Notes</h2>
-            {{range $i, $ee := .LastNotes}}
-            <a
-              class="my-8 block no-underline hover:-ml-6 hover:border-l-05rem hover:border-solid hover:border-l-gray-100 hover:pl-4 dark:hover:border-l-zinc-700"
-              href="/{{$ee.Nevent}}"
-            >
-              <div
-                class="-ml-2.5 mb-1.5 flex flex-row flex-wrap border-b-4 border-solid border-b-gray-100 pb-1 pl-2.5 dark:border-b-neutral-800"
+          <aside>
+            <div
+              class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
+            ></div>
+            <nav class="mb-6 leading-5">
+              <h2 class="text-2xl text-strongpink">Last Notes</h2>
+              {{range $i, $ee := .LastNotes}}
+              <a
+                class="my-8 block no-underline hover:-ml-6 hover:border-l-05rem hover:border-solid hover:border-l-gray-100 hover:pl-4 dark:hover:border-l-zinc-700"
+                href="/{{$ee.Nevent}}"
               >
-                <div class="text-sm text-strongpink">{{$ee.CreatedAtStr}}</div>
-                {{if $ee.IsReply}}
-                <div class="ml-2 text-sm text-gray-300 dark:text-gray-400">
-                  - reply
+                <div
+                  class="-ml-2.5 mb-1.5 flex flex-row flex-wrap border-b-4 border-solid border-b-gray-100 pb-1 pl-2.5 dark:border-b-neutral-800"
+                >
+                  <div class="text-sm text-strongpink">
+                    {{$ee.CreatedAtStr}}
+                  </div>
+                  {{if $ee.IsReply}}
+                  <div class="ml-2 text-sm text-gray-300 dark:text-gray-400">
+                    - reply
+                  </div>
+                  {{end}}
                 </div>
-                {{end}}
-              </div>
-              <div
-                class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink"
-                _="on load if my scrollHeight > my offsetHeight add .gradient"
-              >
-                {{$ee.Preview}}
-              </div>
-            </a>
-            {{end}}
-          </nav>
+                <div
+                  class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink"
+                  _="on load if my scrollHeight > my offsetHeight add .gradient"
+                >
+                  {{$ee.Preview}}
+                </div>
+              </a>
+              {{end}}
+            </nav>
+          </aside>
           {{end}}
 
           <div
