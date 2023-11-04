@@ -71,6 +71,8 @@
               {{end}}
             </h1>
           </header>
+          {{ if or (not (eq "" .Metadata.Website)) (not (eq ""
+          .RenderedAuthorAboutText)) }}
           <div
             class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
@@ -86,6 +88,7 @@
           >
             {{.RenderedAuthorAboutText}}
           </div>
+          {{ end }}
           <div
             class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
@@ -94,12 +97,14 @@
             {{.Npub}}
           </div>
           <div class="mb-6 leading-5">
+            {{ if not (eq "" .Metadata.NIP05) }}
             <div class="text-sm text-strongpink">NIP-05 Address</div>
-            {{.Metadata.NIP05}}
+            {{.Metadata.NIP05}} {{ end }}
           </div>
           <div class="mb-6 leading-5">
+            {{ if not (eq "" .Metadata.LUD16) }}
             <div class="text-sm text-strongpink">NIP-57 Address</div>
-            {{.Metadata.LUD16}}
+            {{.Metadata.LUD16}} {{ end }}
           </div>
           <div class="mb-6 leading-5">
             <div class="text-sm text-strongpink">Profile Code</div>

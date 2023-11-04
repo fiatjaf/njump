@@ -144,7 +144,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 	data.modifiedAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 
-	author := event
 	data.authorRelays = []string{}
 
 	eventRelays := []string{}
@@ -254,13 +253,22 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	}
 
-	if event.Kind != 0 {
+	if event.Kind == 0 {
+		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
+		json.Unmarshal([]byte(event.Content), &data.metadata)
+	} else {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-		author, relays, _ = getEvent(ctx, data.npub, relaysForNip19)
+		defer cancel()
+		author, relays, _ := getEvent(ctx, data.npub, relaysForNip19)
+		if author != nil {
+			if err := json.Unmarshal([]byte(author.Content), &data.metadata); err == nil {
+				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
+				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
+			}
+		}
 		if len(relays) > 0 {
 			data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
 		}
-		cancel()
 	}
 
 	data.kindDescription = kindNames[event.Kind]
@@ -302,13 +310,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data.npubShort = data.npub[:8] + "…" + data.npub[len(data.npub)-4:]
 	data.authorLong = data.npub
 	data.authorShort = data.npubShort
-
-	if author != nil {
-		if err := json.Unmarshal([]byte(author.Content), &data.metadata); err == nil {
-			data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
-			data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
-		}
-	}
 
 	return data, nil
 }
