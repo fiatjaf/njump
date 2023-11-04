@@ -22,6 +22,7 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
 const XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -296,7 +297,7 @@ func getNameFromNip19(ctx context.Context, nip19 string) string {
 	if err != nil {
 		return nip19
 	}
-	metadata, err := nostr.ParseMetadata(*author)
+	metadata, err := sdk.ParseMetadata(author)
 	if err != nil {
 		return nip19
 	}

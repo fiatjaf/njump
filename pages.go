@@ -6,8 +6,8 @@ import (
 	_ "embed"
 	"html/template"
 
-	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip11"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/tylermmorton/tmpl"
 )
 
@@ -135,7 +135,7 @@ type TelegramInstantViewPage struct {
 	Content     template.HTML
 	Description string
 	Subject     string
-	Metadata    nostr.ProfileMetadata
+	Metadata    sdk.ProfileMetadata
 	AuthorLong  string
 	CreatedAt   string
 }
@@ -217,7 +217,7 @@ type NotePage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         nostr.ProfileMetadata
+	Metadata         sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML
@@ -246,7 +246,7 @@ type ProfilePage struct {
 	CreatedAt                  string
 	Domain                     string
 	LastNotes                  []EnhancedEvent
-	Metadata                   nostr.ProfileMetadata
+	Metadata                   sdk.ProfileMetadata
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
@@ -275,7 +275,7 @@ type FileMetadataPage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         nostr.ProfileMetadata
+	Metadata         sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML

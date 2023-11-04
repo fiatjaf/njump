@@ -26,7 +26,7 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 	// 50% of chance of picking a pubkey
 	if ra := rand.Intn(2); ra == 0 {
 		set := make([]string, 0, 50)
-		for _, pubkey := range cache.GetPaginatedkeys("pa", 1, 50) {
+		for _, pubkey := range cache.GetPaginatedKeys("pa", 1, 50) {
 			set = append(set, pubkey)
 		}
 		if s := len(set); s > 0 {

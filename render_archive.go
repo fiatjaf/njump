@@ -51,7 +51,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		title = "Nostr relays archive"
 	}
 
-	keys := cache.GetPaginatedkeys(prefix, page, resultsPerPage)
+	keys := cache.GetPaginatedKeys(prefix, page, resultsPerPage)
 	data := []string{}
 	for i := 0; i < len(keys); i++ {
 		if area == "npubs-archive" {

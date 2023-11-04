@@ -60,7 +60,7 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	return val, true
 }
 
-func (c *Cache) GetPaginatedkeys(prefix string, page int, size int) []string {
+func (c *Cache) GetPaginatedKeys(prefix string, page int, size int) []string {
 	keys := []string{}
 	err := c.DB.View(func(txn *badger.Txn) error {
 		opts := badger.DefaultIteratorOptions

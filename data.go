@@ -12,6 +12,7 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
 type EnhancedEvent struct {
@@ -74,7 +75,7 @@ type Data struct {
 	createdAt           string
 	modifiedAt          string
 	parentLink          template.HTML
-	metadata            nostr.ProfileMetadata
+	metadata            sdk.ProfileMetadata
 	authorRelays        []string
 	authorLong          string
 	authorShort         string

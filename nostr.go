@@ -11,7 +11,7 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/nbd-wtf/go-nostr/sdk"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 	"golang.org/x/exp/slices"
 )
 
