@@ -97,7 +97,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	title := ""
-	titleizedContent := ""
 	twitterTitle := title
 	if data.event.Kind == 0 && data.metadata.Name != "" {
 		title = data.metadata.Name
@@ -177,26 +176,28 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {
 			// otherwise replace npub/nprofiles with names and trim length
-			res := replaceUserReferencesWithNames(r.Context(), []string{data.event.Content})
-			description = res[0]
+			description := replaceUserReferencesWithNames(r.Context(), []string{data.event.Content})[0]
 			if len(description) > 240 {
 				description = description[:240]
 			}
-			titleizedContent = strings.TrimSpace(
-				strings.Replace(
-					strings.Replace(description, "\r\n", " ", -1),
-					"\n", " ", -1,
-				),
-			)
-			if len(titleizedContent) <= 65 {
-				titleizedContent = "\"" + titleizedContent + "\""
-			} else {
-				titleizedContent = "\"" + titleizedContent[:64] + "…\""
-			}
 		}
 	}
+
+	// titleizedContent
+	titleizedContent := strings.TrimSpace(
+		strings.Replace(
+			strings.Replace(
+				replaceUserReferencesWithNames(r.Context(), []string{data.event.Content})[0],
+				"\r\n", " ", -1),
+			"\n", " ", -1,
+		),
+	)
 	if titleizedContent == "" {
 		titleizedContent = title
+	} else if len(titleizedContent) <= 65 {
+		titleizedContent = "\"" + titleizedContent + "\""
+	} else {
+		titleizedContent = "\"" + titleizedContent[:64] + "…\""
 	}
 
 	// content massaging
