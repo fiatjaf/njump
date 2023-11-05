@@ -15,7 +15,14 @@
       rgba(0, 0, 0, 0) 100%
     );
   }
-  .safari {
-    margin: 1cm 3cm;
+  
+  @media print {
+    @page {
+      margin: 2cm 3cm;
+    }
+    body.safari {
+      margin: 1cm 3cm;
+    }
   }
+
 }
