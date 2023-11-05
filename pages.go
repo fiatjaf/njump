@@ -194,9 +194,9 @@ type OtherPage struct {
 	DetailsPartial    `tmpl:"details"`
 	FooterPartial     `tmpl:"footer"`
 
-	Naddr           string
 	Kind            int
 	KindDescription string
+	Alt             string
 }
 
 func (*OtherPage) TemplateText() string { return tmplOther }

@@ -362,7 +362,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NeventNaked:        data.neventNaked,
 			},
 			DetailsPartial:  detailsData,
-			Naddr:           data.naddr,
+			Alt:             data.alt,
 			Kind:            data.event.Kind,
 			KindDescription: data.kindDescription,
 		})

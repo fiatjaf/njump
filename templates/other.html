@@ -2,11 +2,7 @@
 <html class="theme--default text-lg font-light print:text-base sm:text-xl">
   <meta charset="UTF-8" />
   <head>
-    {{ if not (eq "" .Naddr) }}
-    <title>Nostr Entity {{.Naddr}}</title>
-    {{ else }}
     <title>Nostr Event {{.Kind}} - {{.KindDescription }}</title>
-    {{ end }}
 
     <!---->
     {{template "head_common" .HeadCommonPartial}}
@@ -28,6 +24,19 @@
             <div class="mb-4 text-2xl">{{.KindDescription}}</div>
           </header>
 
+          {{ if not (eq "" .Alt) }}
+          <div
+            class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
+          ></div>
+
+          <article
+            class="prose-cite:text-sm prose prose mb-6 leading-5 dark:prose-invert"
+          >
+            {{.Alt}}
+          </article>
+          {{ end }}
+
+          <!---->
           {{template "details" .DetailsPartial}}
 
           <div
