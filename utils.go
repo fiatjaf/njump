@@ -300,9 +300,9 @@ func replaceNostrURLsWithTags(matcher *regexp.Regexp, input string) string {
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
 			defer cancel()
 			name := getNameFromNip19(ctx, nip19)
-			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:bg-garnet px-1"><span class="font-bold">%s</span> (<span class="italic">%s</span>)</a>`, nip19, name, first_chars+"…"+last_chars)
+			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:text-white dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a>`, nip19, name, first_chars+"…"+last_chars)
 		} else {
-			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:bg-garnet px-1">%s</a>`, nip19, first_chars+"…"+last_chars)
+			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:text-white dark:bg-garnet px-1">%s</a>`, nip19, first_chars+"…"+last_chars)
 		}
 	})
 }
