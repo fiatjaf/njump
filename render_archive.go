@@ -42,11 +42,11 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if area == "npubs-archive" {
-		prefix = "pa"
+		prefix = "pa:"
 		pathPrefix = ""
 		title = "Nostr npubs archive"
 	} else {
-		prefix = "ra"
+		prefix = "ra:"
 		pathPrefix = "r/"
 		title = "Nostr relays archive"
 	}

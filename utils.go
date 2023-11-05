@@ -239,6 +239,27 @@ func getParentNevent(event *nostr.Event) string {
 	return parentNevent
 }
 
+func attachRelaysToEvent(event *nostr.Event, relays ...string) {
+	key := "rls:" + event.ID
+	existingRelays := make([]string, 0, 10)
+	if exists := cache.GetJSON(key, &existingRelays); exists {
+		relays = unique(append(existingRelays, relays...))
+	}
+	cache.SetJSONWithTTL(key, relays, time.Hour*24*7)
+}
+
+func scheduleEventExpiration(eventId string, ts time.Duration) {
+	key := "ttl:" + eventId
+	nextExpiration := time.Now().Add(ts).Unix()
+	var currentExpiration int64
+	if exists := cache.GetJSON(key, &currentExpiration); exists {
+		if nextExpiration < currentExpiration {
+			return
+		}
+	}
+	cache.SetJSON(key, nextExpiration)
+}
+
 // Rendering functions
 // ### ### ### ### ### ### ### ### ### ### ###
 
@@ -469,53 +490,6 @@ func normalizeWebsiteURL(u string) string {
 		return u
 	}
 	return "https://" + u
-}
-
-func loadNpubsArchive(ctx context.Context) {
-	log.Debug().Msg("refreshing the npubs archive")
-
-	contactsArchive := make([]string, 0, 500)
-
-	for _, pubkey := range trustedPubKeys {
-		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-		pubkeyContacts := contactsForPubkey(ctx, pubkey)
-		contactsArchive = append(contactsArchive, pubkeyContacts...)
-		cancel()
-	}
-
-	contactsArchive = unique(contactsArchive)
-	for _, contact := range contactsArchive {
-		log.Debug().Msgf("adding contact %s", contact)
-		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
-	}
-}
-
-func loadRelaysArchive(ctx context.Context) {
-	log.Debug().Msg("refreshing the relays archive")
-
-	relaysArchive := make([]string, 0, 500)
-
-	for _, pubkey := range trustedPubKeys {
-		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-		pubkeyContacts := relaysForPubkey(ctx, pubkey)
-		relaysArchive = append(relaysArchive, pubkeyContacts...)
-		cancel()
-	}
-
-	relaysArchive = unique(relaysArchive)
-	for _, relay := range relaysArchive {
-		for _, excluded := range excludedRelays {
-			if strings.Contains(relay, excluded) {
-				log.Debug().Msgf("skipping relay %s", relay)
-				continue
-			}
-		}
-		if strings.Contains(relay, "/npub1") {
-			continue // skip relays with personalyzed query like filter.nostr.wine
-		}
-		log.Debug().Msgf("adding relay %s", relay)
-		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
-	}
 }
 
 func eventToHTML(evt *nostr.Event) template.HTML {

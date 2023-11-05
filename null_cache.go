@@ -4,6 +4,9 @@ package main
 
 import (
 	"time"
+
+	"github.com/fiatjaf/eventstore"
+	"github.com/fiatjaf/eventstore/nullstore"
 )
 
 var cache = Cache{}
@@ -18,3 +21,5 @@ func (c *Cache) SetJSON(key string, value any)                               {}
 func (c *Cache) SetWithTTL(key string, value []byte, ttl time.Duration)      {}
 func (c *Cache) SetJSONWithTTL(key string, value any, ttl time.Duration)     {}
 func (c *Cache) GetPaginatedKeys(prefix string, page int, size int) []string { return []string{} }
+
+var db eventstore.Store = nullstore.NullStore{}

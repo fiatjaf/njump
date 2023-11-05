@@ -8,9 +8,14 @@ import (
 	"time"
 
 	"github.com/dgraph-io/badger"
+	"github.com/fiatjaf/eventstore"
+	eventstore_badger "github.com/fiatjaf/eventstore/badger"
 )
 
-var cache = Cache{}
+var (
+	cache                  = Cache{}
+	db    eventstore.Store = &eventstore_badger.BadgerBackend{}
+)
 
 type Cache struct {
 	*badger.DB
@@ -36,6 +41,12 @@ func (c *Cache) initialize() func() {
 	}()
 
 	return func() { db.Close() }
+}
+
+func (c *Cache) Delete(key string) error {
+	return c.DB.Update(func(txn *badger.Txn) error {
+		return txn.Delete([]byte(key))
+	})
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {

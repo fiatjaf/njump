@@ -8,18 +8,19 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
+	"github.com/fiatjaf/eventstore/badger"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog"
 )
 
 type Settings struct {
-	Port          string `envconfig:"PORT" default:"2999"`
-	Domain        string `envconfig:"DOMAIN" default:"njump.me"`
-	DiskCachePath string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-cache"`
-	TailwindDebug bool   `envconfig:"TAILWIND_DEBUG"`
+	Port           string `envconfig:"PORT" default:"2999"`
+	Domain         string `envconfig:"DOMAIN" default:"njump.me"`
+	DiskCachePath  string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-cache"`
+	EventStorePath string `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
+	TailwindDebug  bool   `envconfig:"TAILWIND_DEBUG"`
 }
 
 //go:embed static/*
@@ -33,22 +34,6 @@ var (
 	log                = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 	tailwindDebugStuff template.HTML
 )
-
-func updateArchives(ctx context.Context) {
-	// do this so we don't run this every time we restart it locally
-	time.Sleep(10 * time.Minute)
-
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		default:
-			loadNpubsArchive(ctx)
-			loadRelaysArchive(ctx)
-		}
-		time.Sleep(24 * time.Hour)
-	}
-}
 
 func main() {
 	err := envconfig.Process("", &s)
@@ -89,9 +74,18 @@ func main() {
 	// initialize disk cache
 	defer cache.initialize()()
 
-	// initialize the function to update the npubs/relays archive
+	// initialize eventstore database
+	if badgerBackend, ok := db.(*badger.BadgerBackend); ok {
+		// it may be NullStore, in which case we do nothing
+		badgerBackend.Path = s.EventStorePath
+	}
+	db.Init()
+	defer db.Close()
+
+	// initialize routines
 	ctx := context.Background()
 	go updateArchives(ctx)
+	go deleteOldCachedEvents(ctx)
 
 	// routes
 	mux := http.NewServeMux()
