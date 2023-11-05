@@ -134,7 +134,8 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	data := &Data{
-		event: event,
+		event:  event,
+		relays: relays,
 	}
 
 	data.npub, _ = nip19.EncodePublicKey(event.PubKey)
@@ -144,7 +145,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data.naddrNaked = ""
 	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 	data.modifiedAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
-
 	data.authorRelays = []string{}
 
 	eventRelays := []string{}

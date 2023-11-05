@@ -47,7 +47,7 @@ func deleteOldCachedEvents(ctx context.Context) {
 
 			if expires < now {
 				// time to delete this
-				id := spl[2]
+				id := spl[1]
 				res, _ := wdb.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
 				if len(res) > 0 {
 					log.Debug().Msgf("deleting %s", res[0].ID)

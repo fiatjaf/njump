@@ -133,7 +133,9 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 
 	// try to fetch in our internal eventstore first
 	if res, _ := wdb.QuerySync(ctx, filter); len(res) != 0 {
-		return res[0], nil, err
+		evt := res[0]
+		scheduleEventExpiration(evt.ID, time.Hour*24*7)
+		return evt, getRelaysForEvent(evt.ID), err
 	}
 
 	// otherwise fetch from external relays
@@ -191,11 +193,11 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	// save stuff in cache and in internal store
 	wdb.Publish(ctx, *result)
 	// save relays if we got them
-	attachRelaysToEvent(result, successRelays...)
+	allRelays := attachRelaysToEvent(result.ID, successRelays...)
 	// keep track of what we have to delete later
 	scheduleEventExpiration(result.ID, time.Hour*24*7)
 
-	return result, successRelays, nil
+	return result, allRelays, nil
 }
 
 func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSitemap bool) []*nostr.Event {
@@ -222,7 +224,7 @@ func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSite
 		defer func() {
 			external <- notes
 		}()
-		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()
 		relays = unique(append(relays, getRelay(), getRelay()))
 		ch := pool.SubManyEose(ctx, relays, nostr.Filters{filter})
@@ -232,10 +234,10 @@ func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSite
 				if !more {
 					return
 				}
-				notes = append(lastNotes, ie.Event)
+				notes = append(notes, ie.Event)
 				if store {
 					db.SaveEvent(ctx, ie.Event)
-					attachRelaysToEvent(ie.Event, ie.Relay.URL)
+					attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
 					scheduleEventExpiration(ie.Event.ID, time.Hour*24)
 				}
 			case <-ctx.Done():
@@ -248,7 +250,7 @@ func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSite
 	if useLocalStore {
 		lastNotes, _ = eventstore.RelayWrapper{Store: db}.QuerySync(ctx, filter)
 	}
-	if len(lastNotes) < 2 {
+	if len(lastNotes) < 5 {
 		// if we didn't get enough notes (or if we didn't even query the local store), wait for the external relays
 		lastNotes = <-external
 	}

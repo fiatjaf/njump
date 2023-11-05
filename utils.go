@@ -239,13 +239,21 @@ func getParentNevent(event *nostr.Event) string {
 	return parentNevent
 }
 
-func attachRelaysToEvent(event *nostr.Event, relays ...string) {
-	key := "rls:" + event.ID
+func attachRelaysToEvent(eventId string, relays ...string) []string {
+	key := "rls:" + eventId
 	existingRelays := make([]string, 0, 10)
 	if exists := cache.GetJSON(key, &existingRelays); exists {
 		relays = unique(append(existingRelays, relays...))
 	}
 	cache.SetJSONWithTTL(key, relays, time.Hour*24*7)
+	return relays
+}
+
+func getRelaysForEvent(eventId string) []string {
+	key := "rls:" + eventId
+	relays := make([]string, 0, 10)
+	cache.GetJSON(key, &relays)
+	return relays
 }
 
 func scheduleEventExpiration(eventId string, ts time.Duration) {
