@@ -8,7 +8,6 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strings"
 
 	"github.com/nbd-wtf/go-nostr/nip19"
@@ -33,9 +32,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		renderProfile(w, r, code)
 		return
 	}
-	userAgent := r.Header.Get("User-Agent")
-	searchEngineRegex := regexp.MustCompile(`Googlebot|Bingbot|Yahoo|Baidu|Yandex|DuckDuckGo|Sogou|Exabot`)
-	fmt.Println(r.URL.Path, "#/", userAgent)
+
+	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
 
 	// force note1 to become nevent1
 	if strings.HasPrefix(code, "note1") {
@@ -111,40 +109,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			}
 			title = fmt.Sprintf("%s: %s", kindNames[data.event.Kind], tValue)
 		} else if kindName, ok := kindNames[data.event.Kind]; ok {
-			if searchEngineRegex.MatchString(userAgent) {
-				urlRegex := regexp.MustCompile(`(https?)://[^\s/$.?#].[^\s]*`)
-				title = urlRegex.ReplaceAllString(data.event.Content, "")
-			} else {
-				title = kindName
-			}
+			title = kindName
 		} else {
 			title = fmt.Sprintf("kind:%d event", data.event.Kind)
 		}
 		if subject != "" {
-			if searchEngineRegex.MatchString(userAgent) {
-				title = subject
-			} else {
-				title += " (" + subject + ")"
-			}
+			title += " (" + subject + ")"
 		}
+		twitterTitle += " by " + data.authorShort
 		date := data.event.CreatedAt.Time().UTC().Format("2006-01-02 15:04")
-		if len(title) > 65 {
-			words := strings.Fields(title)
-			title = ""
-			for _, word := range words {
-				if len(title)+len(word)+1 <= 65 { // +1 for space
-					if title != "" {
-						title += " "
-					}
-					title += word
-				} else {
-					break
-				}
-			}
-			title = title + " ..."
-			title += " at " + date
-		}
-		twitterTitle += " by " + data.authorShort + " at " + date
+		title += " at " + date
+		twitterTitle += " at " + date
 	}
 
 	seenOnRelays := ""
