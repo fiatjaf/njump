@@ -352,6 +352,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			IsVideo:      data.kind1063Metadata.IsVideo(),
 		})
 	case Other:
+		detailsData.HideDetails = false // always open this since we know nothing else about the event
+
 		err = OtherTemplate.Render(w, &OtherPage{
 			HeadCommonPartial: HeadCommonPartial{
 				IsProfile:          false,

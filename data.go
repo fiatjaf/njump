@@ -245,8 +245,8 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			data.kind1063Metadata.Summary = (*tag)[1]
 		}
 	default:
+		data.templateId = Other
 		if event.Kind >= 30000 && event.Kind < 40000 {
-			data.templateId = Other
 			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
 				data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
 				data.naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), nil)
