@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 
 	"github.com/nbd-wtf/go-nostr/nip19"
@@ -167,15 +168,29 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			"\n", " ", -1,
 		),
 	)
+
 	// Remove image/video urls
 	urlRegex := regexp.MustCompile(`(https?)://[^\s/$.?#]+\.(?i:jpg|jpeg|png|gif|bmp|mp4|mov|avi|mkv|webm|ogg)`)
 	titleizedContent = urlRegex.ReplaceAllString(titleizedContent, "")
+
 	if titleizedContent == "" {
 		titleizedContent = title
-	} else if len(titleizedContent) <= 65 {
-		titleizedContent = titleizedContent
-	} else {
-		titleizedContent = titleizedContent[:64]
+	}
+
+	if len(titleizedContent) > 85 {
+		words := strings.Fields(titleizedContent)
+		titleizedContent = ""
+		for _, word := range words {
+			if len(titleizedContent)+len(word)+1 <= 85 { // +1 for space
+				if titleizedContent != "" {
+					titleizedContent += " "
+				}
+				titleizedContent += word
+			} else {
+				break
+			}
+		}
+		titleizedContent = titleizedContent + " ..."
 	}
 
 	// content massaging
