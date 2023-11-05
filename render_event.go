@@ -170,9 +170,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if titleizedContent == "" {
 		titleizedContent = title
 	} else if len(titleizedContent) <= 65 {
-		titleizedContent = "\"" + titleizedContent + "\""
+		titleizedContent = titleizedContent
 	} else {
-		titleizedContent = "\"" + titleizedContent[:64] + "…\""
+		titleizedContent = titleizedContent[:64]
 	}
 
 	// content massaging
