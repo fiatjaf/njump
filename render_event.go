@@ -167,6 +167,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			"\n", " ", -1,
 		),
 	)
+	// Remove image/video urls
+	urlRegex := regexp.MustCompile(`(https?)://[^\s/$.?#]+\.(?i:jpg|jpeg|png|gif|bmp|mp4|mov|avi|mkv|webm|ogg)`)
+	titleizedContent = urlRegex.ReplaceAllString(titleizedContent, "")
 	if titleizedContent == "" {
 		titleizedContent = title
 	} else if len(titleizedContent) <= 65 {
