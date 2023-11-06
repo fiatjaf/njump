@@ -60,12 +60,12 @@
             <h1 class="text-2xl">
               {{.LiveEvent.Title}} {{ if (eq "ended" .LiveEvent.Status)}}
               <span
-                class="ml-4 rounded bg-neutral-400 px-4 py-1 text-base text-white dark:bg-neutral-700"
+                class="whitespace-nowrap rounded bg-neutral-400 px-4 py-1 text-base text-white dark:bg-neutral-700"
                 >Ended</span
               >
               {{ else if (eq "live" .LiveEvent.Status)}}
               <span
-                class="ml-4 rounded bg-strongpink px-4 py-1 text-base text-white"
+                class="whitespace-nowrap rounded bg-strongpink px-4 py-1 text-base text-white"
                 >Live now!</span
               >
               {{ end }}
@@ -81,7 +81,7 @@
             <div class="mb-4">
               {{ range .LiveEvent.Tags }}
               <span
-                class="mr-2 rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white"
+                class="mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white"
                 >{{ . }}</span
               >
               {{ end }}
