@@ -174,7 +174,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 
 		for ie := range pool.SubManyEoseNonUnique(ctx, relays, nostr.Filters{filter}) {
 			if pu, err := url.Parse(ie.Relay.URL); err == nil {
-				successRelays = append(successRelays, pu.Host+pu.RawPath)
+				successRelays = append(successRelays, pu.Scheme+"://"+pu.Host+pu.RawPath)
 			}
 			result = ie.Event
 			countdown = min(countdown, 1)
