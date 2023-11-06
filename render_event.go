@@ -345,6 +345,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Kind:            data.event.Kind,
 			KindDescription: data.kindDescription,
 		})
+	default:
+		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
+		http.Error(w, "tried to render an unsupported template at render_event.go", 500)
 	}
 
 	if err != nil {
