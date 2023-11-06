@@ -5,7 +5,7 @@ go 1.21.0
 require (
 	github.com/apatters/go-wordwrap v1.0.0
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/fiatjaf/eventstore v0.2.0
+	github.com/fiatjaf/eventstore v0.2.1
 	github.com/fiatjaf/khatru v0.0.6
 	github.com/gomarkdown/markdown v0.0.0-20230322041520-c84983bdbf2a
 	github.com/kelseyhightower/envconfig v1.4.0
