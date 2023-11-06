@@ -71,10 +71,11 @@
               {{ end }}
             </h1>
             <div class="mb-4">
-              Streaming hosted by
+              {{ if not (eq "" .LiveEvent.HostNpub) }} Streaming hosted by
               <a href="/{{ .LiveEvent.HostNpub }}"
                 >{{ .LiveEvent.Host.Name }}</a
               >
+              {{ end }}
             </div>
             <!-- main content -->
             <div class="mb-4">
