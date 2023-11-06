@@ -1,16 +1,17 @@
 module github.com/fiatjaf/njump
 
-go 1.21
+go 1.21.0
 
 require (
 	github.com/apatters/go-wordwrap v1.0.0
 	github.com/dgraph-io/badger v1.6.2
 	github.com/fiatjaf/eventstore v0.2.0
+	github.com/fiatjaf/khatru v0.0.6
 	github.com/gomarkdown/markdown v0.0.0-20230322041520-c84983bdbf2a
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lukevers/freetype-go v0.0.0-20150513150840-77e276735410
 	github.com/microcosm-cc/bluemonday v1.0.24
-	github.com/nbd-wtf/go-nostr v0.25.0
+	github.com/nbd-wtf/go-nostr v0.25.1
 	github.com/nbd-wtf/nostr-sdk v0.0.1
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/cors v1.10.0
@@ -22,6 +23,7 @@ require (
 
 require (
 	github.com/AndreasBriese/bbloom v0.0.0-20190825152654-46b345b51c96 // indirect
+	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
 	github.com/btcsuite/btcd/btcutil v1.1.3 // indirect
@@ -32,6 +34,7 @@ require (
 	github.com/dgraph-io/badger/v4 v4.2.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
+	github.com/fasthttp/websocket v1.5.3 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.2.0 // indirect
@@ -49,9 +52,12 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/puzpuzpuz/xsync/v2 v2.5.1 // indirect
+	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	github.com/tidwall/gjson v1.14.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	github.com/valyala/fasthttp v1.47.0 // indirect
 	go.opencensus.io v0.22.5 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect

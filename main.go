@@ -10,7 +10,9 @@ import (
 	"strings"
 
 	"github.com/fiatjaf/eventstore/badger"
+	"github.com/fiatjaf/khatru"
 	"github.com/kelseyhightower/envconfig"
+	"github.com/nbd-wtf/go-nostr"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog"
 )
@@ -87,8 +89,17 @@ func main() {
 	go updateArchives(ctx)
 	go deleteOldCachedEvents(ctx)
 
+	// expose our internal cache as a relay (mostly for debugging purposes)
+	relay := khatru.NewRelay()
+	relay.QueryEvents = append(relay.QueryEvents, db.QueryEvents)
+	relay.RejectEvent = append(relay.RejectEvent,
+		func(context.Context, *nostr.Event) (bool, string) {
+			return true, "this relay is not writable"
+		},
+	)
+
 	// routes
-	mux := http.NewServeMux()
+	mux := relay.Router()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
 	mux.HandleFunc("/relays-archive.xml", renderArchive)
 	mux.HandleFunc("/npubs-archive.xml", renderArchive)
@@ -106,7 +117,7 @@ func main() {
 	mux.HandleFunc("/", renderEvent)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
-	if err := http.ListenAndServe("0.0.0.0:"+s.Port, cors.Default().Handler(mux)); err != nil {
+	if err := http.ListenAndServe("0.0.0.0:"+s.Port, cors.Default().Handler(relay)); err != nil {
 		log.Fatal().Err(err).Msg("")
 	}
 
