@@ -135,7 +135,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	if res, _ := wdb.QuerySync(ctx, filter); len(res) != 0 {
 		evt := res[0]
 		scheduleEventExpiration(evt.ID, time.Hour*24*7)
-		return evt, getRelaysForEvent(evt.ID), err
+		return evt, getRelaysForEvent(evt.ID), nil
 	}
 
 	// otherwise fetch from external relays

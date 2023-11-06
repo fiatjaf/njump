@@ -41,7 +41,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		_, redirectHex, err := nip19.Decode(code)
 		if err != nil {
 			w.Header().Set("Cache-Control", "max-age=60")
-			http.Error(w, "error fetching event: "+err.Error(), 404)
+			http.Error(w, "error decoding note1 code: "+err.Error(), 404)
 			return
 		}
 		redirectNevent, _ := nip19.EncodeEvent(redirectHex.(string), []string{}, "")
@@ -58,7 +58,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	data, err := grabData(r.Context(), code, false)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
-		http.Error(w, "error fetching event: "+err.Error(), 404)
+		http.Error(w, "failed to fetch event related data: "+err.Error(), 404)
 		return
 	}
 

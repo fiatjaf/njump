@@ -121,7 +121,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	event, relays, err := getEvent(ctx, code, nil)
 	if err != nil {
 		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
-		return nil, err
+		return nil, fmt.Errorf("error fetching event: %w", err)
 	}
 
 	relaysForNip19 := make([]string, 0, 3)
