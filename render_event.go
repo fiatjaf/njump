@@ -245,6 +245,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		// kind-specific stuff
 		FileMetadata: data.kind1063Metadata,
+		LiveEvent:    data.kind30311Metadata,
 	}
 
 	opengraph := OpenGraphPartial{
@@ -329,6 +330,33 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			FileMetadata: *data.kind1063Metadata,
 			IsImage:      data.kind1063Metadata.IsImage(),
 			IsVideo:      data.kind1063Metadata.IsVideo(),
+		})
+	case LiveEvent:
+		opengraph.Image = data.kind30311Metadata.Image
+
+		err = LiveEventTemplate.Render(w, &LiveEventPage{
+			OpenGraphPartial: opengraph,
+			HeadCommonPartial: HeadCommonPartial{
+				IsProfile:          false,
+				TailwindDebugStuff: tailwindDebugStuff,
+				NaddrNaked:         data.naddrNaked,
+				NeventNaked:        data.neventNaked,
+			},
+			DetailsPartial: detailsData,
+			ClientsPartial: ClientsPartial{
+				Clients: generateClientList(style, data.naddr, data.event),
+			},
+
+			CreatedAt:        data.createdAt,
+			Metadata:         data.metadata,
+			Npub:             data.npub,
+			NpubShort:        data.npubShort,
+			Style:            style,
+			Subject:          subject,
+			TitleizedContent: titleizedContent,
+			Alt:              data.alt,
+
+			LiveEvent: *data.kind30311Metadata,
 		})
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event

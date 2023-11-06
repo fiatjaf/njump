@@ -18,6 +18,7 @@ const (
 	LongForm
 	TelegramInstantView
 	FileMetadata
+	LiveEvent
 	Other
 )
 
@@ -96,6 +97,7 @@ type DetailsPartial struct {
 
 	// kind-specific stuff
 	FileMetadata *Kind1063Metadata
+	LiveEvent    *Kind30311Metadata
 }
 
 func (*DetailsPartial) TemplateText() string { return tmplDetails }
@@ -294,6 +296,37 @@ type FileMetadataPage struct {
 }
 
 func (*FileMetadataPage) TemplateText() string { return tmplFileMetadata }
+
+var (
+	//go:embed templates/live_event.html
+	tmplLiveEvent     string
+	LiveEventTemplate = tmpl.MustCompile(&LiveEventPage{})
+)
+
+type LiveEventPage struct {
+	OpenGraphPartial  `tmpl:"opengraph"`
+	HeadCommonPartial `tmpl:"head_common"`
+	TopPartial        `tmpl:"top"`
+	DetailsPartial    `tmpl:"details"`
+	ClientsPartial    `tmpl:"clients"`
+	FooterPartial     `tmpl:"footer"`
+
+	Content          template.HTML
+	CreatedAt        string
+	Metadata         *sdk.ProfileMetadata
+	Npub             string
+	NpubShort        string
+	ParentLink       template.HTML
+	SeenOn           []string
+	Style            Style
+	Subject          string
+	TitleizedContent string
+	Alt              string
+
+	LiveEvent Kind30311Metadata
+}
+
+func (*LiveEventPage) TemplateText() string { return tmplLiveEvent }
 
 var (
 	//go:embed templates/relay.html

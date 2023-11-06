@@ -87,6 +87,7 @@ type Data struct {
 	content             string
 	alt                 string
 	kind1063Metadata    *Kind1063Metadata
+	kind30311Metadata   *Kind30311Metadata
 }
 
 type Kind1063Metadata struct {
@@ -102,6 +103,16 @@ type Kind1063Metadata struct {
 	I         string
 	Blurhash  string
 	Thumb     string
+}
+
+type Kind30311Metadata struct {
+	Title    string
+	Summary  string
+	Image    string
+	Status   string
+	Host     sdk.ProfileMetadata
+	HostNpub string
+	Tags     []string
 }
 
 func (fm Kind1063Metadata) IsVideo() bool { return strings.Split(fm.M, "/")[0] == "video" }
@@ -245,6 +256,35 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
 			data.kind1063Metadata.Summary = (*tag)[1]
+		}
+	case 30311:
+		data.templateId = LiveEvent
+		d := event.Tags.GetFirst([]string{"d", ""})
+		data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), data.relays)
+		data.kind30311Metadata = &Kind30311Metadata{}
+
+		if tag := event.Tags.GetFirst([]string{"title", ""}); tag != nil {
+			data.kind30311Metadata.Title = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
+			data.kind30311Metadata.Summary = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
+			data.kind30311Metadata.Image = (*tag)[1]
+		}
+		if tag := event.Tags.GetFirst([]string{"status", ""}); tag != nil {
+			data.kind30311Metadata.Status = (*tag)[1]
+		}
+		pTags := event.Tags.GetAll([]string{"p", ""})
+		for _, p := range pTags {
+			if p[3] == "host" {
+				data.kind30311Metadata.Host = sdk.FetchProfileMetadata(ctx, pool, p[1], data.relays...)
+				data.kind30311Metadata.HostNpub = data.kind30311Metadata.Host.Npub()
+			}
+		}
+		tTags := event.Tags.GetAll([]string{"t", ""})
+		for _, t := range tTags {
+			data.kind30311Metadata.Tags = append(data.kind30311Metadata.Tags, t[1])
 		}
 	default:
 		data.templateId = Other
