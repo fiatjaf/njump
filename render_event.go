@@ -152,7 +152,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {
 			// otherwise replace npub/nprofiles with names and trim length
-			description := replaceUserReferencesWithNames(r.Context(), []string{data.event.Content})[0]
+			description = replaceUserReferencesWithNames(r.Context(), []string{data.event.Content})[0]
 			if len(description) > 240 {
 				description = description[:240]
 			}
