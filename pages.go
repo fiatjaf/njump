@@ -29,17 +29,20 @@ var (
 
 //tmpl:bind head_common.html
 type OpenGraphPartial struct {
-	IsTwitter        bool
-	TitleizedContent string
-	Title            string
-	TwitterTitle     string
-	Proxy            string
-	AuthorLong       string
-	TextImageURL     string
-	Video            string
-	VideoType        string
-	Image            string
-	Description      string
+	SingleTitle string
+	// x (we will always render just the singletitle if we have that)
+	Superscript string
+	Subscript   string
+
+	BigImage string
+	// x (we will always render just the bigimage if we have that)
+	Video        string
+	VideoType    string
+	Image        string
+	ProxiedImage string
+
+	// this is the main text we should always have
+	Text string
 }
 
 func (*OpenGraphPartial) TemplateText() string { return tmplOpenGraph }
@@ -135,7 +138,7 @@ type TelegramInstantViewPage struct {
 	Content     template.HTML
 	Description string
 	Subject     string
-	Metadata    sdk.ProfileMetadata
+	Metadata    *sdk.ProfileMetadata
 	AuthorLong  string
 	CreatedAt   string
 }
@@ -217,7 +220,7 @@ type NotePage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         sdk.ProfileMetadata
+	Metadata         *sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML
@@ -246,7 +249,7 @@ type ProfilePage struct {
 	CreatedAt                  string
 	Domain                     string
 	LastNotes                  []EnhancedEvent
-	Metadata                   sdk.ProfileMetadata
+	Metadata                   *sdk.ProfileMetadata
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
@@ -275,7 +278,7 @@ type FileMetadataPage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         sdk.ProfileMetadata
+	Metadata         *sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML

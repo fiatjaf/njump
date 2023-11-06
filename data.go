@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"html"
 	"html/template"
@@ -75,7 +74,7 @@ type Data struct {
 	createdAt           string
 	modifiedAt          string
 	parentLink          template.HTML
-	metadata            sdk.ProfileMetadata
+	metadata            *sdk.ProfileMetadata
 	authorRelays        []string
 	authorLong          string
 	authorShort         string
@@ -139,6 +138,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	data.npub, _ = nip19.EncodePublicKey(event.PubKey)
+	data.npubShort = data.npub[:8] + "…" + data.npub[len(data.npub)-4:]
+	data.authorLong = data.npub       // hopefully will be replaced later
+	data.authorShort = data.npubShort // hopefully will be replaced later
 	data.nevent, _ = nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
 	data.neventNaked, _ = nip19.EncodeEvent(event.ID, nil, event.PubKey)
 	data.naddr = ""
@@ -256,13 +258,14 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	if event.Kind == 0 {
 		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
-		json.Unmarshal([]byte(event.Content), &data.metadata)
+		data.metadata, _ = sdk.ParseMetadata(event)
 	} else {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 		defer cancel()
 		author, relays, _ := getEvent(ctx, data.npub, relaysForNip19)
 		if author != nil {
-			if err := json.Unmarshal([]byte(author.Content), &data.metadata); err == nil {
+			data.metadata, _ = sdk.ParseMetadata(author)
+			if data.metadata != nil {
 				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
 				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
 			}
@@ -307,10 +310,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			}
 		}
 	}
-
-	data.npubShort = data.npub[:8] + "…" + data.npub[len(data.npub)-4:]
-	data.authorLong = data.npub
-	data.authorShort = data.npubShort
 
 	return data, nil
 }

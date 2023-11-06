@@ -96,32 +96,24 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	title := ""
-	twitterTitle := title
-	if data.event.Kind == 0 && data.metadata.Name != "" {
-		title = data.metadata.Name
-	} else {
-		if data.event.Kind >= 30000 && data.event.Kind < 40000 {
-			tValue := "~"
-			for _, tag := range data.event.Tags {
-				if tag[0] == "t" {
-					tValue = tag[1]
-					break
-				}
+	if data.event.Kind >= 30000 && data.event.Kind < 40000 {
+		tValue := "~"
+		for _, tag := range data.event.Tags {
+			if tag[0] == "t" {
+				tValue = tag[1]
+				break
 			}
-			title = fmt.Sprintf("%s: %s", kindNames[data.event.Kind], tValue)
-		} else if kindName, ok := kindNames[data.event.Kind]; ok {
-			title = kindName
-		} else {
-			title = fmt.Sprintf("kind:%d event", data.event.Kind)
 		}
-		if subject != "" {
-			title += " (" + subject + ")"
-		}
-		twitterTitle += " by " + data.authorShort
-		date := data.event.CreatedAt.Time().UTC().Format("2006-01-02 15:04")
-		title += " at " + date
-		twitterTitle += " at " + date
+		title = fmt.Sprintf("%s: %s", kindNames[data.event.Kind], tValue)
+	} else if kindName, ok := kindNames[data.event.Kind]; ok {
+		title = kindName
+	} else {
+		title = fmt.Sprintf("kind:%d event", data.event.Kind)
 	}
+	if subject != "" {
+		title += " (" + subject + ")"
+	}
+	title += " by " + data.authorShort
 
 	seenOnRelays := ""
 	if len(data.relays) > 0 {
@@ -255,6 +247,18 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		FileMetadata: data.kind1063Metadata,
 	}
 
+	opengraph := OpenGraphPartial{
+		BigImage:     textImageURL,
+		Image:        data.image,
+		Video:        data.video,
+		VideoType:    data.videoType,
+		ProxiedImage: "https://" + host + "/njump/proxy?src=" + data.image,
+
+		Superscript: data.authorLong,
+		Subscript:   title,
+		Text:        description,
+	}
+
 	switch data.templateId {
 	case TelegramInstantView:
 		err = TelegramInstantViewTemplate.Render(w, &TelegramInstantViewPage{
@@ -270,20 +274,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:   data.createdAt,
 		})
 	case Note:
+		if style == StyleTwitter {
+			opengraph.SingleTitle = "by " + data.authorShort + " at " + humanDate(data.event.CreatedAt)
+		}
+
 		err = NoteTemplate.Render(w, &NotePage{
-			OpenGraphPartial: OpenGraphPartial{
-				IsTwitter:        style == StyleTwitter,
-				Proxy:            "https://" + host + "/njump/proxy?src=",
-				Title:            title,
-				TwitterTitle:     twitterTitle,
-				TitleizedContent: titleizedContent,
-				TextImageURL:     textImageURL,
-				Image:            data.image,
-				Video:            data.video,
-				VideoType:        data.videoType,
-				Description:      description,
-				AuthorLong:       data.authorLong,
-			},
+			OpenGraphPartial: opengraph,
 			HeadCommonPartial: HeadCommonPartial{
 				IsProfile:          false,
 				Oembed:             oembed,
@@ -306,20 +302,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			TitleizedContent: titleizedContent,
 		})
 	case FileMetadata:
+		opengraph.Image = data.kind1063Metadata.DisplayImage()
+
 		err = FileMetadataTemplate.Render(w, &FileMetadataPage{
-			OpenGraphPartial: OpenGraphPartial{
-				IsTwitter:        style == StyleTwitter,
-				Proxy:            "https://" + host + "/njump/proxy?src=",
-				TitleizedContent: titleizedContent,
-				TwitterTitle:     twitterTitle,
-				Title:            title,
-				TextImageURL:     textImageURL,
-				Video:            data.video,
-				VideoType:        data.videoType,
-				Image:            data.kind1063Metadata.DisplayImage(),
-				Description:      description,
-				AuthorLong:       data.authorLong,
-			},
+			OpenGraphPartial: opengraph,
 			HeadCommonPartial: HeadCommonPartial{
 				IsProfile:          false,
 				TailwindDebugStuff: tailwindDebugStuff,

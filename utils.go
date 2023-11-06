@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	html "html"
+	"html"
 	"html/template"
 	"io"
 	"net/http"
@@ -548,4 +548,16 @@ func limitAt[V any](list []V, n int) []V {
 		return list
 	}
 	return list[0:n]
+}
+
+func humanDate(createdAt nostr.Timestamp) string {
+	ts := createdAt.Time()
+	now := time.Now()
+	if ts.Before(now.AddDate(0, -9, 0)) {
+		return ts.UTC().Format("02 Jan 2006")
+	} else if ts.Before(now.AddDate(0, 0, -6)) {
+		return ts.UTC().Format("Jan _2")
+	} else {
+		return ts.UTC().Format("Mon, Jan _2 15:04 UTC")
+	}
 }
