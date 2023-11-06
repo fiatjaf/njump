@@ -9,7 +9,7 @@ module.exports = {
       fontSize: {
         xs: '0.7rem',
         sm: '0.8rem',
-        '2xl': ['1.5rem', '1.1rem']
+        '2xl': ['1.5rem']
       },
       colors: {
         lavender: '#fdf0f5',
