@@ -4,7 +4,7 @@ go 1.21.0
 
 require (
 	github.com/apatters/go-wordwrap v1.0.0
-	github.com/dgraph-io/badger v1.6.2
+	github.com/dgraph-io/badger/v4 v4.2.0
 	github.com/fiatjaf/eventstore v0.2.0
 	github.com/fiatjaf/khatru v0.0.6
 	github.com/gomarkdown/markdown v0.0.0-20230322041520-c84983bdbf2a
@@ -22,7 +22,6 @@ require (
 )
 
 require (
-	github.com/AndreasBriese/bbloom v0.0.0-20190825152654-46b345b51c96 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
@@ -31,7 +30,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/decred/dcrd/crypto/blake256 v1.0.1 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
-	github.com/dgraph-io/badger/v4 v4.2.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/fasthttp/websocket v1.5.3 // indirect

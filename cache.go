@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dgraph-io/badger"
+	"github.com/dgraph-io/badger/v4"
 	"github.com/fiatjaf/eventstore"
 	eventstore_badger "github.com/fiatjaf/eventstore/badger"
 )
