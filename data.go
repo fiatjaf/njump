@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html"
 	"html/template"
+	"strconv"
 	"strings"
 	"time"
 
@@ -88,6 +89,7 @@ type Data struct {
 	alt                 string
 	kind1063Metadata    *Kind1063Metadata
 	kind30311Metadata   *Kind30311Metadata
+	kind1311Metadata    *Kind1311Metadata
 }
 
 type Kind1063Metadata struct {
@@ -113,6 +115,10 @@ type Kind30311Metadata struct {
 	Host     sdk.ProfileMetadata
 	HostNpub string
 	Tags     []string
+}
+
+type Kind1311Metadata struct {
+	// ...
 }
 
 func (fm Kind1063Metadata) IsVideo() bool { return strings.Split(fm.M, "/")[0] == "video" }
@@ -280,6 +286,16 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		tTags := event.Tags.GetAll([]string{"t", ""})
 		for _, t := range tTags {
 			data.kind30311Metadata.Tags = append(data.kind30311Metadata.Tags, t[1])
+		}
+	case 1311:
+		data.templateId = LiveEventMessage
+		data.kind1311Metadata = &Kind1311Metadata{}
+		data.content = event.Content
+		if atag := event.Tags.GetFirst([]string{"a", ""}); atag != nil {
+			parts := strings.Split((*atag)[1], ":")
+			kind, _ := strconv.Atoi(parts[0])
+			parentNevent, _ := nip19.EncodeEntity(parts[1], kind, parts[2], data.relays)
+			data.parentLink = template.HTML(replaceNostrURLsWithTags(nostrEveryMatcher, "nostr:"+parentNevent))
 		}
 	default:
 		data.templateId = Other

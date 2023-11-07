@@ -61,6 +61,7 @@ var kindNames = map[int]string{
 	43:    "Channel Hide Message",
 	44:    "Channel Mute User",
 	1063:  "File Metadata",
+	1311:  "Live Chat Message",
 	1984:  "Reporting",
 	9734:  "Zap Request",
 	9735:  "Zap",
@@ -80,6 +81,7 @@ var kindNames = map[int]string{
 	30018: "Create or update a product",
 	30023: "Long-form Content",
 	30078: "Application-specific Data",
+	30311: "Live Event",
 }
 
 var kindNIPs = map[int]string{
@@ -98,6 +100,7 @@ var kindNIPs = map[int]string{
 	43:    "28",
 	44:    "28",
 	1063:  "94",
+	1311:  "53",
 	1984:  "56",
 	9734:  "57",
 	9735:  "57",
@@ -117,6 +120,7 @@ var kindNIPs = map[int]string{
 	30018: "15",
 	30023: "23",
 	30078: "78",
+	30311: "53",
 }
 
 type Style string

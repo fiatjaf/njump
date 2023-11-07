@@ -362,6 +362,35 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 			LiveEvent: *data.kind30311Metadata,
 		})
+	case LiveEventMessage:
+		// opengraph.Image = data.kind1311Metadata.Image
+
+		err = LiveEventMessageTemplate.Render(w, &LiveEventMessagePage{
+			OpenGraphPartial: opengraph,
+			HeadCommonPartial: HeadCommonPartial{
+				IsProfile:          false,
+				TailwindDebugStuff: tailwindDebugStuff,
+				NaddrNaked:         data.naddrNaked,
+				NeventNaked:        data.neventNaked,
+			},
+			DetailsPartial: detailsData,
+			ClientsPartial: ClientsPartial{
+				Clients: generateClientList(style, data.naddr, data.event),
+			},
+
+			Content:          template.HTML(data.content),
+			CreatedAt:        data.createdAt,
+			Metadata:         data.metadata,
+			Npub:             data.npub,
+			NpubShort:        data.npubShort,
+			ParentLink:       data.parentLink,
+			Style:            style,
+			Subject:          subject,
+			TitleizedContent: titleizedContent,
+			Alt:              data.alt,
+
+			LiveEventMessage: *data.kind1311Metadata,
+		})
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
 
