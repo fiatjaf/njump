@@ -49,7 +49,11 @@
 {{ if not (eq 0 (len .SeenOn)) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Seen on</div>
-  {{ range .SeenOn }}<a href="/r/{{.}}">{{.}}</a>
+  {{ range .SeenOn }}<a
+    href="/r/{{.}}"
+    class="underline-none pr-2 decoration-neutral-200 decoration-1 underline-offset-[6px] hover:underline"
+    >{{.}}</a
+  >
   {{ end }}
 </div>
 {{ end }}
@@ -84,7 +88,7 @@
   >
   <label
     for="advanced-switch"
-    class="cursor-pointer border-b border-b-gray-300 pb-0.5 pb-0.5 text-sm leading-4"
+    class="cursor-pointer text-sm leading-4 underline decoration-neutral-200 decoration-1 underline-offset-[6px]"
     >Show more details</label
   >
 </div>
@@ -99,7 +103,9 @@
   <div class="mb-6 leading-5">
     <div class="text-sm text-strongpink">Kind type</div>
     {{.Kind}} {{ if not (eq .KindNIP "")}} -
-    <a href="https://github.com/nostr-protocol/nips/blob/master/{{.KindNIP}}.md"
+    <a
+      href="https://github.com/nostr-protocol/nips/blob/master/{{.KindNIP}}.md"
+      class="underline decoration-neutral-200 decoration-1 underline-offset-[6px]"
       >{{.KindDescription}}</a
     >
     {{ end }}
