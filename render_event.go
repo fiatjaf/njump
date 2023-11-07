@@ -279,6 +279,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			opengraph.SingleTitle = "by " + data.authorShort + " at " + humanDate(data.event.CreatedAt)
 		}
 
+		if data.naddr != "" {
+			code = data.naddr
+		}
+
 		err = NoteTemplate.Render(w, &NotePage{
 			OpenGraphPartial: opengraph,
 			HeadCommonPartial: HeadCommonPartial{

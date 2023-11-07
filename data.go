@@ -136,10 +136,13 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	relaysForNip19 := make([]string, 0, 3)
-	for i, relay := range relays {
-		relaysForNip19 = append(relaysForNip19, relay)
-		if i == 2 {
-			break
+	c := 0
+	for _, relayUrl := range relays {
+		if shouldUseRelayForNip19(relayUrl) {
+			relaysForNip19 = append(relaysForNip19, relayUrl)
+			if c == 2 {
+				break
+			}
 		}
 	}
 
@@ -160,17 +163,11 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data.modifiedAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 	data.authorRelays = []string{}
 
-	eventRelays := []string{}
-	for _, relay := range relays {
-		for _, excluded := range excludedRelays {
-			if strings.Contains(relay, excluded) {
-				continue
-			}
+	if event.Kind >= 30000 && event.Kind < 40000 {
+		if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
+			data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
+			data.naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), nil)
 		}
-		if strings.Contains(relay, "/npub1") {
-			continue // skip relays with personalyzed query like filter.nostr.wine
-		}
-		eventRelays = append(eventRelays, trimProtocol(relay))
 	}
 
 	if tag := event.Tags.GetFirst([]string{"alt", ""}); tag != nil {
@@ -259,8 +256,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	case 30311:
 		data.templateId = LiveEvent
-		d := event.Tags.GetFirst([]string{"d", ""})
-		data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), data.relays)
 		data.kind30311Metadata = &Kind30311Metadata{}
 
 		if tag := event.Tags.GetFirst([]string{"title", ""}); tag != nil {
@@ -288,12 +283,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	default:
 		data.templateId = Other
-		if event.Kind >= 30000 && event.Kind < 40000 {
-			if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
-				data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
-				data.naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), nil)
-			}
-		}
 	}
 
 	if event.Kind == 0 {
