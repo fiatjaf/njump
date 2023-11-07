@@ -187,7 +187,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	}
 
 	if result == nil {
-		return nil, nil, fmt.Errorf("couldn't find this %s", prefix)
+		return nil, nil, fmt.Errorf("couldn't find this %s, did you include relay or author hints in it?", prefix)
 	}
 
 	// save stuff in cache and in internal store
