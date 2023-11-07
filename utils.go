@@ -185,7 +185,7 @@ func getParentNevent(event *nostr.Event, fallbackRelay string) string {
 		} else if fallbackRelay != "" {
 			relay = fallbackRelay
 		} else {
-			relay = everything[rand.Intn(len(everything))]
+			relay = getRandomRelay()
 		}
 		parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], []string{relay}, "")
 	}
@@ -532,4 +532,12 @@ func shouldUseRelayForNip19(relayUrl string) bool {
 		return false
 	}
 	return true
+}
+
+func getRandomRelay() string {
+	if serial == 0 {
+		serial = rand.Intn(len(everything))
+	}
+	serial = (serial + 1) % len(everything)
+	return everything[serial]
 }

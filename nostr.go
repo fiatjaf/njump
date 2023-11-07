@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"math/rand"
 	"net/url"
 	"time"
 
@@ -57,14 +56,6 @@ type CachedEvent struct {
 	Relays []string     `json:"r"`
 }
 
-func getRelay() string {
-	if serial == 0 {
-		serial = rand.Intn(len(everything))
-	}
-	serial = (serial + 1) % len(everything)
-	return everything[serial]
-}
-
 func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Event, []string, error) {
 	wdb := eventstore.RelayWrapper{Store: db}
 
@@ -100,8 +91,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	case nostr.EventPointer:
 		author = v.Author
 		filter.IDs = []string{v.ID}
-		relays = append(relays, getRelay())
-		relays = append(relays, getRelay())
+		relays = append(relays, getRandomRelay(), getRandomRelay())
 		relays = append(relays, v.Relays...)
 		withRelays = true
 	case nostr.EntityPointer:
@@ -113,16 +103,13 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 		if v.Kind != 0 {
 			filter.Kinds = append(filter.Kinds, v.Kind)
 		}
-		relays = append(relays, getRelay())
-		relays = append(relays, getRelay())
+		relays = append(relays, getRandomRelay(), getRandomRelay())
 		relays = append(relays, v.Relays...)
 		withRelays = true
 	case string:
 		if prefix == "note" {
 			filter.IDs = []string{v}
-			relays = append(relays, getRelay())
-			relays = append(relays, getRelay())
-			relays = append(relays, getRelay())
+			relays = append(relays, getRandomRelay(), getRandomRelay(), getRandomRelay())
 		} else if prefix == "npub" {
 			author = v
 			filter.Authors = []string{v}
@@ -135,7 +122,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	if res, _ := wdb.QuerySync(ctx, filter); len(res) != 0 {
 		evt := res[0]
 		scheduleEventExpiration(evt.ID, time.Hour*24*7)
-		return evt, getRelaysForEvent(evt.ID), nil
+		return evt, getRandomRelaysForEvent(evt.ID), nil
 	}
 
 	// otherwise fetch from external relays
@@ -148,7 +135,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 		relays = append(relays, authorRelays...)
 	}
 	for len(relays) < 5 {
-		relays = append(relays, getRelay())
+		relays = append(relays, getRandomRelay())
 	}
 
 	relays = unique(relays)
@@ -226,7 +213,7 @@ func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSite
 		}()
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()
-		relays = unique(append(relays, getRelay(), getRelay()))
+		relays = unique(append(relays, getRandomRelay(), getRandomRelay()))
 		ch := pool.SubManyEose(ctx, relays, nostr.Filters{filter})
 		for {
 			select {
