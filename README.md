@@ -8,6 +8,19 @@ njump currently lives under [njump.me](https://njump.me), you can reach it appen
 
 For more information about njump's philosophy and its use, read the presentation [on the homepage](https://njump.me).
 
+## Supported Kinds
+
+| kind    | description                | NIP         |
+| ------- | -------------------------- | ----------- |
+| `0`     | Metadata                   | [1](01.md)  |
+| `1`     | Short Text Note            | [1](01.md)  |
+| `6`     | Repost                     | [18](18.md) |
+| `1063`  | File Metadata              | [94](94.md) |
+| `1311`  | Live Chat Message          | [53](53.md) |
+| `30023` | Long-form Content          | [23](23.md) |
+| `30024` | Draft Long-form Content    | [23](23.md) |
+| `30311` | Live Event                 | [53](53.md) |
+
 ## Development
 
 ### Running locally
