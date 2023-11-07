@@ -58,14 +58,15 @@
             class="prose-cite:text-sm prose mb-6 max-w-full leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-gray-100 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-zinc-800 sm:prose-a:text-justify"
           >
             <h1 class="text-2xl">
-              {{.LiveEvent.Title}} {{ if (eq "ended" .LiveEvent.Status)}}
+              <span class="mr-2">{{.LiveEvent.Title}}</span>{{ if (eq "ended"
+              .LiveEvent.Status)}}
               <span
-                class="whitespace-nowrap rounded bg-neutral-400 px-4 py-1 text-base text-white dark:bg-neutral-700"
+                class="whitespace-nowrap rounded bg-neutral-400 px-4 py-1 align-text-top text-base text-white dark:bg-neutral-700"
                 >Ended</span
               >
               {{ else if (eq "live" .LiveEvent.Status)}}
               <span
-                class="whitespace-nowrap rounded bg-strongpink px-4 py-1 text-base text-white"
+                class="whitespace-nowrap rounded bg-strongpink px-4 py-1 align-text-top text-base text-white"
                 >Live now!</span
               >
               {{ end }}
