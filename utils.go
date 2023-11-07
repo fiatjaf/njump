@@ -7,6 +7,7 @@ import (
 	"html"
 	"html/template"
 	"io"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -174,15 +175,17 @@ func getPreviewStyle(r *http.Request) Style {
 	}
 }
 
-func getParentNevent(event *nostr.Event) string {
+func getParentNevent(event *nostr.Event, fallbackRelay string) string {
 	parentNevent := ""
 	replyTag := nip10.GetImmediateReply(event.Tags)
 	if replyTag != nil {
 		relay := ""
-		if len(*replyTag) > 2 {
+		if (len(*replyTag) > 2) && ((*replyTag)[2] != "") {
 			relay = (*replyTag)[2]
+		} else if fallbackRelay != "" {
+			relay = fallbackRelay
 		} else {
-			relay = ""
+			relay = everything[rand.Intn(len(everything))]
 		}
 		parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], []string{relay}, "")
 	}
