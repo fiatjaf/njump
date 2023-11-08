@@ -256,6 +256,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
 			data.kind1063Metadata.Image = (*tag)[1]
+			data.image = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
 			data.kind1063Metadata.Summary = (*tag)[1]
@@ -272,6 +273,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
 			data.kind30311Metadata.Image = (*tag)[1]
+			data.image = (*tag)[1]
 		}
 		if tag := event.Tags.GetFirst([]string{"status", ""}); tag != nil {
 			data.kind30311Metadata.Status = (*tag)[1]
