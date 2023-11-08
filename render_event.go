@@ -82,7 +82,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	useTextImage := (data.event.Kind == 1 || data.event.Kind == 30023) &&
 		data.image == "" && data.video == "" && len(data.event.Content) > 133
 
-	if style == StyleTelegram || r.URL.Query().Get("tgiv") == "true" {
+	if tgiv := r.URL.Query().Get("tgiv"); tgiv == "true" || (style == StyleTelegram && tgiv != "false") {
 		// do telegram instant preview (only works on telegram mobile apps, not desktop)
 		if data.event.Kind == 30023 || // do it for longform articles
 			(data.event.Kind == 1 && len(data.event.Content) > 650) || // or very long notes
@@ -257,7 +257,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		Superscript: data.authorLong,
 		Subscript:   title,
-		Text:        description,
+		Text:        strings.TrimSpace(description),
 	}
 
 	switch data.templateId {
@@ -276,7 +276,18 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Note:
 		if style == StyleTwitter {
+			// twitter only uses one title, so we ensure it is this
+			// we can't set this for other platforms as some will reuse stuff from twitter-specific tags
 			opengraph.SingleTitle = "by " + data.authorShort + " at " + humanDate(data.event.CreatedAt)
+		}
+
+		if opengraph.BigImage == "" && style != StyleTwitter && strings.HasSuffix(opengraph.Text, opengraph.Image) {
+			// if a note is mostly about an image, we should prefer to display the image in a big card
+			// this works, for example, in telegram, and it may work in other places --
+			// but we can't do this on twitter because when twitter sees a big image it hides all the text and title
+			// also twitter images only work if they're proxied and for now we're not proxying this
+			opengraph.Text = opengraph.Text[0 : len(opengraph.Text)-len(opengraph.Image)]
+			opengraph.BigImage = opengraph.Image
 		}
 
 		if data.naddr != "" {
