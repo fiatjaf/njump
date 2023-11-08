@@ -31,6 +31,9 @@ module.exports = {
             '--tw-prose-invert-headings': theme('colors.strongpink'),
             '--tw-prose-links': theme('colors.gray[700]'),
             '--tw-prose-invert-links': theme('colors.neutral[50]')
+            a: {
+              'font-weight': 300,
+            },
           }
         }
       })
