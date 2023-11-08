@@ -175,19 +175,15 @@ func getPreviewStyle(r *http.Request) Style {
 	}
 }
 
-func getParentNevent(event *nostr.Event, fallbackRelay string) string {
+func getParentNevent(event *nostr.Event) string {
 	parentNevent := ""
 	replyTag := nip10.GetImmediateReply(event.Tags)
 	if replyTag != nil {
-		relay := ""
+		var relays []string
 		if (len(*replyTag) > 2) && ((*replyTag)[2] != "") {
-			relay = (*replyTag)[2]
-		} else if fallbackRelay != "" {
-			relay = fallbackRelay
-		} else {
-			relay = getRandomRelay()
+			relays = []string{(*replyTag)[2]}
 		}
-		parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], []string{relay}, "")
+		parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], relays, "")
 	}
 	return parentNevent
 }

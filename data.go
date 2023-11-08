@@ -211,7 +211,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	case 1, 7, 30023, 30024:
 		data.templateId = Note
 		data.content = event.Content
-		if parentNevent := getParentNevent(event, data.relays[0]); parentNevent != "" {
+		if parentNevent := getParentNevent(event); parentNevent != "" {
 			data.parentLink = template.HTML(replaceNostrURLsWithTags(nostrNoteNeventMatcher, "nostr:"+parentNevent))
 		}
 	case 6:
