@@ -87,7 +87,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		if data.event.Kind == 30023 || // do it for longform articles
 			(data.event.Kind == 1 && len(data.event.Content) > 650) || // or very long notes
 			// or shorter notes that should be using text-to-image stuff but are not because they have video or images
-			(data.event.Kind == 1 && len(data.event.Content) > 133 && !useTextImage) {
+			(data.event.Kind == 1 && len(data.event.Content)-len(data.image) > 133 && !useTextImage) {
 			data.templateId = TelegramInstantView
 			useTextImage = false
 		}
