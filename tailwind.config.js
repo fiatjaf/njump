@@ -27,10 +27,13 @@ module.exports = {
         /* for markdown html content */
         DEFAULT: {
           css: {
+            '--tw-prose-invert-body': theme('colors.neutral[100]'),
+            '--tw-prose-invert-quotes': theme('colors.neutral[100]'),
             '--tw-prose-headings': theme('colors.strongpink'),
             '--tw-prose-invert-headings': theme('colors.strongpink'),
             '--tw-prose-links': theme('colors.gray[700]'),
-            '--tw-prose-invert-links': theme('colors.neutral[50]')
+            '--tw-prose-invert-links': theme('colors.neutral[50]'),
+            maxWidth: '100%',
             a: {
               'font-weight': 300,
             },
