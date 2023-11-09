@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/fiatjaf/eventstore/badger"
+	eventstore_badger "github.com/fiatjaf/eventstore/badger"
 	"github.com/fiatjaf/khatru"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/nbd-wtf/go-nostr"
@@ -73,16 +73,7 @@ func main() {
 		tailwindDebugStuff = template.HTML(fmt.Sprintf("<script src=\"https://cdn.tailwindcss.com?plugins=typography\"></script><script>\n%s</script><style type=\"text/tailwindcss\">%s</style>", config, style))
 	}
 
-	// initialize disk cache
-	defer cache.initialize()()
-
-	// initialize eventstore database
-	if badgerBackend, ok := db.(*badger.BadgerBackend); ok {
-		// it may be NullStore, in which case we do nothing
-		badgerBackend.Path = s.EventStorePath
-	}
-	db.Init()
-	defer db.Close()
+	initCache()
 
 	// initialize routines
 	ctx := context.Background()
@@ -122,4 +113,21 @@ func main() {
 	}
 
 	select {}
+}
+
+func initCache() func() {
+	// initialize disk cache
+	deinit := cache.initialize()
+
+	// initialize eventstore database
+	if badgerBackend, ok := db.(*eventstore_badger.BadgerBackend); ok {
+		// it may be NullStore, in which case we do nothing
+		badgerBackend.Path = s.EventStorePath
+	}
+	db.Init()
+
+	return func() {
+		deinit()
+		db.Close()
+	}
 }

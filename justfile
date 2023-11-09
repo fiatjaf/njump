@@ -20,3 +20,6 @@ prettier:
 
 tailwind:
     tailwind -i tailwind.css -o static/tailwind-bundle.min.css --minify
+
+test:
+    go test -tags=nocache

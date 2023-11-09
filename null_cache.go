@@ -9,7 +9,10 @@ import (
 	"github.com/fiatjaf/eventstore/nullstore"
 )
 
-var cache = Cache{}
+var (
+	cache                  = Cache{}
+	db    eventstore.Store = &nullstore.NullStore{}
+)
 
 type Cache struct{}
 
@@ -22,5 +25,3 @@ func (c *Cache) SetWithTTL(key string, value []byte, ttl time.Duration)      {}
 func (c *Cache) SetJSONWithTTL(key string, value any, ttl time.Duration)     {}
 func (c *Cache) GetPaginatedKeys(prefix string, page int, size int) []string { return []string{} }
 func (c *Cache) Delete(key string)                                           {}
-
-var db eventstore.Store = &nullstore.NullStore{}
