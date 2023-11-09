@@ -55,7 +55,7 @@ func TestNoteWithTextImage(t *testing.T) {
 
 	assert.Contains(t, og.Image, "/njump/image/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t", "")
 	assert.Equal(t, og.TwitterCard, "summary_large_image", "")
-	assert.Contains(t, og.Text, "Thanks, it's of course a work in progress", "")
+	assert.Contains(t, og.Text, "seen on", "")
 }
 
 func makeRequest(t *testing.T, path string) *OpengraphFields {

@@ -18,7 +18,7 @@
 <!-- otherwise we tell twitter to display it as a normal text-based embed.
      these distinctions don't seem to make any difference in other platforms,
      maybe telegram -->
-<meta property="twitter:card" content="summary" />
+<meta name="twitter:card" content="summary" />
 {{ if not (eq "" .Image) }}
 <meta property="og:image" content="{{.Image}}" />
 <meta name="twitter:image" content="{{.ProxiedImage}}" />

@@ -8,12 +8,12 @@
     <meta property="og:site_name" content="{{.Hostname}} - nostr relay" />
     {{ if not (eq "" .Info.Icon) }}
     <meta property="og:image" content="{{.Info.Icon}}" />
-    <meta property="twitter:image" content="{{.Proxy}}{{.Info.Icon}}" />
+    <meta name="twitter:image" content="{{.Proxy}}{{.Info.Icon}}" />
     {{end}} {{ if not (eq "" .Info.Description) }}
     <meta property="og:description" content="{{.Info.Description}}" />
     <meta name="twitter:description" content="{{.Info.Description}}" />
     {{end}}
-    <meta property="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary" />
 
     <link
       rel="sitemap"
