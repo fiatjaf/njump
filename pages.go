@@ -424,7 +424,7 @@ type ErrorPage struct {
 
 func (e *ErrorPage) TemplateText() string {
 	e.Message = "I cannot give any suggestions to solve the problem, maybe the best solution is to pubblicy blame the devs on Nostr"
-	if strings.Contains(e.Errors, "invalid checksum") {
+	if strings.Contains(e.Errors, "invalid checksum") || strings.Contains(e.Errors, "failed to decode") {
 		e.Message = "It seems you entered an invalid event code, try to check if it is correct; a good idea is compare the first and the last characters"
 	} else if strings.Contains(e.Errors, "couldn't find this") {
 		e.Message = "I can't find the event, maybe it is new and has not been already propagated on the relays I'm checking; you can try again in some time"
