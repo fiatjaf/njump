@@ -5,6 +5,7 @@ package main
 import (
 	_ "embed"
 	"html/template"
+	"strings"
 
 	"github.com/nbd-wtf/go-nostr/nip11"
 	sdk "github.com/nbd-wtf/nostr-sdk"
@@ -406,3 +407,27 @@ type SitemapPage struct {
 }
 
 func (*SitemapPage) TemplateText() string { return tmplSitemap }
+
+var (
+	//go:embed templates/error.html
+	tmplError     string
+	ErrorTemplate = tmpl.MustCompile(&ErrorPage{})
+)
+
+type ErrorPage struct {
+	HeadCommonPartial `tmpl:"head_common"`
+	TopPartial        `tmpl:"top"`
+	FooterPartial     `tmpl:"footer"`
+	Message           string
+	Errors            string
+}
+
+func (e *ErrorPage) TemplateText() string {
+	e.Message = "I cannot give any suggestions to solve the problem, maybe the best solution is to pubblicy blame the devs on Nostr"
+	if strings.Contains(e.Errors, "invalid checksum") {
+		e.Message = "It seems you entered an invalid event code, try to check if it is correct; a good idea is compare the first and the last characters"
+	} else if strings.Contains(e.Errors, "couldn't find this") {
+		e.Message = "I can't find the event, maybe it is new and has not been already propagated on the relays I'm checking; you can try again in some time"
+	}
+	return tmplError
+}

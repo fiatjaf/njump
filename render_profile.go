@@ -19,17 +19,20 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 	}
 
 	data, err := grabData(r.Context(), code, isSitemap)
+
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
-		http.Error(w, "error fetching event: "+err.Error(), 404)
-		return
-	}
-
-	if len(data.renderableLastNotes) != 0 {
+	} else if len(data.renderableLastNotes) != 0 {
 		w.Header().Set("Cache-Control", "max-age=3600")
 	}
 
-	if !isSitemap {
+	if err != nil {
+		errorPage := &ErrorPage{
+			Errors: err.Error(),
+		}
+		errorPage.TemplateText()
+		ErrorTemplate.Render(w, errorPage)
+	} else if !isSitemap {
 		err = ProfileTemplate.Render(w, &ProfilePage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: true, TailwindDebugStuff: tailwindDebugStuff},
 			DetailsPartial: DetailsPartial{
