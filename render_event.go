@@ -61,6 +61,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	data, err := grabData(r.Context(), code, false)
 	if err != nil {
+
+		code, errTry := nip19.EncodeEvent(r.URL.Path[1:], []string{}, "")
+		if errTry == nil {
+			http.Redirect(w, r, "/"+code, http.StatusFound)
+			return
+		}
+
 		w.Header().Set("Cache-Control", "max-age=60")
 		errorPage := &ErrorPage{
 			Errors: err.Error(),
