@@ -243,7 +243,7 @@ func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSite
 	}
 
 	// sort before returning
-	slices.SortFunc(lastNotes, func(a, b *nostr.Event) int { return int(a.CreatedAt - b.CreatedAt) })
+	slices.SortFunc(lastNotes, func(a, b *nostr.Event) int { return int(b.CreatedAt - a.CreatedAt) })
 	return lastNotes
 }
 
@@ -272,7 +272,7 @@ func relayLastNotes(ctx context.Context, relayUrl string, isSitemap bool) []*nos
 		})
 	}
 
-	slices.SortFunc(lastNotes, func(a, b *nostr.Event) int { return int(a.CreatedAt - b.CreatedAt) })
+	slices.SortFunc(lastNotes, func(a, b *nostr.Event) int { return int(b.CreatedAt - a.CreatedAt) })
 	if len(lastNotes) > 0 {
 		cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
 	}
