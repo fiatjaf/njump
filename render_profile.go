@@ -31,6 +31,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			Errors: err.Error(),
 		}
 		errorPage.TemplateText()
+		w.WriteHeader(http.StatusNotFound)
 		ErrorTemplate.Render(w, errorPage)
 	} else if !isSitemap {
 		err = ProfileTemplate.Render(w, &ProfilePage{

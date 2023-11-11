@@ -45,6 +45,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				Errors: err.Error(),
 			}
 			errorPage.TemplateText()
+			w.WriteHeader(http.StatusNotFound)
 			ErrorTemplate.Render(w, errorPage)
 			return
 		}
@@ -73,6 +74,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Errors: err.Error(),
 		}
 		errorPage.TemplateText()
+		w.WriteHeader(http.StatusNotFound)
 		ErrorTemplate.Render(w, errorPage)
 		return
 	}
