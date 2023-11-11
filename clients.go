@@ -16,6 +16,7 @@ func generateClientList(style Style, code string, event *nostr.Event) []ClientRe
 	if event.Kind == 1 || event.Kind == 6 {
 		return []ClientReference{
 			{ID: "native", Name: "your native client", URL: template.URL("nostr:" + code)},
+			{ID: "nostracoin", Name: "nostraco.in", URL: template.URL("https://nostraco.in/p/" + event.ID)},
 			{ID: "snort", Name: "Snort", URL: template.URL("https://Snort.social/e/" + code)},
 			{ID: "nostrudel", Name: "Nostrudel", URL: template.URL("https://nostrudel.ninja/#/n/" + code)},
 			{ID: "satellite", Name: "Satellite", URL: template.URL("https://satellite.earth/thread/" + event.ID)},
@@ -28,6 +29,7 @@ func generateClientList(style Style, code string, event *nostr.Event) []ClientRe
 	} else if event.Kind == 0 {
 		return []ClientReference{
 			{ID: "native", Name: "your native client", URL: template.URL("nostr:" + code)},
+			{ID: "nostracoin", Name: "nostraco.in", URL: template.URL("https://nostraco.in/ba/" + code)},
 			{ID: "nosta", Name: "Nosta", URL: template.URL("https://nosta.me/" + code)},
 			{ID: "snort", Name: "Snort", URL: template.URL("https://snort.social/p/" + code)},
 			{ID: "satellite", Name: "Satellite", URL: template.URL("https://satellite.earth/@" + code)},
