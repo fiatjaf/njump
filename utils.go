@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"html"
 	"html/template"
-	"io"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -14,10 +13,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/ast"
-	mdhtml "github.com/gomarkdown/markdown/html"
-	"github.com/gomarkdown/markdown/parser"
 	"github.com/microcosm-cc/bluemonday"
 	"mvdan.cc/xurls/v2"
 
@@ -372,54 +367,6 @@ func previewNotesFormatting(input string) string {
 	}
 
 	return strings.Join(processedLines, "<br/>")
-}
-
-func mdToHTML(md string, usingTelegramInstantView bool) string {
-	md = strings.ReplaceAll(md, "\u00A0", " ")
-	md = replaceNostrURLsWithTags(nostrEveryMatcher, md)
-
-	// create markdown parser with extensions
-	p := parser.NewWithExtensions(
-		parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock | parser.Footnotes)
-	doc := p.Parse([]byte(md))
-
-	var customNodeHook mdhtml.RenderNodeFunc = nil
-	if usingTelegramInstantView {
-		// telegram instant view really doesn't like when there is an image inside a paragraph (like <p><img></p>)
-		// so we use this custom thing to stop all paragraphs before the images, print the images then start a new
-		// paragraph afterwards.
-		customNodeHook = func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
-			if img, ok := node.(*ast.Image); ok {
-				if entering {
-					src := img.Destination
-					w.Write([]byte(`</p><img src="`))
-					mdhtml.EscLink(w, src)
-					w.Write([]byte(`" alt="`))
-				} else {
-					if img.Title != nil {
-						w.Write([]byte(`" title="`))
-						mdhtml.EscapeHTML(w, img.Title)
-					}
-					w.Write([]byte(`" /><p>`))
-				}
-				return ast.GoToNext, true
-			}
-			return ast.GoToNext, false
-		}
-	}
-
-	// create HTML renderer with extensions
-	opts := mdhtml.RendererOptions{
-		Flags:          mdhtml.CommonFlags | mdhtml.HrefTargetBlank,
-		RenderNodeHook: customNodeHook,
-	}
-	renderer := mdhtml.NewRenderer(opts)
-	output := string(markdown.Render(doc, renderer))
-
-	// sanitize content
-	output = sanitizeXSS(output)
-
-	return output
 }
 
 func unique(strSlice []string) []string {
