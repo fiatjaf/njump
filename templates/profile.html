@@ -71,8 +71,10 @@
               {{end}}
             </h1>
           </header>
-          {{ if or (not (eq "" .Metadata.Website)) (not (eq ""
-          .RenderedAuthorAboutText)) }}
+          <div dir="auto">
+            {{ if or (not (eq "" .Metadata.Website)) (not (eq ""
+            .RenderedAuthorAboutText)) }}
+          </div>
           <div
             class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
@@ -156,6 +158,7 @@
                 <div
                   class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink"
                   _="on load if my scrollHeight > my offsetHeight add .gradient"
+                  dir="auto"
                 >
                   {{$ee.Preview}}
                 </div>
