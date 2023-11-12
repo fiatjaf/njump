@@ -96,8 +96,16 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	useTextImage := (data.event.Kind == 1 || data.event.Kind == 30023) &&
-		data.image == "" && data.video == "" && len(data.event.Content) > 133
+	useTextImage := false
+
+	if data.event.Kind == 1 || data.event.Kind == 30023 {
+		if data.image == "" && data.video == "" && len(data.event.Content) > 133 {
+			useTextImage = true
+		}
+		if style == StyleTwitter {
+			useTextImage = true
+		}
+	}
 
 	if tgiv := r.URL.Query().Get("tgiv"); tgiv == "true" || (style == StyleTelegram && tgiv != "false") {
 		// do telegram instant preview (only works on telegram mobile apps, not desktop)
