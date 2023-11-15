@@ -13,14 +13,15 @@ import (
 )
 
 type OpengraphFields struct {
-	TwitterCard   string
-	TwitterTitle  string
-	Superscript   string
-	Subscript     string
-	Image         string
-	Video         string
-	VideoFullType string
-	Text          string
+	TwitterCard        string
+	TwitterTitle       string
+	Superscript        string
+	Subscript          string
+	Image              string
+	Video              string
+	VideoFullType      string
+	Text               string
+	TelegramAndroidApp string
 }
 
 func TestMain(m *testing.M) {
@@ -43,7 +44,7 @@ func TestHomePage(t *testing.T) {
 }
 
 func TestNormalShortTextNote(t *testing.T) {
-	og := makeRequest(t, "/nevent1qqswgl5fgcwcrhzmy2u9d3nq6dg7xnsp95657xe0xk9xh6xac43vwsqpqqrf49qe")
+	og := makeRequest(t, "/nevent1qqswgl5fgcwcrhzmy2u9d3nq6dg7xnsp95657xe0xk9xh6xac43vwsqpqqrf49qe", "")
 
 	assert.Equal(t, og.Image, "", "")
 	assert.Equal(t, og.TwitterCard, "summary", "")
@@ -51,15 +52,22 @@ func TestNormalShortTextNote(t *testing.T) {
 }
 
 func TestNoteWithTextImage(t *testing.T) {
-	og := makeRequest(t, "/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t")
+	og := makeRequest(t, "/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t", "")
 
 	assert.Contains(t, og.Image, "/njump/image/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t", "")
 	assert.Equal(t, og.TwitterCard, "summary_large_image", "")
 	assert.Contains(t, og.Text, "seen on", "")
 }
 
-func makeRequest(t *testing.T, path string) *OpengraphFields {
+func TestNoteAsTelegramInstantView(t *testing.T) {
+	og := makeRequest(t, "/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t", "TelegramBot (like TwitterBot)")
+	assert.Equal(t, og.TelegramAndroidApp, "Medium", "")
+}
+
+func makeRequest(t *testing.T, path string, ua string) *OpengraphFields {
 	r := httptest.NewRequest("GET", path, nil)
+	r.Header.Set("user-agent", ua)
+
 	w := httptest.NewRecorder()
 	renderEvent(w, r)
 
@@ -102,6 +110,9 @@ func parseHead(resp io.Reader, og *OpengraphFields) error {
 	})
 	doc.Find(`meta[property="og:description"]`).Each(func(_ int, s *goquery.Selection) {
 		og.Text, _ = s.Attr("content")
+	})
+	doc.Find(`meta[property="al:android:app_name"]`).Each(func(_ int, s *goquery.Selection) {
+		og.TelegramAndroidApp, _ = s.Attr("content")
 	})
 
 	return nil
