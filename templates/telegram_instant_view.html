@@ -32,7 +32,9 @@
     {{.Metadata.ShortName}} on Nostr: {{ end }}
   </h1>
 
-  {{ if not (eq "" .Summary) }}
+  {{ if not (eq "" .ParentLink) }}
+  <h2>in reply to {{ .ParentLink }}</h2>
+  {{ else if not (eq "" .Summary) }}
   <h2>{{ .Summary }}</h2>
   {{ end }}
 

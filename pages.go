@@ -145,6 +145,7 @@ type TelegramInstantViewPage struct {
 	Metadata    *sdk.ProfileMetadata
 	AuthorLong  string
 	CreatedAt   string
+	ParentLink  template.HTML
 }
 
 func (*TelegramInstantViewPage) TemplateText() string { return tmplTelegramInstantView }

@@ -298,6 +298,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Metadata:    data.metadata,
 			AuthorLong:  data.authorLong,
 			CreatedAt:   data.createdAt,
+			ParentLink:  data.parentLink,
 		})
 	case Note:
 		if style == StyleTwitter {
