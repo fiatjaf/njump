@@ -111,6 +111,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		// do telegram instant preview (only works on telegram mobile apps, not desktop)
 		if data.event.Kind == 30023 || // do it for longform articles
 			(data.event.Kind == 1 && len(data.event.Content) > 650) || // or very long notes
+			(data.parentLink != "") || // or notes that are replies (so we can navigate to them from telegram)
+			(strings.Contains(data.content, "nostr:")) || // or notes that quote other stuff (idem)
 			// or shorter notes that should be using text-to-image stuff but are not because they have video or images
 			(data.event.Kind == 1 && len(data.event.Content)-len(data.image) > 133 && !useTextImage) {
 			data.templateId = TelegramInstantView
@@ -230,7 +232,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		data.content = basicFormatting(html.EscapeString(data.content), true, false)
 		// then we render quotes as HTML, which will also apply basicFormatting to all the internal quotes
 		data.content = renderQuotesAsHTML(r.Context(), data.content, data.templateId == TelegramInstantView)
-		// we must do this because inside <blockquotes> we must treat <img>s different when telegram_instant_view
+		// we must do this because inside <blockquotes> we must treat <img>s differently when telegram_instant_view
 	}
 
 	w.Header().Set("Content-Type", "text/html")
