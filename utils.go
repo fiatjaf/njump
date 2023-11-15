@@ -335,20 +335,18 @@ func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstan
 	}
 
 	imageReplacementTemplate := ` <img src="%s"> `
+	videoReplacementTemplate := `<video controls width="100%%" class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"><source src="%s"></video>`
 	if usingTelegramInstantView {
 		// telegram instant view doesn't like when there is an image inside a blockquote (like <p><img></p>)
 		// so we use this custom thing to stop all blockquotes before the images, print the images then
 		// start a new blockquote afterwards -- we do the same with the markdown renderer for <p> tags on mdToHtml
 		imageReplacementTemplate = "</blockquote>" + imageReplacementTemplate + "<blockquote>"
+		videoReplacementTemplate = "</blockquote>" + videoReplacementTemplate + "<blockquote>"
 	}
 
 	lines := strings.Split(input, "\n")
 	for i, line := range lines {
-		line = replaceURLsWithTags(line,
-			imageReplacementTemplate,
-			`<video controls width="100%%" class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"><source src="%s"></video>`,
-		)
-
+		line = replaceURLsWithTags(line, imageReplacementTemplate, videoReplacementTemplate)
 		line = replaceNostrURLsWithTags(nostrMatcher, line)
 		lines[i] = line
 	}
