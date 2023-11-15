@@ -22,14 +22,14 @@
 {{ end }}
 
 <!-- stuff that affects the content inside the preview window -->
-<meta name="author" content="{{.Metadata.Name}}" />
+<meta name="author" content="{{.Metadata.ShortName}}" />
 <meta name="telegram:channel" content="@nostr_protocol" />
 
 <!-- basic content of the preview window -->
 <article>
   <h1>
-    {{ if not (eq "" .Subject) }} {{.Subject}} {{ else }} {{.Metadata.Name}} on
-    Nostr: {{ end }}
+    {{ if not (eq "" .Subject) }} {{.Subject}} {{ else }}
+    {{.Metadata.ShortName}} on Nostr: {{ end }}
   </h1>
 
   {{ if not (eq "" .Summary) }}

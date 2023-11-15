@@ -18,7 +18,7 @@ require (
 	github.com/rs/cors v1.10.0
 	github.com/rs/zerolog v1.29.1
 	github.com/stretchr/testify v1.8.4
-	github.com/tylermmorton/tmpl v0.0.0-20230817025807-fd8b24ce5c3d
+	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
 	mvdan.cc/xurls/v2 v2.5.0
 )
