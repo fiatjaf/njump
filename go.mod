@@ -13,7 +13,7 @@ require (
 	github.com/lukevers/freetype-go v0.0.0-20150513150840-77e276735410
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/go-nostr v0.25.3
-	github.com/nbd-wtf/nostr-sdk v0.0.1
+	github.com/nbd-wtf/nostr-sdk v0.0.3
 	github.com/pelletier/go-toml v1.9.5
 	github.com/rs/cors v1.10.0
 	github.com/rs/zerolog v1.29.1
