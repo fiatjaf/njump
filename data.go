@@ -26,6 +26,10 @@ func (ee EnhancedEvent) IsReply() bool {
 	return nip10.GetImmediateReply(ee.event.Tags) != nil
 }
 
+func (ee EnhancedEvent) Reply() *nostr.Tag {
+	return nip10.GetImmediateReply(ee.event.Tags)
+}
+
 func (ee EnhancedEvent) Preview() template.HTML {
 	lines := strings.Split(html.EscapeString(ee.event.Content), "\n")
 	var processedLines []string
@@ -72,7 +76,12 @@ func (ee EnhancedEvent) RssTitle() string {
 }
 
 func (ee EnhancedEvent) RssContent() string {
-	content := basicFormatting(html.EscapeString(ee.event.Content), true, false)
+	content := ee.event.Content
+	if ee.IsReply() {
+		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.event.PubKey)
+		content = "In reply to nostr:" + nevent + "\n_________________________\n\n" + content
+	}
+	content = basicFormatting(html.EscapeString(content), true, false)
 	// content = renderQuotesAsHTML(context.Background(), content, false)
 	content = linkQuotes(content)
 	return content

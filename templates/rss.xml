@@ -8,12 +8,20 @@
   {{if not (eq "" .Npub)}}
     <title>Nostr notes by {{.Metadata.Name}}</title>
     <link>https://{{.Host}}/{{.Npub}}</link>
-    <image>{{.Metadata.Picture}}</image>
+    <image>
+      <url>{{.Metadata.Picture}}</url>
+      <link>https://{{.Host}}/{{.Npub}}</link>
+      <title>Nostr notes by {{.Metadata.Name}}</title>
+    </image>
   {{end}}
   {{if not (eq "" .RelayHostname)}}
     <title>Nostr notes on {{.RelayHostname}}</title>
     <link>https://{{.Host}}/r/{{.RelayHostname}}</link>
-    <image>{{.Info.Icon}}</image>
+    <image>
+      <url>{{.Info.Icon}}</url>
+      <title>Nostr notes on {{.RelayHostname}}</title>
+      <link>https://{{.Host}}/r/{{.RelayHostname}}</link>
+    </image>
   {{end}}
 
   {{range $i, $ee := .LastNotes}}
