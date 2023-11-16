@@ -424,6 +424,9 @@ type ErrorPage struct {
 }
 
 func (e *ErrorPage) TemplateText() string {
+	if e.Message != "" {
+		return tmplError
+	}
 	e.Message = "I cannot give any suggestions to solve the problem, maybe the best solution is to pubblicy blame the devs on Nostr"
 	if strings.Contains(e.Errors, "invalid checksum") {
 		e.Message = "It seems you entered an invalid event code, try to check if it is correct; a good idea is compare the first and the last characters"

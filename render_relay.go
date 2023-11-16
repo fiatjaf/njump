@@ -25,7 +25,18 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// relay metadata
-	info, _ := nip11.Fetch(r.Context(), hostname)
+	info, err := nip11.Fetch(r.Context(), hostname)
+	if err != nil {
+		w.Header().Set("Cache-Control", "max-age=60")
+		errorPage := &ErrorPage{
+			Message: "The relay you are looking for does not exist or is offline; check the name in the url or try later",
+			Errors:  err.Error(),
+		}
+		errorPage.TemplateText()
+		w.WriteHeader(http.StatusNotFound)
+		ErrorTemplate.Render(w, errorPage)
+		return
+	}
 	if info == nil {
 		info = &nip11.RelayInformationDocument{
 			Name: hostname,
