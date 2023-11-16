@@ -318,8 +318,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			opengraph.BigImage = opengraph.Image
 		}
 
+		enhancedCode := data.nevent
 		if data.naddr != "" {
-			code = data.naddr
+			enhancedCode = data.naddr
 		}
 
 		err = NoteTemplate.Render(w, &NotePage{
@@ -333,7 +334,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(style, code, data.event),
+				Clients: generateClientList(style, enhancedCode, data.event),
 			},
 
 			Content:          template.HTML(data.content),
@@ -358,7 +359,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(style, code, data.event),
+				Clients: generateClientList(style, data.nevent, data.event),
 			},
 
 			CreatedAt:        data.createdAt,
