@@ -398,6 +398,7 @@ type SitemapPage struct {
 
 	// for the relay sitemap
 	RelayHostname string
+	Info          *nip11.RelayInformationDocument
 
 	// for the profile and relay sitemaps
 	LastNotes []EnhancedEvent
@@ -408,6 +409,35 @@ type SitemapPage struct {
 }
 
 func (*SitemapPage) TemplateText() string { return tmplSitemap }
+
+var (
+	//go:embed templates/rss.xml
+	tmplRSS     string
+	RSSTemplate = tmpl.MustCompile(&RSSPage{})
+)
+
+type RSSPage struct {
+	Host       string
+	ModifiedAt string
+	Title      string
+
+	// for the profile RSS
+	Npub     string
+	Metadata *sdk.ProfileMetadata
+
+	// for the relay RSS
+	RelayHostname string
+	Info          *nip11.RelayInformationDocument
+
+	// for the profile and relay RSSs
+	LastNotes []EnhancedEvent
+
+	// for the archive RSS
+	PathPrefix string
+	Data       []string
+}
+
+func (*RSSPage) TemplateText() string { return tmplRSS }
 
 var (
 	//go:embed templates/error.html

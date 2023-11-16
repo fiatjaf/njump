@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html"
 	"html/template"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -13,6 +14,7 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	sdk "github.com/nbd-wtf/nostr-sdk"
+	"github.com/texttheater/golang-levenshtein/levenshtein"
 )
 
 type EnhancedEvent struct {
@@ -36,6 +38,54 @@ func (ee EnhancedEvent) Preview() template.HTML {
 	}
 
 	return template.HTML(strings.Join(processedLines, "<br/>"))
+}
+
+func (ee EnhancedEvent) RssTitle() string {
+	regex := regexp.MustCompile(`(?i)<br\s?/?>`)
+	replacedString := regex.ReplaceAllString(string(ee.Preview()), " ")
+	words := strings.Fields(replacedString)
+	title := ""
+	for i, word := range words {
+		if len(title)+len(word)+1 <= 65 { // +1 for space
+			if title != "" {
+				title += " "
+			}
+			title += word
+		} else {
+			if i > 1 { // the first word len is > 65
+				title = title + " ..."
+			} else {
+				title = ""
+			}
+			break
+		}
+	}
+
+	content := ee.RssContent()
+	distance := levenshtein.DistanceForStrings([]rune(title), []rune(content), levenshtein.DefaultOptions)
+	similarityThreshold := 5
+	if distance <= similarityThreshold {
+		return ""
+	} else {
+		return title
+	}
+}
+
+func (ee EnhancedEvent) RssContent() string {
+	content := basicFormatting(html.EscapeString(ee.event.Content), true, false)
+	// content = renderQuotesAsHTML(context.Background(), content, false)
+	content = linkQuotes(content)
+	return content
+}
+
+func (ee EnhancedEvent) Thumb() string {
+	imgRegex := regexp.MustCompile(`(https?://[^\s]+\.(?:png|jpe?g|gif|bmp|svg)(?:/[^\s]*)?)`)
+	matches := imgRegex.FindAllStringSubmatch(ee.event.Content, -1)
+	if len(matches) > 0 {
+		// The first match group captures the image URL
+		return matches[0][1]
+	}
+	return ""
 }
 
 func (ee EnhancedEvent) Npub() string {

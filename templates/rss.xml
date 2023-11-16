@@ -1,0 +1,34 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <pubDate>{{.ModifiedAt}}</pubDate>
+    <lastBuildDate>{{.ModifiedAt}}</lastBuildDate>
+    <docs>https://github.com/fiatjaf/njump</docs>
+    <generator>https://{{.Host}}</generator>
+    
+  {{if not (eq "" .Npub)}}
+    <title>Nostr notes by {{.Metadata.Name}}</title>
+    <link>https://{{.Host}}/{{.Npub}}</link>
+    <image>{{.Metadata.Picture}}</image>
+  {{end}}
+  {{if not (eq "" .RelayHostname)}}
+    <title>Nostr notes on {{.RelayHostname}}</title>
+    <link>https://{{.Host}}/r/{{.RelayHostname}}</link>
+    <image>{{.Info.Icon}}</image>
+  {{end}}
+
+  {{range $i, $ee := .LastNotes}}
+    <item>
+      <guid>{{$ee.Nevent}}</guid>
+      {{if not (eq "" $ee.RssTitle)}}
+        <title>{{$ee.RssTitle}}</title>
+      {{end}}
+      <link>https://{{$.Host}}/{{$ee.Nevent}}</link>
+      {{if not (eq "" $ee.Thumb)}}
+        <enclosure url="{{$ee.Thumb}}" />
+      {{end}}
+      <description>{{$ee.RssContent}}</description>
+      <pubDate>{{$ee.ModifiedAtStr}}</pubDate>
+    </item>
+  {{end}}
+  </channel>
+</rss>

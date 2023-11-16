@@ -317,6 +317,15 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 	})
 }
 
+func linkQuotes(input string) string {
+	return nostrNoteNeventMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		nip19 := match[len("nostr:"):]
+		first_chars := nip19[:8]
+		last_chars := nip19[len(nip19)-4:]
+		return fmt.Sprintf(`<a href="/%s">%s</a>`, nip19, first_chars+"…"+last_chars)
+	})
+}
+
 func sanitizeXSS(html string) string {
 	p := bluemonday.UGCPolicy()
 	p.AllowStyling()
