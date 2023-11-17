@@ -58,7 +58,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			LastNotes:  data.renderableLastNotes,
 		})
 	} else {
-		w.Header().Add("content-type", "text/xml")
+		w.Header().Add("content-type", "text/html")
 		err = ProfileTemplate.Render(w, &ProfilePage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: true, TailwindDebugStuff: tailwindDebugStuff},
 			DetailsPartial: DetailsPartial{
