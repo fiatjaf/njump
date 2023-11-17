@@ -77,13 +77,13 @@ func (ee EnhancedEvent) RssTitle() string {
 
 func (ee EnhancedEvent) RssContent() string {
 	content := ee.event.Content
-	if ee.IsReply() {
-		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.event.PubKey)
-		content = content + "\n\n____________________\nIn reply to nostr:" + nevent
-	}
 	content = basicFormatting(html.EscapeString(content), true, false)
 	content = renderQuotesAsHTML(context.Background(), content, false)
-	// content = linkQuotes(content)
+	if ee.IsReply() {
+		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.event.PubKey)
+		neventShort := nevent[:8] + "…" + nevent[len(nevent)-4:]
+		content = "In reply to <a href='/" + nevent + "'>" + neventShort + "</a><br/>_________________________<br/><br/>" + content
+	}
 	return content
 }
 
