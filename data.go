@@ -371,7 +371,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		author, relays, _ := getEvent(ctx, data.npub, relaysForNip19)
 		if author != nil {
 			data.metadata, _ = sdk.ParseMetadata(author)
-			if data.metadata != nil {
+			if data.metadata == nil {
+				data.metadata = &sdk.ProfileMetadata{PubKey: data.event.PubKey}
+			} else {
 				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
 				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
 			}
