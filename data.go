@@ -79,11 +79,11 @@ func (ee EnhancedEvent) RssContent() string {
 	content := ee.event.Content
 	if ee.IsReply() {
 		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.event.PubKey)
-		content = "In reply to nostr:" + nevent + "\n_________________________\n\n" + content
+		content = content + "\n\n____________________\nIn reply to nostr:" + nevent
 	}
 	content = basicFormatting(html.EscapeString(content), true, false)
-	// content = renderQuotesAsHTML(context.Background(), content, false)
-	content = linkQuotes(content)
+	content = renderQuotesAsHTML(context.Background(), content, false)
+	// content = linkQuotes(content)
 	return content
 }
 
