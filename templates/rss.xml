@@ -1,42 +1,35 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-  <channel>
-    <pubDate>{{.ModifiedAt}}</pubDate>
-    <lastBuildDate>{{.ModifiedAt}}</lastBuildDate>
-    <docs>https://github.com/fiatjaf/njump</docs>
-    <generator>https://{{.Host}}</generator>
-    
-  {{if not (eq "" .Npub)}}
-    <title>Nostr notes by {{.Metadata.Name}}</title>
-    <link>https://{{.Host}}/{{.Npub}}</link>
-    <image>
-      <url>{{.Metadata.Picture}}</url>
-      <link>https://{{.Host}}/{{.Npub}}</link>
-      <title>Nostr notes by {{.Metadata.Name}}</title>
-    </image>
-  {{end}}
-  {{if not (eq "" .RelayHostname)}}
-    <title>Nostr notes on {{.RelayHostname}}</title>
-    <link>https://{{.Host}}/r/{{.RelayHostname}}</link>
-    <image>
-      <url>{{.Info.Icon}}</url>
-      <title>Nostr notes on {{.RelayHostname}}</title>
-      <link>https://{{.Host}}/r/{{.RelayHostname}}</link>
-    </image>
-  {{end}}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <updated>{{.ModifiedAt}}</updated>
+  <generator>https://{{.Host}}</generator>
+{{if not (eq "" .Npub)}}
+  <title>Nostr notes by {{.Metadata.Name}}</title>
+  <author>
+    <name>{{.Metadata.Name}}</name>
+  </author>
+  <link href="https://{{.Host}}/{{.Npub}}" />
+  <id>{{.Npub}}</id>
+  <icon>{{.Metadata.Picture}}</icon>
+  <logo>{{.Metadata.Picture}}</logo>
+{{end}}
+{{if not (eq "" .RelayHostname)}}
+  <title>Nostr notes on {{.RelayHostname}}</title>
+  <link href="https://{{.Host}}/r/{{.RelayHostname}}" />
+  <id>{{.RelayHostname}}</id>
+  <icon>{{.Info.Icon}}</icon>
+  <logo>{{.Info.Icon}}</logo>
+{{end}}
 
-  {{range $i, $ee := .LastNotes}}
-    <item>
-      <guid>{{$ee.Nevent}}</guid>
-      {{if not (eq "" $ee.RssTitle)}}
-        <title>{{$ee.RssTitle}}</title>
-      {{end}}
-      <link>https://{{$.Host}}/{{$ee.Nevent}}</link>
-      {{if not (eq "" $ee.Thumb)}}
-        <enclosure url="{{$ee.Thumb}}" />
-      {{end}}
-      <description>{{$ee.RssContent}}</description>
-      <pubDate>{{$ee.ModifiedAtStr}}</pubDate>
-    </item>
-  {{end}}
-  </channel>
-</rss>
+{{range $i, $ee := .LastNotes}}
+  <entry>
+    <id>{{$ee.Nevent}}</id>
+    {{if not (eq "" $ee.RssTitle)}}
+      <title>{{$ee.RssTitle}}</title>
+    {{end}}
+    <link rel="alternate" href="https://{{$.Host}}/{{$ee.Nevent}}" />
+    <content type="html">
+      {{$ee.RssContent}}
+    </content>
+    <updated>{{$ee.ModifiedAtStr}}</updated>
+  </entry>
+{{end}}
+</feed>
