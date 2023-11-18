@@ -23,7 +23,7 @@ const (
 	MAX_CHARS_PER_QUOTE_LINE = 48
 	FONT_SIZE                = 7
 
-	BLOCK = "▒"
+	BLOCK = "|"
 )
 
 //go:embed fonts/*
