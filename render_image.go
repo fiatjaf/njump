@@ -23,8 +23,14 @@ const (
 	MAX_CHARS_PER_LINE       = 52
 	MAX_CHARS_PER_QUOTE_LINE = 48
 	FONT_SIZE                = 7
+	FONT_DPI                 = 300
 
 	BLOCK = "|"
+)
+
+var (
+	BACKGROUND = color.RGBA{20, 29, 39, 255}
+	FOREGROUND = color.RGBA{142, 212, 249, 255}
 )
 
 //go:embed fonts/*
@@ -164,17 +170,19 @@ func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, er
 	}
 
 	img := gg.NewContext(width, height)
-	img.SetColor(color.Black)
+	img.SetColor(BACKGROUND)
+	img.Clear()
+	img.SetColor(FOREGROUND)
 	img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
 		Size:    FONT_SIZE,
-		DPI:     300,
+		DPI:     FONT_DPI,
 		Hinting: font.HintingFull,
 	}))
 
 	for i, line := range lines {
 		img.DrawStringWrapped(line,
 			float64(10+paddingLeft),
-			float64(10+(i*FONT_SIZE*300*256.0/72.0)>>8),
+			float64(10+(i*FONT_SIZE*FONT_DPI*256.0/72.0)>>8),
 			0, 0,
 			float64(width-10-paddingLeft),
 			float64(height-10), gg.AlignLeft,
