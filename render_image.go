@@ -5,7 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"image"
-	"image/draw"
+	"image/color"
 	"image/png"
 	"net/http"
 	"strings"
@@ -13,8 +13,9 @@ import (
 	"unicode"
 
 	"github.com/apatters/go-wordwrap"
-	"github.com/lukevers/freetype-go/freetype"
-	"github.com/lukevers/freetype-go/freetype/truetype"
+	"github.com/fogleman/gg"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font"
 )
 
 const (
@@ -151,7 +152,7 @@ func normalizeText(input []string, breakWords bool) []string {
 	return lines
 }
 
-func drawImage(lines []string, font *truetype.Font, style Style) (image.Image, error) {
+func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, error) {
 	width := 700
 	height := 525
 	paddingLeft := 0
@@ -162,43 +163,24 @@ func drawImage(lines []string, font *truetype.Font, style Style) (image.Image, e
 		height = width * 268 / 512
 	}
 
-	// get the physical image ready with colors/size
-	fg, bg := image.Black, image.White
-	img := image.NewRGBA(image.Rect(0, 0, width, height))
+	img := gg.NewContext(width, height)
+	img.SetColor(color.Black)
+	img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
+		Size:    FONT_SIZE,
+		DPI:     300,
+		Hinting: font.HintingFull,
+	}))
 
-	// draw the empty image
-	draw.Draw(img, img.Bounds(), bg, image.Point{}, draw.Src)
-
-	// create new freetype context to get ready for adding text.
-	c := freetype.NewContext()
-	c.SetDPI(300)
-	c.SetFont(font)
-	c.SetFontSize(FONT_SIZE)
-	c.SetClip(img.Bounds())
-	c.SetDst(img)
-	c.SetSrc(fg)
-	c.SetHinting(freetype.NoHinting)
-
-	// draw each line separately
-	var count float64 = 1
-	for _, line := range lines {
-		if err := drawText(c, line, count, paddingLeft); err != nil {
-			return nil, err
-		}
-		count++
+	for i, line := range lines {
+		img.DrawStringWrapped(line,
+			float64(10+paddingLeft),
+			float64(10+(i*FONT_SIZE*300*256.0/72.0)>>8),
+			0, 0,
+			float64(width-10-paddingLeft),
+			float64(height-10), gg.AlignLeft,
+		)
 	}
-
-	return img, nil
-}
-
-func drawText(c *freetype.Context, text string, line float64, paddingLeft int) error {
-	// We need an offset because we need to know where exactly on the
-	// image to place the text. The `line` is how much of an offset
-	// that we need to provide (which line the text is going on).
-	offsetY := 10 + int(c.PointToFix32(FONT_SIZE*line)>>8)
-
-	_, err := c.DrawString(text, freetype.Pt(10+paddingLeft, offsetY))
-	return err
+	return img.Image(), nil
 }
 
 // replace nevent and note with their text, as an extra line prefixed by BLOCK
@@ -325,7 +307,7 @@ gotLang:
 		return nil, false, err
 	}
 
-	font, err := freetype.ParseFont(fontData)
+	font, err := truetype.Parse(fontData)
 	if err != nil {
 		return nil, false, err
 	}
