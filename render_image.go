@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"embed"
 	"fmt"
 	"image"
 	"image/color"
@@ -10,19 +9,16 @@ import (
 	"net/http"
 	"strings"
 	"time"
-	"unicode"
 
 	"github.com/apatters/go-wordwrap"
 	"github.com/fogleman/gg"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
 )
 
 const (
 	MAX_LINES                = 20
 	MAX_CHARS_PER_LINE       = 52
 	MAX_CHARS_PER_QUOTE_LINE = 48
-	FONT_SIZE                = 7
+	FONT_SIZE                = 22
 	FONT_DPI                 = 300
 
 	BLOCK = "|"
@@ -32,9 +28,6 @@ var (
 	BACKGROUND = color.RGBA{20, 29, 39, 255}
 	FOREGROUND = color.RGBA{142, 212, 249, 255}
 )
-
-//go:embed fonts/*
-var fonts embed.FS
 
 func renderImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
@@ -51,13 +44,6 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// get the font and language specifics based on the characters used
-	font, breakWords, err := getLanguage(event.Content)
-	if err != nil {
-		http.Error(w, "error getting font: "+err.Error(), 500)
-		return
-	}
-
 	// this turns the raw event.Content into a series of lines ready to drawn
 	lines := normalizeText(
 		replaceUserReferencesWithNames(r.Context(),
@@ -65,10 +51,10 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 				event.Content,
 			),
 		),
-		breakWords,
+		true, // breakWords,
 	)
 
-	img, err := drawImage(lines, font, getPreviewStyle(r))
+	img, err := drawImage(lines, getPreviewStyle(r))
 	if err != nil {
 		log.Printf("error writing image: %s", err)
 		http.Error(w, "error writing image!", 500)
@@ -158,13 +144,13 @@ func normalizeText(input []string, breakWords bool) []string {
 	return lines
 }
 
-func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, error) {
+func drawImage(lines []string, style Style) (image.Image, error) {
 	width := 700
 	height := 525
-	paddingLeft := 0
+	// paddingLeft := 0
 	switch style {
 	case StyleTelegram:
-		paddingLeft = 15
+		// paddingLeft = 15
 	case StyleTwitter:
 		height = width * 268 / 512
 	}
@@ -173,21 +159,24 @@ func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, er
 	img.SetColor(BACKGROUND)
 	img.Clear()
 	img.SetColor(FOREGROUND)
-	img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
-		Size:    FONT_SIZE,
-		DPI:     FONT_DPI,
-		Hinting: font.HintingFull,
-	}))
+	// img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
+	// 	Size:    FONT_SIZE,
+	// 	DPI:     FONT_DPI,
+	// 	Hinting: font.HintingFull,
+	// }))
 
-	for i, line := range lines {
-		img.DrawStringWrapped(line,
-			float64(10+paddingLeft),
-			float64(10+(i*FONT_SIZE*FONT_DPI*256.0/72.0)>>8),
-			0, 0,
-			float64(width-10-paddingLeft),
-			float64(height-10), gg.AlignLeft,
-		)
-	}
+	// for i, line := range lines {
+	// 	fmt.Println(i, line)
+	// 	// img.DrawStringAnchored(line,
+	// 	// 	float64(10+paddingLeft),
+	// 	// 	float64(10+(i*FONT_SIZE*FONT_DPI*256.0/72.0)>>8),
+	// 	// 	0,
+	// 	// 	1,
+	// 	// )
+	// }
+	dst := image.NewRGBA(image.Rect(0, 0, width, height))
+	renderText(dst, lines)
+	img.DrawImage(dst, 0, 0)
 	return img.Image(), nil
 }
 
@@ -237,88 +226,4 @@ func renderQuotesAsBlockPrefixedText(ctx context.Context, input string) []string
 	}
 
 	return blocks
-}
-
-func getLanguage(text string) (*truetype.Font, bool, error) {
-	fontName := "fonts/NotoSans.ttf"
-	shouldBreakWords := false
-
-	for _, group := range []struct {
-		lang       *unicode.RangeTable
-		fontName   string
-		breakWords bool
-	}{
-		{
-			unicode.Katakana,
-			"fonts/NotoSansJP.ttf",
-			true,
-		},
-		{
-			unicode.Hiragana,
-			"fonts/NotoSansJP.ttf",
-			true,
-		},
-		{
-			unicode.Han,
-			"fonts/NotoSansTC.ttf",
-			true,
-		},
-		{
-			unicode.Hangul,
-			"fonts/NotoSansKR.ttf",
-			true,
-		},
-		{
-			unicode.Arabic,
-			"fonts/NotoSansArabic.ttf",
-			false,
-		},
-		{
-			unicode.Hebrew,
-			"fonts/NotoSansHebrew.ttf",
-			false,
-		},
-		{
-			unicode.Bengali,
-			"fonts/NotoSansBengali.ttf",
-			false,
-		},
-		{
-			unicode.Thai,
-			"fonts/NotoSansThai.ttf",
-			false,
-		},
-	} {
-		for _, rune := range text {
-			rune16 := uint16(rune)
-			for _, r16 := range group.lang.R16 {
-				if rune16 >= r16.Lo && rune16 <= r16.Hi {
-					fontName = group.fontName
-					shouldBreakWords = group.breakWords
-					goto gotLang
-				}
-			}
-			rune32 := uint32(rune)
-			for _, r32 := range group.lang.R32 {
-				if rune32 >= r32.Lo && rune32 <= r32.Hi {
-					fontName = group.fontName
-					shouldBreakWords = group.breakWords
-					goto gotLang
-				}
-			}
-		}
-	}
-
-gotLang:
-	fontData, err := fonts.ReadFile(fontName)
-	if err != nil {
-		return nil, false, err
-	}
-
-	font, err := truetype.Parse(fontData)
-	if err != nil {
-		return nil, false, err
-	}
-
-	return font, shouldBreakWords, nil
 }
