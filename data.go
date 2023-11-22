@@ -134,7 +134,7 @@ type Data struct {
 	createdAt           string
 	modifiedAt          string
 	parentLink          template.HTML
-	metadata            *sdk.ProfileMetadata
+	metadata            sdk.ProfileMetadata
 	authorRelays        []string
 	authorLong          string
 	authorShort         string
@@ -371,9 +371,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		author, relays, _ := getEvent(ctx, data.npub, relaysForNip19)
 		if author != nil {
 			data.metadata, _ = sdk.ParseMetadata(author)
-			if data.metadata == nil {
-				data.metadata = &sdk.ProfileMetadata{PubKey: data.event.PubKey}
-			} else {
+			if data.metadata.Name != "" {
 				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
 				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
 			}

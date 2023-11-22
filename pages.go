@@ -142,7 +142,7 @@ type TelegramInstantViewPage struct {
 	Content     template.HTML
 	Description string
 	Subject     string
-	Metadata    *sdk.ProfileMetadata
+	Metadata    sdk.ProfileMetadata
 	AuthorLong  string
 	CreatedAt   string
 	ParentLink  template.HTML
@@ -225,7 +225,7 @@ type NotePage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         *sdk.ProfileMetadata
+	Metadata         sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML
@@ -254,7 +254,7 @@ type ProfilePage struct {
 	CreatedAt                  string
 	Domain                     string
 	LastNotes                  []EnhancedEvent
-	Metadata                   *sdk.ProfileMetadata
+	Metadata                   sdk.ProfileMetadata
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
@@ -283,7 +283,7 @@ type FileMetadataPage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         *sdk.ProfileMetadata
+	Metadata         sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML
@@ -316,7 +316,7 @@ type LiveEventPage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         *sdk.ProfileMetadata
+	Metadata         sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML
@@ -347,7 +347,7 @@ type LiveEventMessagePage struct {
 
 	Content          template.HTML
 	CreatedAt        string
-	Metadata         *sdk.ProfileMetadata
+	Metadata         sdk.ProfileMetadata
 	Npub             string
 	NpubShort        string
 	ParentLink       template.HTML
@@ -423,7 +423,7 @@ type RSSPage struct {
 
 	// for the profile RSS
 	Npub     string
-	Metadata *sdk.ProfileMetadata
+	Metadata sdk.ProfileMetadata
 
 	// for the relay RSS
 	RelayHostname string
