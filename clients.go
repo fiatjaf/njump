@@ -70,5 +70,6 @@ func generateClientList(style Style, code string, event *nostr.Event) []ClientRe
 func generateRelayBrowserClientList(host string) []ClientReference {
 	return []ClientReference{
 		{ID: "coracle", Name: "Coracle", URL: template.URL("https://coracle.social/relays/" + host)},
+		{ID: "nostrrr", Name: "nostrrr", URL: template.URL("https://nostrrr.com/relay/" + host)},
 	}
 }
