@@ -369,16 +369,16 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 		defer cancel()
 		author, relays, _ := getEvent(ctx, data.npub, relaysForNip19)
-		if author != nil {
+		if author == nil {
+			data.metadata = sdk.ProfileMetadata{PubKey: event.PubKey}
+		} else {
 			data.metadata, _ = sdk.ParseMetadata(author)
 			if data.metadata.Name != "" {
 				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
 				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
 			}
 		}
-		if len(relays) > 0 {
-			data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
-		}
+		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
 	}
 
 	data.kindDescription = kindNames[event.Kind]
