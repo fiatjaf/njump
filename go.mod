@@ -10,7 +10,7 @@ require (
 	github.com/fiatjaf/khatru v0.0.6
 	github.com/fogleman/gg v1.3.0
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
-	github.com/gomarkdown/markdown v0.0.0-20230322041520-c84983bdbf2a
+	github.com/gomarkdown/markdown v0.0.0-20231115200524-a660076da3fd
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/go-nostr v0.25.3
