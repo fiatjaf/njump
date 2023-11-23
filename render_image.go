@@ -37,9 +37,6 @@ var (
 //go:embed fonts/*
 var fonts embed.FS
 
-//go:embed static/logo.png
-var logo []byte
-
 func renderImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 
@@ -191,6 +188,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, er
 	}
 
 	// create the stamp image
+	logo, _ := static.ReadFile("static/logo.png")
 	stampImg, _ := png.Decode(bytes.NewBuffer(logo))
 	stampWidth := stampImg.Bounds().Dx()
 	stampHeight := stampImg.Bounds().Dy()
