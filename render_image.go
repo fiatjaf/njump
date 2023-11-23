@@ -29,8 +29,8 @@ const (
 )
 
 var (
-	BACKGROUND = color.RGBA{20, 29, 39, 255}
-	FOREGROUND = color.RGBA{142, 212, 249, 255}
+	BACKGROUND = color.RGBA{23, 23, 23, 255}
+	FOREGROUND = color.RGBA{255, 230, 238, 255}
 )
 
 //go:embed fonts/*
@@ -185,6 +185,23 @@ func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, er
 		y := float64(i)*lineHeight + 50                  // Calculate the Y position for each line
 		img.DrawString(line, float64(20+paddingLeft), y) // Draw the line at the calculated Y position
 	}
+
+	// Create the stamp image
+	stampImg, err := gg.LoadPNG("static/logo.png")
+	if err != nil {
+		return nil, err
+	}
+
+	stampWidth := stampImg.Bounds().Dx()
+	stampHeight := stampImg.Bounds().Dy()
+
+	// Calculate the position for the stamp in the bottom right corner
+	stampX := width - stampWidth - 20
+	stampY := height - stampHeight - 20
+
+	// Draw the stamp onto the image
+	img.DrawImage(stampImg, stampX, stampY)
+
 	return img.Image(), nil
 }
 
