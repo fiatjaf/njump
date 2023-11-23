@@ -31,7 +31,7 @@ For live-reload you can use [`air`](https://github.com/cosmtrek/air) and start i
 
 ### Running from a precompiled binary
 
-You can grab one from the [releases](releases) and just run it.
+You can grab one from the [releases](../../releases) and just run it.
 
 ### Docker
 
