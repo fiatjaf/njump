@@ -21,13 +21,17 @@ For more information about njump's philosophy and its use, read the presentation
 | `30024` | Draft Long-form Content    | [23](23.md) |
 | `30311` | Live Event                 | [53](53.md) |
 
-## Development
+## Running
 
 ### Running locally
 
 The easiest way to start is to run the development server with `just` (if you have [it](https://just.systems/) installed) or with `TAILWIND_DEBUG=true go run .`. You can also check the contents of `justfile` to see other useful scripts.
 
 For live-reload you can use [`air`](https://github.com/cosmtrek/air) and start it with `air -c .air.toml` -- this will run it without the local cache, which can be annoying if you're not specifically debugging the part of the code that loads content, so you may want to run it with `air -c .air.toml --build.cmd 'go build -o ./tmp/main .'`. These run modes will recompile the Tailwind bundle on every restart and they assume you have [the `tailwind` CLI](https://tailwindcss.com/docs/installation) installed globally.
+
+### Running from a precompiled binary
+
+You can grab one from the [releases](releases) and just run it.
 
 ### Docker
 
