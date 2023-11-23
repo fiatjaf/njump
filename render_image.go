@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"embed"
 	"fmt"
@@ -35,6 +36,9 @@ var (
 
 //go:embed fonts/*
 var fonts embed.FS
+
+//go:embed static/logo.png
+var logo []byte
 
 func renderImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
@@ -186,12 +190,8 @@ func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, er
 		img.DrawString(line, float64(20+paddingLeft), y) // Draw the line at the calculated Y position
 	}
 
-	// Create the stamp image
-	stampImg, err := gg.LoadPNG("static/logo.png")
-	if err != nil {
-		return nil, err
-	}
-
+	// create the stamp image
+	stampImg, _ := png.Decode(bytes.NewBuffer(logo))
 	stampWidth := stampImg.Bounds().Dx()
 	stampHeight := stampImg.Bounds().Dy()
 
