@@ -179,14 +179,11 @@ func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, er
 		Hinting: font.HintingFull,
 	}))
 
+	lineSpacing := 0.3
+	lineHeight := float64(FONT_SIZE)*FONT_DPI/72.0 + float64(FONT_SIZE)*lineSpacing*FONT_DPI/72.0
 	for i, line := range lines {
-		img.DrawStringWrapped(line,
-			float64(10+paddingLeft),
-			float64(10+(i*FONT_SIZE*FONT_DPI*256.0/72.0)>>8),
-			0, 0,
-			float64(width-10-paddingLeft),
-			float64(height-10), gg.AlignLeft,
-		)
+		y := float64(i)*lineHeight + 50                  // Calculate the Y position for each line
+		img.DrawString(line, float64(20+paddingLeft), y) // Draw the line at the calculated Y position
 	}
 	return img.Image(), nil
 }
