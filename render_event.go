@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"html"
@@ -11,6 +12,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/pelletier/go-toml"
 )
@@ -28,47 +30,19 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		// remove the "nostr:" prefix
 		http.Redirect(w, r, "/"+code[6:], http.StatusFound)
 		return
-	} else if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
-		// it's a profile
-		renderProfile(w, r, code)
-		return
 	}
 
-	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
-
-	// force note1 to become nevent1
-	if strings.HasPrefix(code, "note1") {
-		_, redirectHex, err := nip19.Decode(code)
-		if err != nil {
-			w.Header().Set("Cache-Control", "max-age=60")
-			errorPage := &ErrorPage{
-				Errors: err.Error(),
-			}
-			errorPage.TemplateText()
-			w.WriteHeader(http.StatusNotFound)
-			ErrorTemplate.Render(w, errorPage)
-			return
-		}
-		redirectNevent, _ := nip19.EncodeEvent(redirectHex.(string), []string{}, "")
-		http.Redirect(w, r, "/"+redirectNevent, http.StatusFound)
-	}
-
-	host := r.Header.Get("X-Forwarded-Host")
-	if host == "" {
-		host = r.Host
-	}
-
-	style := getPreviewStyle(r)
-
-	data, err := grabData(r.Context(), code, false)
+	// decode the nip19 code we've received
+	prefix, decoded, err := nip19.Decode(code)
 	if err != nil {
-
-		code, errTry := nip19.EncodeEvent(r.URL.Path[1:], []string{}, "")
-		if errTry == nil {
-			http.Redirect(w, r, "/"+code, http.StatusFound)
+		// if it's a 32-byte hex assume it's an event id
+		if _, err := hex.DecodeString(code); err == nil && len(code) == 64 {
+			redirectNevent, _ := nip19.EncodeEvent(code, []string{}, "")
+			http.Redirect(w, r, "/"+redirectNevent, http.StatusFound)
 			return
 		}
 
+		// otherwise error
 		w.Header().Set("Cache-Control", "max-age=60")
 		errorPage := &ErrorPage{
 			Errors: err.Error(),
@@ -79,10 +53,49 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// render npub and nprofile using a separate function
+	if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
+		// it's a profile
+		renderProfile(w, r, code)
+		return
+	}
+
+	// get data for this event
+	data, err := grabData(r.Context(), code, false)
+	if err != nil {
+		w.Header().Set("Cache-Control", "max-age=60")
+		errorPage := &ErrorPage{
+			Errors: err.Error(),
+		}
+		errorPage.TemplateText()
+		w.WriteHeader(http.StatusNotFound)
+		ErrorTemplate.Render(w, errorPage)
+		return
+	}
+
+	// if the result is a kind:0 render this as a profile
 	if data.event.Kind == 0 {
-		// it's a NIP-05 profile
 		renderProfile(w, r, data.npub)
 		return
+	}
+
+	// if we originally got a note code or an nevent with no hints
+	// augment the URL to point to an nevent with hints -- redirect
+	if p, ok := decoded.(nostr.EventPointer); (ok && p.Author == "" && len(p.Relays) == 0) || prefix == "note" {
+		http.Redirect(w, r, "/"+data.nevent, http.StatusFound)
+		return
+	}
+
+	// from here onwards we know we're rendering an event
+	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
+
+	// gather page style from user-agent
+	style := getPreviewStyle(r)
+
+	// gather host
+	host := r.Header.Get("X-Forwarded-Host")
+	if host == "" {
+		host = r.Host
 	}
 
 	var subject string
