@@ -21,7 +21,7 @@ func generateClientList(style Style, code string, event *nostr.Event) []ClientRe
 			{ID: "satellite", Name: "Satellite", URL: template.URL("https://satellite.earth/thread/" + event.ID)},
 			{ID: "coracle", Name: "Coracle", URL: template.URL("https://coracle.social/" + code)},
 			{ID: "primal", Name: "Primal", URL: template.URL("https://primal.net/thread/" + event.ID)},
-			{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.vercel.app/" + code)},
+			{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.app/" + code)},
 			{ID: "highlighter", Name: "Highlighter", URL: template.URL("https://highlighter.com/a/" + code)},
 			{ID: "iris", Name: "Iris", URL: template.URL("https://iris.to/" + code)},
 		}
@@ -34,7 +34,7 @@ func generateClientList(style Style, code string, event *nostr.Event) []ClientRe
 			{ID: "coracle", Name: "Coracle", URL: template.URL("https://coracle.social/" + code)},
 			{ID: "primal", Name: "Primal", URL: template.URL("https://primal.net/profile/" + event.PubKey)},
 			{ID: "nostrudel", Name: "Nostrudel", URL: template.URL("https://nostrudel.ninja/#/u/" + code)},
-			{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.vercel.app/" + code)},
+			{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.app/" + code)},
 			{ID: "iris", Name: "Iris", URL: template.URL("https://iris.to/" + code)},
 		}
 	} else if event.Kind == 30023 || event.Kind == 30024 {
