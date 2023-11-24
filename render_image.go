@@ -261,6 +261,11 @@ func getLanguage(text string) (*truetype.Font, bool, error) {
 		breakWords bool
 	}{
 		{
+			unicode.Han,
+			"fonts/NotoSansSC.ttf",
+			true,
+		},
+		{
 			unicode.Katakana,
 			"fonts/NotoSansJP.ttf",
 			true,
@@ -268,11 +273,6 @@ func getLanguage(text string) (*truetype.Font, bool, error) {
 		{
 			unicode.Hiragana,
 			"fonts/NotoSansJP.ttf",
-			true,
-		},
-		{
-			unicode.Han,
-			"fonts/NotoSansTC.ttf",
 			true,
 		},
 		{
