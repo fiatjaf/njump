@@ -24,21 +24,22 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 	}
 
 	data, err := grabData(r.Context(), code, isSitemap)
-
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
-	} else if len(data.renderableLastNotes) != 0 {
-		w.Header().Set("Cache-Control", "max-age=3600")
-	}
-
-	if err != nil {
 		errorPage := &ErrorPage{
 			Errors: err.Error(),
 		}
 		errorPage.TemplateText()
 		w.WriteHeader(http.StatusNotFound)
 		ErrorTemplate.Render(w, errorPage)
-	} else if isSitemap {
+		return
+	}
+
+	if len(data.renderableLastNotes) != 0 {
+		w.Header().Set("Cache-Control", "max-age=3600")
+	}
+
+	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
 		w.Write([]byte(XML_HEADER))
 		SitemapTemplate.Render(w, &SitemapPage{

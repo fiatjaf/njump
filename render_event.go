@@ -42,6 +42,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// it may be a NIP-05
+		if strings.Contains(code, ".") {
+			renderProfile(w, r, code)
+			return
+		}
+
 		// otherwise error
 		w.Header().Set("Cache-Control", "max-age=60")
 		errorPage := &ErrorPage{
@@ -54,7 +60,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// render npub and nprofile using a separate function
-	if strings.HasPrefix(code, "npub") || strings.HasPrefix(code, "nprofile") {
+	if prefix == "npub" || prefix == "nprofile" {
 		// it's a profile
 		renderProfile(w, r, code)
 		return
