@@ -24,7 +24,7 @@ const (
 	MAX_CHARS_PER_LINE       = 52
 	MAX_CHARS_PER_QUOTE_LINE = 48
 	FONT_SIZE                = 7
-	FONT_DPI                 = 300
+	FONT_DPI                 = 260
 
 	BLOCK = "|"
 )
@@ -162,10 +162,11 @@ func normalizeText(input []string, breakWords bool) []string {
 func drawImage(lines []string, ttf *truetype.Font, style Style) (image.Image, error) {
 	width := 700
 	height := 525
-	paddingLeft := 0
+	paddingLeft := 5
 	switch style {
 	case StyleTelegram:
-		paddingLeft = 15
+		paddingLeft += 10
+		width -= 10
 	case StyleTwitter:
 		height = width * 268 / 512
 	}
