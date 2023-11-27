@@ -39,5 +39,11 @@
                 iframe.contentWindow.postMessage({showGradient: true}, '*');
             }
         }
+
+        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        if (darkModeQuery.matches) {
+            // Dark mode is preferred
+            iframe.contentWindow.postMessage({setDarkMode: true}, '*');
+        }
     });
 })();

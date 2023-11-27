@@ -102,12 +102,15 @@
           var gradient = document.getElementById('bottom-gradient')
           gradient.classList.remove('hidden')
         }
+        if (event.data.setDarkMode) {
+          document.querySelector('html').classList.add('theme--dark')
+        }
       })
     </script>
 
     <div
       id="bottom-gradient"
-      class="pointer-events-none sticky bottom-0 left-0 hidden h-20 w-full bg-gradient-to-b from-transparent to-white"
+      class="pointer-events-none sticky bottom-0 left-0 hidden h-20 w-full bg-gradient-to-b from-transparent to-white dark:to-neutral-900"
     ></div>
 
     <img
