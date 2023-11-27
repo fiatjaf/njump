@@ -66,6 +66,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check if the embed parameter is set to "yes"
+	embedParam := r.URL.Query().Get("embed")
+	if embedParam == "yes" {
+		renderEmbedded(w, r, code)
+		return
+	}
+
 	// get data for this event
 	data, err := grabData(r.Context(), code, false)
 	if err != nil {

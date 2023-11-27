@@ -237,6 +237,25 @@ type NotePage struct {
 func (*NotePage) TemplateText() string { return tmplNote }
 
 var (
+	//go:embed templates/embedded_note.html
+	tmplEmbeddedNote     string
+	EmbeddedNoteTemplate = tmpl.MustCompile(&EmbeddedNotePage{})
+)
+
+type EmbeddedNotePage struct {
+	Content   template.HTML
+	CreatedAt string
+	Metadata  sdk.ProfileMetadata
+	Npub      string
+	NpubShort string
+	SeenOn    []string
+	Subject   string
+	Url       string
+}
+
+func (*EmbeddedNotePage) TemplateText() string { return tmplEmbeddedNote }
+
+var (
 	//go:embed templates/profile.html
 	tmplProfile     string
 	ProfileTemplate = tmpl.MustCompile(&ProfilePage{})
