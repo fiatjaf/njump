@@ -76,7 +76,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 
 			Metadata:                   data.metadata,
 			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
-			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false)),
+			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false, false)),
 			Npub:                       data.npub,
 			Nprofile:                   data.nprofile,
 			AuthorRelays:               data.authorRelays,

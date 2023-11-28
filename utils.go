@@ -215,7 +215,7 @@ func scheduleEventExpiration(eventId string, ts time.Duration) {
 // Rendering functions
 // ### ### ### ### ### ### ### ### ### ### ###
 
-func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacementTemplate string) string {
+func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacementTemplate string, skipLinks bool) string {
 	return urlMatcher.ReplaceAllStringFunc(input, func(match string) string {
 		switch {
 		case imageExtensionMatcher.MatchString(match):
@@ -229,7 +229,11 @@ func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacemen
 			// or markdown !()[...] tags for further processing => `![](%s)`
 			return fmt.Sprintf(videoReplacementTemplate, match)
 		default:
-			return "<a href=\"" + match + "\">" + match + "</a>"
+			if skipLinks {
+				return match
+			} else {
+				return "<a href=\"" + match + "\">" + match + "</a>"
+			}
 		}
 	})
 }
@@ -313,7 +317,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 
 		content := fmt.Sprintf(
 			`<blockquote class="border-l-05rem border-l-strongpink border-solid"><div class="-ml-4 bg-gradient-to-r from-gray-100 dark:from-zinc-800 to-transparent mr-0 mt-0 mb-4 pl-4 pr-2 py-2">quoting %s </div> %s </blockquote>`, match, event.Content)
-		return basicFormatting(content, false, usingTelegramInstantView)
+		return basicFormatting(content, false, usingTelegramInstantView, false)
 	})
 }
 
@@ -337,7 +341,7 @@ func sanitizeXSS(html string) string {
 	return p.Sanitize(html)
 }
 
-func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstantView bool) string {
+func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstantView bool, skipLinks bool) string {
 	nostrMatcher := nostrEveryMatcher
 	if skipNostrEventLinks {
 		nostrMatcher = nostrNpubNprofileMatcher
@@ -355,7 +359,7 @@ func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstan
 
 	lines := strings.Split(input, "\n")
 	for i, line := range lines {
-		line = replaceURLsWithTags(line, imageReplacementTemplate, videoReplacementTemplate)
+		line = replaceURLsWithTags(line, imageReplacementTemplate, videoReplacementTemplate, skipLinks)
 		line = replaceNostrURLsWithTags(nostrMatcher, line)
 		lines[i] = line
 	}

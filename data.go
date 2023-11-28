@@ -77,7 +77,7 @@ func (ee EnhancedEvent) RssTitle() string {
 
 func (ee EnhancedEvent) RssContent() string {
 	content := ee.event.Content
-	content = basicFormatting(html.EscapeString(content), true, false)
+	content = basicFormatting(html.EscapeString(content), true, false, false)
 	content = renderQuotesAsHTML(context.Background(), content, false)
 	if ee.IsReply() {
 		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.event.PubKey)
