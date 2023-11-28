@@ -16,6 +16,7 @@ type TemplateID int
 
 const (
 	Note TemplateID = iota
+	Profile
 	LongForm
 	TelegramInstantView
 	FileMetadata
@@ -285,6 +286,29 @@ type ProfilePage struct {
 }
 
 func (*ProfilePage) TemplateText() string { return tmplProfile }
+
+var (
+	//go:embed templates/embedded_profile.html
+	tmplEmbeddedProfile     string
+	EmbeddedProfileTemplate = tmpl.MustCompile(&EmbeddedProfilePage{})
+)
+
+type EmbeddedProfilePage struct {
+	AuthorRelays               []string
+	Content                    string
+	CreatedAt                  string
+	Domain                     string
+	Metadata                   sdk.ProfileMetadata
+	NormalizedAuthorWebsiteURL string
+	RenderedAuthorAboutText    template.HTML
+	Nevent                     string
+	Npub                       string
+	Nprofile                   string
+	Proxy                      string
+	Title                      string
+}
+
+func (*EmbeddedProfilePage) TemplateText() string { return tmplEmbeddedProfile }
 
 var (
 	//go:embed templates/file_metadata.html

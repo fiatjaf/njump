@@ -241,6 +241,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	switch event.Kind {
 	case 0:
+		data.templateId = Profile
 		{
 			rawAuthorRelays := []string{}
 			ctx, cancel := context.WithTimeout(ctx, time.Second*4)

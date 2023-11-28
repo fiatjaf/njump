@@ -59,17 +59,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// render npub and nprofile using a separate function
-	if prefix == "npub" || prefix == "nprofile" {
-		// it's a profile
-		renderProfile(w, r, code)
-		return
-	}
-
 	// Check if the embed parameter is set to "yes"
 	embedParam := r.URL.Query().Get("embed")
 	if embedParam == "yes" {
 		renderEmbedded(w, r, code)
+		return
+	}
+
+	// render npub and nprofile using a separate function
+	if prefix == "npub" || prefix == "nprofile" {
+		// it's a profile
+		renderProfile(w, r, code)
 		return
 	}
 

@@ -51,6 +51,15 @@ func renderEmbedded(w http.ResponseWriter, r *http.Request, code string) {
 			Url:       code,
 		})
 
+	case Profile:
+		err = EmbeddedProfileTemplate.Render(w, &EmbeddedProfilePage{
+			Metadata:                   data.metadata,
+			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
+			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false, true)),
+			Npub:                       data.npub,
+			Nprofile:                   data.nprofile,
+			AuthorRelays:               data.authorRelays,
+		})
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
 		http.Error(w, "tried to render an unsupported template at render_event.go", 500)
