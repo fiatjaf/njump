@@ -65,7 +65,6 @@ func loadNpubsArchive(ctx context.Context) {
 	log.Debug().Msg("refreshing the npubs archive")
 
 	contactsArchive := make([]string, 0, 500)
-
 	for _, pubkey := range trustedPubKeys {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 		pubkeyContacts := contactsForPubkey(ctx, pubkey)
@@ -73,8 +72,7 @@ func loadNpubsArchive(ctx context.Context) {
 		cancel()
 	}
 
-	contactsArchive = unique(contactsArchive)
-	for _, contact := range contactsArchive {
+	for _, contact := range unique(contactsArchive) {
 		log.Debug().Msgf("adding contact %s", contact)
 		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
 	}
@@ -92,8 +90,7 @@ func loadRelaysArchive(ctx context.Context) {
 		cancel()
 	}
 
-	relaysArchive = unique(relaysArchive)
-	for _, relay := range relaysArchive {
+	for _, relay := range unique(relaysArchive) {
 		for _, excluded := range excludedRelays {
 			if strings.Contains(relay, excluded) {
 				log.Debug().Msgf("skipping relay %s", relay)

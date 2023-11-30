@@ -290,12 +290,11 @@ func relaysForPubkey(ctx context.Context, pubkey string, extraRelays ...string) 
 			cache.SetJSONWithTTL("io:"+pubkey, pubkeyRelays, time.Hour*24*7)
 		}
 	}
-	pubkeyRelays = unique(pubkeyRelays)
-	return pubkeyRelays
+	return unique(pubkeyRelays)
 }
 
 func contactsForPubkey(ctx context.Context, pubkey string, extraRelays ...string) []string {
-	pubkeyContacts := make([]string, 0, 100)
+	pubkeyContacts := make([]string, 0, 300)
 	relays := make([]string, 0, 12)
 	if ok := cache.GetJSON("cc:"+pubkey, &pubkeyContacts); !ok {
 		log.Debug().Msgf("searching contacts for %s", pubkey)
@@ -335,6 +334,5 @@ func contactsForPubkey(ctx context.Context, pubkey string, extraRelays ...string
 			cache.SetJSONWithTTL("cc:"+pubkey, pubkeyContacts, time.Hour*6)
 		}
 	}
-	pubkeyContacts = unique(pubkeyContacts)
-	return pubkeyContacts
+	return unique(pubkeyContacts)
 }

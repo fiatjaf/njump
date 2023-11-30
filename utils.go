@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/microcosm-cc/bluemonday"
+	"golang.org/x/exp/slices"
 	"mvdan.cc/xurls/v2"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -381,15 +382,15 @@ func previewNotesFormatting(input string) string {
 }
 
 func unique(strSlice []string) []string {
-	keys := make(map[string]bool)
-	list := []string{}
-	for _, entry := range strSlice {
-		if _, ok := keys[entry]; !ok {
-			keys[entry] = true
-			list = append(list, entry)
+	slices.Sort(strSlice)
+	j := 0
+	for i := 1; i < len(strSlice); i++ {
+		if strSlice[j] != strSlice[i] {
+			j++
+			strSlice[j] = strSlice[i]
 		}
 	}
-	return list
+	return strSlice[:j+1]
 }
 
 func trimProtocol(relay string) string {
