@@ -11,13 +11,6 @@ import (
 	"github.com/gomarkdown/markdown/parser"
 )
 
-var mdparser = parser.NewWithExtensions(
-	parser.CommonExtensions |
-		parser.AutoHeadingIDs |
-		parser.NoEmptyLineBeforeBlock |
-		parser.Footnotes,
-)
-
 var mdrenderer = html.NewRenderer(html.RendererOptions{
 	Flags: html.CommonFlags | html.HrefTargetBlank,
 })
@@ -62,7 +55,13 @@ func mdToHTML(md string, usingTelegramInstantView bool, skipLinks bool) string {
 	md = replaceNostrURLsWithTags(nostrEveryMatcher, md)
 
 	// create markdown parser with extensions
-	doc := mdparser.Parse([]byte(md))
+	// this parser is stateful so it must be reinitialized every time
+	doc := parser.NewWithExtensions(
+		parser.CommonExtensions |
+			parser.AutoHeadingIDs |
+			parser.NoEmptyLineBeforeBlock |
+			parser.Footnotes,
+	).Parse([]byte(md))
 
 	renderer := mdrenderer
 	if usingTelegramInstantView {
