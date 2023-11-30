@@ -7,7 +7,7 @@ build: tailwind
     go build -o ./njump
 
 deploy:
-    GOOS=linux GOARCH=amd64 go build -ldflags='-s -w' -o ./njump
+    GOOS=linux GOARCH=amd64 go build -o ./njump
     rsync --progress njump njump:njump/njump-new
     ssh njump 'systemctl stop njump'
     ssh njump 'mv njump/njump-new njump/njump'
