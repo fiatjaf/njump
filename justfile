@@ -4,13 +4,14 @@ dev:
     TAILWIND_DEBUG=true go run .
 
 build: tailwind
-    CC=$(which musl-gcc) go build -ldflags='-s -w -linkmode external -extldflags "-static"' -o ./njump
+    go build -o ./njump
 
-deploy: build
-    ssh root@turgot 'systemctl stop njump'
-    rsync njump turgot:njump/njump-new
-    ssh turgot 'mv njump/njump-new njump/njump'
-    ssh root@turgot 'systemctl start njump'
+deploy:
+    GOOS=linux GOARCH=amd64 go build -ldflags='-s -w' -o ./njump
+    rsync njump njump:njump/njump-new
+    ssh njump 'systemctl stop njump'
+    ssh njump 'mv njump/njump-new njump/njump'
+    ssh njump 'systemctl start njump'
 
 debug-build: tailwind
     go build -tags=nocache -o ./tmp/main .
