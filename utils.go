@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -190,8 +191,17 @@ func attachRelaysToEvent(eventId string, relays ...string) []string {
 	if exists := cache.GetJSON(key, &existingRelays); exists {
 		relays = unique(append(existingRelays, relays...))
 	}
-	cache.SetJSONWithTTL(key, relays, time.Hour*24*7)
-	return relays
+
+	// cleanup
+	filtered := make([]string, 0, len(relays))
+	for _, relay := range relays {
+		if !isntRealRelay(relay) {
+			filtered = append(filtered, relay)
+		}
+	}
+
+	cache.SetJSONWithTTL(key, filtered, time.Hour*24*7)
+	return filtered
 }
 
 func getRelaysForEvent(eventId string) []string {
@@ -495,4 +505,17 @@ func getRandomRelay() string {
 	}
 	serial = (serial + 1) % len(everything)
 	return everything[serial]
+}
+
+func isntRealRelay(url string) bool {
+	if len(url) < 6 {
+		// this is just invalid
+		return true
+	}
+
+	// if there is a "/" after the initial "wss://" part that means this is probably a "virtual relay"
+	// like wss://feeds.nostr.band/topic or wss://filter.nostr.wine/pubkey or wss://cache2.primal.net/v1
+	// and should not be used in computing outbox model relay recommendations
+	substr := []byte(url[6:])
+	return bytes.IndexByte(substr, '/') != -1
 }
