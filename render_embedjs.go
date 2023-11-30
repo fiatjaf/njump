@@ -7,6 +7,7 @@ import (
 
 func renderEmbedjs(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/javascript")
-	http.ServeFile(w, r, "templates/embed.js")
-	return
+
+	fileContent, _ := static.ReadFile("static/embed.js")
+	w.Write(fileContent)
 }

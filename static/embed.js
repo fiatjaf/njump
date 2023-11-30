@@ -12,12 +12,8 @@
     var height = scriptElement.getAttribute('height') || 'auto';
     var iframe = document.createElement('iframe');
     iframe.src = host + '/' + eventParam + '?embed=yes';
-
-    // Basic styles
     iframe.style.width = width;
     iframe.style.height = height;
-    // iframe.style.border = '2px solid #b6b6b6';
-    // iframe.style.borderRadius = '10px';
 
     // Add a class to easily permit overwriting the styles
     iframe.classList.add("nostr-embedded")
@@ -29,7 +25,7 @@
     }
     @media (prefers-color-scheme: dark) {
         .nostr-embedded {
-            border-color: #393939; /* Adjust the color for dark mode */
+            border-color: #393939;
         }
     }
     `;
@@ -55,9 +51,9 @@
             }
         }
 
+        // Check if dark mode is preferred
         const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
         if (darkModeQuery.matches) {
-            // Dark mode is preferred
             iframe.contentWindow.postMessage({setDarkMode: true}, '*');
         }
     });
