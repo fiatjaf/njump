@@ -18,9 +18,6 @@ var (
 	pool   = nostr.NewSimplePool(context.Background())
 	serial int
 
-	always = []string{
-		"wss://relay.nostr.band",
-	}
 	everything = []string{
 		"wss://nostr-pub.wellorder.net",
 		"wss://saltivka.org",
@@ -33,6 +30,7 @@ var (
 		"wss://relay.snort.social",
 		"wss://offchain.pub",
 		"wss://relay.primal.net",
+		"wss://relay.nostr.band",
 		"wss://public.relaying.io",
 	}
 	profiles = []string{
@@ -78,7 +76,6 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	var filter nostr.Filter
 	relays := make([]string, 0, 25)
 	relays = append(relays, relayHints...)
-	relays = append(relays, always...)
 
 	switch v := data.(type) {
 	case nostr.ProfilePointer:
@@ -306,7 +303,6 @@ func contactsForPubkey(ctx context.Context, pubkey string, extraRelays ...string
 
 		pubkeyRelays := relaysForPubkey(ctx, pubkey, relays...)
 		relays = append(relays, pubkeyRelays...)
-		relays = append(relays, always...)
 		relays = append(relays, profiles...)
 
 		ch := pool.SubManyEose(ctx, relays, nostr.Filters{
