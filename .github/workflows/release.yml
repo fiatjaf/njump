@@ -31,7 +31,10 @@ jobs:
             goos: windows
     steps:
       - uses: actions/checkout@v3
-      - uses: wangyoucao577/go-release-action@v1.40
+      - run: wget https://github.com/tailwindlabs/tailwindcss/releases/download/v3.3.5/tailwindcss-linux-x64
+      - run: chmod +x tailwindcss-linux-x64
+      - run: ./tailwindcss-linux-x64 -i tailwind.css -o static/tailwind-bundle.min.css --minify
+      - uses: wangyoucao577/go-release-action@v1.41
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
@@ -39,4 +42,4 @@ jobs:
           overwrite: true
           md5sum: false
           sha256sum: false
-          compress_assets: false
+          compress_assets: true
