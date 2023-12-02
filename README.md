@@ -31,7 +31,7 @@ For live-reload you can use [`air`](https://github.com/cosmtrek/air) and start i
 
 ### Running from a precompiled binary
 
-You can grab one from the [releases](../../releases) and just run it.
+You can grab one from the [releases](../../releases), unpack and run it.
 
 ### Docker
 
@@ -54,4 +54,4 @@ EVENT_STORE_PATH="/tmp/njump-db"
 TAILWIND_DEBUG=
 ```
 
-For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump-v0.0.1-linux-amd64`.
+For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump`.
