@@ -14,7 +14,7 @@ RUN npm install tailwindcss
 RUN npx tailwind -i tailwind.css -o tailwind-bundle.min.css --minify
 
 #### Go build stage
-FROM golang:1.21.2 as gobuilder
+FROM golang:1.21.4 as gobuilder
 
 # Set a temporary work directory
 WORKDIR /app

@@ -41,3 +41,17 @@ To build and run in a Docker container:
 docker build -t njump .
 docker run -e DOMAIN=njump.mydomain.com -p 2999:2999 njump
 ```
+
+### Environment variables
+
+These are the defaults that you can change by setting environment variables in your system before running:
+
+```
+PORT="2999"
+DOMAIN="njump.me"
+DISK_CACHE_PATH="/tmp/njump-internal"
+EVENT_STORE_PATH="/tmp/njump-db"
+TAILWIND_DEBUG=
+```
+
+For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump-v0.0.1-linux-amd64`.

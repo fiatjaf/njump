@@ -1,6 +1,6 @@
 module github.com/fiatjaf/njump
 
-go 1.21.0
+go 1.21.4
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.0
