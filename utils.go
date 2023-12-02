@@ -513,6 +513,11 @@ func isntRealRelay(url string) bool {
 		return true
 	}
 
+	// hardcoded
+	if url == "wss://relay.noswhere.com" {
+		return true
+	}
+
 	// if there is a "/" after the initial "wss://" part that means this is probably a "virtual relay"
 	// like wss://feeds.nostr.band/topic or wss://filter.nostr.wine/pubkey or wss://cache2.primal.net/v1
 	// and should not be used in computing outbox model relay recommendations

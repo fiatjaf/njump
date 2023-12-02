@@ -35,9 +35,11 @@ var (
 	}
 	profiles = []string{
 		"wss://purplepag.es",
+		"wss://relay.noswhere.com",
 	}
 	justIds = []string{
 		"wss://cache2.primal.net/v1",
+		"wss://relay.noswhere.com",
 	}
 
 	trustedPubKeys = []string{
@@ -91,7 +93,6 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	case nostr.EventPointer:
 		author = v.Author
 		filter.IDs = []string{v.ID}
-		relays = append(relays, getRandomRelay())
 		relays = append(relays, v.Relays...)
 		relays = append(relays, justIds...)
 		withRelays = true
@@ -110,7 +111,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	case string:
 		if prefix == "note" {
 			filter.IDs = []string{v}
-			relays = append(relays, getRandomRelay(), getRandomRelay())
+			relays = append(relays, getRandomRelay())
 			relays = append(relays, justIds...)
 		} else if prefix == "npub" {
 			author = v
