@@ -150,8 +150,8 @@ github.com/mattn/go-isatty v0.0.14 h1:yVuAays6BHfxijgZPzw+3Zlu5yQgKGP2/hcQbHb7S9
 github.com/mattn/go-isatty v0.0.14/go.mod h1:7GGIvUiUoEMVVmxf/4nioHXj79iQHKdU27kJ6hsGG94=
 github.com/microcosm-cc/bluemonday v1.0.24 h1:NGQoPtwGVcbGkKfvyYk1yRqknzBuoMiUrO6R7uFTPlw=
 github.com/microcosm-cc/bluemonday v1.0.24/go.mod h1:ArQySAMps0790cHSkdPEJ7bGkF2VePWH773hsJNSHf8=
-github.com/nbd-wtf/go-nostr v0.25.3 h1:RPPh4cOosw0OZi5KG627pZ3GlKxiKsjARluzen/mB9g=
-github.com/nbd-wtf/go-nostr v0.25.3/go.mod h1:bkffJI+x914sPQWum9ZRUn66D7NpDnAoWo1yICvj3/0=
+github.com/nbd-wtf/go-nostr v0.26.4 h1:C5AXvMaRZactznfjfvscciUFypCJT6AYYGpyQqRAQxQ=
+github.com/nbd-wtf/go-nostr v0.26.4/go.mod h1:bkffJI+x914sPQWum9ZRUn66D7NpDnAoWo1yICvj3/0=
 github.com/nbd-wtf/nostr-sdk v0.0.4 h1:vMCiYpFElKMHPXpZjFVEq4utoTLdTYbkqXVYH1/4uzs=
 github.com/nbd-wtf/nostr-sdk v0.0.4/go.mod h1:KQZOtzcrXBlVhpZYG1tw83ADIONNMMPjUU3ZAH5U2RY=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
