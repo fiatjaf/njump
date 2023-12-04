@@ -392,6 +392,10 @@ func previewNotesFormatting(input string) string {
 }
 
 func unique(strSlice []string) []string {
+	if len(strSlice) == 0 {
+		return strSlice
+	}
+
 	slices.Sort(strSlice)
 	j := 0
 	for i := 1; i < len(strSlice); i++ {
