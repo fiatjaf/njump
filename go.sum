@@ -68,8 +68,8 @@ github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1m
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/fasthttp/websocket v1.5.3 h1:TPpQuLwJYfd4LJPXvHDYPMFWbLjsT91n3GpWtCQtdek=
 github.com/fasthttp/websocket v1.5.3/go.mod h1:46gg/UBmTU1kUaTcwQXpUxtRwG2PvIZYeA8oL6vF3Fs=
-github.com/fiatjaf/eventstore v0.2.6 h1:ulKmQhYnJXOEBDJQzbq6p9lJY4HhbIx5OCmGRJ5uVrE=
-github.com/fiatjaf/eventstore v0.2.6/go.mod h1:Zx1XqwICh7RxxKLkgc0aXlVo298ABs4W5awP/1/bYYs=
+github.com/fiatjaf/eventstore v0.2.13 h1:Pow501WjZVtfVug8PHJAlgw4um3bGe1iQ2GxbFZgaN8=
+github.com/fiatjaf/eventstore v0.2.13/go.mod h1:CDzb0tH0Buw2TrKQ4Bpvwg3F6ITvLsk+pmp0tACNUlw=
 github.com/fiatjaf/khatru v0.0.6 h1:6d5gnKdgsaHD+NZFzsVp22nqxnGxtlLLR8gYVea6KBU=
 github.com/fiatjaf/khatru v0.0.6/go.mod h1:gvfXhDel30t84mkWk5aDwBRD1N8py4RixIwGD0i+LMY=
 github.com/fogleman/gg v1.3.0 h1:/7zJX8F6AaYQc57WQCyN9cAIz+4bCJGO9B+dyW29am8=
