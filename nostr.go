@@ -177,6 +177,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	}
 
 	if result == nil {
+		log.Debug().Str("code", code).Msg("couldn't find")
 		return nil, nil, fmt.Errorf("couldn't find this %s, did you include relay or author hints in it?", prefix)
 	}
 

@@ -7,7 +7,7 @@ require (
 	github.com/apatters/go-wordwrap v1.0.0
 	github.com/dgraph-io/badger/v4 v4.2.0
 	github.com/fiatjaf/eventstore v0.2.13
-	github.com/fiatjaf/khatru v0.0.6
+	github.com/fiatjaf/khatru v0.1.1
 	github.com/fogleman/gg v1.3.0
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/gomarkdown/markdown v0.0.0-20231115200524-a660076da3fd
