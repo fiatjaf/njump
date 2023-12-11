@@ -78,13 +78,11 @@
               {{end}}
             </h1>
           </header>
-          <div dir="auto">
-            {{ if or (not (eq "" .Metadata.Website)) (not (eq ""
-            .RenderedAuthorAboutText)) }}
-          </div>
+
           <div
             class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
+          {{ if not (eq "" .Metadata.Website) }}
           <div class="mb-6 leading-5">
             <a
               class="border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink"
@@ -92,15 +90,19 @@
               >{{.Metadata.Website}}</a
             >
           </div>
+          {{ end }} {{ if not (eq "" .RenderedAuthorAboutText) }}
           <div
             class="prose mb-6 leading-5 dark:prose-invert prose-headings:font-light sm:prose-a:text-justify"
+            dir="auto"
           >
             {{.RenderedAuthorAboutText}}
           </div>
-          {{ end }}
+          {{ end }} {{ if or (not (eq "" .Metadata.Website)) (not (eq ""
+          .RenderedAuthorAboutText)) }}
           <div
             class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
           ></div>
+          {{ end }}
           <div class="mb-6 leading-5">
             <div class="text-sm text-strongpink">Public Key</div>
             {{.Npub}}
