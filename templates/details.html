@@ -6,7 +6,7 @@
 {{ if not (eq "" .Npub) }}
 <div class="mb-6 break-all leading-5">
   <div class="text-sm text-strongpink">Author Public Key</div>
-  <span class="text-neutral-500 dark:text-neutral-300">{{.Npub}}</span>
+  <span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{{.Npub}}</span>
 </div>
 {{ end }}
 
@@ -17,7 +17,7 @@
 {{ if not (eq "" .FileMetadata.Summary) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Summary</div>
-  <span class="text-neutral-500 dark:text-neutral-300"
+  <span class="text-neutral-500 dark:text-neutral-300 text-[16px]"
     >{{.FileMetadata.Summary}}</span
   >
 </div>
@@ -26,7 +26,7 @@
 {{ if not (eq "" .FileMetadata.Dim) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Dimension</div>
-  <span class="text-neutral-500 dark:text-neutral-300"
+  <span class="text-neutral-500 dark:text-neutral-300 text-[16px]"
     >{{.FileMetadata.Dim}}</span
   >
 </div>
@@ -35,7 +35,7 @@
 {{ if not (eq "" .FileMetadata.Size) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Size</div>
-  <span class="text-neutral-500 dark:text-neutral-300"
+  <span class="text-neutral-500 dark:text-neutral-300 text-[16px]"
     >{{.FileMetadata.Size}} bytes</span
   >
 </div>
@@ -44,7 +44,7 @@
 {{ if not (eq "" .FileMetadata.Magnet) }}
 <div class="mb-6 leading-5">
   <div class="text-sm text-strongpink">Magnet URL</div>
-  <span class="text-neutral-500 dark:text-neutral-300"
+  <span class="text-neutral-500 dark:text-neutral-300 text-[16px]"
     >{{.FileMetadata.Magnet}}</span
   >
 </div>
@@ -55,7 +55,7 @@
 <!------>
 
 {{ if not (eq 0 (len .SeenOn)) }}
-<div class="mb-6 leading-5 text-neutral-500 dark:text-neutral-300">
+<div class="mb-6 leading-5 text-neutral-500 dark:text-neutral-300 text-[16px]">
   <div class="text-sm text-strongpink">Seen on</div>
   {{ range .SeenOn }}<a
     href="/r/{{.}}"
@@ -96,7 +96,7 @@
   >
   <label
     for="advanced-switch"
-    class="cursor-pointer text-sm leading-4 underline text-neutral-500 dark:text-neutral-300 decoration-neutral-200 dark:decoration-neutral-500 decoration-1 underline-offset-[6px]"
+    class="cursor-pointer text-sm leading-4 underline text-neutral-500 dark:text-neutral-300 text-[16px] decoration-neutral-200 dark:decoration-neutral-500 decoration-1 underline-offset-[6px]"
     >Show more details</label
   >
 </div>
@@ -105,16 +105,16 @@
 <div id="hidden-fields" class="{{if .HideDetails}}hidden{{end}}">
   <div class="mb-6 leading-5">
     <div class="text-sm text-strongpink">Published at</div>
-    <span class="text-neutral-500 dark:text-neutral-300">{{.CreatedAt}}</span>
+    <span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{{.CreatedAt}}</span>
   </div>
 
   <div class="mb-6 leading-5">
     <div class="text-sm text-strongpink">Kind type</div>
-    <span class="text-neutral-500 dark:text-neutral-300">{{.Kind}}</span>
+    <span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{{.Kind}}</span>
     {{ if not (eq .KindNIP "")}} -
     <a
       href="https://github.com/nostr-protocol/nips/blob/master/{{.KindNIP}}.md"
-      class="text-neutral-500 underline decoration-neutral-200 dark:decoration-neutral-500 decoration-1 underline-offset-[6px] dark:text-neutral-300"
+      class="text-neutral-500 underline decoration-neutral-200 dark:decoration-neutral-500 decoration-1 underline-offset-[6px] text-neutral-500 dark:text-neutral-300 text-[16px]"
       >{{.KindDescription}}</a
     >
     {{ end }}
@@ -123,7 +123,7 @@
   {{ if not (eq "" .Nevent) }}
   <div class="mb-6 leading-5">
     <div class="text-sm text-strongpink">Address Code</div>
-    <span class="text-neutral-500 dark:text-neutral-300">{.Nevent}}span>
+    <span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{.Nevent}}span>
   </div>
   {{ end }}
 
@@ -143,7 +143,7 @@
   {{ if not (eq "" .Nprofile) }}
   <div class="mb-6 break-all leading-5">
     <div class="text-sm text-strongpink">Author Profile Code</div>
-    <span class="text-neutral-500 dark:text-neutral-300">{{.Nprofile}}</span>
+    <span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{{.Nprofile}}</span>
   </div>
   {{ end }}
 </div>
