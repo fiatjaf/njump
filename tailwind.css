@@ -3,7 +3,7 @@
 @tailwind utilities;
 @layer utilities {
   html, body {
-    font-size: 19px;
+    font-size: 18px;
   }
   .imgclip {
     clip-path: url(#svg-shape);
