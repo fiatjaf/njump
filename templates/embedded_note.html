@@ -35,7 +35,9 @@
                   {{.Metadata.Name}}
                   <!---->
                   {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
-                  <span class="text-stone-400">{{.Metadata.DisplayName}}</span>
+                  <span class="text-stone-400"
+                    >/ {{.Metadata.DisplayName}}</span
+                  >
                   {{end}}
                 </div>
                 <div class="text-sm leading-4 text-stone-400 sm:text-base">

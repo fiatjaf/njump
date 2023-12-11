@@ -26,12 +26,12 @@
                 <img class="block h-auto w-full" src="{{.Metadata.Picture}}" />
               </div>
               <div class="block print:text-base sm:grow">
-                <div class="text-sm leading-4 sm:text-2xl">
+                <div class="leading-4 sm:text-2xl">
                   {{.Metadata.Name}}
                   <!---->
                   {{if not (eq .Metadata.Name .Metadata.DisplayName)}}
-                  <span class="text-sm text-stone-400 sm:text-xl"
-                    >{{.Metadata.DisplayName}}</span
+                  <span class="text-stone-400 sm:text-xl"
+                    >/ {{.Metadata.DisplayName}}</span
                   >
                   {{end}}
                 </div>
