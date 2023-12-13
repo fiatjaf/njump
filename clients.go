@@ -33,7 +33,7 @@ func generateClientList(style Style, code string, event *nostr.Event) []ClientRe
 			{ID: "spring", Name: "Spring", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.nostr.universe;end`;")},
 			{ID: "snort-app", Name: "Snort", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=social.snort.app;end`;")},
 			{ID: "freefrom", Name: "FreeFrom", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.freefrom;end`;")},
-			{ID: "current", Name: "current", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=io.getcurrent.current;end`;")},
+			{ID: "current", Name: "Current", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=io.getcurrent.current;end`;")},
 			{ID: "plebstr", Name: "Plebstr", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.plebstr.client;end`;")},
 			{ID: "nozzle", Name: "Nozzle", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.dluvian.nozzle;end`;")},
 			{ID: "plasma", Name: "Plasma", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=social.plasma;end`;")},
