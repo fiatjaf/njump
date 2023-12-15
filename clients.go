@@ -13,7 +13,7 @@ type ClientReference struct {
 	Platform string
 }
 
-func generateClientList(style Style, code string, event *nostr.Event) []ClientReference {
+func generateClientList(code string, event *nostr.Event) []ClientReference {
 	clients := []ClientReference{
 		{ID: "native", Name: "Your default app", URL: template.URL("nostr:" + code), Platform: "native"},
 	}

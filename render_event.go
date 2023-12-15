@@ -360,7 +360,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(style, enhancedCode, data.event),
+				Clients: generateClientList(enhancedCode, data.event),
+			},
+			FooterPartial: FooterPartial{
+				BigImage: opengraph.BigImage,
 			},
 
 			Content:          template.HTML(data.content),
@@ -385,7 +388,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(style, data.nevent, data.event),
+				Clients: generateClientList(data.nevent, data.event),
 			},
 
 			CreatedAt:        data.createdAt,
@@ -414,7 +417,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(style, data.naddr, data.event),
+				Clients: generateClientList(data.naddr, data.event),
 			},
 
 			CreatedAt:        data.createdAt,
@@ -441,7 +444,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 			DetailsPartial: detailsData,
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(style, data.naddr, data.event),
+				Clients: generateClientList(data.naddr, data.event),
 			},
 
 			Content:          template.HTML(data.content),

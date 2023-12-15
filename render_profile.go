@@ -71,7 +71,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 				Kind:            data.event.Kind,
 			},
 			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(getPreviewStyle(r), data.nprofile, data.event),
+				Clients: generateClientList(data.nprofile, data.event),
 			},
 
 			Metadata:                   data.metadata,
