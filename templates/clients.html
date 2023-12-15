@@ -55,7 +55,7 @@
     _="on load
          wait 50ms
          get my children
-           get sortByCount(it) then repeat for c in it call me.appendChild(c) end
+           get filterAndSort(it) then repeat for c in it call me.appendChild(c) end
          get first in me
            then tell it
              remove .hidden
@@ -64,6 +64,7 @@
   >
     {{range $index, $client := .Clients}}
     <div
+      data-platform="{{$client.Platform}}"
       class="client | hidden w-full items-center border-b border-zinc-800 bg-zinc-700 first-of-type:rounded-t-lg first-of-type:border-0 first-of-type:bg-strongpink hover:bg-zinc-800 sm:mb-3 sm:flex sm:rounded-lg sm:border-0 sm:first-of-type:rounded-lg"
       _="on load get localStorage['nj:{{.ID}}'] or 0 then set @count to it then set @title to `used ${it} times`
          on click increment localStorage['nj:{{$client.ID}}']"
@@ -79,16 +80,16 @@
         {{$client.Name}}
         <span
           class="type | float-right mr-4 text-xs uppercase text-neutral-400 sm:hidden"
-          >{{$client.Type}}</span
+          >{{$client.Platform}}</span
         >
       </a>
     </div>
     {{end}}
-    <div class="client | hidden h-8 bg-zinc-700"></div>
+    <div data-platform="dummy" class="client | hidden h-8 bg-zinc-700" ></div>
   </div>
   <div
     id="gradient"
-    class="fixed bottom-0 hidden h-16 w-full bg-gradient-to-t from-zinc-800 to-transparent"
+    class="fixed bottom-0 hidden h-10 w-full bg-gradient-to-t from-zinc-800 to-transparent pointer-events-auto"
   ></div>
 </aside>
 
@@ -110,10 +111,46 @@
 </style>
 
 <script>
-  function sortByCount(children) {
-    return Array.from(children).sort(
-      (a, b) =>
-        parseInt(b.getAttribute('count')) - parseInt(a.getAttribute('count'))
-    )
+function getPlatform() {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  if (/android/i.test(userAgent)) {
+    return 'android';
+  } else if (/iPad|iPhone|iPod/i.test(userAgent) && !window.MSStream) {
+    return 'ios';
+  } else {
+    return 'web';
   }
+}
+
+function filterAndSort(children) {
+  const platform = getPlatform();
+
+  const filteredElements = Array.from(children).filter((element) => {
+    const platformAttr = element.getAttribute('data-platform');
+    return platform === platformAttr || platformAttr === 'web' || platformAttr === 'native' || platformAttr === 'dummy';
+  });
+
+  Array.from(children).forEach((element) => {
+    if (!filteredElements.includes(element)) {
+      element.remove();
+    }
+  });
+
+  const sortedElements = filteredElements.sort(
+    (a, b) =>
+      parseInt(b.getAttribute('count')) - parseInt(a.getAttribute('count'))
+  );
+
+  // Assuming you want to re-insert the sorted elements into their parent container
+  const parent = children[0].parentNode;
+  parent.innerHTML = ''; // Clear the parent container
+  sortedElements.forEach((element) => {
+    parent.appendChild(element);
+  });
+
+  return sortedElements;
+}
+
+
 </script>
