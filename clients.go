@@ -54,16 +54,12 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 	}
 
 	androidClients := []ClientReference{
-		{ID: "nostrmo", Name: "Nostrmo", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.github.haorendashu.nostrmo;end`;"), Platform: "android"},
-		{ID: "amethyst", Name: "Amethyst", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.vitorpamplona.amethyst;end`;"), Platform: "android"},
 		{ID: "yana", Name: "Yana", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=yana.nostr;end`;"), Platform: "android"},
 		{ID: "spring", Name: "Spring", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.nostr.universe;end`;"), Platform: "android"},
-		{ID: "snort-android", Name: "Snort", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=social.snort.android;end`;"), Platform: "android"},
+		{ID: "amethyst", Name: "Amethyst", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.vitorpamplona.amethyst;end`;"), Platform: "android"},
 		{ID: "freefrom", Name: "FreeFrom", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.freefrom;end`;"), Platform: "android"},
 		{ID: "current", Name: "Current", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=io.getcurrent.current;end`;"), Platform: "android"},
 		{ID: "plebstr", Name: "Plebstr", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.plebstr.client;end`;"), Platform: "android"},
-		{ID: "nozzle", Name: "Nozzle", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=com.dluvian.nozzle;end`;"), Platform: "android"},
-		{ID: "plasma", Name: "Plasma", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=social.plasma;end`;"), Platform: "android"},
 		// {ID: "", Name: "", URL: template.URL("intent:" + code + "#Intent;scheme=nostr;package=;end`;"), Platform: "app"},
 	}
 
@@ -72,6 +68,8 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 		{ID: "damus", Name: "Damus", URL: template.URL("damus:" + code), Platform: "ios"},
 		{ID: "nostur", Name: "Nostur", URL: template.URL("nostur:" + code), Platform: "ios"},
 		{ID: "primal", Name: "Primal", URL: template.URL("primal:" + code), Platform: "ios"},
+		{ID: "freefrom", Name: "FreeFrom", URL: template.URL("freefrom:" + code), Platform: "ios"},
+		{ID: "plebstr", Name: "Plbestr", URL: template.URL("plebstr:" + code), Platform: "ios"},
 	}
 
 	clients = append(clients, androidClients...)
