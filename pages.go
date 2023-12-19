@@ -125,7 +125,9 @@ var (
 )
 
 //tmpl:bind footer.html
-type FooterPartial struct{}
+type FooterPartial struct {
+	BigImage string
+}
 
 func (*FooterPartial) TemplateText() string { return tmplFooter }
 
