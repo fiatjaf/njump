@@ -41,6 +41,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 
 	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
+		w.Header().Set("Cache-Control", "max-age=86400")
 		w.Write([]byte(XML_HEADER))
 		SitemapTemplate.Render(w, &SitemapPage{
 			Host:       s.Domain,
@@ -50,6 +51,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		})
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
+		w.Header().Set("Cache-Control", "max-age=86400")
 		w.Write([]byte(XML_HEADER))
 		RSSTemplate.Render(w, &RSSPage{
 			Host:       s.Domain,
@@ -60,6 +62,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		})
 	} else {
 		w.Header().Add("content-type", "text/html")
+		w.Header().Set("Cache-Control", "max-age=86400")
 		err = ProfileTemplate.Render(w, &ProfilePage{
 			HeadCommonPartial: HeadCommonPartial{IsProfile: true, TailwindDebugStuff: tailwindDebugStuff},
 			DetailsPartial: DetailsPartial{
