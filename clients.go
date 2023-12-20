@@ -24,7 +24,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 		{ID: "satellite", Name: "Satellite", URL: template.URL("https://satellite.earth/thread/" + event.ID), Platform: "web"},
 		{ID: "coracle", Name: "Coracle", URL: template.URL("https://coracle.social/" + code), Platform: "web"},
 		{ID: "primal", Name: "Primal", URL: template.URL("https://primal.net/thread/" + event.ID), Platform: "web"},
-		{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.vercel.app/" + code), Platform: "web"},
+		{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.app/" + code), Platform: "web"},
 		{ID: "highlighter", Name: "Highlighter", URL: template.URL("https://highlighter.com/a/" + code), Platform: "web"},
 		{ID: "iris", Name: "Iris", URL: template.URL("https://iris.to/" + code), Platform: "web"},
 	}
@@ -36,7 +36,7 @@ func generateClientList(code string, event *nostr.Event) []ClientReference {
 		{ID: "coracle", Name: "Coracle", URL: template.URL("https://coracle.social/" + code), Platform: "web"},
 		{ID: "primal", Name: "Primal", URL: template.URL("https://primal.net/profile/" + event.PubKey), Platform: "web"},
 		{ID: "nostrudel", Name: "Nostrudel", URL: template.URL("https://nostrudel.ninja/#/u/" + code), Platform: "web"},
-		{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.vercel.app/" + code), Platform: "web"},
+		{ID: "nostter", Name: "Nostter", URL: template.URL("https://nostter.app/" + code), Platform: "web"},
 		{ID: "iris", Name: "Iris", URL: template.URL("https://iris.to/" + code), Platform: "web"},
 	}
 
