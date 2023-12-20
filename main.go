@@ -106,6 +106,7 @@ func main() {
 	mux.HandleFunc("/p/", redirectFromPSlash)
 	mux.HandleFunc("/favicon.ico", redirectToFavicon)
 	mux.HandleFunc("/embed/", renderEmbedjs)
+	mux.HandleFunc("/profile-lastnotes/", renderEvent)
 	mux.HandleFunc("/", renderEvent)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)

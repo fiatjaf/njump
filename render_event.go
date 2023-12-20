@@ -32,6 +32,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if strings.HasPrefix(code, "profile-last-notes") {
+		renderProfile(w, r, code)
+		return
+	}
+
 	// decode the nip19 code we've received
 	prefix, decoded, err := nip19.Decode(code)
 	if err != nil {

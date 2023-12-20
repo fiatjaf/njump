@@ -290,6 +290,18 @@ type ProfilePage struct {
 func (*ProfilePage) TemplateText() string { return tmplProfile }
 
 var (
+	//go:embed templates/_last_notes.html
+	tmplLastNotes     string
+	LastNotesTemplate = tmpl.MustCompile(&LastNotesPage{})
+)
+
+type LastNotesPage struct {
+	LastNotes []EnhancedEvent
+}
+
+func (*LastNotesPage) TemplateText() string { return tmplLastNotes }
+
+var (
 	//go:embed templates/embedded_profile.html
 	tmplEmbeddedProfile     string
 	EmbeddedProfileTemplate = tmpl.MustCompile(&EmbeddedProfilePage{})

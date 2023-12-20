@@ -23,6 +23,12 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		isRSS = true
 	}
 
+	isLastNotes := false
+	if strings.HasPrefix(code, "profile-last-notes") {
+		code = code[19:]
+		isLastNotes = true
+	}
+
 	data, err := grabData(r.Context(), code, isSitemap)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
@@ -33,10 +39,6 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		w.WriteHeader(http.StatusNotFound)
 		ErrorTemplate.Render(w, errorPage)
 		return
-	}
-
-	if len(data.renderableLastNotes) != 0 {
-		w.Header().Set("Cache-Control", "max-age=3600")
 	}
 
 	if isSitemap {
@@ -59,6 +61,14 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			Npub:       data.npub,
 			Metadata:   data.metadata,
 			LastNotes:  data.renderableLastNotes,
+		})
+	} else if isLastNotes {
+		w.Header().Add("content-type", "text/html")
+		if len(data.renderableLastNotes) != 0 {
+			w.Header().Set("Cache-Control", "max-age=3600")
+		}
+		LastNotesTemplate.Render(w, &LastNotesPage{
+			LastNotes: data.renderableLastNotes,
 		})
 	} else {
 		w.Header().Add("content-type", "text/html")
