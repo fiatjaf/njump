@@ -25,8 +25,8 @@ import (
 
 const (
 	MAX_LINES                = 20
-	MAX_CHARS_PER_LINE       = 51
-	MAX_CHARS_PER_QUOTE_LINE = 48
+	MAX_CHARS_PER_LINE       = 50
+	MAX_CHARS_PER_QUOTE_LINE = 46
 	FONT_SIZE                = 7
 	FONT_DPI                 = 260
 
@@ -67,7 +67,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	lines := normalizeText(
 		replaceUserReferencesWithNames(r.Context(),
 			renderQuotesAsBlockPrefixedText(r.Context(),
-				data.event.Content,
+				content,
 			),
 		),
 		breakWords,
@@ -213,13 +213,15 @@ func cropToSquare(img image.Image) image.Image {
 func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.ProfileMetadata, date string) (image.Image, error) {
 	width := 700
 	height := 525
-	paddingLeft := 5
+	paddingLeft := 25
+	barExtraPadding := 5
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
 		width -= 10
 	case StyleTwitter:
 		height = width * 268 / 512
+		barExtraPadding = 105
 	}
 
 	img := gg.NewContext(width, height)
@@ -236,8 +238,8 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	lineSpacing := 0.3
 	lineHeight := float64(FONT_SIZE)*FONT_DPI/72.0 + float64(FONT_SIZE)*lineSpacing*FONT_DPI/72.0
 	for i, line := range lines {
-		y := float64(i)*lineHeight + 50                  // Calculate the Y position for each line
-		img.DrawString(line, float64(20+paddingLeft), y) // Draw the line at the calculated Y position
+		y := float64(i)*lineHeight + 50               // Calculate the Y position for each line
+		img.DrawString(line, float64(paddingLeft), y) // Draw the line at the calculated Y position
 	}
 
 	// Draw black bar at the bottom
@@ -258,14 +260,14 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	}
 
 	// Draw author's image from URL
-	authorTextX := paddingLeft + 20
+	authorTextX := paddingLeft + barExtraPadding
 	if metadata.Picture != "" {
 		authorImage, err := fetchImageFromURL(metadata.Picture)
 		if err != nil {
 			return nil, err
 		}
 		resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(barHeight-20), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
-		img.DrawImage(resizedAuthorImage, paddingLeft+20, height-barHeight+10)
+		img.DrawImage(resizedAuthorImage, paddingLeft+barExtraPadding, height-barHeight+10)
 		authorTextX += 65
 	}
 
@@ -273,6 +275,15 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	authorTextY := height - barHeight + 20
 	img.SetColor(color.White)
 	img.DrawStringWrapped(metadata.ShortName(), float64(authorTextX), float64(authorTextY), 0, 0, float64(width-authorTextX*2), 1.5, gg.AlignLeft)
+
+	// Draw the logo
+	logo, _ := static.ReadFile("static/logo.png")
+	stampImg, _ := png.Decode(bytes.NewBuffer(logo))
+	stampWidth := stampImg.Bounds().Dx()
+	stampHeight := stampImg.Bounds().Dy()
+	stampX := width - stampWidth - paddingLeft - barExtraPadding
+	stampY := height - stampHeight - 20
+	img.DrawImage(stampImg, stampX, stampY)
 
 	// Draw event date
 	layout := "2006-01-02 15:04:05"
@@ -284,16 +295,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 		Hinting: font.HintingFull,
 	}))
 	img.SetColor(color.RGBA{160, 160, 160, 255})
-	img.DrawStringWrapped(formattedDate, float64(width-360), float64(authorTextY+3), 0, 0, float64(200), 1.5, gg.AlignRight)
-
-	// Draw the logo
-	logo, _ := static.ReadFile("static/logo.png")
-	stampImg, _ := png.Decode(bytes.NewBuffer(logo))
-	stampWidth := stampImg.Bounds().Dx()
-	stampHeight := stampImg.Bounds().Dy()
-	stampX := width - stampWidth - 20
-	stampY := height - stampHeight - 20
-	img.DrawImage(stampImg, stampX, stampY)
+	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-barExtraPadding-stampWidth-260), float64(authorTextY+3), 0, 0, float64(240), 1.5, gg.AlignRight)
 
 	return img.Image(), nil
 }
