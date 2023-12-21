@@ -63,6 +63,9 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	content := strings.Replace(data.event.Content, "\n\n\n\n", "\n\n", -1)
+	content = strings.Replace(data.event.Content, "\n\n\n", "\n\n", -1)
+
 	// this turns the raw event.Content into a series of lines ready to drawn
 	lines := normalizeText(
 		replaceUserReferencesWithNames(r.Context(),
@@ -95,6 +98,7 @@ func normalizeText(input []string, breakWords bool) []string {
 	l := 0 // global line counter
 
 	for _, block := range input {
+		block := strings.TrimRight(block, "\n")
 		quoting := false
 		maxChars := MAX_CHARS_PER_LINE
 		if strings.HasPrefix(block, BLOCK+" ") {
