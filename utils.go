@@ -9,7 +9,6 @@ import (
 	"html/template"
 	"math/rand"
 	"net/http"
-	"net/url"
 	"regexp"
 	"strings"
 	"time"
@@ -195,9 +194,10 @@ func attachRelaysToEvent(eventId string, relays ...string) []string {
 	// cleanup
 	filtered := make([]string, 0, len(relays))
 	for _, relay := range relays {
-		if !isntRealRelay(relay) {
-			filtered = append(filtered, relay)
+		if isntRealRelay(relay) {
+			continue
 		}
+		filtered = append(filtered, relay)
 	}
 
 	cache.SetJSONWithTTL(key, filtered, time.Hour*24*7)
@@ -495,11 +495,6 @@ func getRandomRelay() string {
 func isntRealRelay(url string) bool {
 	if len(url) < 6 {
 		// this is just invalid
-		return true
-	}
-
-	// hardcoded
-	if url == "wss://relay.noswhere.com" {
 		return true
 	}
 
