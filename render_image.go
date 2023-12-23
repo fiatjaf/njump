@@ -248,7 +248,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 
 	// Draw black bar at the bottom
 	barHeight := 70
-	var veryDarkGray = color.RGBA{R: 10, G: 10, B: 10, A: 255}
+	veryDarkGray := color.RGBA{R: 10, G: 10, B: 10, A: 255}
 	img.SetColor(veryDarkGray)
 	img.DrawRectangle(0, float64(height-barHeight), float64(width), float64(barHeight))
 	img.Fill()
@@ -268,7 +268,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	if metadata.Picture != "" {
 		authorImage, err := fetchImageFromURL(metadata.Picture)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error fetching author picture: %w", err)
 		}
 		resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(barHeight-20), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
 		img.DrawImage(resizedAuthorImage, paddingLeft+barExtraPadding, height-barHeight+10)
