@@ -484,25 +484,6 @@ func humanDate(createdAt nostr.Timestamp) string {
 	}
 }
 
-func shouldUseRelayForNip19(relayUrl string) bool {
-	for _, excluded := range excludedRelays {
-		if strings.Contains(relayUrl, excluded) {
-			return false
-		}
-	}
-	urlp, err := url.Parse(relayUrl)
-	if err != nil {
-		return false
-	}
-	if urlp.Scheme != "wss" && urlp.Scheme != "ws" {
-		return false
-	}
-	if urlp.Path != "" && urlp.Path != "/" {
-		return false
-	}
-	return true
-}
-
 func getRandomRelay() string {
 	if serial == 0 {
 		serial = rand.Intn(len(everything))

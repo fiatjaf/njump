@@ -203,11 +203,13 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	relaysForNip19 := make([]string, 0, 3)
 	c := 0
 	for _, relayUrl := range relays {
-		if shouldUseRelayForNip19(relayUrl) {
-			relaysForNip19 = append(relaysForNip19, relayUrl)
-			if c == 2 {
-				break
-			}
+		if isntRealRelay(relayUrl) {
+			continue
+		}
+
+		relaysForNip19 = append(relaysForNip19, relayUrl)
+		if c == 2 {
+			break
 		}
 	}
 
