@@ -267,12 +267,11 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	authorTextX := paddingLeft + barExtraPadding
 	if metadata.Picture != "" {
 		authorImage, err := fetchImageFromURL(metadata.Picture)
-		if err != nil {
-			return nil, fmt.Errorf("error fetching author picture: %w", err)
+		if err == nil {
+			resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(barHeight-20), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
+			img.DrawImage(resizedAuthorImage, paddingLeft+barExtraPadding, height-barHeight+10)
+			authorTextX += 65
 		}
-		resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(barHeight-20), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
-		img.DrawImage(resizedAuthorImage, paddingLeft+barExtraPadding, height-barHeight+10)
-		authorTextX += 65
 	}
 
 	// Draw author's name
