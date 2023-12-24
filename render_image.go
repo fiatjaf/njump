@@ -34,8 +34,9 @@ const (
 )
 
 var (
-	BACKGROUND = color.RGBA{23, 23, 23, 255}
-	FOREGROUND = color.RGBA{255, 230, 238, 255}
+	BACKGROUND     = color.RGBA{23, 23, 23, 255}
+	BAR_BACKGROUND = color.RGBA{10, 10, 10, 255}
+	FOREGROUND     = color.RGBA{255, 230, 238, 255}
 )
 
 //go:embed fonts/*
@@ -248,8 +249,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 
 	// Draw black bar at the bottom
 	barHeight := 70
-	veryDarkGray := color.RGBA{R: 10, G: 10, B: 10, A: 255}
-	img.SetColor(veryDarkGray)
+	img.SetColor(BAR_BACKGROUND)
 	img.DrawRectangle(0, float64(height-barHeight), float64(width), float64(barHeight))
 	img.Fill()
 
@@ -258,7 +258,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	gradientRectY := height - barHeight - gradientRectHeight
 	for y := 0; y < gradientRectHeight; y++ {
 		alpha := uint8(255 * (math.Pow(float64(y)/float64(gradientRectHeight), 2)))
-		img.SetRGBA255(23, 23, 23, int(alpha))
+		img.SetRGBA255(int(BACKGROUND.R), int(BACKGROUND.G), int(BACKGROUND.B), int(alpha))
 		img.DrawRectangle(0, float64(gradientRectY+y), float64(width), 1)
 		img.Fill()
 	}
@@ -276,8 +276,18 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 
 	// Draw author's name
 	authorTextY := height - barHeight + 20
+	authorMaxWidth := width/2.0 - paddingLeft*2 - barExtraPadding
 	img.SetColor(color.White)
-	img.DrawStringWrapped(metadata.ShortName(), float64(authorTextX), float64(authorTextY), 0, 0, float64(width-authorTextX*2), 1.5, gg.AlignLeft)
+	img.DrawStringWrapped(metadata.ShortName(), float64(authorTextX), float64(authorTextY), 0, 0, float64(authorMaxWidth), 99, gg.AlignLeft)
+
+	// Create a gradient to cover too long names
+	gradientLenght := 100
+	for x := 0; x < gradientLenght; x++ {
+		alpha := uint8(255 - 255*(math.Pow(float64(x)/float64(gradientLenght), 2)))
+		img.SetRGBA255(int(BAR_BACKGROUND.R), int(BAR_BACKGROUND.G), int(BAR_BACKGROUND.B), int(alpha))
+		img.DrawRectangle(float64(authorTextX+authorMaxWidth-x), float64(height-barHeight), 1, float64(barHeight))
+		img.Fill()
+	}
 
 	// Draw the logo
 	logo, _ := static.ReadFile("static/logo.png")
