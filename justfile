@@ -6,8 +6,10 @@ dev:
 build: tailwind
     go build -o ./njump
 
-deploy:
+deploy: tailwind
+    sed -i.bak "s#/tailwind-bundle.min.css#/tailwind-bundle.min.css?$(date +'%Y%m%d%H%M')#g" templates/head_common.html
     GOOS=linux GOARCH=amd64 go build -o ./njump
+    mv -f templates/head_common.html.bak templates/head_common.html
     rsync --progress njump njump:njump/njump-new
     ssh njump 'systemctl stop njump'
     ssh njump 'mv njump/njump-new njump/njump'
