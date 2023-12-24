@@ -298,7 +298,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 		Hinting: font.HintingFull,
 	}))
 	img.SetColor(color.RGBA{160, 160, 160, 255})
-	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-barExtraPadding-stampWidth-260), float64(authorTextY+3), 0, 0, float64(240), 1.5, gg.AlignRight)
+	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-stampWidth-260), float64(authorTextY+3), 0, 0, float64(240), 1.5, gg.AlignRight)
 
 	return img.Image(), nil
 }
