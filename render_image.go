@@ -284,7 +284,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	stampImg, _ := png.Decode(bytes.NewBuffer(logo))
 	stampWidth := stampImg.Bounds().Dx()
 	stampHeight := stampImg.Bounds().Dy()
-	stampX := width - stampWidth - paddingLeft - barExtraPadding
+	stampX := width - stampWidth - paddingLeft
 	stampY := height - stampHeight - 20
 	img.DrawImage(stampImg, stampX, stampY)
 
