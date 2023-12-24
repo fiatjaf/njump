@@ -17,11 +17,10 @@ func updateArchives(ctx context.Context) {
 		select {
 		case <-ctx.Done():
 			return
-		default:
+		case <-time.After(24 * time.Hour):
 			loadNpubsArchive(ctx)
 			loadRelaysArchive(ctx)
 		}
-		time.Sleep(24 * time.Hour)
 	}
 }
 
@@ -29,7 +28,11 @@ func deleteOldCachedEvents(ctx context.Context) {
 	wdb := eventstore.RelayWrapper{Store: db}
 
 	for {
-		time.Sleep(time.Hour)
+		select {
+		case <-ctx.Done():
+			return
+		case <-time.After(time.Hour):
+		}
 		log.Debug().Msg("deleting old cached events")
 		now := time.Now().Unix()
 		for _, key := range cache.GetPaginatedKeys("ttl:", 1, 500) {

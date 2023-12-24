@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
 
 	eventstore_badger "github.com/fiatjaf/eventstore/badger"
@@ -73,10 +74,12 @@ func main() {
 		tailwindDebugStuff = template.HTML(fmt.Sprintf("<script src=\"https://cdn.tailwindcss.com?plugins=typography\"></script><script>\n%s</script><style type=\"text/tailwindcss\">%s</style>", config, style))
 	}
 
-	initCache()
+	deinitCache := initCache()
+	defer deinitCache()
 
 	// initialize routines
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	go updateArchives(ctx)
 	go deleteOldCachedEvents(ctx)
 
@@ -110,11 +113,18 @@ func main() {
 	mux.HandleFunc("/", renderEvent)
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
-	if err := http.ListenAndServe("0.0.0.0:"+s.Port, cors.Default().Handler(relay)); err != nil {
-		log.Fatal().Err(err).Msg("")
-	}
+	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: cors.Default().Handler(relay)}
+	go func() {
+		server.ListenAndServe()
+		if err := server.ListenAndServe(); err != nil {
+			log.Error().Err(err).Msg("")
+		}
+	}()
 
-	select {}
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, os.Interrupt)
+	<-sc
+	server.Close()
 }
 
 func initCache() func() {
