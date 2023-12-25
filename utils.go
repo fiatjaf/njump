@@ -7,12 +7,17 @@ import (
 	"fmt"
 	"html"
 	"html/template"
+	"image"
+	"image/color"
+	"image/draw"
+	"math"
 	"math/rand"
 	"net/http"
 	"regexp"
 	"strings"
 	"time"
 
+	"github.com/fogleman/gg"
 	"github.com/microcosm-cc/bluemonday"
 	"golang.org/x/exp/slices"
 	"mvdan.cc/xurls/v2"
@@ -503,4 +508,99 @@ func isntRealRelay(url string) bool {
 	// and should not be used in computing outbox model relay recommendations
 	substr := []byte(url[6:])
 	return bytes.IndexByte(substr, '/') != -1
+}
+
+// quotesAsBlockPrefixedText replaces nostr:nevent1... and note with their text, as an extra line
+// prefixed by BLOCK this returns a slice of lines
+func quotesAsBlockPrefixedText(ctx context.Context, input string) []string {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	blocks := make([]string, 0, 8)
+	matches := nostrNoteNeventMatcher.FindAllStringSubmatchIndex(input, -1)
+
+	if len(matches) == 0 {
+		// no matches, just return text as it is
+		blocks = append(blocks, input)
+		return blocks
+	}
+
+	// one or more matches, return multiple lines
+	blocks = append(blocks, input[0:matches[0][0]])
+	i := -1 // matches iteration counter
+	b := 0  // current block index
+	for _, match := range matches {
+		i++
+
+		matchText := input[match[0]:match[1]]
+		submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
+		nip19 := submatch[0][6:]
+
+		event, _, err := getEvent(ctx, nip19, nil)
+		if err != nil {
+			// error case concat this to previous block
+			blocks[b] += matchText
+			continue
+		}
+
+		// add a new block with the quoted text
+		blocks = append(blocks, BLOCK+" "+event.Content)
+
+		// increase block count
+		b++
+	}
+	// add remaining text after the last match
+	remainingText := input[matches[i][1]:]
+	if strings.TrimSpace(remainingText) != "" {
+		blocks = append(blocks, remainingText)
+	}
+
+	return blocks
+}
+
+func fetchImageFromURL(url string) (image.Image, error) {
+	response, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	img, _, err := image.Decode(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return img, nil
+}
+
+func roundImage(img image.Image) image.Image {
+	bounds := img.Bounds()
+	diameter := math.Min(float64(bounds.Dx()), float64(bounds.Dy()))
+	radius := diameter / 2
+
+	// Create a new context for the mask
+	mask := gg.NewContext(bounds.Dx(), bounds.Dy())
+	mask.SetColor(color.Black) // Set the mask color to fully opaque
+	mask.DrawCircle(float64(bounds.Dx())/2, float64(bounds.Dy())/2, radius)
+	mask.ClosePath()
+	mask.Fill()
+
+	// Apply the circular mask to the original image
+	result := image.NewRGBA(bounds)
+	maskImg := mask.Image()
+	draw.DrawMask(result, bounds, img, image.Point{}, maskImg, image.Point{}, draw.Over)
+
+	return result
+}
+
+func cropToSquare(img image.Image) image.Image {
+	bounds := img.Bounds()
+	size := int(math.Min(float64(bounds.Dx()), float64(bounds.Dy())))
+	squareImg := image.NewRGBA(image.Rect(0, 0, size, size))
+	for x := 0; x < size; x++ {
+		for y := 0; y < size; y++ {
+			squareImg.Set(x, y, img.At(x+(bounds.Dx()-size)/2, y+(bounds.Dy()-size)/2))
+		}
+	}
+	return squareImg
 }
