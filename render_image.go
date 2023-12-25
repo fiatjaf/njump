@@ -220,6 +220,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	height := 525
 	paddingLeft := 25
 	barExtraPadding := 5
+	gradientRectHeight := 140
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
@@ -227,6 +228,7 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	case StyleTwitter:
 		height = width * 268 / 512
 		barExtraPadding = 105
+		gradientRectHeight = 100
 	}
 
 	img := gg.NewContext(width, height)
@@ -240,11 +242,27 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	}))
 
 	// Draw note text
-	lineSpacing := 0.3
-	lineHeight := float64(FONT_SIZE)*FONT_DPI/72.0 + float64(FONT_SIZE)*lineSpacing*FONT_DPI/72.0
-	for i, line := range lines {
-		y := float64(i)*lineHeight + 50               // Calculate the Y position for each line
-		img.DrawString(line, float64(paddingLeft), y) // Draw the line at the calculated Y position
+	tempContent := strings.Join(lines, " ")
+	if len(tempContent) < 141 {
+		fontSize := FONT_SIZE * 1.7 * (float64(height) / 550) * float64(((141-float64(len(tempContent)))*100/141+100)/100)
+		img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
+			Size:    fontSize,
+			DPI:     FONT_DPI,
+			Hinting: font.HintingFull,
+		}))
+		img.DrawStringWrapped(tempContent, 60, 60, 0, 0, float64(width-120), 1.2, gg.AlignLeft)
+		img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
+			Size:    FONT_SIZE,
+			DPI:     FONT_DPI,
+			Hinting: font.HintingFull,
+		}))
+	} else {
+		lineSpacing := 0.3
+		lineHeight := float64(FONT_SIZE)*FONT_DPI/72.0 + float64(FONT_SIZE)*lineSpacing*FONT_DPI/72.0
+		for i, line := range lines {
+			y := float64(i)*lineHeight + 50               // Calculate the Y position for each line
+			img.DrawString(line, float64(paddingLeft), y) // Draw the line at the calculated Y position
+		}
 	}
 
 	// Draw black bar at the bottom
@@ -254,7 +272,6 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	img.Fill()
 
 	// Create a rectangle at the bottom with a gradient from black to transparent
-	gradientRectHeight := 140
 	gradientRectY := height - barHeight - gradientRectHeight
 	for y := 0; y < gradientRectHeight; y++ {
 		alpha := uint8(255 * (math.Pow(float64(y)/float64(gradientRectHeight), 2)))
