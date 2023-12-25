@@ -221,6 +221,8 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	paddingLeft := 25
 	barExtraPadding := 5
 	gradientRectHeight := 140
+	barHeight := 70
+
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
@@ -242,15 +244,34 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	}))
 
 	// Draw note text
-	tempContent := strings.Join(lines, " ")
-	if len(tempContent) < 141 {
-		fontSize := FONT_SIZE * 1.7 * (float64(height) / 550) * float64(((141-float64(len(tempContent)))*100/141+100)/100)
+	joinedContent := strings.Join(lines, " ")
+	if len(joinedContent) < 141 {
+		i := 1.0
+		fontSize := FONT_SIZE * i
+		lineSpacing := 1.2
+		for i < 20 {
+			fontSize = FONT_SIZE + i
+			img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
+				Size:    fontSize,
+				DPI:     FONT_DPI,
+				Hinting: font.HintingFull,
+			}))
+			wrappedContent := strings.Join(img.WordWrap(joinedContent, float64(width-120)), "\n")
+			_, checkHeight := img.MeasureMultilineString(wrappedContent, lineSpacing)
+			if checkHeight > float64(height-barHeight-60*2) {
+				fontSize -= 0.1
+				break
+			}
+			i += 0.1
+		}
 		img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
 			Size:    fontSize,
 			DPI:     FONT_DPI,
 			Hinting: font.HintingFull,
 		}))
-		img.DrawStringWrapped(tempContent, 60, 60, 0, 0, float64(width-120), 1.2, gg.AlignLeft)
+		img.DrawStringWrapped(joinedContent, 60, 60, 0, 0, float64(width-120), lineSpacing, gg.AlignLeft)
+
+		// Set again the basic font face
 		img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
 			Size:    FONT_SIZE,
 			DPI:     FONT_DPI,
@@ -266,7 +287,6 @@ func drawImage(lines []string, ttf *truetype.Font, style Style, metadata sdk.Pro
 	}
 
 	// Draw black bar at the bottom
-	barHeight := 70
 	img.SetColor(BAR_BACKGROUND)
 	img.DrawRectangle(0, float64(height-barHeight), float64(width), float64(barHeight))
 	img.Fill()
