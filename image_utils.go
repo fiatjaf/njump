@@ -10,16 +10,24 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
+	"github.com/go-text/typesetting/harfbuzz"
 	"github.com/go-text/typesetting/language"
+	"github.com/go-text/typesetting/shaping"
 	"github.com/pemistahl/lingua-go"
+	"github.com/puzpuzpuz/xsync/v2"
+	"golang.org/x/image/math/fixed"
 )
 
-const nSupportedScripts = 13
+const (
+	nSupportedScripts = 13
+	scaleShift        = 6
+)
 
 var (
 	supportedScripts = [nSupportedScripts]language.Script{
@@ -41,7 +49,7 @@ var (
 	detector     lingua.LanguageDetector
 	scriptRanges []ScriptRange
 	fontMap      [nSupportedScripts]font.Face
-	emojiFont    font.Face
+	emojiFace    font.Face
 
 	defaultLanguageMap = [nSupportedScripts]language.Language{
 		"en-us",
@@ -74,6 +82,11 @@ var (
 		di.DirectionLTR,
 		di.DirectionRTL,
 	}
+
+	shaperLock   sync.Mutex
+	shaperBuffer = harfbuzz.NewBuffer()
+	fontCache    = xsync.NewTypedMapOf[font.Face, *harfbuzz.Font](pointerHasher)
+	emojiFont    *harfbuzz.Font
 )
 
 type ScriptRange struct {
@@ -133,7 +146,10 @@ func initializeImageDrawingStuff() error {
 	fontMap[9] = loadFont("fonts/NotoSansJavanese.ttf")
 	fontMap[10] = loadFont("fonts/NotoSansSC.ttf")
 	fontMap[11] = loadFont("fonts/NotoSansKR.ttf")
-	emojiFont = loadFont("fonts/NotoEmoji.ttf")
+	emojiFace = loadFont("fonts/NotoEmoji.ttf")
+
+	// shaper stuff
+	emojiFont = harfbuzz.NewFont(emojiFace)
 
 	return nil
 }
@@ -324,4 +340,118 @@ func shortenURLs(text string) string {
 		urlStr := parsed.String()
 		return strings.Replace(urlStr, "/////", strings.Join(pathParts, "/"), 1)
 	})
+}
+
+func shapeText(input shaping.Input) shaping.Output {
+	shaperLock.Lock()
+	defer shaperLock.Unlock()
+	shaperBuffer.Clear()
+
+	runes, start, end := input.Text, input.RunStart, input.RunEnd
+	if end < start {
+		panic("end < start")
+	}
+	start = clamp(start, 0, len(runes))
+	end = clamp(end, 0, len(runes))
+	shaperBuffer.AddRunes(runes, start, end-start)
+
+	shaperBuffer.Props.Direction = input.Direction.Harfbuzz()
+	shaperBuffer.Props.Language = input.Language
+	shaperBuffer.Props.Script = input.Script
+
+	// load or get font from cache
+	hfont, _ := fontCache.LoadOrCompute(input.Face, func() *harfbuzz.Font {
+		return harfbuzz.NewFont(input.Face)
+	})
+
+	// adjust the user provided fields
+	hfont.XScale = int32(input.Size.Ceil()) << scaleShift
+	hfont.YScale = hfont.XScale
+
+	// actually use harfbuzz to shape the text.
+	shaperBuffer.Shape(hfont, nil)
+
+	// convert the shaped text into an output
+	glyphs := make([]shaping.Glyph, len(shaperBuffer.Info))
+	for i := range glyphs {
+		g := shaperBuffer.Info[i].Glyph
+		glyphs[i] = shaping.Glyph{
+			ClusterIndex: shaperBuffer.Info[i].Cluster,
+			GlyphID:      g,
+			Mask:         shaperBuffer.Info[i].Mask,
+		}
+		extents, ok := hfont.GlyphExtents(g)
+		if !ok {
+			// leave the glyph having zero size if it isn't in the font. There
+			// isn't really anything we can do to recover from such an error.
+			continue
+		}
+		glyphs[i].Width = fixed.I(int(extents.Width)) >> scaleShift
+		glyphs[i].Height = fixed.I(int(extents.Height)) >> scaleShift
+		glyphs[i].XBearing = fixed.I(int(extents.XBearing)) >> scaleShift
+		glyphs[i].YBearing = fixed.I(int(extents.YBearing)) >> scaleShift
+		glyphs[i].XAdvance = fixed.I(int(shaperBuffer.Pos[i].XAdvance)) >> scaleShift
+		glyphs[i].YAdvance = fixed.I(int(shaperBuffer.Pos[i].YAdvance)) >> scaleShift
+		glyphs[i].XOffset = fixed.I(int(shaperBuffer.Pos[i].XOffset)) >> scaleShift
+		glyphs[i].YOffset = fixed.I(int(shaperBuffer.Pos[i].YOffset)) >> scaleShift
+	}
+	countClusters(glyphs, input.RunEnd, input.Direction.Progression())
+	out := shaping.Output{
+		Glyphs:    glyphs,
+		Direction: input.Direction,
+		Face:      input.Face,
+		Size:      input.Size,
+	}
+	out.Runes.Offset = input.RunStart
+	out.Runes.Count = input.RunEnd - input.RunStart
+
+	fontExtents := hfont.ExtentsForDirection(out.Direction.Harfbuzz())
+	out.LineBounds = shaping.Bounds{
+		Ascent:  fixed.I(int(fontExtents.Ascender)) >> scaleShift,
+		Descent: fixed.I(int(fontExtents.Descender)) >> scaleShift,
+		Gap:     fixed.I(int(fontExtents.LineGap)) >> scaleShift,
+	}
+	out.RecalculateAll()
+	return out
+}
+
+// countClusters tallies the number of runes and glyphs in each cluster
+// and updates the relevant fields on the provided glyph slice.
+func countClusters(glyphs []shaping.Glyph, textLen int, dir di.Progression) {
+	currentCluster := -1
+	runesInCluster := 0
+	glyphsInCluster := 0
+	previousCluster := textLen
+	for i := range glyphs {
+		g := glyphs[i].ClusterIndex
+		if g != currentCluster {
+			// If we're processing a new cluster, count the runes and glyphs
+			// that compose it.
+			runesInCluster = 0
+			glyphsInCluster = 1
+			currentCluster = g
+			nextCluster := -1
+		glyphCountLoop:
+			for k := i + 1; k < len(glyphs); k++ {
+				if glyphs[k].ClusterIndex == g {
+					glyphsInCluster++
+				} else {
+					nextCluster = glyphs[k].ClusterIndex
+					break glyphCountLoop
+				}
+			}
+			if nextCluster == -1 {
+				nextCluster = textLen
+			}
+			switch dir {
+			case di.FromTopLeft:
+				runesInCluster = nextCluster - currentCluster
+			case di.TowardTopLeft:
+				runesInCluster = previousCluster - currentCluster
+			}
+			previousCluster = g
+		}
+		glyphs[i].GlyphCount = glyphsInCluster
+		glyphs[i].RuneCount = runesInCluster
+	}
 }

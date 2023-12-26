@@ -186,9 +186,8 @@ func drawText(paragraphs []string, width, height int) image.Image {
 		rawText := []rune(paragraph)
 
 		lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(rawText)
-		shaper := &shaping.HarfbuzzShaper{}
 
-		shapedRunes := shaper.Shape(shaping.Input{
+		shapedRunes := shapeText(shaping.Input{
 			Text:      rawText,
 			RunStart:  0,
 			RunEnd:    len(rawText),
