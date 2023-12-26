@@ -1,7 +1,7 @@
 export PATH := "./node_modules/.bin:" + env_var('PATH')
 
 dev:
-    TAILWIND_DEBUG=true go run .
+    TAILWIND_DEBUG=true go build -o /tmp/njump && /tmp/njump
 
 build: tailwind
     go build -o ./njump
