@@ -19,7 +19,6 @@ import (
 	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/nfnt/resize"
 	xfont "golang.org/x/image/font"
-	"golang.org/x/image/math/fixed"
 )
 
 const (
@@ -183,24 +182,24 @@ func drawText(paragraphs []string, width, height int) image.Image {
 
 	i := 1
 	for _, paragraph := range paragraphs {
-		text := []rune(paragraph)
+		rawText := []rune(paragraph)
+		if len(rawText) == 0 {
+			rawText = []rune{' '}
+		}
 
-		lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(text)
-		shaper := &shaping.HarfbuzzShaper{}
-
-		shapedRunes := shaper.Shape(shaping.Input{
-			Text:      text,
-			RunStart:  0,
-			RunEnd:    len(text),
-			Face:      face,
-			Size:      fixed.I(int(r.FontSize)),
-			Script:    script,
-			Language:  lang,
-			Direction: dir,
-		})
+		lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(rawText)
+		iterator := &shapedOutputIterator{
+			rawText:   rawText,
+			shaper:    &shaping.HarfbuzzShaper{},
+			fontSize:  FONT_SIZE,
+			language:  lang,
+			script:    script,
+			direction: dir,
+			face:      face,
+		}
 
 		var wrapper shaping.LineWrapper
-		lines, _ := wrapper.WrapParagraph(shaping.WrapConfig{}, width, []rune(text), shaping.NewSliceIterator([]shaping.Output{shapedRunes}))
+		lines, _ := wrapper.WrapParagraph(shaping.WrapConfig{}, width, rawText, iterator)
 
 		for _, line := range lines {
 			for _, out := range line {

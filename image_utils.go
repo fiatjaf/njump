@@ -12,11 +12,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dmolesUC3/emoji"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
 	"github.com/go-text/typesetting/language"
+	"github.com/go-text/typesetting/shaping"
 	"github.com/pemistahl/lingua-go"
+	"golang.org/x/image/math/fixed"
 )
 
 const nSupportedScripts = 13
@@ -324,4 +327,82 @@ func shortenURLs(text string) string {
 		urlStr := parsed.String()
 		return strings.Replace(urlStr, "/////", strings.Join(pathParts, "/"), 1)
 	})
+}
+
+type shapedOutputIterator struct {
+	rawText   []rune
+	idx       int
+	savedIdx  int
+	shaper    *shaping.HarfbuzzShaper
+	fontSize  int
+	face      font.Face
+	language  language.Language
+	script    language.Script
+	direction di.Direction
+}
+
+var _ shaping.RunIterator = (*shapedOutputIterator)(nil)
+
+func (it *shapedOutputIterator) Next() (int, shaping.Output, bool) {
+	idx, nextIdx, run, ok := it.readNext()
+	if ok {
+		it.idx = nextIdx
+	}
+	return idx, run, ok
+}
+
+func (it *shapedOutputIterator) Peek() (int, shaping.Output, bool) {
+	idx, _, out, more := it.readNext()
+	return idx, out, more
+}
+
+func (it *shapedOutputIterator) readNext() (int, int, shaping.Output, bool) {
+	if it.idx >= len(it.rawText) {
+		return it.idx, -1, shaping.Output{}, false
+	}
+
+	// if the next character is an emoji then return a block of emojis
+	if emoji.IsEmoji(it.rawText[it.idx]) {
+		shapedEmoji := it.shaper.Shape(shaping.Input{
+			Text:      it.rawText,
+			RunStart:  it.idx,
+			RunEnd:    it.idx + 1,
+			Face:      emojiFont,
+			Size:      fixed.I(int(it.fontSize)),
+			Script:    it.script,
+			Language:  it.language,
+			Direction: it.direction,
+		})
+		return it.idx, it.idx + 1, shapedEmoji, true
+	}
+	// otherwise we consume runes until we find an emoji and return everything
+
+	var runesConsumed int = 0
+	for r, rn := range it.rawText[it.idx:] {
+		if emoji.IsEmoji(rn) {
+			// reached an emoji, stop now
+			break
+		}
+		runesConsumed = r
+	}
+
+	shapedRunes := it.shaper.Shape(shaping.Input{
+		Text:      it.rawText,
+		RunStart:  it.idx,
+		RunEnd:    it.idx + runesConsumed + 1,
+		Face:      it.face,
+		Size:      fixed.I(int(it.fontSize)),
+		Script:    it.script,
+		Language:  it.language,
+		Direction: it.direction,
+	})
+	return it.idx, it.idx + runesConsumed + 1, shapedRunes, true
+}
+
+func (it *shapedOutputIterator) Save() {
+	it.savedIdx = it.idx
+}
+
+func (it *shapedOutputIterator) Restore() {
+	it.idx = it.savedIdx
 }
