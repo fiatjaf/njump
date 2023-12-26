@@ -52,6 +52,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	content := strings.Replace(data.event.Content, "\n\n\n\n", "\n\n", -1)
 	content = strings.Replace(data.event.Content, "\n\n\n", "\n\n", -1)
+	content = shortenURLs(content)
 
 	// this turns the raw event.Content into a series of lines ready to drawn
 	paragraphs := replaceUserReferencesWithNames(r.Context(),
@@ -72,7 +73,6 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	if err := png.Encode(w, img); err != nil {
 		log.Printf("error encoding image: %s", err)
-		http.Error(w, "error encoding image!", 500)
 		return
 	}
 }

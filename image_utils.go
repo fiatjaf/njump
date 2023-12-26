@@ -8,6 +8,7 @@ import (
 	"image/draw"
 	"math"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -255,4 +256,40 @@ func lookupScript(r rune) int {
 		}
 	}
 	return 0 // unknown
+}
+
+// shortenURLs takes a text content and returns the same content, but with all big URLs like https://image.nostr.build/0993112ab590e04b978ad32002005d42c289d43ea70d03dafe9ee99883fb7755.jpg#m=image%2Fjpeg&dim=1361x1148&blurhash=%3B7Jjhw00.l.QEh%3FuIA-pMe00%7EVjXX8x%5DE2xuSgtQcr%5E%2500%3FHxD%24%25%25Ms%2Bt%2B-%3BVZK59a%252MyD%2BV%5BI.8%7Ds%3B%25Lso-oi%5ENINHnjI%3BR*%3DdM%7BX7%25MIUtksn%24LM%7BMySeR%25R*%251M%7DRkv%23RjtjS%239as%3AxDnO%251&x=61be75a3e3e0cc88e7f0e625725d66923fdd777b3b691a1c7072ba494aef188d shortened to something like https://image.nostr.build/.../...7755.jpg
+func shortenURLs(text string) string {
+	return urlMatcher.ReplaceAllStringFunc(text, func(match string) string {
+		if len(match) < 50 {
+			return match
+		}
+
+		parsed, err := url.Parse(match)
+		if err != nil {
+			return match
+		}
+
+		parsed.Fragment = ""
+
+		if len(parsed.RawQuery) > 10 {
+			parsed.RawQuery = ""
+		}
+
+		pathParts := strings.Split(parsed.Path, "/")
+		nParts := len(pathParts)
+		lastPart := pathParts[nParts-1]
+		if len(lastPart) > 12 {
+			pathParts[nParts-1] = "…" + lastPart[len(lastPart)-11:]
+		}
+		if nParts > 2 {
+			pathParts[1] = "…"
+			pathParts[2] = pathParts[nParts-1]
+			pathParts = pathParts[0:2]
+		}
+
+		parsed.Path = "/////"
+		urlStr := parsed.String()
+		return strings.Replace(urlStr, "/////", strings.Join(pathParts, "/"), 1)
+	})
 }
