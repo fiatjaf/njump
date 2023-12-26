@@ -14,16 +14,10 @@ import (
 
 	"github.com/fogleman/gg"
 	"github.com/go-text/render"
-	"github.com/go-text/typesetting/di"
-	"github.com/go-text/typesetting/font"
-	"github.com/go-text/typesetting/fontscan"
-	"github.com/go-text/typesetting/language"
-	"github.com/go-text/typesetting/opentype/api/metadata"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/nfnt/resize"
-	"github.com/pemistahl/lingua-go"
 	xfont "golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
 )
@@ -36,52 +30,10 @@ var (
 	BACKGROUND     = color.RGBA{23, 23, 23, 255}
 	BAR_BACKGROUND = color.RGBA{10, 10, 10, 255}
 	FOREGROUND     = color.RGBA{255, 230, 238, 255}
-
-	fontmap  *fontscan.FontMap
-	detector lingua.LanguageDetector
 )
 
 //go:embed fonts/*
 var fonts embed.FS
-
-func initializeImageDrawingStuff() error {
-	// language detector
-	detector = lingua.NewLanguageDetectorBuilder().FromLanguages(
-		lingua.Japanese,
-		lingua.Persian,
-		lingua.Chinese,
-		lingua.Thai,
-		lingua.Hebrew,
-	).WithLowAccuracyMode().Build()
-
-	// fonts
-	dir, err := fonts.ReadDir("fonts")
-	if err != nil {
-		return fmt.Errorf("error reading fonts/ dir: %w", err)
-	}
-	fontmap = fontscan.NewFontMap(nil)
-	for _, entry := range dir {
-		filepath := "fonts/" + entry.Name()
-		fontData, err := fonts.ReadFile(filepath)
-		face, err := font.ParseTTF(bytes.NewReader(fontData))
-		if err != nil {
-			return fmt.Errorf("error loading font %s: %w", filepath, err)
-		}
-		fontmap.AddFace(face,
-			fontscan.Location{File: filepath},
-			metadata.Description{
-				Family: "Noto",
-				Aspect: metadata.Aspect{
-					Style:   metadata.StyleNormal,
-					Weight:  metadata.WeightNormal,
-					Stretch: metadata.StretchNormal,
-				},
-				IsMonospace: false,
-			},
-		)
-	}
-	return nil
-}
 
 func renderImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
@@ -104,7 +56,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	// this turns the raw event.Content into a series of lines ready to drawn
 	paragraphs := replaceUserReferencesWithNames(r.Context(),
 		quotesAsBlockPrefixedText(r.Context(),
-			content,
+			strings.Split(content, "\n"),
 		),
 	)
 
@@ -145,8 +97,8 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	img.SetColor(FOREGROUND)
 
 	// main content text
-	textImg := drawText(paragraphs, width-4*2, height-2*2)
-	img.DrawImage(textImg, 4, 2)
+	textImg := drawText(paragraphs, width-25*2, height-20)
+	img.DrawImage(textImg, 25, 20)
 
 	// font for writing the bottom bar stuff
 	fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
@@ -219,12 +171,12 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 }
 
 func drawText(paragraphs []string, width, height int) image.Image {
-	const FONT_SIZE = 26
+	const FONT_SIZE = 25
 
 	r := &render.Renderer{
 		PixScale: 1,
 		FontSize: FONT_SIZE,
-		Color:    color.White,
+		Color:    color.RGBA{R: 255, G: 230, B: 238, A: 255},
 	}
 
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
@@ -233,24 +185,18 @@ func drawText(paragraphs []string, width, height int) image.Image {
 	for _, paragraph := range paragraphs {
 		text := []rune(paragraph)
 
-		detectedLanguage, ok := detector.DetectLanguageOf(paragraph)
-		var lang language.Language
-		if ok {
-			lang = language.NewLanguage(detectedLanguage.IsoCode639_1().String())
-		}
-
+		lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(text)
 		shaper := &shaping.HarfbuzzShaper{}
 
-		face := fontmap.ResolveFace(text[0])
 		shapedRunes := shaper.Shape(shaping.Input{
-			Text:      []rune(text),
+			Text:      text,
 			RunStart:  0,
-			RunEnd:    len([]rune(text)),
+			RunEnd:    len(text),
 			Face:      face,
 			Size:      fixed.I(int(r.FontSize)),
-			Script:    language.LookupScript([]rune(text)[0]),
+			Script:    script,
 			Language:  lang,
-			Direction: di.DirectionRTL,
+			Direction: dir,
 		})
 
 		var wrapper shaping.LineWrapper
@@ -258,7 +204,7 @@ func drawText(paragraphs []string, width, height int) image.Image {
 
 		for _, line := range lines {
 			for _, out := range line {
-				r.DrawShapedRunAt(out, img, 0, FONT_SIZE*i)
+				r.DrawShapedRunAt(out, img, 0, FONT_SIZE*i*12/10)
 				i++
 			}
 		}
