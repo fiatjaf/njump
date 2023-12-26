@@ -18,11 +18,12 @@ import (
 	"github.com/pemistahl/lingua-go"
 )
 
-const nSupportedScripts = 11
+const nSupportedScripts = 12
 
 var (
 	supportedScripts = [nSupportedScripts]language.Script{
 		language.Unknown,
+		language.Latin,
 		language.Hiragana,
 		language.Katakana,
 		language.Hebrew,
@@ -62,8 +63,8 @@ func initializeImageDrawingStuff() error {
 	).WithLowAccuracyMode().Build()
 
 	// script detector material
-	for ssi, script := range supportedScripts {
-		for _, srange := range language.ScriptRanges {
+	for _, srange := range language.ScriptRanges {
+		for ssi, script := range supportedScripts {
 			if srange.Script == script {
 				scriptRanges = append(scriptRanges, ScriptRange{
 					Start:  srange.Start,
@@ -86,16 +87,17 @@ func initializeImageDrawingStuff() error {
 		return face
 	}
 	fontMap[0] = loadFont("fonts/NotoSans.ttf")
-	fontMap[1] = loadFont("fonts/NotoSansJP.ttf")
-	fontMap[2] = fontMap[1]
-	fontMap[3] = loadFont("fonts/NotoSansHebrew.ttf")
-	fontMap[4] = loadFont("fonts/NotoSansThai.ttf")
-	fontMap[5] = loadFont("fonts/NotoSansArabic.ttf")
-	fontMap[6] = loadFont("fonts/NotoSansDevanagari.ttf")
-	fontMap[7] = loadFont("fonts/NotoSansBengali.ttf")
-	fontMap[8] = loadFont("fonts/NotoSansJavanese.ttf")
-	fontMap[9] = loadFont("fonts/NotoSansSC.ttf")
-	fontMap[10] = loadFont("fonts/NotoSansKR.ttf")
+	fontMap[1] = fontMap[0]
+	fontMap[2] = loadFont("fonts/NotoSansJP.ttf")
+	fontMap[3] = fontMap[1]
+	fontMap[4] = loadFont("fonts/NotoSansHebrew.ttf")
+	fontMap[5] = loadFont("fonts/NotoSansThai.ttf")
+	fontMap[6] = loadFont("fonts/NotoSansArabic.ttf")
+	fontMap[7] = loadFont("fonts/NotoSansDevanagari.ttf")
+	fontMap[8] = loadFont("fonts/NotoSansBengali.ttf")
+	fontMap[9] = loadFont("fonts/NotoSansJavanese.ttf")
+	fontMap[10] = loadFont("fonts/NotoSansSC.ttf")
+	fontMap[11] = loadFont("fonts/NotoSansKR.ttf")
 	emojiFont = loadFont("fonts/NotoEmoji.ttf")
 
 	return nil
@@ -167,7 +169,7 @@ func getLanguageAndScriptAndDirectionAndFont(paragraph []rune) (
 	for l := 0; l < nLetters; l++ {
 		idx := lookupScript(paragraph[l])
 		ranking[idx]++
-		if l > threshold && ranking[idx] > threshold {
+		if idx > 0 && l > threshold && ranking[idx] > threshold {
 			script = supportedScripts[idx]
 			face = fontMap[idx]
 			goto gotScript
@@ -249,7 +251,7 @@ func lookupScript(r rune) int {
 		} else if entry.End < r {
 			i = h + 1
 		} else {
-			return h // position in supportedScripts
+			return entry.Pos // position in supportedScripts
 		}
 	}
 	return 0 // unknown
