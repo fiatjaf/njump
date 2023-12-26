@@ -19,7 +19,7 @@ import (
 	"github.com/pemistahl/lingua-go"
 )
 
-const nSupportedScripts = 12
+const nSupportedScripts = 13
 
 var (
 	supportedScripts = [nSupportedScripts]language.Script{
@@ -35,12 +35,45 @@ var (
 		language.Javanese,
 		language.Han,
 		language.Hangul,
+		language.Syriac,
 	}
 
 	detector     lingua.LanguageDetector
 	scriptRanges []ScriptRange
 	fontMap      [nSupportedScripts]font.Face
 	emojiFont    font.Face
+
+	defaultLanguageMap = [nSupportedScripts]language.Language{
+		"en-us",
+		"en-us",
+		"ja",
+		"ja",
+		"he",
+		"th",
+		"ar",
+		"hi",
+		"bn",
+		"jv",
+		"zh",
+		"ko",
+		"syr",
+	}
+
+	directionMap = [nSupportedScripts]di.Direction{
+		di.DirectionLTR,
+		di.DirectionLTR,
+		di.DirectionLTR,
+		di.DirectionLTR,
+		di.DirectionRTL,
+		di.DirectionLTR,
+		di.DirectionRTL,
+		di.DirectionLTR,
+		di.DirectionLTR,
+		di.DirectionLTR,
+		di.DirectionLTR,
+		di.DirectionLTR,
+		di.DirectionRTL,
+	}
 )
 
 type ScriptRange struct {
@@ -60,6 +93,7 @@ func initializeImageDrawingStuff() error {
 		lingua.Hebrew,
 		lingua.Arabic,
 		lingua.Bengali,
+		lingua.Hindi,
 		lingua.Korean,
 	).WithLowAccuracyMode().Build()
 
@@ -168,28 +202,26 @@ func getLanguageAndScriptAndDirectionAndFont(paragraph []rune) (
 	var face font.Face
 	var idx int
 	for l := 0; l < nLetters; l++ {
-		idx := lookupScript(paragraph[l])
-		ranking[idx]++
-		if idx > 0 && l > threshold && ranking[idx] > threshold {
-			script = supportedScripts[idx]
-			face = fontMap[idx]
-			goto gotScript
+		rnidx := lookupScript(paragraph[l])
+		ranking[rnidx]++
+		if idx > 0 && l > threshold && ranking[rnidx] > threshold {
+			idx = rnidx
+			goto gotScriptIndex
 		}
 	}
 	idx = maxIndex(ranking[:])
+
+gotScriptIndex:
 	script = supportedScripts[idx]
 	face = fontMap[idx]
-
-gotScript:
-	direction := di.DirectionLTR
-	if script == language.Arabic {
-		direction = di.DirectionRTL
-	}
+	direction := directionMap[idx]
 
 	lng := language.Language("en-us")
 	lang, ok := detector.DetectLanguageOf(string(paragraph))
 	if ok {
 		lng = language.Language(lang.IsoCode639_1().String())
+	} else {
+		lng = defaultLanguageMap[idx]
 	}
 
 	return lng, script, direction, face
