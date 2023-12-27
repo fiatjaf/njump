@@ -13,13 +13,11 @@ import (
 	"time"
 
 	"github.com/fogleman/gg"
-	"github.com/go-text/render"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/nfnt/resize"
 	xfont "golang.org/x/image/font"
-	"golang.org/x/image/math/fixed"
 )
 
 const (
@@ -173,11 +171,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 func drawText(paragraphs []string, width, height int) image.Image {
 	const FONT_SIZE = 25
 
-	r := &render.Renderer{
-		PixScale: 1,
-		FontSize: FONT_SIZE,
-		Color:    color.RGBA{R: 255, G: 230, B: 238, A: 255},
-	}
+	color := color.RGBA{R: 255, G: 230, B: 238, A: 255}
 
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
@@ -185,18 +179,7 @@ func drawText(paragraphs []string, width, height int) image.Image {
 	for _, paragraph := range paragraphs {
 		rawText := []rune(paragraph)
 
-		lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(rawText)
-
-		shapedRunes := shapeText(shaping.Input{
-			Text:      rawText,
-			RunStart:  0,
-			RunEnd:    len(rawText),
-			Face:      face,
-			Size:      fixed.I(int(r.FontSize)),
-			Script:    script,
-			Language:  lang,
-			Direction: dir,
-		})
+		shapedRunes, emojiMask := shapeText(rawText, FONT_SIZE)
 
 		var wrapper shaping.LineWrapper
 		it := shaping.NewSliceIterator([]shaping.Output{shapedRunes})
@@ -204,7 +187,7 @@ func drawText(paragraphs []string, width, height int) image.Image {
 
 		for _, line := range lines {
 			for _, out := range line {
-				r.DrawShapedRunAt(out, img, 0, FONT_SIZE*i*12/10)
+				drawShapedRunAt(FONT_SIZE, color, out, emojiMask, img, 0, FONT_SIZE*i*12/10)
 				i++
 			}
 		}

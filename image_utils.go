@@ -13,14 +13,16 @@ import (
 	"sync"
 	"time"
 
+	"github.com/dmolesUC3/emoji"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
 	"github.com/go-text/typesetting/harfbuzz"
 	"github.com/go-text/typesetting/language"
+	"github.com/go-text/typesetting/opentype/api"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/pemistahl/lingua-go"
-	"github.com/puzpuzpuz/xsync/v2"
+	"github.com/srwiley/rasterx"
 	"golang.org/x/image/math/fixed"
 )
 
@@ -85,7 +87,8 @@ var (
 
 	shaperLock   sync.Mutex
 	shaperBuffer = harfbuzz.NewBuffer()
-	fontCache    = xsync.NewTypedMapOf[font.Face, *harfbuzz.Font](pointerHasher)
+	emojiBuffer  = harfbuzz.NewBuffer()
+	fontCache    = make(map[font.Face]*harfbuzz.Font)
 	emojiFont    *harfbuzz.Font
 )
 
@@ -342,59 +345,98 @@ func shortenURLs(text string) string {
 	})
 }
 
-func shapeText(input shaping.Input) shaping.Output {
+func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
+	lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(rawText)
+
 	shaperLock.Lock()
 	defer shaperLock.Unlock()
-	shaperBuffer.Clear()
 
-	runes, start, end := input.Text, input.RunStart, input.RunEnd
-	if end < start {
-		panic("end < start")
+	// load or get main font from cache
+	hfont, ok := fontCache[face]
+	if !ok {
+		hfont = harfbuzz.NewFont(face)
+		fontCache[face] = hfont
 	}
-	start = clamp(start, 0, len(runes))
-	end = clamp(end, 0, len(runes))
-	shaperBuffer.AddRunes(runes, start, end-start)
 
-	shaperBuffer.Props.Direction = input.Direction.Harfbuzz()
-	shaperBuffer.Props.Language = input.Language
-	shaperBuffer.Props.Script = input.Script
+	// define this only once
+	input := shaping.Input{
+		Text:      rawText,
+		RunStart:  0,
+		RunEnd:    len(rawText),
+		Face:      face,
+		Size:      fixed.I(int(fontSize)),
+		Script:    script,
+		Language:  lang,
+		Direction: dir,
+	}
 
-	// load or get font from cache
-	hfont, _ := fontCache.LoadOrCompute(input.Face, func() *harfbuzz.Font {
-		return harfbuzz.NewFont(input.Face)
-	})
+	// shape stuff for both normal text and emojis
+	for _, params := range []struct {
+		font *harfbuzz.Font
+		buf  *harfbuzz.Buffer
+	}{
+		{hfont, shaperBuffer},
+		{emojiFont, emojiBuffer},
+	} {
+		params.buf.Clear() // clear before using
 
-	// adjust the user provided fields
-	hfont.XScale = int32(input.Size.Ceil()) << scaleShift
-	hfont.YScale = hfont.XScale
+		runes, start, end := input.Text, input.RunStart, input.RunEnd
+		if end < start {
+			panic("end < start")
+		}
+		start = clamp(start, 0, len(runes))
+		end = clamp(end, 0, len(runes))
+		params.buf.AddRunes(runes, start, end-start)
 
-	// actually use harfbuzz to shape the text.
-	shaperBuffer.Shape(hfont, nil)
+		params.buf.Props.Direction = input.Direction.Harfbuzz()
+		params.buf.Props.Language = input.Language
+		params.buf.Props.Script = input.Script
+
+		// adjust the user provided fields
+		params.font.XScale = int32(input.Size.Ceil()) << scaleShift
+		params.font.YScale = params.font.XScale
+
+		// actually use harfbuzz to shape the text.
+		params.buf.Shape(params.font, nil)
+	}
+
+	// this will be used to determine whether a given glyph is an emoji or not when rendering
+	emojiMask := make([]bool, len(shaperBuffer.Info))
 
 	// convert the shaped text into an output
 	glyphs := make([]shaping.Glyph, len(shaperBuffer.Info))
-	for i := range glyphs {
-		g := shaperBuffer.Info[i].Glyph
-		glyphs[i] = shaping.Glyph{
-			ClusterIndex: shaperBuffer.Info[i].Cluster,
-			GlyphID:      g,
-			Mask:         shaperBuffer.Info[i].Mask,
+	for i := 0; i < len(glyphs); i++ {
+		var buf *harfbuzz.Buffer
+		var font *harfbuzz.Font
+		if emoji.IsEmoji(rawText[i]) {
+			buf = emojiBuffer
+			font = emojiFont
+			emojiMask[i] = true
+		} else {
+			buf = shaperBuffer
+			font = hfont
 		}
-		extents, ok := hfont.GlyphExtents(g)
+		glyph := buf.Info[i]
+
+		glyphs[i] = shaping.Glyph{
+			ClusterIndex: glyph.Cluster,
+			GlyphID:      glyph.Glyph,
+			Mask:         glyph.Mask,
+		}
+		extents, ok := font.GlyphExtents(glyph.Glyph)
 		if !ok {
-			// leave the glyph having zero size if it isn't in the font. There
-			// isn't really anything we can do to recover from such an error.
 			continue
 		}
 		glyphs[i].Width = fixed.I(int(extents.Width)) >> scaleShift
 		glyphs[i].Height = fixed.I(int(extents.Height)) >> scaleShift
 		glyphs[i].XBearing = fixed.I(int(extents.XBearing)) >> scaleShift
 		glyphs[i].YBearing = fixed.I(int(extents.YBearing)) >> scaleShift
-		glyphs[i].XAdvance = fixed.I(int(shaperBuffer.Pos[i].XAdvance)) >> scaleShift
-		glyphs[i].YAdvance = fixed.I(int(shaperBuffer.Pos[i].YAdvance)) >> scaleShift
-		glyphs[i].XOffset = fixed.I(int(shaperBuffer.Pos[i].XOffset)) >> scaleShift
-		glyphs[i].YOffset = fixed.I(int(shaperBuffer.Pos[i].YOffset)) >> scaleShift
+		glyphs[i].XAdvance = fixed.I(int(buf.Pos[i].XAdvance)) >> scaleShift
+		glyphs[i].YAdvance = fixed.I(int(buf.Pos[i].YAdvance)) >> scaleShift
+		glyphs[i].XOffset = fixed.I(int(buf.Pos[i].XOffset)) >> scaleShift
+		glyphs[i].YOffset = fixed.I(int(buf.Pos[i].YOffset)) >> scaleShift
 	}
+
 	countClusters(glyphs, input.RunEnd, input.Direction.Progression())
 	out := shaping.Output{
 		Glyphs:    glyphs,
@@ -412,7 +454,8 @@ func shapeText(input shaping.Input) shaping.Output {
 		Gap:     fixed.I(int(fontExtents.LineGap)) >> scaleShift,
 	}
 	out.RecalculateAll()
-	return out
+
+	return out, emojiMask
 }
 
 // countClusters tallies the number of runes and glyphs in each cluster
@@ -454,4 +497,62 @@ func countClusters(glyphs []shaping.Glyph, textLen int, dir di.Progression) {
 		glyphs[i].GlyphCount = glyphsInCluster
 		glyphs[i].RuneCount = runesInCluster
 	}
+}
+
+func drawShapedRunAt(fontSize int, clr color.Color, out shaping.Output, emojiMask []bool, img draw.Image, startX, startY int) int {
+	b := img.Bounds()
+	scanner := rasterx.NewScannerGV(b.Dx(), b.Dy(), img, b)
+	f := rasterx.NewFiller(b.Dx(), b.Dy(), scanner)
+	f.SetColor(clr)
+	x := float32(startX)
+	y := float32(startY)
+	for i, g := range out.Glyphs {
+		xPos := x + fixed266ToFloat(g.XOffset)
+		yPos := y - fixed266ToFloat(g.YOffset)
+
+		face := out.Face
+		if emojiMask[i] {
+			face = emojiFace
+		}
+
+		data := face.GlyphData(g.GlyphID)
+		switch format := data.(type) {
+		case api.GlyphOutline:
+			scale := float32(fontSize) / float32(face.Upem())
+			drawOutline(g, format, f, scale, xPos, yPos)
+		default:
+			panic("format not supported for glyph")
+		}
+
+		x += fixed266ToFloat(g.XAdvance)
+	}
+	f.Draw()
+	return int(math.Ceil(float64(x)))
+}
+
+func drawOutline(g shaping.Glyph, bitmap api.GlyphOutline, f *rasterx.Filler, scale float32, x, y float32) {
+	for _, s := range bitmap.Segments {
+		switch s.Op {
+		case api.SegmentOpMoveTo:
+			f.Start(fixed.Point26_6{X: floatToFixed266(s.Args[0].X*scale + x), Y: floatToFixed266(-s.Args[0].Y*scale + y)})
+		case api.SegmentOpLineTo:
+			f.Line(fixed.Point26_6{X: floatToFixed266(s.Args[0].X*scale + x), Y: floatToFixed266(-s.Args[0].Y*scale + y)})
+		case api.SegmentOpQuadTo:
+			f.QuadBezier(fixed.Point26_6{X: floatToFixed266(s.Args[0].X*scale + x), Y: floatToFixed266(-s.Args[0].Y*scale + y)},
+				fixed.Point26_6{X: floatToFixed266(s.Args[1].X*scale + x), Y: floatToFixed266(-s.Args[1].Y*scale + y)})
+		case api.SegmentOpCubeTo:
+			f.CubeBezier(fixed.Point26_6{X: floatToFixed266(s.Args[0].X*scale + x), Y: floatToFixed266(-s.Args[0].Y*scale + y)},
+				fixed.Point26_6{X: floatToFixed266(s.Args[1].X*scale + x), Y: floatToFixed266(-s.Args[1].Y*scale + y)},
+				fixed.Point26_6{X: floatToFixed266(s.Args[2].X*scale + x), Y: floatToFixed266(-s.Args[2].Y*scale + y)})
+		}
+	}
+	f.Stop(true)
+}
+
+func fixed266ToFloat(i fixed.Int26_6) float32 {
+	return float32(float64(i) / 64)
+}
+
+func floatToFixed266(f float32) fixed.Int26_6 {
+	return fixed.Int26_6(int(float64(f) * 64))
 }

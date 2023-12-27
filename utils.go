@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"hash/maphash"
 	"html"
 	"html/template"
 	"math/rand"
@@ -13,7 +12,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	"unsafe"
 
 	"github.com/microcosm-cc/bluemonday"
 	"golang.org/x/exp/slices"
@@ -528,8 +526,4 @@ func clamp(val, low, high int) int {
 		return high
 	}
 	return val
-}
-
-func pointerHasher[V any](_ maphash.Seed, k *V) uint64 {
-	return uint64(uintptr(unsafe.Pointer(k)))
 }
