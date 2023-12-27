@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dmolesUC3/emoji"
+	"github.com/fiatjaf/emoji"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
@@ -415,7 +415,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
 	for i := 0; i < len(glyphs); i++ {
 		var buf *harfbuzz.Buffer
 		var font *harfbuzz.Font
-		if emoji.IsEmoji(rawText[i]) {
+		if i < len(rawText) && emoji.IsEmoji(rawText[i]) {
 			buf = emojiBuffer
 			font = emojiFont
 			emojiMask[i] = true
@@ -540,6 +540,8 @@ func drawShapedRunAt(
 		switch format := data.(type) {
 		case api.GlyphOutline:
 			drawOutline(g, format, f, currentScale, xPos, yPos)
+		case nil:
+			continue
 		default:
 			panic("format not supported for glyph")
 		}

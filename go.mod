@@ -5,15 +5,15 @@ go 1.21.4
 require (
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/dmolesUC3/emoji v0.0.0-20190226181050-1849526eb21f
+	github.com/fiatjaf/emoji v0.0.1
 	github.com/fiatjaf/eventstore v0.3.3
 	github.com/fiatjaf/khatru v0.2.1
 	github.com/fogleman/gg v1.3.0
-	github.com/go-text/render v0.0.0-20230619120952-35bccb6164b8
 	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/gomarkdown/markdown v0.0.0-20231115200524-a660076da3fd
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/kr/pretty v0.3.1
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/go-nostr v0.27.3
 	github.com/nbd-wtf/nostr-sdk v0.0.4
@@ -22,10 +22,11 @@ require (
 	github.com/pemistahl/lingua-go v1.4.0
 	github.com/rs/cors v1.10.0
 	github.com/rs/zerolog v1.29.1
+	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
 	github.com/stretchr/testify v1.8.4
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
-	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
+	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b
 	golang.org/x/image v0.14.0
 	mvdan.cc/xurls/v2 v2.5.0
 )
@@ -56,17 +57,17 @@ require (
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.2 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/puzpuzpuz/xsync/v2 v2.5.1 // indirect
+	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	github.com/sebest/xff v0.0.0-20210106013422-671bd2870b3a // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
-	github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c // indirect
-	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/tidwall/gjson v1.17.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
