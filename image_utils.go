@@ -345,6 +345,13 @@ func shortenURLs(text string) string {
 	})
 }
 
+// beware: this is all very hacky and I don't know what I am doing!
+// this function is copied from go-text/typesetting/shaping's HarfbuzzShaper and adapted to not require a "class",
+// to rely on our dirty globals like fontCache, shaperLock and shaperBuffer; it also uses a custom function to
+// determine language, script, direction and font face internally instead of taking a shaping.Input argument --
+// but also, the most important change was to make it "shape" the same text, twice, with the default font and with
+// the emoji font, then build an output of glyphs containing normal glyphs for when the referenced rune is not an
+// emoji and an emoji glyph for when it is.
 func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
 	lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(rawText)
 
@@ -458,8 +465,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
 	return out, emojiMask
 }
 
-// countClusters tallies the number of runes and glyphs in each cluster
-// and updates the relevant fields on the provided glyph slice.
+// this function is copied from go-text/typesetting/shaping because shapeText needs it
 func countClusters(glyphs []shaping.Glyph, textLen int, dir di.Progression) {
 	currentCluster := -1
 	runesInCluster := 0
@@ -499,7 +505,20 @@ func countClusters(glyphs []shaping.Glyph, textLen int, dir di.Progression) {
 	}
 }
 
-func drawShapedRunAt(fontSize int, clr color.Color, out shaping.Output, emojiMask []bool, img draw.Image, startX, startY int) int {
+// this function is copied from go-text/render, but adapted to not require a "class" to be instantiated and also,
+// more importantly, to take an emojiMask parameter, with the same length as out.Glyphs, to determine when a
+// glyph should be rendered with the emoji font instead of with the default font
+func drawShapedRunAt(
+	fontSize int,
+	clr color.Color,
+	out shaping.Output,
+	emojiMask []bool,
+	img draw.Image,
+	startX,
+	startY int,
+) int {
+	scale := float32(fontSize) / float32(out.Face.Upem())
+
 	b := img.Bounds()
 	scanner := rasterx.NewScannerGV(b.Dx(), b.Dy(), img, b)
 	f := rasterx.NewFiller(b.Dx(), b.Dy(), scanner)
@@ -511,15 +530,16 @@ func drawShapedRunAt(fontSize int, clr color.Color, out shaping.Output, emojiMas
 		yPos := y - fixed266ToFloat(g.YOffset)
 
 		face := out.Face
+		currentScale := scale
 		if emojiMask[i] {
 			face = emojiFace
+			currentScale = float32(fontSize) / float32(face.Upem())
 		}
 
 		data := face.GlyphData(g.GlyphID)
 		switch format := data.(type) {
 		case api.GlyphOutline:
-			scale := float32(fontSize) / float32(face.Upem())
-			drawOutline(g, format, f, scale, xPos, yPos)
+			drawOutline(g, format, f, currentScale, xPos, yPos)
 		default:
 			panic("format not supported for glyph")
 		}
@@ -530,6 +550,7 @@ func drawShapedRunAt(fontSize int, clr color.Color, out shaping.Output, emojiMas
 	return int(math.Ceil(float64(x)))
 }
 
+// this draws a font glyph (i.e. a letter) according to instructions and scale and whatever
 func drawOutline(g shaping.Glyph, bitmap api.GlyphOutline, f *rasterx.Filler, scale float32, x, y float32) {
 	for _, s := range bitmap.Segments {
 		switch s.Op {

@@ -170,9 +170,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 
 func drawText(paragraphs []string, width, height int) image.Image {
 	const FONT_SIZE = 25
-
 	color := color.RGBA{R: 255, G: 230, B: 238, A: 255}
-
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
 	i := 1
