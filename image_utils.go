@@ -27,7 +27,7 @@ import (
 )
 
 const (
-	nSupportedScripts = 13
+	nSupportedScripts = 14
 	scaleShift        = 6
 )
 
@@ -35,6 +35,7 @@ var (
 	supportedScripts = [nSupportedScripts]language.Script{
 		language.Unknown,
 		language.Latin,
+		language.Cyrillic,
 		language.Hiragana,
 		language.Katakana,
 		language.Hebrew,
@@ -56,6 +57,7 @@ var (
 	defaultLanguageMap = [nSupportedScripts]language.Language{
 		"en-us",
 		"en-us",
+		"ru",
 		"ja",
 		"ja",
 		"he",
@@ -70,6 +72,7 @@ var (
 	}
 
 	directionMap = [nSupportedScripts]di.Direction{
+		di.DirectionLTR,
 		di.DirectionLTR,
 		di.DirectionLTR,
 		di.DirectionLTR,
@@ -139,16 +142,17 @@ func initializeImageDrawingStuff() error {
 	}
 	fontMap[0] = loadFont("fonts/NotoSans.ttf")
 	fontMap[1] = fontMap[0]
-	fontMap[2] = loadFont("fonts/NotoSansJP.ttf")
-	fontMap[3] = fontMap[1]
-	fontMap[4] = loadFont("fonts/NotoSansHebrew.ttf")
-	fontMap[5] = loadFont("fonts/NotoSansThai.ttf")
-	fontMap[6] = loadFont("fonts/NotoSansArabic.ttf")
-	fontMap[7] = loadFont("fonts/NotoSansDevanagari.ttf")
-	fontMap[8] = loadFont("fonts/NotoSansBengali.ttf")
-	fontMap[9] = loadFont("fonts/NotoSansJavanese.ttf")
-	fontMap[10] = loadFont("fonts/NotoSansSC.ttf")
-	fontMap[11] = loadFont("fonts/NotoSansKR.ttf")
+	fontMap[2] = fontMap[0]
+	fontMap[3] = loadFont("fonts/NotoSansJP.ttf")
+	fontMap[4] = fontMap[3]
+	fontMap[5] = loadFont("fonts/NotoSansHebrew.ttf")
+	fontMap[6] = loadFont("fonts/NotoSansThai.ttf")
+	fontMap[7] = loadFont("fonts/NotoSansArabic.ttf")
+	fontMap[8] = loadFont("fonts/NotoSansDevanagari.ttf")
+	fontMap[9] = loadFont("fonts/NotoSansBengali.ttf")
+	fontMap[10] = loadFont("fonts/NotoSansJavanese.ttf")
+	fontMap[11] = loadFont("fonts/NotoSansSC.ttf")
+	fontMap[12] = loadFont("fonts/NotoSansKR.ttf")
 	emojiFace = loadFont("fonts/NotoEmoji.ttf")
 
 	// shaper stuff
@@ -228,7 +232,8 @@ func getLanguageAndScriptAndDirectionAndFont(paragraph []rune) (
 			goto gotScriptIndex
 		}
 	}
-	idx = maxIndex(ranking[:])
+	idx = maxIndex(ranking[2:] /* skip Unknown and Latin because they are the default */)
+	idx += 2 // add back the skipped indexes (if maxIndex returns -1 this will default us to 1, latin)
 
 gotScriptIndex:
 	script = supportedScripts[idx]

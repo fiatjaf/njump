@@ -506,7 +506,7 @@ func isntRealRelay(url string) bool {
 }
 
 func maxIndex(slice []int) int {
-	maxIndex := 0
+	maxIndex := -1
 	maxVal := 0
 	for i, val := range slice {
 		if val > maxVal {
