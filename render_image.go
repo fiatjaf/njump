@@ -102,7 +102,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	img.SetColor(FOREGROUND)
 
 	// main content text
-	textImg := drawText(paragraphs, width-paddingLeft*2, height-20)
+	textImg := drawText(paragraphs, width-paddingLeft*2, height-20, true)
 	img.DrawImage(textImg, paddingLeft, 20)
 
 	// font for writing the bottom bar stuff
@@ -144,7 +144,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	authorTextY := height - barHeight + 15
 	authorMaxWidth := width/2.0 - paddingLeft*2 - barExtraPadding
 	img.SetColor(color.White)
-	textImg = drawText([]string{metadata.ShortName()}, width, barHeight)
+	textImg = drawText([]string{metadata.ShortName()}, width, barHeight, false)
 	img.DrawImage(textImg, authorTextX, authorTextY)
 
 	// a gradient to cover too long names
@@ -177,10 +177,35 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	return img.Image(), nil
 }
 
-func drawText(paragraphs []string, width, height int) image.Image {
-	const FONT_SIZE = 25
+func drawText(paragraphs []string, width, height int, dynamicResize bool) image.Image {
+	FONT_SIZE := 25
 	color := color.RGBA{R: 255, G: 230, B: 238, A: 255}
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
+
+	joinedContent := strings.Join(paragraphs, "\n")
+	if dynamicResize && len(joinedContent) < 141 {
+		FONT_SIZE = 7
+		img := gg.NewContext(width, height)
+		fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
+		ttf, _ := truetype.Parse(fontData)
+		i := 1
+		lineSpacing := 1.2
+		for i < 20 {
+			FONT_SIZE += i
+			img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
+				Size: float64(FONT_SIZE),
+				DPI:  260,
+			}))
+			wrappedContent := strings.Join(img.WordWrap(joinedContent, float64(width-120)), "\n")
+			_, checkHeight := img.MeasureMultilineString(wrappedContent, lineSpacing)
+			if checkHeight > float64(height-70-60*2) {
+				FONT_SIZE -= 1
+				break
+			}
+			i += 1
+		}
+		FONT_SIZE = FONT_SIZE*4 - 2
+	}
 
 	lineNumber := 1
 	for _, paragraph := range paragraphs {
