@@ -9,6 +9,7 @@ import (
 	"image/png"
 	"math"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -33,6 +34,8 @@ var (
 //go:embed fonts/*
 var fonts embed.FS
 
+var multiNewlineRe = regexp.MustCompile(`\n\n+`)
+
 func renderImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
 
@@ -48,8 +51,11 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	content := strings.Replace(data.event.Content, "\n\n\n\n", "\n\n", -1)
-	content = strings.Replace(data.event.Content, "\n\n\n", "\n\n", -1)
+	content := data.event.Content
+	content = strings.Replace(content, "\r\n", "\n", -1)
+	content = multiNewlineRe.ReplaceAllString(content, "\n\n")
+	content = strings.Replace(content, "\t", "  ", -1)
+	content = strings.Replace(content, "\r", "", -1)
 	content = shortenURLs(content)
 
 	// this turns the raw event.Content into a series of lines ready to drawn
