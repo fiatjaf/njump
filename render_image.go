@@ -193,12 +193,12 @@ func drawText(paragraphs []string, width, height int) image.Image {
 		for _, line := range lines {
 			for _, out := range line {
 				charsWritten, _ := drawShapedRunAt(
+					img,
 					FONT_SIZE,
 					color,
 					out,
 					emojiMask,
 					totalCharsWritten,
-					img,
 					0,
 					FONT_SIZE*lineNumber*12/10,
 				)
