@@ -139,10 +139,11 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 			authorTextX += 65
 		}
 	}
-	authorTextY := height - barHeight + 20
+	authorTextY := height - barHeight + 15
 	authorMaxWidth := width/2.0 - paddingLeft*2 - barExtraPadding
 	img.SetColor(color.White)
-	img.DrawStringWrapped(metadata.ShortName(), float64(authorTextX), float64(authorTextY), 0, 0, float64(width*99), 99, gg.AlignLeft)
+	textImg = drawText([]string{metadata.ShortName()}, width, barHeight)
+	img.DrawImage(textImg, authorTextX, authorTextY)
 
 	// a gradient to cover too long names
 	img.SetColor(BAR_BACKGROUND)
@@ -169,7 +170,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	parsedTime, _ := time.Parse(layout, date)
 	formattedDate := parsedTime.Format("Jan 02, 2006")
 	img.SetColor(color.RGBA{160, 160, 160, 255})
-	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-stampWidth-260), float64(authorTextY+3), 0, 0, float64(240), 1.5, gg.AlignRight)
+	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-stampWidth-260), float64(height-barHeight+22), 0, 0, float64(240), 1.5, gg.AlignRight)
 
 	return img.Image(), nil
 }
