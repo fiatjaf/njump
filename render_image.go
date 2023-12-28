@@ -85,7 +85,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	width := 700
 	height := 525
 	paddingLeft := 25
-	barExtraPadding := 5
+	barExtraPadding := 0
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
@@ -101,8 +101,8 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	img.SetColor(FOREGROUND)
 
 	// main content text
-	textImg := drawText(paragraphs, width-25*2, height-20)
-	img.DrawImage(textImg, 25, 20)
+	textImg := drawText(paragraphs, width-paddingLeft*2, height-20)
+	img.DrawImage(textImg, paddingLeft, 20)
 
 	// font for writing the bottom bar stuff
 	fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
