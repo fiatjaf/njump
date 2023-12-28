@@ -86,6 +86,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	height := 525
 	paddingLeft := 25
 	barExtraPadding := 0
+	gradientRectHeight := 140
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
@@ -120,13 +121,14 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	img.Fill()
 
 	// a rectangle at the bottom with a gradient from black to transparent
-	gradientRectHeight := 140
-	gradientRectY := height - barHeight - gradientRectHeight
-	for y := 0; y < gradientRectHeight; y++ {
-		alpha := uint8(255 * (math.Pow(float64(y)/float64(gradientRectHeight), 2)))
-		img.SetRGBA255(int(BACKGROUND.R), int(BACKGROUND.G), int(BACKGROUND.B), int(alpha))
-		img.DrawRectangle(0, float64(gradientRectY+y), float64(width), 1)
-		img.Fill()
+	if len(strings.Join(paragraphs, "\n")) > 141 {
+		gradientRectY := height - barHeight - gradientRectHeight
+		for y := 0; y < gradientRectHeight; y++ {
+			alpha := uint8(255 * (math.Pow(float64(y)/float64(gradientRectHeight), 2)))
+			img.SetRGBA255(int(BACKGROUND.R), int(BACKGROUND.G), int(BACKGROUND.B), int(alpha))
+			img.DrawRectangle(0, float64(gradientRectY+y), float64(width), 1)
+			img.Fill()
+		}
 	}
 
 	// draw author's name
