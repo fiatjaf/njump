@@ -173,7 +173,7 @@ func drawText(paragraphs []string, width, height int) image.Image {
 	color := color.RGBA{R: 255, G: 230, B: 238, A: 255}
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
-	i := 1
+	lineNumber := 1
 	for _, paragraph := range paragraphs {
 		rawText := []rune(paragraph)
 
@@ -183,10 +183,21 @@ func drawText(paragraphs []string, width, height int) image.Image {
 		it := shaping.NewSliceIterator([]shaping.Output{shapedRunes})
 		lines, _ := wrapper.WrapParagraph(shaping.WrapConfig{}, width, rawText, it)
 
+		totalCharsWritten := 0
 		for _, line := range lines {
 			for _, out := range line {
-				drawShapedRunAt(FONT_SIZE, color, out, emojiMask, img, 0, FONT_SIZE*i*12/10)
-				i++
+				charsWritten, _ := drawShapedRunAt(
+					FONT_SIZE,
+					color,
+					out,
+					emojiMask,
+					totalCharsWritten,
+					img,
+					0,
+					FONT_SIZE*lineNumber*12/10,
+				)
+				totalCharsWritten += charsWritten
+				lineNumber++
 			}
 		}
 	}

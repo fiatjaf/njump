@@ -518,10 +518,11 @@ func drawShapedRunAt(
 	clr color.Color,
 	out shaping.Output,
 	emojiMask []bool,
+	maskBaseIndex int,
 	img draw.Image,
 	startX,
 	startY int,
-) int {
+) (charsWritten int, endingX int) {
 	scale := float32(fontSize) / float32(out.Face.Upem())
 
 	b := img.Bounds()
@@ -536,7 +537,7 @@ func drawShapedRunAt(
 
 		face := out.Face
 		currentScale := scale
-		if emojiMask[i] {
+		if emojiMask[maskBaseIndex+i] {
 			face = emojiFace
 			currentScale = float32(fontSize) / float32(face.Upem())
 		}
@@ -551,10 +552,12 @@ func drawShapedRunAt(
 			panic("format not supported for glyph")
 		}
 
+		charsWritten++
 		x += fixed266ToFloat(g.XAdvance)
 	}
 	f.Draw()
-	return int(math.Ceil(float64(x)))
+
+	return charsWritten, int(math.Ceil(float64(x)))
 }
 
 // this draws a font glyph (i.e. a letter) according to instructions and scale and whatever
