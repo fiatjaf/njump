@@ -77,3 +77,5 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/go-text/typesetting => github.com/fiatjaf/typesetting v0.0.0-20231228183257-7c3f6f5a0ccc

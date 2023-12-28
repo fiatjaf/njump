@@ -70,12 +70,12 @@ github.com/fiatjaf/eventstore v0.3.3 h1:yZgHecBwHCVU+FuLgwz3gJJu27Xq4P8CNld37mQi
 github.com/fiatjaf/eventstore v0.3.3/go.mod h1:iqGHNXOMz+ztLHXxG13WBXgz/2bG0q/p1L3olof4dYo=
 github.com/fiatjaf/khatru v0.2.1 h1:NlgjBYH7iJpjFyOJVNEX/E2I1v4d5+KINhA+VxgDr4o=
 github.com/fiatjaf/khatru v0.2.1/go.mod h1:DsiQEmQmb6/hTXV6/OMcF7C7h19u1tJG5zAgaQVjseY=
+github.com/fiatjaf/typesetting v0.0.0-20231228183257-7c3f6f5a0ccc h1:8QpOKCVr8jpuvpmLCZUnsZ50faseCym2r6f5crpODKM=
+github.com/fiatjaf/typesetting v0.0.0-20231228183257-7c3f6f5a0ccc/go.mod h1:d22AnmeKq/on0HNv73UFriMKc4Ez6EqZAofLhAzpSzI=
 github.com/fogleman/gg v1.3.0 h1:/7zJX8F6AaYQc57WQCyN9cAIz+4bCJGO9B+dyW29am8=
 github.com/fogleman/gg v1.3.0/go.mod h1:R/bRT+9gY/C5z7JzPU0zXsXHKM4/ayA+zqcVNZzPa1k=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
-github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658 h1:KeDKnC99J3l5qJK4zV13Au2UwPn4N20TnIlM0YvILj8=
-github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658/go.mod h1:d22AnmeKq/on0HNv73UFriMKc4Ez6EqZAofLhAzpSzI=
 github.com/go-text/typesetting-utils v0.0.0-20231211103740-d9332ae51f04 h1:zBx+p/W2aQYtNuyZNcTfinWvXBQwYtDfme051PR/lAY=
 github.com/go-text/typesetting-utils v0.0.0-20231211103740-d9332ae51f04/go.mod h1:DDxDdQEnB70R8owOx3LVpEFvpMK9eeH1o2r0yZhFI9o=
 github.com/gobwas/httphead v0.1.0 h1:exrUm0f4YX0L7EBwZHuCF4GDp8aJfVeBrlLQrs6NqWU=
