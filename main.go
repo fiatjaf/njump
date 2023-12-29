@@ -74,6 +74,10 @@ func main() {
 		tailwindDebugStuff = template.HTML(fmt.Sprintf("<script src=\"https://cdn.tailwindcss.com?plugins=typography\"></script><script>\n%s</script><style type=\"text/tailwindcss\">%s</style>", config, style))
 	}
 
+	// image rendering stuff
+	initializeImageDrawingStuff()
+
+	// eventstore and internal db
 	deinitCache := initCache()
 	defer deinitCache()
 

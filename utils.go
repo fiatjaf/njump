@@ -504,3 +504,26 @@ func isntRealRelay(url string) bool {
 	substr := []byte(url[6:])
 	return bytes.IndexByte(substr, '/') != -1
 }
+
+func maxIndex(slice []int) int {
+	maxIndex := -1
+	maxVal := 0
+	for i, val := range slice {
+		if val > maxVal {
+			maxVal = val
+			maxIndex = i
+		}
+	}
+	return maxIndex
+}
+
+// clamp ensures val is in the inclusive range [low,high].
+func clamp(val, low, high int) int {
+	if val < low {
+		return low
+	}
+	if val > high {
+		return high
+	}
+	return val
+}

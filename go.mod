@@ -4,25 +4,28 @@ go 1.21.4
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.0
-	github.com/apatters/go-wordwrap v1.0.0
 	github.com/dgraph-io/badger/v4 v4.2.0
 	github.com/fiatjaf/eventstore v0.3.3
 	github.com/fiatjaf/khatru v0.2.1
 	github.com/fogleman/gg v1.3.0
+	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/gomarkdown/markdown v0.0.0-20231115200524-a660076da3fd
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
+	github.com/nbd-wtf/emoji v0.0.3
 	github.com/nbd-wtf/go-nostr v0.27.3
 	github.com/nbd-wtf/nostr-sdk v0.0.4
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
+	github.com/pemistahl/lingua-go v1.4.0
 	github.com/rs/cors v1.10.0
 	github.com/rs/zerolog v1.29.1
+	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
 	github.com/stretchr/testify v1.8.4
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
-	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
+	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b
 	golang.org/x/image v0.14.0
 	mvdan.cc/xurls/v2 v2.5.0
 )
@@ -61,6 +64,7 @@ require (
 	github.com/puzpuzpuz/xsync/v2 v2.5.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	github.com/sebest/xff v0.0.0-20210106013422-671bd2870b3a // indirect
+	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/tidwall/gjson v1.17.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
@@ -69,6 +73,9 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/go-text/typesetting => github.com/fiatjaf/typesetting v0.0.0-20231228183257-7c3f6f5a0ccc
