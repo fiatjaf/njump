@@ -182,29 +182,27 @@ func drawText(paragraphs []string, width, height int, dynamicResize bool) image.
 	color := color.RGBA{R: 255, G: 230, B: 238, A: 255}
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
-	joinedContent := strings.Join(paragraphs, "\n")
+	joinedContent := strings.Join(paragraphs, " \n") // The space before the \n is necessary
 	if dynamicResize && len(joinedContent) < 141 {
-		FONT_SIZE = 7
+		fontSizeTest := 7.0
+		step := 0.5
 		img := gg.NewContext(width, height)
 		fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
 		ttf, _ := truetype.Parse(fontData)
-		i := 1
-		lineSpacing := 1.2
-		for i < 20 {
-			FONT_SIZE += i
+		for {
+			fontSizeTest += step
 			img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
-				Size: float64(FONT_SIZE),
+				Size: fontSizeTest,
 				DPI:  260,
 			}))
-			wrappedContent := strings.Join(img.WordWrap(joinedContent, float64(width-120)), "\n")
-			_, checkHeight := img.MeasureMultilineString(wrappedContent, lineSpacing)
-			if checkHeight > float64(height-70-60*2) {
-				FONT_SIZE -= 1
+			wrappedContent := img.WordWrap(joinedContent, float64(width-70))
+			_, checkHeight := img.MeasureMultilineString(strings.Join(wrappedContent, "\n"), 1.0)
+			if checkHeight > float64(height-70-60*2) || fontSizeTest > 50 {
+				fontSizeTest -= step
 				break
 			}
-			i += 1
 		}
-		FONT_SIZE = FONT_SIZE*4 - 2
+		FONT_SIZE = int(fontSizeTest * (float64(FONT_SIZE) / 7))
 	}
 
 	lineNumber := 1
