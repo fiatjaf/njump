@@ -113,8 +113,6 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 			math.Pow(float64(np-1), 0.80)
 		addedSize := 240.0 / largeness
 		dynamicFontSize = fontSize + int(addedSize)
-
-		fmt.Println("font size:", dynamicFontSize, largeness, "|", nchars, np, "|", math.Pow(float64(nchars), 1.16), float64(np)*9, "|", paragraphs)
 	}
 	textImg := drawText(paragraphs, dynamicFontSize, width-paddingLeft*2, height-20)
 	img.DrawImage(textImg, paddingLeft, 20)
