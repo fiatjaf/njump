@@ -258,7 +258,7 @@ func replaceNostrURLsWithTags(matcher *regexp.Regexp, input string) string {
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
 			defer cancel()
-			name := getNameFromNip19(ctx, nip19)
+			name, _ := getNameFromNip19(ctx, nip19)
 			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a>`, nip19, name, first_chars+"…"+last_chars)
 		} else {
 			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">%s</a>`, nip19, first_chars+"…"+last_chars)
@@ -280,19 +280,19 @@ func shortenNostrURLs(input string) string {
 	})
 }
 
-func getNameFromNip19(ctx context.Context, nip19 string) string {
+func getNameFromNip19(ctx context.Context, nip19 string) (string, bool) {
 	author, _, err := getEvent(ctx, nip19, nil)
 	if err != nil {
-		return nip19
+		return nip19, false
 	}
 	metadata, err := sdk.ParseMetadata(author)
 	if err != nil {
-		return nip19
+		return nip19, false
 	}
 	if metadata.Name == "" {
-		return nip19
+		return nip19, false
 	}
-	return metadata.Name
+	return metadata.Name, true
 }
 
 // replaces an npub/nprofile with the name of the author, if possible
@@ -304,8 +304,15 @@ func replaceUserReferencesWithNames(ctx context.Context, input []string) []strin
 	for i, line := range input {
 		input[i] = nostrNpubNprofileMatcher.ReplaceAllStringFunc(line, func(match string) string {
 			submatch := nostrNpubNprofileMatcher.FindStringSubmatch(match)
-			nip19 := submatch[1]
-			return getNameFromNip19(ctx, nip19)
+			nip19code := submatch[1]
+			name, ok := getNameFromNip19(ctx, nip19code)
+			if ok {
+				spl := strings.SplitN(strings.TrimSpace(name), " ", 2)
+				if spl[0] != "" {
+					return "@" + spl[0]
+				}
+			}
+			return nip19code[0:10] + "…" + nip19code[len(nip19code)-5:]
 		})
 	}
 	return input
