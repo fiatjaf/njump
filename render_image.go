@@ -82,6 +82,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 }
 
 func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, date string) (image.Image, error) {
+	fontSize := 25
 	width := 700
 	height := 525
 	paddingLeft := 25
@@ -102,10 +103,23 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	img.SetColor(FOREGROUND)
 
 	// main content text
-	textImg := drawText(paragraphs, width-paddingLeft*2, height-20, true)
+	dynamicFontSize := fontSize
+	if np := len(paragraphs); np < 4 {
+		nchars := 0
+		for _, par := range paragraphs {
+			nchars += len([]rune(par))
+		}
+		largeness := math.Pow(float64(nchars), 0.60) +
+			math.Pow(float64(np-1), 0.80)
+		addedSize := 240.0 / largeness
+		dynamicFontSize = fontSize + int(addedSize)
+
+		fmt.Println("font size:", dynamicFontSize, largeness, "|", nchars, np, "|", math.Pow(float64(nchars), 1.16), float64(np)*9, "|", paragraphs)
+	}
+	textImg := drawText(paragraphs, dynamicFontSize, width-paddingLeft*2, height-20)
 	img.DrawImage(textImg, paddingLeft, 20)
 
-	// font for writing the bottom bar stuff
+	// font for writing the date
 	fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
 	ttf, _ := truetype.Parse(fontData)
 	img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
@@ -144,7 +158,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	authorTextY := height - barHeight + 15
 	authorMaxWidth := width/2.0 - paddingLeft*2 - barExtraPadding
 	img.SetColor(color.White)
-	textImg = drawText([]string{metadata.ShortName()}, width, barHeight, false)
+	textImg = drawText([]string{metadata.ShortName()}, fontSize, width, barHeight)
 	img.DrawImage(textImg, authorTextX, authorTextY)
 
 	// a gradient to cover too long names
@@ -177,38 +191,14 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	return img.Image(), nil
 }
 
-func drawText(paragraphs []string, width, height int, dynamicResize bool) image.Image {
-	FONT_SIZE := 25
+func drawText(paragraphs []string, fontSize int, width, height int) image.Image {
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
-
-	joinedContent := strings.Join(paragraphs, " \n") // the space before the \n is necessary
-	if dynamicResize && len(joinedContent) < 141 {
-		fontSizeTest := 7.0
-		step := 0.5
-		img := gg.NewContext(width, height)
-		fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
-		ttf, _ := truetype.Parse(fontData)
-		for {
-			fontSizeTest += step
-			img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
-				Size: fontSizeTest,
-				DPI:  260,
-			}))
-			wrappedContent := img.WordWrap(joinedContent, float64(width-70))
-			_, checkHeight := img.MeasureMultilineString(strings.Join(wrappedContent, "\n"), 1.0)
-			if checkHeight > float64(height-70-60*2) || fontSizeTest > 50 {
-				fontSizeTest -= step
-				break
-			}
-		}
-		FONT_SIZE = int(fontSizeTest * (float64(FONT_SIZE) / 7))
-	}
 
 	lineNumber := 1
 	for _, paragraph := range paragraphs {
 		rawText := []rune(paragraph)
 
-		shapedRunes, emojiMask, hlMask := shapeText(rawText, FONT_SIZE)
+		shapedRunes, emojiMask, hlMask := shapeText(rawText, fontSize)
 
 		var wrapper shaping.LineWrapper
 		it := shaping.NewSliceIterator([]shaping.Output{shapedRunes})
@@ -219,7 +209,7 @@ func drawText(paragraphs []string, width, height int, dynamicResize bool) image.
 			for _, out := range line {
 				charsWritten, _ := drawShapedBlockAt(
 					img,
-					FONT_SIZE,
+					fontSize,
 					[4]color.Color{
 						color.RGBA{R: 255, G: 230, B: 238, A: 255}, // normal
 						color.RGBA{R: 146, G: 193, B: 198, A: 255}, // links
@@ -231,7 +221,7 @@ func drawText(paragraphs []string, width, height int, dynamicResize bool) image.
 					hlMask,
 					totalCharsWritten,
 					0,
-					FONT_SIZE*lineNumber*12/10,
+					fontSize*lineNumber*12/10,
 				)
 				totalCharsWritten += charsWritten
 				lineNumber++
