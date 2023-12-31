@@ -487,7 +487,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 		case hlNormal:
 			if glyph.Codepoint == '#' &&
 				len(buf.Info) > i+1 &&
-				unicode.In(buf.Info[i+1].Codepoint, unicode.Letter) {
+				unicode.In(buf.Info[i+1].Codepoint, unicode.Nl) {
 				hlState = hlHashtag
 			} else if glyph.Codepoint == 'h' &&
 				len(buf.Info) > i+1 &&
@@ -509,7 +509,8 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 				}
 			} else if glyph.Codepoint == '@' &&
 				len(buf.Info) > i+1 &&
-				unicode.In(buf.Info[i+1].Codepoint, unicode.Letter) {
+				unicode.In(buf.Info[i+1].Codepoint,
+					unicode.Nl, unicode.Number) {
 				hlState = hlMention
 			}
 		case hlLink:
@@ -518,11 +519,11 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 				hlState = hlNormal
 			}
 		case hlMention:
-			if !unicode.In(glyph.Codepoint, unicode.Letter) {
+			if !unicode.In(glyph.Codepoint, unicode.Nl) {
 				hlState = hlNormal
 			}
 		case hlHashtag:
-			if !unicode.In(glyph.Codepoint, unicode.Letter) {
+			if !unicode.In(glyph.Codepoint, unicode.Nl) {
 				hlState = hlNormal
 			}
 		}
