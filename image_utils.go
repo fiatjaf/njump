@@ -104,6 +104,8 @@ var (
 	emojiBuffer = harfbuzz.NewBuffer()
 	fontCache   = make(map[font.Face]*harfbuzz.Font)
 	emojiFont   *harfbuzz.Font
+
+	lettersAndNumbers = &unicode.RangeTable{}
 )
 
 type ScriptRange struct {
@@ -170,6 +172,15 @@ func initializeImageDrawingStuff() error {
 
 	// shaper stuff
 	emojiFont = harfbuzz.NewFont(emojiFace)
+
+	// highlighting stuff
+	lettersAndNumbers.LatinOffset = unicode.Latin.LatinOffset + unicode.Number.LatinOffset
+	lettersAndNumbers.R16 = make([]unicode.Range16, len(unicode.Latin.R16)+len(unicode.Number.R16))
+	copy(lettersAndNumbers.R16, unicode.Latin.R16)
+	copy(lettersAndNumbers.R16[len(unicode.Latin.R16):], unicode.Number.R16)
+	lettersAndNumbers.R32 = make([]unicode.Range32, len(unicode.Latin.R32)+len(unicode.Number.R32))
+	copy(lettersAndNumbers.R32, unicode.Latin.R32)
+	copy(lettersAndNumbers.R32[len(unicode.Latin.R32):], unicode.Number.R32)
 
 	return nil
 }
@@ -493,7 +504,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 		case hlNormal:
 			if glyph.Codepoint == '#' &&
 				len(buf.Info) > i+1 &&
-				unicode.In(buf.Info[i+1].Codepoint, unicode.Nl) {
+				unicode.In(buf.Info[i+1].Codepoint, lettersAndNumbers) {
 				hlState = hlHashtag
 			} else if glyph.Codepoint == 'h' &&
 				len(buf.Info) > i+1 &&
@@ -515,8 +526,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 				}
 			} else if glyph.Codepoint == '@' &&
 				len(buf.Info) > i+1 &&
-				unicode.In(buf.Info[i+1].Codepoint,
-					unicode.Nl, unicode.Number) {
+				unicode.In(buf.Info[i+1].Codepoint, lettersAndNumbers) {
 				hlState = hlMention
 			}
 		case hlLink:
@@ -525,11 +535,11 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 				hlState = hlNormal
 			}
 		case hlMention:
-			if !unicode.In(glyph.Codepoint, unicode.Nl) {
+			if !unicode.In(glyph.Codepoint, lettersAndNumbers) {
 				hlState = hlNormal
 			}
 		case hlHashtag:
-			if !unicode.In(glyph.Codepoint, unicode.Nl) {
+			if !unicode.In(glyph.Codepoint, lettersAndNumbers) {
 				hlState = hlNormal
 			}
 		}
