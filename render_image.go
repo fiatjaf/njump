@@ -103,18 +103,16 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	img.SetColor(FOREGROUND)
 
 	// main content text
-	dynamicFontSize := fontSize
+	addedSize := 0
 	if np := len(paragraphs); np < 4 {
 		nchars := 0
 		for _, par := range paragraphs {
 			nchars += len([]rune(par))
 		}
-		largeness := math.Pow(float64(nchars), 0.60) +
-			math.Pow(float64(np-1), 0.80)
-		addedSize := 240.0 / largeness
-		dynamicFontSize = fontSize + int(addedSize)
+		largeness := math.Pow(float64(nchars), 0.6) + math.Pow(float64(np-1), 0.8)
+		addedSize = int(240.0 / largeness)
 	}
-	textImg := drawText(paragraphs, dynamicFontSize, width-paddingLeft*2, height-20)
+	textImg := drawText(paragraphs, fontSize+addedSize, width-paddingLeft*2, height-20)
 	img.DrawImage(textImg, paddingLeft, 20)
 
 	// font for writing the date
