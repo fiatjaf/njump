@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
@@ -29,6 +30,16 @@ import (
 const (
 	nSupportedScripts = 14
 	scaleShift        = 6
+)
+
+// highlighting stuff
+type hlstate int
+
+const (
+	hlNormal  hlstate = 0
+	hlLink    hlstate = 1
+	hlMention hlstate = 2
+	hlHashtag hlstate = 3
 )
 
 var (
@@ -357,7 +368,7 @@ func shortenURLs(text string) string {
 // but also, the most important change was to make it "shape" the same text, twice, with the default font and with
 // the emoji font, then build an output of glyphs containing normal glyphs for when the referenced rune is not an
 // emoji and an emoji glyph for when it is.
-func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
+func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate) {
 	lang, script, dir, face := getLanguageAndScriptAndDirectionAndFont(rawText)
 
 	shaperLock.Lock()
@@ -449,9 +460,15 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
 		}
 	}
 
+	// this will be used to determine if we'll use a different color when rendering a glyph or not
+	hlMask := make([]hlstate, len(emojiBuffer.Info))
+	var hlState hlstate = hlNormal
+
 	// convert the shaped text into an output
 	glyphs := make([]shaping.Glyph, len(mainBuffer.Info))
 	for i := 0; i < len(glyphs); i++ {
+
+		// deciding if we'll render this as emoji or not
 		var buf *harfbuzz.Buffer
 		var font *harfbuzz.Font
 		if emojiMask[i] {
@@ -461,7 +478,56 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
 			buf = mainBuffer
 			font = mainFont
 		}
+
+		// current glyph specs
 		glyph := buf.Info[i]
+
+		// naïve text highlighting
+		switch hlState {
+		case hlNormal:
+			if glyph.Codepoint == '#' &&
+				len(buf.Info) > i+1 &&
+				unicode.In(buf.Info[i+1].Codepoint, unicode.Letter) {
+				hlState = hlHashtag
+			} else if glyph.Codepoint == 'h' &&
+				len(buf.Info) > i+1 &&
+				buf.Info[i+1].Codepoint == 't' &&
+				buf.Info[i+2].Codepoint == 't' &&
+				buf.Info[i+3].Codepoint == 'p' {
+
+				if buf.Info[i+4].Codepoint == 's' &&
+					buf.Info[i+5].Codepoint == ':' &&
+					buf.Info[i+6].Codepoint == '/' &&
+					buf.Info[i+7].Codepoint == '/' &&
+					buf.Info[i+8].Codepoint != ' ' {
+					hlState = hlLink
+				} else if buf.Info[i+4].Codepoint == ':' &&
+					buf.Info[i+5].Codepoint == '/' &&
+					buf.Info[i+6].Codepoint == '/' &&
+					buf.Info[i+7].Codepoint != ' ' {
+					hlState = hlLink
+				}
+			} else if glyph.Codepoint == '@' &&
+				len(buf.Info) > i+1 &&
+				unicode.In(buf.Info[i+1].Codepoint, unicode.Letter) {
+				hlState = hlMention
+			}
+		case hlLink:
+			if glyph.Codepoint == ' ' ||
+				glyph.Codepoint == ',' {
+				hlState = hlNormal
+			}
+		case hlMention:
+			if !unicode.In(glyph.Codepoint, unicode.Letter) {
+				hlState = hlNormal
+			}
+		case hlHashtag:
+			if !unicode.In(glyph.Codepoint, unicode.Letter) {
+				hlState = hlNormal
+			}
+		}
+		hlMask[i] = hlState
+		// ~
 
 		glyphs[i] = shaping.Glyph{
 			ClusterIndex: glyph.Cluster,
@@ -500,7 +566,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool) {
 	}
 	out.RecalculateAll()
 
-	return out, emojiMask
+	return out, emojiMask, hlMask
 }
 
 // this function is copied from go-text/typesetting/shaping because shapeText needs it
@@ -546,12 +612,13 @@ func countClusters(glyphs []shaping.Glyph, textLen int, dir di.Progression) {
 // this function is copied from go-text/render, but adapted to not require a "class" to be instantiated and also,
 // more importantly, to take an emojiMask parameter, with the same length as out.Glyphs, to determine when a
 // glyph should be rendered with the emoji font instead of with the default font
-func drawShapedRunAt(
+func drawShapedBlockAt(
 	img draw.Image,
 	fontSize int,
-	clr color.Color,
+	colors [4]color.Color,
 	out shaping.Output,
 	emojiMask []bool,
+	hlMask []hlstate,
 	maskBaseIndex int,
 	startX,
 	startY int,
@@ -559,11 +626,17 @@ func drawShapedRunAt(
 	scale := float32(fontSize) / float32(out.Face.Upem())
 
 	b := img.Bounds()
-	scanner := rasterx.NewScannerGV(b.Dx(), b.Dy(), img, b)
-	f := rasterx.NewFiller(b.Dx(), b.Dy(), scanner)
-	f.SetColor(clr)
+
+	var fillers [4]*rasterx.Filler
+	for i := range fillers {
+		scanner := rasterx.NewScannerGV(b.Dx(), b.Dy(), img, b)
+		fillers[i] = rasterx.NewFiller(b.Dx(), b.Dy(), scanner)
+		fillers[i].SetColor(colors[i])
+	}
+
 	x := float32(startX)
 	y := float32(startY)
+
 	for i, g := range out.Glyphs {
 		xPos := x + fixed266ToFloat(g.XOffset)
 		yPos := y - fixed266ToFloat(g.YOffset)
@@ -574,6 +647,8 @@ func drawShapedRunAt(
 			face = emojiFace
 			currentScale = float32(fontSize) / float32(face.Upem())
 		}
+
+		f := fillers[hlMask[maskBaseIndex+i]]
 
 		data := face.GlyphData(g.GlyphID)
 		switch format := data.(type) {
@@ -588,7 +663,10 @@ func drawShapedRunAt(
 		charsWritten++
 		x += fixed266ToFloat(g.XAdvance)
 	}
-	f.Draw()
+
+	for _, filler := range fillers {
+		filler.Draw()
+	}
 
 	return charsWritten, int(math.Ceil(float64(x)))
 }

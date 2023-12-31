@@ -179,10 +179,9 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 
 func drawText(paragraphs []string, width, height int, dynamicResize bool) image.Image {
 	FONT_SIZE := 25
-	color := color.RGBA{R: 255, G: 230, B: 238, A: 255}
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
-	joinedContent := strings.Join(paragraphs, " \n") // The space before the \n is necessary
+	joinedContent := strings.Join(paragraphs, " \n") // the space before the \n is necessary
 	if dynamicResize && len(joinedContent) < 141 {
 		fontSizeTest := 7.0
 		step := 0.5
@@ -209,7 +208,7 @@ func drawText(paragraphs []string, width, height int, dynamicResize bool) image.
 	for _, paragraph := range paragraphs {
 		rawText := []rune(paragraph)
 
-		shapedRunes, emojiMask := shapeText(rawText, FONT_SIZE)
+		shapedRunes, emojiMask, hlMask := shapeText(rawText, FONT_SIZE)
 
 		var wrapper shaping.LineWrapper
 		it := shaping.NewSliceIterator([]shaping.Output{shapedRunes})
@@ -218,12 +217,18 @@ func drawText(paragraphs []string, width, height int, dynamicResize bool) image.
 		totalCharsWritten := 0
 		for _, line := range lines {
 			for _, out := range line {
-				charsWritten, _ := drawShapedRunAt(
+				charsWritten, _ := drawShapedBlockAt(
 					img,
 					FONT_SIZE,
-					color,
+					[4]color.Color{
+						color.RGBA{R: 255, G: 230, B: 238, A: 255}, // normal
+						color.RGBA{R: 146, G: 193, B: 198, A: 255}, // links
+						color.RGBA{R: 84, G: 211, B: 168, A: 255},  // mentions
+						color.RGBA{R: 156, G: 186, B: 53, A: 255},  // hashtags
+					},
 					out,
 					emojiMask,
+					hlMask,
 					totalCharsWritten,
 					0,
 					FONT_SIZE*lineNumber*12/10,
