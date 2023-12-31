@@ -19,11 +19,12 @@ import (
 )
 
 type Settings struct {
-	Port           string `envconfig:"PORT" default:"2999"`
-	Domain         string `envconfig:"DOMAIN" default:"njump.me"`
-	DiskCachePath  string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
-	EventStorePath string `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
-	TailwindDebug  bool   `envconfig:"TAILWIND_DEBUG"`
+	Port              string `envconfig:"PORT" default:"2999"`
+	Domain            string `envconfig:"DOMAIN" default:"njump.me"`
+	DiskCachePath     string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
+	EventStorePath    string `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
+	TailwindDebug     bool   `envconfig:"TAILWIND_DEBUG"`
+	SkipLanguageModel bool   `envconfig:"SKIP_LANGUAGE_MODEL"`
 }
 
 //go:embed static/*

@@ -1,7 +1,7 @@
 export PATH := "./node_modules/.bin:" + env_var('PATH')
 
 dev:
-    TAILWIND_DEBUG=true go build -o /tmp/njump && /tmp/njump
+    TAILWIND_DEBUG=true SKIP_LANGUAGE_MODEL=true go build -o /tmp/njump && /tmp/njump
 
 check-samples:
     #!/usr/bin/env xonsh

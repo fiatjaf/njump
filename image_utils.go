@@ -115,17 +115,19 @@ type ScriptRange struct {
 
 func initializeImageDrawingStuff() error {
 	// language detector
-	detector = lingua.NewLanguageDetectorBuilder().FromLanguages(
-		lingua.Japanese,
-		lingua.Persian,
-		lingua.Chinese,
-		lingua.Thai,
-		lingua.Hebrew,
-		lingua.Arabic,
-		lingua.Bengali,
-		lingua.Hindi,
-		lingua.Korean,
-	).WithLowAccuracyMode().Build()
+	if !s.SkipLanguageModel {
+		detector = lingua.NewLanguageDetectorBuilder().FromLanguages(
+			lingua.Japanese,
+			lingua.Persian,
+			lingua.Chinese,
+			lingua.Thai,
+			lingua.Hebrew,
+			lingua.Arabic,
+			lingua.Bengali,
+			lingua.Hindi,
+			lingua.Korean,
+		).WithLowAccuracyMode().Build()
+	}
 
 	// script detector material
 	for _, srange := range language.ScriptRanges {
@@ -252,11 +254,15 @@ gotScriptIndex:
 	direction := directionMap[idx]
 
 	lng := language.Language("en-us")
-	lang, ok := detector.DetectLanguageOf(string(paragraph))
-	if ok {
-		lng = language.Language(lang.IsoCode639_1().String())
-	} else {
+	if detector == nil {
 		lng = defaultLanguageMap[idx]
+	} else {
+		lang, ok := detector.DetectLanguageOf(string(paragraph))
+		if ok {
+			lng = language.Language(lang.IsoCode639_1().String())
+		} else {
+			lng = defaultLanguageMap[idx]
+		}
 	}
 
 	return lng, script, direction, face
