@@ -542,9 +542,9 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 					}
 				} else if glyph.Codepoint == INVISIBLE_SPACE &&
 					len(buf.Info) > i+1 &&
-					unicode.Is(lettersAndNumbers, buf.Info[i+1].Codepoint) {
+					(unicode.Is(lettersAndNumbers, buf.Info[i+1].Codepoint) || emojiMask[i+1]) {
 					hlState = hlMention
-					hlSkip = 1 // we already know the next character is a letter
+					hlSkip = 1 // we already know the next character is a letter or emoji
 				}
 			case hlLink:
 				if glyph.Codepoint == ' ' ||
@@ -552,7 +552,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 					hlState = hlNormal
 				}
 			case hlMention:
-				if !unicode.Is(lettersAndNumbers, glyph.Codepoint) {
+				if !unicode.Is(lettersAndNumbers, glyph.Codepoint) && !emojiMask[i] {
 					hlState = hlNormal
 				}
 			case hlHashtag:
