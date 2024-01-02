@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	_ "image/gif"
 	"math"
 	"net/http"
 	"net/url"
@@ -13,6 +14,8 @@ import (
 	"sync"
 	"time"
 	"unicode"
+
+	_ "golang.org/x/image/webp"
 
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
