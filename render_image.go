@@ -210,9 +210,9 @@ func drawText(paragraphs []string, fontSize int, width, height int) image.Image 
 					fontSize,
 					[4]color.Color{
 						color.RGBA{R: 255, G: 230, B: 238, A: 255}, // normal
-						color.RGBA{R: 146, G: 193, B: 198, A: 255}, // links
-						color.RGBA{R: 84, G: 211, B: 168, A: 255},  // mentions
-						color.RGBA{R: 156, G: 186, B: 53, A: 255},  // hashtags
+						color.RGBA{R: 242, G: 211, B: 152, A: 255}, // links
+						color.RGBA{R: 227, G: 42, B: 109, A: 255},  // mentions -> Tailwind strongpink
+						color.RGBA{R: 151, G: 210, B: 251, A: 255}, // hashtags
 					},
 					out,
 					emojiMask,
