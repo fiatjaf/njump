@@ -253,15 +253,15 @@ func replaceNostrURLsWithTags(matcher *regexp.Regexp, input string) string {
 	// match and replace npup1, nprofile1, note1, nevent1, etc
 	return matcher.ReplaceAllStringFunc(input, func(match string) string {
 		nip19 := match[len("nostr:"):]
-		first_chars := nip19[:8]
-		last_chars := nip19[len(nip19)-4:]
+		firstChars := nip19[:8]
+		lastChars := nip19[len(nip19)-4:]
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
 			defer cancel()
 			name, _ := getNameFromNip19(ctx, nip19)
-			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a>`, nip19, name, first_chars+"…"+last_chars)
+			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a>`, nip19, name, firstChars+"…"+lastChars)
 		} else {
-			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">%s</a>`, nip19, first_chars+"…"+last_chars)
+			return fmt.Sprintf(`<a href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">%s</a>`, nip19, firstChars+"…"+lastChars)
 		}
 	})
 }
@@ -270,12 +270,12 @@ func shortenNostrURLs(input string) string {
 	// match and replace npup1, nprofile1, note1, nevent1, etc
 	return nostrEveryMatcher.ReplaceAllStringFunc(input, func(match string) string {
 		nip19 := match[len("nostr:"):]
-		first_chars := nip19[:8]
-		last_chars := nip19[len(nip19)-4:]
+		firstChars := nip19[:8]
+		lastChars := nip19[len(nip19)-4:]
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
-			return "@" + first_chars + "…" + last_chars
+			return "@" + firstChars + "…" + lastChars
 		} else {
-			return "#" + first_chars + "…" + last_chars
+			return "#" + firstChars + "…" + lastChars
 		}
 	})
 }
@@ -342,9 +342,9 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 func linkQuotes(input string) string {
 	return nostrNoteNeventMatcher.ReplaceAllStringFunc(input, func(match string) string {
 		nip19 := match[len("nostr:"):]
-		first_chars := nip19[:8]
-		last_chars := nip19[len(nip19)-4:]
-		return fmt.Sprintf(`<a href="/%s">%s</a>`, nip19, first_chars+"…"+last_chars)
+		firstChars := nip19[:8]
+		lastChars := nip19[len(nip19)-4:]
+		return fmt.Sprintf(`<a href="/%s">%s</a>`, nip19, firstChars+"…"+lastChars)
 	})
 }
 
