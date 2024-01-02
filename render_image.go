@@ -45,6 +45,12 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Trim fake extensions
+	extensions := []string{".png", ".jpg", ".jpeg"}
+	for _, ext := range extensions {
+		code = strings.TrimSuffix(code, ext)
+	}
+
 	data, err := grabData(r.Context(), code, false)
 	if err != nil {
 		http.Error(w, "error fetching event: "+err.Error(), 404)
