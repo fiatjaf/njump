@@ -23,7 +23,11 @@ import (
 	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
-const XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+const (
+	XML_HEADER      = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+	THIN_SPACE      = '\u2009'
+	INVISIBLE_SPACE = '\U0001D17A'
+)
 
 var (
 	urlSuffixMatcher         = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
@@ -296,7 +300,8 @@ func getNameFromNip19(ctx context.Context, nip19 string) (string, bool) {
 }
 
 // replaces an npub/nprofile with the name of the author, if possible
-func replaceUserReferencesWithNames(ctx context.Context, input []string) []string {
+// meant to be used when plaintext is expected, not formatted HTML
+func replaceUserReferencesWithNames(ctx context.Context, input []string, prefix, suffix string) []string {
 	// Match and replace npup1 or nprofile1
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
@@ -307,10 +312,7 @@ func replaceUserReferencesWithNames(ctx context.Context, input []string) []strin
 			nip19code := submatch[1]
 			name, ok := getNameFromNip19(ctx, nip19code)
 			if ok {
-				spl := strings.SplitN(strings.TrimSpace(name), " ", 2)
-				if spl[0] != "" {
-					return "@" + spl[0]
-				}
+				return prefix + strings.ReplaceAll(name, " ", string(THIN_SPACE))
 			}
 			return nip19code[0:10] + "…" + nip19code[len(nip19code)-5:]
 		})

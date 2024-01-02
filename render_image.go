@@ -63,6 +63,8 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		quotesAsBlockPrefixedText(r.Context(),
 			strings.Split(content, "\n"),
 		),
+		string(INVISIBLE_SPACE),
+		"",
 	)
 
 	img, err := drawImage(paragraphs, getPreviewStyle(r), data.metadata, data.createdAt)

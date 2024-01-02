@@ -24,6 +24,7 @@ import (
 	"github.com/nbd-wtf/emoji"
 	"github.com/pemistahl/lingua-go"
 	"github.com/srwiley/rasterx"
+	"golang.org/x/exp/slices"
 	"golang.org/x/image/math/fixed"
 )
 
@@ -175,12 +176,19 @@ func initializeImageDrawingStuff() error {
 
 	// highlighting stuff
 	lettersAndNumbers.LatinOffset = unicode.Latin.LatinOffset + unicode.Number.LatinOffset
-	lettersAndNumbers.R16 = make([]unicode.Range16, len(unicode.Latin.R16)+len(unicode.Number.R16))
+	lettersAndNumbers.R16 = make([]unicode.Range16, len(unicode.Latin.R16)+len(unicode.Number.R16)+1)
 	copy(lettersAndNumbers.R16, unicode.Latin.R16)
 	copy(lettersAndNumbers.R16[len(unicode.Latin.R16):], unicode.Number.R16)
+	lettersAndNumbers.R16[len(unicode.Latin.R16)+len(unicode.Number.R16)] = unicode.Range16{
+		Lo:     uint16(THIN_SPACE),
+		Hi:     uint16(THIN_SPACE),
+		Stride: 1,
+	}
+	slices.SortFunc(lettersAndNumbers.R16, func(a, b unicode.Range16) int { return int(a.Lo) - int(b.Lo) })
 	lettersAndNumbers.R32 = make([]unicode.Range32, len(unicode.Latin.R32)+len(unicode.Number.R32))
 	copy(lettersAndNumbers.R32, unicode.Latin.R32)
 	copy(lettersAndNumbers.R32[len(unicode.Latin.R32):], unicode.Number.R32)
+	slices.SortFunc(lettersAndNumbers.R32, func(a, b unicode.Range32) int { return int(a.Lo) - int(b.Lo) })
 
 	return nil
 }
@@ -480,6 +488,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 	// this will be used to determine if we'll use a different color when rendering a glyph or not
 	hlMask := make([]hlstate, len(emojiBuffer.Info))
 	var hlState hlstate = hlNormal
+	hlSkip := 0 // this will cause us to skip the highlighting parsing phase for the next x glyphs
 
 	// convert the shaped text into an output
 	glyphs := make([]shaping.Glyph, len(mainBuffer.Info))
@@ -500,47 +509,56 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 		glyph := buf.Info[i]
 
 		// naïve text highlighting
-		switch hlState {
-		case hlNormal:
-			if glyph.Codepoint == '#' &&
-				len(buf.Info) > i+1 &&
-				unicode.In(buf.Info[i+1].Codepoint, lettersAndNumbers) {
-				hlState = hlHashtag
-			} else if glyph.Codepoint == 'h' &&
-				len(buf.Info) > i+1 &&
-				buf.Info[i+1].Codepoint == 't' &&
-				buf.Info[i+2].Codepoint == 't' &&
-				buf.Info[i+3].Codepoint == 'p' {
+		if hlSkip > 0 {
+			// skip once
+			hlSkip--
+		} else {
+			switch hlState {
+			case hlNormal:
+				if glyph.Codepoint == '#' &&
+					len(buf.Info) > i+1 &&
+					unicode.Is(lettersAndNumbers, buf.Info[i+1].Codepoint) {
+					hlState = hlHashtag
+					hlSkip = 1 // we already know the next character is a letter in the hashtag, so skip it
+				} else if glyph.Codepoint == 'h' &&
+					len(buf.Info) > i+1 &&
+					buf.Info[i+1].Codepoint == 't' &&
+					buf.Info[i+2].Codepoint == 't' &&
+					buf.Info[i+3].Codepoint == 'p' {
 
-				if buf.Info[i+4].Codepoint == 's' &&
-					buf.Info[i+5].Codepoint == ':' &&
-					buf.Info[i+6].Codepoint == '/' &&
-					buf.Info[i+7].Codepoint == '/' &&
-					buf.Info[i+8].Codepoint != ' ' {
-					hlState = hlLink
-				} else if buf.Info[i+4].Codepoint == ':' &&
-					buf.Info[i+5].Codepoint == '/' &&
-					buf.Info[i+6].Codepoint == '/' &&
-					buf.Info[i+7].Codepoint != ' ' {
-					hlState = hlLink
+					if buf.Info[i+4].Codepoint == 's' &&
+						buf.Info[i+5].Codepoint == ':' &&
+						buf.Info[i+6].Codepoint == '/' &&
+						buf.Info[i+7].Codepoint == '/' &&
+						buf.Info[i+8].Codepoint != ' ' {
+						hlState = hlLink
+						hlSkip = 8 // we already know the next 8 characters are 'ttps://_', so skip them
+					} else if buf.Info[i+4].Codepoint == ':' &&
+						buf.Info[i+5].Codepoint == '/' &&
+						buf.Info[i+6].Codepoint == '/' &&
+						buf.Info[i+7].Codepoint != ' ' {
+						hlState = hlLink
+						hlSkip = 7 // we already know the next 8 characters are 'ttp://_', so skip them
+					}
+				} else if glyph.Codepoint == INVISIBLE_SPACE &&
+					len(buf.Info) > i+1 &&
+					unicode.Is(lettersAndNumbers, buf.Info[i+1].Codepoint) {
+					hlState = hlMention
+					hlSkip = 1 // we already know the next character is a letter
 				}
-			} else if glyph.Codepoint == '@' &&
-				len(buf.Info) > i+1 &&
-				unicode.In(buf.Info[i+1].Codepoint, lettersAndNumbers) {
-				hlState = hlMention
-			}
-		case hlLink:
-			if glyph.Codepoint == ' ' ||
-				glyph.Codepoint == ',' {
-				hlState = hlNormal
-			}
-		case hlMention:
-			if !unicode.In(glyph.Codepoint, lettersAndNumbers) {
-				hlState = hlNormal
-			}
-		case hlHashtag:
-			if !unicode.In(glyph.Codepoint, lettersAndNumbers) {
-				hlState = hlNormal
+			case hlLink:
+				if glyph.Codepoint == ' ' ||
+					glyph.Codepoint == ',' {
+					hlState = hlNormal
+				}
+			case hlMention:
+				if !unicode.Is(lettersAndNumbers, glyph.Codepoint) {
+					hlState = hlNormal
+				}
+			case hlHashtag:
+				if !unicode.Is(lettersAndNumbers, glyph.Codepoint) {
+					hlState = hlNormal
+				}
 			}
 		}
 		hlMask[i] = hlState
