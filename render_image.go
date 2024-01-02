@@ -112,13 +112,13 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 
 	// main content text
 	addedSize := 0
-	if np := len(paragraphs); np < 4 {
+	if np := len(paragraphs); np < 6 {
 		nchars := 0
 		for _, par := range paragraphs {
 			nchars += len([]rune(par))
 		}
 		largeness := math.Pow(float64(nchars), 0.6) + math.Pow(float64(np-1), 0.8)
-		addedSize = int(240.0 / largeness)
+		addedSize = int(240.0 / largeness * math.Pow(float64(height/525), 2.2))
 	}
 	textImg := drawText(paragraphs, fontSize+addedSize, width-paddingLeft*2, height-20)
 	img.DrawImage(textImg, paddingLeft, 20)
