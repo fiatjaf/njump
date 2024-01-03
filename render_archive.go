@@ -55,10 +55,10 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	data := []string{}
 	for i := 0; i < len(keys); i++ {
 		if area == "npubs-archive" {
-			npub, _ := nip19.EncodePublicKey(keys[i])
+			npub, _ := nip19.EncodePublicKey(keys[i][3:])
 			data = append(data, npub)
 		} else {
-			data = append(data, keys[i])
+			data = append(data, trimProtocol(keys[i][3:]))
 		}
 	}
 
