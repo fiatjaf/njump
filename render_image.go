@@ -234,16 +234,14 @@ func drawText(paragraphs []string, fontSize int, width, height int) (image.Image
 					fontSize*lineNumber*12/10,
 				)
 				totalCharsWritten += charsWritten
+
+				if fontSize*lineNumber*12/10 > height {
+					return img, true
+				}
 				lineNumber++
 			}
 		}
 	}
 
-	overflow := false
-	lineNumber--
-	if fontSize*lineNumber*12/10 > height {
-		overflow = true
-	}
-
-	return img, overflow
+	return img, false
 }
