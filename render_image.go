@@ -112,13 +112,19 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 
 	// main content text
 	addedSize := 0
+	zoom := 1.0
 	if np := len(paragraphs); np < 6 {
 		nchars := 0
+		blankLines := 0
 		for _, par := range paragraphs {
 			nchars += len([]rune(par))
+			if par == "" {
+				blankLines++
+			}
 		}
-		largeness := math.Pow(float64(nchars), 0.6) + math.Pow(float64(np-1), 0.8)
-		addedSize = int(240.0 / largeness * math.Pow(float64(height/525), 2.2))
+		largeness := math.Pow(float64(nchars), 0.60) + math.Pow(float64(np-blankLines), 1) + math.Pow(float64(blankLines), 0.7)
+		zoom = float64(math.Pow(float64(height)/366.0-(float64(blankLines+1)/10), 1.2))
+		addedSize = int(200.0 / largeness * zoom)
 	}
 	textImg, overflowingText := drawText(paragraphs, fontSize+addedSize, width-paddingLeft*2, height-20)
 	img.DrawImage(textImg, paddingLeft, 20)
