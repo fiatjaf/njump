@@ -11,6 +11,7 @@ import (
 
 func updateArchives(ctx context.Context) {
 	// do this so we don't run this every time we restart it locally
+
 	time.Sleep(10 * time.Minute)
 
 	for {
@@ -88,7 +89,7 @@ func loadRelaysArchive(ctx context.Context) {
 
 	for _, pubkey := range trustedPubKeys {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-		pubkeyContacts := relaysForPubkey(ctx, pubkey)
+		pubkeyContacts := relaysForPubkey(ctx, pubkey, profiles...)
 		relaysArchive = append(relaysArchive, pubkeyContacts...)
 		cancel()
 	}
