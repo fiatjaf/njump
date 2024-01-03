@@ -96,6 +96,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	paddingLeft := 25
 	barExtraPadding := 0
 	gradientRectHeight := 140
+	barHeight := 70
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
@@ -126,7 +127,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 		zoom = float64(math.Pow(float64(height)/366.0-(float64(blankLines+1)/10), 1.2))
 		addedSize = int(200.0 / largeness * zoom)
 	}
-	textImg, overflowingText := drawText(paragraphs, fontSize+addedSize, width-paddingLeft*2, height-20)
+	textImg, overflowingText := drawText(paragraphs, int(float64(fontSize+addedSize)), width-paddingLeft*2, height-20-barHeight)
 	img.DrawImage(textImg, paddingLeft, 20)
 
 	// font for writing the date
@@ -139,7 +140,6 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	}))
 
 	// black bar at the bottom
-	barHeight := 70
 	img.SetColor(BAR_BACKGROUND)
 	img.DrawRectangle(0, float64(height-barHeight), float64(width), float64(barHeight))
 	img.Fill()
@@ -240,6 +240,7 @@ func drawText(paragraphs []string, fontSize int, width, height int) (image.Image
 	}
 
 	overflow := false
+	lineNumber--
 	if fontSize*lineNumber*12/10 > height {
 		overflow = true
 	}
