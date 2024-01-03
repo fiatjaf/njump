@@ -10,7 +10,7 @@ func renderRobots(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `User-agent: *
 Allow: /
 
-Sitemap: https://{{%s}}/npubs-archive.xml
-Sitemap: https://{{%s}}/relays-archive.xml
+Sitemap: https://%s/npubs-archive.xml
+Sitemap: https://%s/relays-archive.xml
 `, s.Domain, s.Domain)
 }
