@@ -123,7 +123,9 @@
   {{ if not (eq "" .Nevent) }}
   <div class="mb-6 leading-5">
     <div class="text-sm text-strongpink">Address Code</div>
-    <span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{.Nevent}}span>
+    <span class="text-[16px] text-neutral-500 dark:text-neutral-300"
+      >{{.Nevent}}</span
+    >
   </div>
   {{ end }}
 
