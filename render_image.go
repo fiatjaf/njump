@@ -94,7 +94,6 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	width := 700
 	height := 525
 	paddingLeft := 25
-	barExtraPadding := 0
 	gradientRectHeight := 140
 	switch style {
 	case StyleTelegram:
@@ -102,7 +101,6 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 		width -= 10
 	case StyleTwitter:
 		height = width * 268 / 512
-		barExtraPadding = 105
 	}
 
 	img := gg.NewContext(width, height)
@@ -150,17 +148,17 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	}
 
 	// draw author's name
-	authorTextX := paddingLeft + barExtraPadding
+	authorTextX := paddingLeft
 	if metadata.Picture != "" {
 		authorImage, err := fetchImageFromURL(metadata.Picture)
 		if err == nil {
 			resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(barHeight-20), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
-			img.DrawImage(resizedAuthorImage, paddingLeft+barExtraPadding, height-barHeight+10)
+			img.DrawImage(resizedAuthorImage, paddingLeft, height-barHeight+10)
 			authorTextX += 65
 		}
 	}
 	authorTextY := height - barHeight + 15
-	authorMaxWidth := width/2.0 - paddingLeft*2 - barExtraPadding
+	authorMaxWidth := width/2.0 - paddingLeft*2
 	img.SetColor(color.White)
 	textImg = drawText([]string{metadata.ShortName()}, fontSize, width, barHeight)
 	img.DrawImage(textImg, authorTextX, authorTextY)

@@ -335,9 +335,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 	case Note:
 		if style == StyleTwitter {
-			// twitter only uses one title, so we ensure it is this
-			// we can't set this for other platforms as some will reuse stuff from twitter-specific tags
-			opengraph.SingleTitle = "by " + data.authorShort + " at " + humanDate(data.event.CreatedAt)
+			// twitter has started sprinkling this over our image, so let's make it invisible
+			opengraph.SingleTitle = string(INVISIBLE_SPACE)
 		}
 
 		if opengraph.BigImage == "" && style != StyleTwitter && strings.HasSuffix(opengraph.Text, opengraph.Image) {
