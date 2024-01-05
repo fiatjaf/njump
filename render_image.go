@@ -95,6 +95,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	height := 525
 	paddingLeft := 25
 	gradientRectHeight := 140
+	barHeight := 70
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
@@ -110,15 +111,21 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 
 	// main content text
 	addedSize := 0
-	if np := len(paragraphs); np < 4 {
+	zoom := 1.0
+	if np := len(paragraphs); np < 6 {
 		nchars := 0
+		blankLines := 0
 		for _, par := range paragraphs {
 			nchars += len([]rune(par))
+			if par == "" {
+				blankLines++
+			}
 		}
-		largeness := math.Pow(float64(nchars), 0.6) + math.Pow(float64(np-1), 0.8)
-		addedSize = int(240.0 / largeness)
+		largeness := math.Pow(float64(nchars), 0.60) + math.Pow(float64(np-blankLines), 1) + math.Pow(float64(blankLines), 0.7)
+		zoom = float64(math.Pow(float64(height)/366.0-(float64(blankLines+1)/10), 1.2))
+		addedSize = int(200.0 / largeness * zoom)
 	}
-	textImg := drawText(paragraphs, fontSize+addedSize, width-paddingLeft*2, height-20)
+	textImg, overflowingText := drawText(paragraphs, int(float64(fontSize+addedSize)), width-paddingLeft*2, height-20-barHeight)
 	img.DrawImage(textImg, paddingLeft, 20)
 
 	// font for writing the date
@@ -131,13 +138,12 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	}))
 
 	// black bar at the bottom
-	barHeight := 70
 	img.SetColor(BAR_BACKGROUND)
 	img.DrawRectangle(0, float64(height-barHeight), float64(width), float64(barHeight))
 	img.Fill()
 
 	// a rectangle at the bottom with a gradient from black to transparent
-	if len(strings.Join(paragraphs, "\n")) > 141 {
+	if overflowingText {
 		gradientRectY := height - barHeight - gradientRectHeight
 		for y := 0; y < gradientRectHeight; y++ {
 			alpha := uint8(255 * (math.Pow(float64(y)/float64(gradientRectHeight), 2)))
@@ -160,7 +166,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	authorTextY := height - barHeight + 15
 	authorMaxWidth := width/2.0 - paddingLeft*2
 	img.SetColor(color.White)
-	textImg = drawText([]string{metadata.ShortName()}, fontSize, width, barHeight)
+	textImg, _ = drawText([]string{metadata.ShortName()}, fontSize, width, barHeight)
 	img.DrawImage(textImg, authorTextX, authorTextY)
 
 	// a gradient to cover too long names
@@ -193,7 +199,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	return img.Image(), nil
 }
 
-func drawText(paragraphs []string, fontSize int, width, height int) image.Image {
+func drawText(paragraphs []string, fontSize int, width, height int) (image.Image, bool) {
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
 	lineNumber := 1
@@ -226,10 +232,14 @@ func drawText(paragraphs []string, fontSize int, width, height int) image.Image 
 					fontSize*lineNumber*12/10,
 				)
 				totalCharsWritten += charsWritten
+
+				if fontSize*lineNumber*12/10 > height {
+					return img, true
+				}
 				lineNumber++
 			}
 		}
 	}
 
-	return img
+	return img, false
 }
