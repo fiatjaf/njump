@@ -5,7 +5,7 @@ go 1.21.4
 require (
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/fiatjaf/eventstore v0.3.3
+	github.com/fiatjaf/eventstore v0.3.6
 	github.com/fiatjaf/khatru v0.2.1
 	github.com/fogleman/gg v1.3.0
 	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
