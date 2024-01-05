@@ -7,9 +7,12 @@ import (
 	"image/color"
 	"image/draw"
 	_ "image/gif"
+	"image/png"
 	"math"
 	"net/http"
 	"net/url"
+	"os"
+	"os/exec"
 	"strings"
 	"sync"
 	"time"
@@ -359,8 +362,8 @@ func lookupScript(r rune) int {
 func shortenURLs(text string, skipImages bool) string {
 	return urlMatcher.ReplaceAllStringFunc(text, func(match string) string {
 
-		if skipImages && isImageURL(match) {
-			return match // Skip image URLs
+		if skipImages && isMediaURL(match) {
+			return match // Skip media URLs
 		}
 
 		if len(match) < 50 {
@@ -716,17 +719,14 @@ func drawShapedBlockAt(
 	return charsWritten, int(math.Ceil(float64(x)))
 }
 
-func drawImageAt(img draw.Image, imageUrl string, startY int) error {
+func drawImageAt(img draw.Image, imageUrl string, startY int) int {
 	resp, err := http.Get(imageUrl)
 	if err != nil {
-		return err
+		return startY
 	}
 	defer resp.Body.Close()
 
 	srcImg, _, err := image.Decode(resp.Body)
-	if err != nil {
-		return err
-	}
 
 	// Resize the fetched image to fit the width of the destination image (img)
 	width := img.Bounds().Dx()
@@ -736,7 +736,55 @@ func drawImageAt(img draw.Image, imageUrl string, startY int) error {
 	destRect := image.Rect(0, destY, width, destY+destHeight)
 	draw.Draw(img, destRect, resizedImg, image.Point{X: 0, Y: 0}, draw.Src)
 
-	return nil
+	return startY + destHeight
+}
+
+func drawVideoAt(img draw.Image, videoUrl string, startY int) int {
+	tempImagePath := "temp_frame.jpg"
+	cmd := exec.Command("ffmpeg", "-i", videoUrl, "-vframes", "1", "-f", "image2", tempImagePath)
+	cmd.Stdout = nil
+	cmd.Stderr = nil
+	if err := cmd.Run(); err != nil {
+		return startY
+	}
+	frame, _ := os.Open(tempImagePath)
+	defer os.Remove(tempImagePath)
+	defer frame.Close()
+
+	imgData, _, _ := image.Decode(frame)
+
+	width := img.Bounds().Dx()
+	resizedFrame := resize.Resize(uint(width), 0, imgData, resize.Lanczos3)
+
+	// Draw the play icon on the center of the frame
+	videoFrame := image.NewRGBA(resizedFrame.Bounds())
+	draw.Draw(videoFrame, videoFrame.Bounds(), resizedFrame, image.Point{}, draw.Src)
+	iconFile, _ := static.ReadFile("static/play.png")
+	stampImg, _ := png.Decode(bytes.NewBuffer(iconFile))
+	videoWidth := videoFrame.Bounds().Dx()
+	videoHeight := videoFrame.Bounds().Dy()
+	iconWidth := stampImg.Bounds().Dx()
+	iconHeight := stampImg.Bounds().Dy()
+	posX := (videoWidth - iconWidth) / 2
+	posY := (videoHeight - iconHeight) / 2
+	destRect := image.Rect(posX, posY, posX+iconWidth, posY+iconHeight)
+	draw.Draw(videoFrame, destRect, stampImg, image.Point{}, draw.Over)
+
+	// Draw the modified video frame onto the main canvas
+	destRect = image.Rect(0, startY, img.Bounds().Dx(), startY+videoFrame.Bounds().Dy())
+	draw.Draw(img, destRect, videoFrame, image.Point{}, draw.Src)
+
+	return startY + videoFrame.Bounds().Dy()
+}
+
+func drawMediaAt(img draw.Image, mediaUrl string, startY int) int {
+	if isImageURL(mediaUrl) {
+		return drawImageAt(img, mediaUrl, startY)
+	} else if isVideoURL(mediaUrl) {
+		return drawVideoAt(img, mediaUrl, startY)
+	} else {
+		return startY
+	}
 }
 
 func isImageURL(input string) bool {
@@ -761,9 +809,35 @@ func isImageURL(input string) bool {
 	return false
 }
 
-func containImages(paragraphs []string) bool {
+func isVideoURL(input string) bool {
+	trimmedURL := strings.TrimSpace(input)
+	if trimmedURL == "" {
+		return false
+	}
+
+	parsedURL, err := url.Parse(trimmedURL)
+	if err != nil {
+		return false // Unable to parse URL, consider it non-image URL
+	}
+
+	// Extract the path (excluding query string and hash fragment)
+	path := parsedURL.Path
+	imageExtensions := []string{".mp4", ".mov"}
+	for _, ext := range imageExtensions {
+		if strings.HasSuffix(strings.ToLower(path), ext) {
+			return true // URL points to a valid image
+		}
+	}
+	return false
+}
+
+func isMediaURL(input string) bool {
+	return isImageURL(input) || isVideoURL(input)
+}
+
+func containsMedia(paragraphs []string) bool {
 	for _, paragraph := range paragraphs {
-		if isImageURL(paragraph) {
+		if isMediaURL(paragraph) {
 			return true
 		}
 	}

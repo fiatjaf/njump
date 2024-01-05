@@ -113,7 +113,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	addedSize := 0
 	zoom := 1.0
 	textFontSize := fontSize
-	if np := len(paragraphs); !containImages(paragraphs) && np < 6 {
+	if np := len(paragraphs); !containsMedia(paragraphs) && np < 6 {
 		nchars := 0
 		blankLines := 0
 		for _, par := range paragraphs {
@@ -210,12 +210,12 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 		paragraph := paragraphs[i]
 
 		// Skip empty lines if the next element is an image
-		if paragraph == "" && isImageURL(paragraphs[i+1]) {
+		if paragraph == "" && isMediaURL(paragraphs[i+1]) {
 			continue
 		}
 
-		if isImageURL(paragraph) {
-			drawImageAt(img, paragraph, yPos)
+		if isMediaURL(paragraph) {
+			yPos = drawMediaAt(img, paragraph, yPos)
 			continue
 		}
 
@@ -244,7 +244,7 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 					hlMask,
 					totalCharsWritten,
 					0,
-					fontSize*lineNumber*12/10,
+					yPos,
 				)
 				totalCharsWritten += charsWritten
 
@@ -252,7 +252,7 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 					return img, true
 				}
 				lineNumber++
-				yPos = fontSize * lineNumber * 12 / 10
+				yPos = yPos + fontSize*12/10
 			}
 		}
 	}
