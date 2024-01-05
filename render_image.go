@@ -62,7 +62,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	content = multiNewlineRe.ReplaceAllString(content, "\n\n")
 	content = strings.Replace(content, "\t", "  ", -1)
 	content = strings.Replace(content, "\r", "", -1)
-	content = shortenURLs(content)
+	content = shortenURLs(content, true)
 
 	// this turns the raw event.Content into a series of lines ready to drawn
 	paragraphs := replaceUserReferencesWithNames(r.Context(),
@@ -112,7 +112,8 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	// main content text
 	addedSize := 0
 	zoom := 1.0
-	if np := len(paragraphs); np < 6 {
+	textFontSize := fontSize
+	if np := len(paragraphs); !containImages(paragraphs) && np < 6 {
 		nchars := 0
 		blankLines := 0
 		for _, par := range paragraphs {
@@ -124,8 +125,9 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 		largeness := math.Pow(float64(nchars), 0.60) + math.Pow(float64(np-blankLines), 1) + math.Pow(float64(blankLines), 0.7)
 		zoom = float64(math.Pow(float64(height)/366.0-(float64(blankLines+1)/10), 1.2))
 		addedSize = int(200.0 / largeness * zoom)
+		textFontSize = int(float64(fontSize + addedSize))
 	}
-	textImg, overflowingText := drawText(paragraphs, int(float64(fontSize+addedSize)), width-paddingLeft*2, height-20-barHeight)
+	textImg, overflowingText := drawParagraphs(paragraphs, textFontSize, width-paddingLeft*2, height-20-barHeight)
 	img.DrawImage(textImg, paddingLeft, 20)
 
 	// font for writing the date
@@ -166,7 +168,7 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	authorTextY := height - barHeight + 15
 	authorMaxWidth := width/2.0 - paddingLeft*2
 	img.SetColor(color.White)
-	textImg, _ = drawText([]string{metadata.ShortName()}, fontSize, width, barHeight)
+	textImg, _ = drawParagraphs([]string{metadata.ShortName()}, fontSize, width, barHeight)
 	img.DrawImage(textImg, authorTextX, authorTextY)
 
 	// a gradient to cover too long names
@@ -199,11 +201,24 @@ func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, d
 	return img.Image(), nil
 }
 
-func drawText(paragraphs []string, fontSize int, width, height int) (image.Image, bool) {
+func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image.Image, bool) {
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
 	lineNumber := 1
-	for _, paragraph := range paragraphs {
+	yPos := fontSize * lineNumber * 12 / 10
+	for i := 0; i < len(paragraphs); i++ {
+		paragraph := paragraphs[i]
+
+		// Skip empty lines if the next element is an image
+		if paragraph == "" && isImageURL(paragraphs[i+1]) {
+			continue
+		}
+
+		if isImageURL(paragraph) {
+			drawImageAt(img, paragraph, yPos)
+			continue
+		}
+
 		rawText := []rune(paragraph)
 
 		shapedRunes, emojiMask, hlMask := shapeText(rawText, fontSize)
@@ -237,6 +252,7 @@ func drawText(paragraphs []string, fontSize int, width, height int) (image.Image
 					return img, true
 				}
 				lineNumber++
+				yPos = fontSize * lineNumber * 12 / 10
 			}
 		}
 	}

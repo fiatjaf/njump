@@ -17,6 +17,8 @@ import (
 
 	_ "golang.org/x/image/webp"
 
+	"github.com/nfnt/resize"
+
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
@@ -354,8 +356,13 @@ func lookupScript(r rune) int {
 }
 
 // shortenURLs takes a text content and returns the same content, but with all big URLs like https://image.nostr.build/0993112ab590e04b978ad32002005d42c289d43ea70d03dafe9ee99883fb7755.jpg#m=image%2Fjpeg&dim=1361x1148&blurhash=%3B7Jjhw00.l.QEh%3FuIA-pMe00%7EVjXX8x%5DE2xuSgtQcr%5E%2500%3FHxD%24%25%25Ms%2Bt%2B-%3BVZK59a%252MyD%2BV%5BI.8%7Ds%3B%25Lso-oi%5ENINHnjI%3BR*%3DdM%7BX7%25MIUtksn%24LM%7BMySeR%25R*%251M%7DRkv%23RjtjS%239as%3AxDnO%251&x=61be75a3e3e0cc88e7f0e625725d66923fdd777b3b691a1c7072ba494aef188d shortened to something like https://image.nostr.build/.../...7755.jpg
-func shortenURLs(text string) string {
+func shortenURLs(text string, skipImages bool) string {
 	return urlMatcher.ReplaceAllStringFunc(text, func(match string) string {
+
+		if skipImages && isImageURL(match) {
+			return match // Skip image URLs
+		}
+
 		if len(match) < 50 {
 			return match
 		}
@@ -707,6 +714,60 @@ func drawShapedBlockAt(
 	}
 
 	return charsWritten, int(math.Ceil(float64(x)))
+}
+
+func drawImageAt(img draw.Image, imageUrl string, startY int) error {
+	resp, err := http.Get(imageUrl)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	srcImg, _, err := image.Decode(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	// Resize the fetched image to fit the width of the destination image (img)
+	width := img.Bounds().Dx()
+	resizedImg := resize.Resize(uint(width), 0, srcImg, resize.Lanczos3)
+	destY := startY
+	destHeight := resizedImg.Bounds().Dy()
+	destRect := image.Rect(0, destY, width, destY+destHeight)
+	draw.Draw(img, destRect, resizedImg, image.Point{X: 0, Y: 0}, draw.Src)
+
+	return nil
+}
+
+func isImageURL(input string) bool {
+	trimmedURL := strings.TrimSpace(input)
+	if trimmedURL == "" {
+		return false
+	}
+
+	parsedURL, err := url.Parse(trimmedURL)
+	if err != nil {
+		return false // Unable to parse URL, consider it non-image URL
+	}
+
+	// Extract the path (excluding query string and hash fragment)
+	path := parsedURL.Path
+	imageExtensions := []string{".jpg", ".jpeg", ".png", ".gif", ".bmp"}
+	for _, ext := range imageExtensions {
+		if strings.HasSuffix(strings.ToLower(path), ext) {
+			return true // URL points to a valid image
+		}
+	}
+	return false
+}
+
+func containImages(paragraphs []string) bool {
+	for _, paragraph := range paragraphs {
+		if isImageURL(paragraph) {
+			return true
+		}
+	}
+	return false
 }
 
 // this draws a font glyph (i.e. a letter) according to instructions and scale and whatever
