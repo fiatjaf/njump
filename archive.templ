@@ -1,0 +1,43 @@
+package main
+
+templ archiveTemplate(params ArchivePageParams) {
+	<!DOCTYPE html>
+	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
+		<meta charset="UTF-8"/>
+		<head>
+			<title>{ params.Title }</title>
+			@headCommonTemplate(params.HeadParams)
+		</head>
+		<body class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black">
+			@topTemplate()
+			<div class="mx-auto block px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
+				<div class="flex w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:w-11/12 md:w-10/12 lg:w-9/12 lg:gap-48vw">
+					<div class="relative top-auto flex basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:items-start">
+						<div class="text-2xl">{ params.Title }</div>
+					</div>
+					<div class="w-full break-words break-all print:w-full sm:w-1/2">
+						<div class="mb-6 leading-5">
+							<h1 class="text-xl">{ params.Title }</h1>
+						</div>
+						<div class="mb-6 leading-5">
+							for _, v:= range params.Data {
+								<a class="block" href="/{params.PathPrefix}{v}">
+									{ v }
+								</a>
+							}
+						</div>
+						<div class="flex justify-between">
+							if params.PrevPage != 0 {
+								<a href="/{params.PaginationUrl}/{params.PrevPage}">&lt;&lt; Prev page</a>
+							}
+							if params.NextPage != 0 {
+								<a href="/{params.PaginationUrl}/{params.NextPage}">Next page &gt;&gt;</a>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+			@footerTemplate()
+		</body>
+	</html>
+}

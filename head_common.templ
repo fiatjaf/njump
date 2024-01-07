@@ -1,0 +1,70 @@
+package main
+
+templ headCommonTemplate(params HeadParams) {
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	if params.Oembed != "" {
+		<link
+			rel="alternate"
+			type="application/json+oembed"
+			href={ params.Oembed + "&format=json" }
+		/>
+		<link rel="alternate" type="text/xml+oembed" href={ params.Oembed + "&format=xml" }/>
+	}
+	if params.IsProfile {
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="/njump/static/favicon/profile/apple-touch-icon.png?v=2"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="/njump/static/favicon/profile/favicon-32x32.png?v=2"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="16x16"
+			href="/njump/static/favicon/profile/favicon-16x16.png?v=2"
+		/>
+	} else {
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="/njump/static/favicon/event/apple-touch-icon.png?v=2"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="/njump/static/favicon/event/favicon-32x32.png?v=2"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="16x16"
+			href="/njump/static/favicon/event/favicon-16x16.png?v=2"
+		/>
+	}
+	<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+	if params.TailwindDebugStuff != "" {
+		@templ.Raw(params.TailwindDebugStuff)
+	} else {
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="/njump/static/tailwind-bundle.min.css"
+		/>
+	}
+	<style> @media print { @page { margin: 2cm 3cm; } } </style>
+	<meta name="theme-color" content="#e42a6d"/>
+	if params.NaddrNaked != "" {
+		<link rel="canonical" href={ "https://njump.me/" + params.NaddrNaked }/>
+	} else {
+		<link rel="canonical" href={ "https://njump.me/" + params.NeventNaked }/>
+	}
+	<script type="text/hyperscript">
+on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.includes('Chrome')] then if it[0] is true and it[1] is false add .safari to <body /> end
+</script>
+}

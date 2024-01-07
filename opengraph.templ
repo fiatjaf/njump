@@ -1,0 +1,44 @@
+package main
+
+templ openGraphTemplate(params OpenGraphParams) {
+	if params.SingleTitle != "" {
+		<!-- we only display this on twitter as a single title -->
+		<meta name="twitter:title" content={ params.SingleTitle }/>
+	} else {
+		<!-- these are not shown by twitter at all, so let's not even give them -->
+		<meta property="og:site_name" content={ params.Superscript }/>
+		<meta property="og:title" content={ params.Subscript }/>
+	}
+	<!-- this is used for when we want to take over the entire screen on twitter,
+     mostly for the big "text-to-image" images -->
+	if params.BigImage != "" {
+		<meta name="twitter:card" content="summary_large_image"/>
+		<meta name="twitter:site" content="@nostrprotocol"/>
+		<meta property="og:image" content={ params.BigImage }/>
+		<meta name="twitter:image" content={ params.BigImage }/>
+	} else {
+		<!-- otherwise we tell twitter to display it as a normal text-based embed.
+             these distinctions don't seem to make any difference in other platforms,
+             maybe telegram -->
+		<meta name="twitter:card" content="summary"/>
+		if params.Image != "" {
+			<meta property="og:image" content={ params.Image }/>
+			<meta name="twitter:image" content={ params.ProxiedImage }/>
+		}
+		<!---->
+		if params.Video != "" {
+			<meta property="og:video" content={ params.Video }/>
+			<meta property="og:video:secure_url" content={ params.Video }/>
+			<meta property="og:video:type" content="video/{params.VideoType}"/>
+		}
+	}
+	<!-- now just display the short text if we have any (which we always should) -->
+	if params.Text != "" {
+		<meta property="og:description" content={ params.Text }/>
+		<meta name="twitter:description" content={ params.Text }/>
+	}
+}
+
+templ bigImagePrerender(bigImage string) {
+	<img src="{bigImage}" class="absolute left-[-999px] w-[100px]"/>
+}

@@ -1,0 +1,51 @@
+package main
+
+templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
+	<meta charset="UTF-8"/>
+	<!-- check https://nikstar.me/post/instant-view/ for more information on how this was set up -->
+	<!-- required stuff so telegram treats us like a medium.com article -->
+	<meta property="al:android:app_name" content="Medium"/>
+	<meta property="article:published_time" content={ params.CreatedAt }/>
+	<!-- stuff that goes in the actual telegram message preview -->
+	<meta property="og:site_name" content={ params.AuthorLong }/>
+	if params.Description != "" {
+		<meta property="og:description" content={ params.Description }/>
+	}
+	<!---->
+	if params.Image != "" {
+		<meta property="og:image" content={ params.Image }/>
+	}
+	<!---->
+	if params.Video != "" {
+		<meta property="og:video" content={ params.Video }/>
+		<meta property="og:video:secure_url" content={ params.Video }/>
+		<meta property="og:video:type" content={ "video/" + params.VideoType }/>
+	}
+	<!-- stuff that affects the content inside the preview window -->
+	<meta name="author" content={ params.Metadata.ShortName }/>
+	<meta name="telegram:channel" content="@nostr_protocol"/>
+	<!-- basic content of the preview window -->
+	<article>
+		<h1>
+			if params.Subject != "" {
+				{ params.Subject }
+			} else {
+				<a href={ "/" + params.Metadata.Npub }>{ params.Metadata.ShortName }</a> on Nostr:
+			}
+		</h1>
+		if params.ParentLink != "" {
+			<aside>in reply to { params.ParentLink }</aside>
+		}
+		<!---->
+		if params.Summary != "" {
+			<aside>{ params.Summary }</aside>
+		}
+		<!---->
+		{ params.Content }
+		if params.Subject != "" {
+			<aside>
+				<a href={ "/" + params.Metadata.Npub }>{ params.Metadata.ShortName }</a>
+			</aside>
+		}
+	</article>
+}

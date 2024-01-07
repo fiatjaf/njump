@@ -1,0 +1,52 @@
+package main
+
+templ liveEventMessageTemplate(params LiveEventMessagePageParams) {
+	<!DOCTYPE html>
+	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
+		<meta charset="UTF-8"/>
+		<head>
+			<title>{ params.TitleizedContent }</title>
+			@openGraphTemplate(params.OpenGraphParams)
+			@headCommonTemplate(params.HeadParams)
+		</head>
+		<body class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black">
+			@topTemplate()
+			<div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
+				<div class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 lg:gap-48vw">
+					<div class="w-full break-words print:w-full sm:w-3/4">
+						@authorHeaderTemplate(params.Metadata)
+						<div class="w-full text-right text-sm text-stone-400">
+							{ params.CreatedAt }
+						</div>
+						<div class="w-full text-right text-sm text-stone-400">
+							if params.ParentLink != "" {
+								messaging during the live event
+								<span class="text-strongpink">
+									@templ.Raw(params.ParentLink)
+								</span>
+							}
+						</div>
+						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
+						<article
+							class="prose-cite:text-sm prose mb-6 leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-gray-100 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-zinc-800 sm:prose-a:text-justify"
+						>
+							if params.Subject != "" {
+								<h1 class="text-2xl">{ params.Subject }</h1>
+							} else {
+								<h1 class="hidden">
+									{ params.Metadata.ShortName() } on Nostr: { params.TitleizedContent }
+								</h1>
+							}
+							<!-- main content -->
+							@templ.Raw(params.Content)
+						</article>
+						@detailsTemplate(params.DetailsParams)
+						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
+					</div>
+					@clientsTemplate(params.Clients)
+				</div>
+			</div>
+			@footerTemplate()
+		</body>
+	</html>
+}

@@ -1,0 +1,35 @@
+package main
+
+templ errorTemplate(params ErrorPageParams) {
+	<!DOCTYPE html>
+	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
+		<meta charset="UTF-8"/>
+		<head>
+			<title>Error</title>
+			@headCommonTemplate(params.HeadParams)
+		</head>
+		<body
+			class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
+		>
+			@topTemplate()
+			<div class="mx-auto mt-12 w-10/12 text-center lg:w-9/12">
+				<div class="mx-auto w-4/5 sm:w-3/5">
+					<div class="mt-4 text-2xl leading-6">
+						@templ.Raw(params.Message)
+					</div>
+					<div class="my-8 italic text-neutral-400 dark:text-neutral-500">
+						{ params.Errors }
+					</div>
+					<div>
+						Are you lost?
+						<a
+							href="/"
+							class="block leading-3 underline decoration-neutral-400 underline-offset-4"
+						>Go to the homepage</a>
+					</div>
+				</div>
+			</div>
+			@footerTemplate()
+		</body>
+	</html>
+}

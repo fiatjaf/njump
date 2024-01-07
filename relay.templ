@@ -1,0 +1,145 @@
+package main
+
+templ relayTemplate(params RelayPageParams) {
+	<!DOCTYPE html>
+	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
+		<meta charset="UTF-8"/>
+		<head>
+			<title>Nostr Relay { params.Hostname } - { params.Info.Name }</title>
+			<meta property="og:title" content={ params.Hostname + " - Nostr Relay" }/>
+			<meta name="twitter:title" content={ params.Hostname + " - Nostr Relay" }/>
+			<meta property="og:site_name" content={ params.Hostname + " - Nostr Relay" }/>
+			if params.Info.Icon != "" {
+				<meta property="og:image" content={ params.Info.Icon }/>
+				<meta name="twitter:image" content={ params.Proxy + params.Info.Icon }/>
+			}
+			if params.Info.Description != "" {
+				<meta property="og:description" content={ params.Info.Description }/>
+				<meta name="twitter:description" content={ params.Info.Description }/>
+			}
+			<meta name="twitter:card" content="summary"/>
+			<link
+				rel="sitemap"
+				type="application/xml"
+				title={ "Sitemap for " + params.Hostname }
+				href={ "/r/" + params.Hostname + ".xml" }
+			/>
+			<link
+				rel="alternate"
+				type="application/atom+xml"
+				title="RSS"
+				href={ "/r/" + params.Hostname + ".rss" }
+			/>
+			@headCommonTemplate(params.HeadParams)
+			)
+		</head>
+		<body
+			class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
+		>
+			@topTemplate()
+			<div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
+				<div
+					class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:flex md:w-10/12 lg:w-9/12 lg:gap-48vw"
+				>
+					<div
+						class="relative top-auto flex basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:items-start"
+					>
+						<div
+							class="hidden basis-2/3 items-center overflow-hidden text-left text-2xl sm:break-all"
+							_="on load or scroll from window or resize from window get #relay_name then measure its top, height then if top is less than height / -2 or height is 0 add .flex then remove .hidden otherwise remove .flex then add .hidden"
+						>
+							{ params.Info.Name }
+						</div>
+						<div
+							class="imgclip max-w-full basis-2/5 overflow-hidden sm:basis-auto"
+						>
+							<img class="block h-auto w-full" src={ params.Info.Icon }/>
+						</div>
+					</div>
+					<div class="w-full break-words print:w-full sm:w-1/2">
+						<header class="mb-6 hidden leading-5 sm:flex sm:items-center">
+							<h1>
+								<div id="relay_name" class="text-2xl">{ params.Info.Name }</div>
+							</h1>
+						</header>
+						<div
+							class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
+						></div>
+						<div class="mb-6 leading-5">
+							<a
+								class="border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink"
+								href={ templ.URL("https://" + params.Hostname) }
+								target="_blank"
+								_="on mouseenter set my innerText to my.innerText.replace('wss://', 'https://')
+                 on mouseleave set my innerText to my.innerText.replace('https://', 'wss://')"
+							>{ "wss://" + params.Hostname }</a>
+						</div>
+						<div
+							class="prose mb-6 leading-5 dark:prose-invert prose-headings:font-light sm:prose-a:text-justify"
+							dir="auto"
+						>
+							{ params.Info.Description }
+						</div>
+						<div
+							class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
+						></div>
+						if params.Info.PubKey != "" {
+							<div class="mb-6 leading-5">
+								<div class="text-sm text-strongpink">Public Key</div>
+								{ params.Info.PubKey }
+							</div>
+						}
+						<!---->
+						if params.Info.Contact != "" {
+							<div class="mb-6 leading-5">
+								<div class="text-sm text-strongpink">Contact</div>
+								<a href={ templ.URL(params.Info.Contact) }>{ params.Info.Contact }</a>
+							</div>
+						}
+						<div
+							class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
+						></div>
+						<aside>
+							<div class="mb-6 leading-5">
+								<h2 class="text-2xl text-strongpink">Last Notes</h2>
+								for _, ee := range params.LastNotes {
+									<a
+										class="my-8 block no-underline hover:-ml-6 hover:border-l-05rem hover:border-solid hover:border-l-gray-100 hover:pl-4 dark:hover:border-l-zinc-700"
+										href={ templ.URL("/" + ee.Nevent()) }
+									>
+										<div
+											class="-ml-2.5 mb-1.5 flex flex-row border-b-4 border-solid border-b-gray-100 pb-1 pl-2.5 dark:border-b-neutral-800"
+										>
+											<div class="text-sm text-strongpink">
+												{ ee.CreatedAtStr() }
+											</div>
+											<br/>
+											if ee.IsReply() {
+												<div class="ml-2 text-xs text-gray-300 dark:text-gray-400">
+													- reply
+												</div>
+											}
+											<div class="ml-auto text-xs text-zinc-700 dark:text-neutral-50">
+												by
+												<a class="rounded bg-lavender px-1 hover:bg-strongpink hover:text-white dark:bg-garnet dark:hover:bg-strongpink" href={ templ.URL("/" + ee.Npub()) }>{ ee.NpubShort() }</a>
+											</div>
+										</div>
+										<div
+											class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink"
+											_="on load if my scrollHeight > my offsetHeight add .gradient"
+											dir="auto"
+										>
+											@templ.Raw(ee.Preview())
+										</div>
+									</a>
+								}
+							</div>
+						</aside>
+					</div>
+					@clientsTemplate(params.Clients)
+				</div>
+			</div>
+			@footerTemplate()
+		</body>
+	</html>
+}

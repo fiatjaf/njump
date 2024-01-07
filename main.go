@@ -30,9 +30,6 @@ type Settings struct {
 //go:embed static/*
 var static embed.FS
 
-//go:embed templates/*
-var templates embed.FS
-
 var (
 	s                  Settings
 	log                = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
