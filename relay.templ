@@ -121,7 +121,13 @@ templ relayTemplate(params RelayPageParams) {
 											}
 											<div class="ml-auto text-xs text-zinc-700 dark:text-neutral-50">
 												by
-												<a class="rounded bg-lavender px-1 hover:bg-strongpink hover:text-white dark:bg-garnet dark:hover:bg-strongpink" href={ templ.URL("/" + ee.Npub()) }>{ ee.NpubShort() }</a>
+												<span
+													class="rounded bg-lavender px-1 hover:bg-strongpink hover:text-white dark:bg-garnet dark:hover:bg-strongpink"
+													_="on click halt the event then set the window's location to @loc"
+													loc={ templ.EscapeString("/" + ee.Npub()) }
+												>
+													{ ee.NpubShort() }
+												</span>
 											</div>
 										</div>
 										<div
