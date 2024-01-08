@@ -71,7 +71,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,
 				KindNIP:         data.kindNIP,
-				EventJSON:       eventToHTML(data.event),
+				EventJSON:       data.event.ToJSONHTML(),
 				Kind:            data.event.Kind,
 				Metadata:        data.metadata,
 			},

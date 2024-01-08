@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"html"
 	"html/template"
 	"regexp"
@@ -30,20 +32,20 @@ func (m Metadata) NpubShort() string {
 }
 
 type EnhancedEvent struct {
-	event  *nostr.Event
+	*nostr.Event
 	relays []string
 }
 
 func (ee EnhancedEvent) IsReply() bool {
-	return nip10.GetImmediateReply(ee.event.Tags) != nil
+	return nip10.GetImmediateReply(ee.Event.Tags) != nil
 }
 
 func (ee EnhancedEvent) Reply() *nostr.Tag {
-	return nip10.GetImmediateReply(ee.event.Tags)
+	return nip10.GetImmediateReply(ee.Event.Tags)
 }
 
 func (ee EnhancedEvent) Preview() template.HTML {
-	lines := strings.Split(html.EscapeString(ee.event.Content), "\n")
+	lines := strings.Split(html.EscapeString(ee.Event.Content), "\n")
 	var processedLines []string
 	for _, line := range lines {
 		if strings.TrimSpace(line) == "" {
@@ -88,11 +90,11 @@ func (ee EnhancedEvent) RssTitle() string {
 }
 
 func (ee EnhancedEvent) RssContent() string {
-	content := ee.event.Content
+	content := ee.Event.Content
 	content = basicFormatting(html.EscapeString(content), true, false, false)
 	content = renderQuotesAsHTML(context.Background(), content, false)
 	if ee.IsReply() {
-		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.event.PubKey)
+		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.Event.PubKey)
 		neventShort := nevent[:8] + "…" + nevent[len(nevent)-4:]
 		content = "In reply to <a href='/" + nevent + "'>" + neventShort + "</a><br/>_________________________<br/><br/>" + content
 	}
@@ -101,7 +103,7 @@ func (ee EnhancedEvent) RssContent() string {
 
 func (ee EnhancedEvent) Thumb() string {
 	imgRegex := regexp.MustCompile(`(https?://[^\s]+\.(?:png|jpe?g|gif|bmp|svg)(?:/[^\s]*)?)`)
-	matches := imgRegex.FindAllStringSubmatch(ee.event.Content, -1)
+	matches := imgRegex.FindAllStringSubmatch(ee.Event.Content, -1)
 	if len(matches) > 0 {
 		// The first match group captures the image URL
 		return matches[0][1]
@@ -110,7 +112,7 @@ func (ee EnhancedEvent) Thumb() string {
 }
 
 func (ee EnhancedEvent) Npub() string {
-	npub, _ := nip19.EncodePublicKey(ee.event.PubKey)
+	npub, _ := nip19.EncodePublicKey(ee.Event.PubKey)
 	return npub
 }
 
@@ -120,16 +122,59 @@ func (ee EnhancedEvent) NpubShort() string {
 }
 
 func (ee EnhancedEvent) Nevent() string {
-	nevent, _ := nip19.EncodeEvent(ee.event.ID, ee.relays, ee.event.PubKey)
+	nevent, _ := nip19.EncodeEvent(ee.Event.ID, ee.relays, ee.Event.PubKey)
 	return nevent
 }
 
 func (ee EnhancedEvent) CreatedAtStr() string {
-	return time.Unix(int64(ee.event.CreatedAt), 0).Format("2006-01-02 15:04:05")
+	return time.Unix(int64(ee.Event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 }
 
 func (ee EnhancedEvent) ModifiedAtStr() string {
-	return time.Unix(int64(ee.event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
+	return time.Unix(int64(ee.Event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
+}
+
+func (ee EnhancedEvent) ToJSONHTML() template.HTML {
+	tagsHTML := "["
+	for t, tag := range ee.Tags {
+		tagsHTML += "\n    ["
+		for i, item := range tag {
+			cls := `"text-zinc-500 dark:text-zinc-50"`
+			if i == 0 {
+				cls = `"text-amber-500 dark:text-amber-200"`
+			}
+			itemJSON, _ := json.Marshal(item)
+			tagsHTML += "\n      <span class=" + cls + ">" + html.EscapeString(string(itemJSON))
+			if i < len(tag)-1 {
+				tagsHTML += ","
+			} else {
+				tagsHTML += "\n    "
+			}
+		}
+		tagsHTML += "]"
+		if t < len(ee.Tags)-1 {
+			tagsHTML += ","
+		} else {
+			tagsHTML += "\n  "
+		}
+	}
+	tagsHTML += "]"
+
+	contentJSON, _ := json.Marshal(ee.Content)
+
+	keyCls := "text-purple-700 dark:text-purple-300"
+
+	return template.HTML(fmt.Sprintf(
+		`{
+  <span class="`+keyCls+`">"id":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
+  <span class="`+keyCls+`">"pubkey":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
+  <span class="`+keyCls+`">"created_at":</span> <span class="text-green-600">%d</span>,
+  <span class="`+keyCls+`">"kind":</span> <span class="text-amber-500 dark:text-amber-200">%d</span>,
+  <span class="`+keyCls+`">"tags":</span> %s,
+  <span class="`+keyCls+`">"content":</span> <span class="text-zinc-500 dark:text-zinc-50">%s</span>,
+  <span class="`+keyCls+`">"sig":</span> <span class="text-zinc-500 dark:text-zinc-50 content">"%s"</span>
+}`, ee.ID, ee.PubKey, ee.CreatedAt, ee.Kind, tagsHTML, html.EscapeString(string(contentJSON)), ee.Sig),
+	)
 }
 
 type Kind1063Metadata struct {

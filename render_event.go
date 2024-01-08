@@ -141,7 +141,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		useTextImage = false
 	}
 
-	title := ""
+	subscript := ""
 	if data.event.Kind >= 30000 && data.event.Kind < 40000 {
 		tValue := "~"
 		for _, tag := range data.event.Tags {
@@ -150,20 +150,23 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		title = fmt.Sprintf("%s: %s", kindNames[data.event.Kind], tValue)
+		subscript = fmt.Sprintf("%s: %s", kindNames[data.event.Kind], tValue)
 	} else if kindName, ok := kindNames[data.event.Kind]; ok {
-		title = kindName
+		subscript = kindName
 	} else {
-		title = fmt.Sprintf("kind:%d event", data.event.Kind)
+		subscript = fmt.Sprintf("kind:%d event", data.event.Kind)
 	}
 	if subject != "" {
-		title += " (" + subject + ")"
+		subscript += " (" + subject + ")"
 	}
-	title += " by " + data.authorShort
+	subscript += " by " + data.metadata.ShortName()
+	if data.event.IsReply() {
+		subscript += " (reply)"
+	}
 
 	seenOnRelays := ""
-	if len(data.relays) > 0 {
-		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(data.relays, ", "))
+	if len(data.event.relays) > 0 {
+		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(data.event.relays, ", "))
 	}
 
 	textImageURL := ""
@@ -212,7 +215,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	titleizedContent = urlRegex.ReplaceAllString(titleizedContent, "")
 
 	if titleizedContent == "" {
-		titleizedContent = title
+		titleizedContent = subscript
 	}
 
 	if len(titleizedContent) > 85 {
@@ -283,9 +286,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:       data.createdAt,
 		KindDescription: data.kindDescription,
 		KindNIP:         data.kindNIP,
-		EventJSON:       eventToHTML(data.event),
+		EventJSON:       data.event.ToJSONHTML(),
 		Kind:            data.event.Kind,
-		SeenOn:          data.relays,
+		SeenOn:          data.event.relays,
 		Metadata:        data.metadata,
 
 		// kind-specific stuff
@@ -301,7 +304,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		ProxiedImage: "https://" + host + "/njump/proxy?src=" + data.image,
 
 		Superscript: data.authorLong,
-		Subscript:   title,
+		Subscript:   subscript,
 		Text:        strings.TrimSpace(description),
 	}
 

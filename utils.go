@@ -3,10 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"html"
-	"html/template"
 	"math/rand"
 	"net/http"
 	"regexp"
@@ -429,49 +426,6 @@ func normalizeWebsiteURL(u string) string {
 		return u
 	}
 	return "https://" + u
-}
-
-func eventToHTML(evt *nostr.Event) template.HTML {
-	tagsHTML := "["
-	for t, tag := range evt.Tags {
-		tagsHTML += "\n    ["
-		for i, item := range tag {
-			cls := `"text-zinc-500 dark:text-zinc-50"`
-			if i == 0 {
-				cls = `"text-amber-500 dark:text-amber-200"`
-			}
-			itemJSON, _ := json.Marshal(item)
-			tagsHTML += "\n      <span class=" + cls + ">" + html.EscapeString(string(itemJSON))
-			if i < len(tag)-1 {
-				tagsHTML += ","
-			} else {
-				tagsHTML += "\n    "
-			}
-		}
-		tagsHTML += "]"
-		if t < len(evt.Tags)-1 {
-			tagsHTML += ","
-		} else {
-			tagsHTML += "\n  "
-		}
-	}
-	tagsHTML += "]"
-
-	contentJSON, _ := json.Marshal(evt.Content)
-
-	keyCls := "text-purple-700 dark:text-purple-300"
-
-	return template.HTML(fmt.Sprintf(
-		`{
-  <span class="`+keyCls+`">"id":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
-  <span class="`+keyCls+`">"pubkey":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
-  <span class="`+keyCls+`">"created_at":</span> <span class="text-green-600">%d</span>,
-  <span class="`+keyCls+`">"kind":</span> <span class="text-amber-500 dark:text-amber-200">%d</span>,
-  <span class="`+keyCls+`">"tags":</span> %s,
-  <span class="`+keyCls+`">"content":</span> <span class="text-zinc-500 dark:text-zinc-50">%s</span>,
-  <span class="`+keyCls+`">"sig":</span> <span class="text-zinc-500 dark:text-zinc-50 content">"%s"</span>
-}`, evt.ID, evt.PubKey, evt.CreatedAt, evt.Kind, tagsHTML, html.EscapeString(string(contentJSON)), evt.Sig),
-	)
 }
 
 func limitAt[V any](list []V, n int) []V {

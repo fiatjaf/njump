@@ -8,15 +8,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
 type Data struct {
 	templateId          TemplateID
-	event               *nostr.Event
-	relays              []string
+	event               EnhancedEvent
 	nprofile            string
 	nevent              string
 	neventNaked         string
@@ -28,7 +26,6 @@ type Data struct {
 	metadata            Metadata
 	authorRelays        []string
 	authorLong          string
-	authorShort         string
 	renderableLastNotes []EnhancedEvent
 	kindDescription     string
 	kindNIP             string
@@ -64,14 +61,15 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	data := &Data{
-		event:  event,
-		relays: relays,
+		event: EnhancedEvent{
+			Event:  event,
+			relays: relays,
+		},
 	}
 
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	npubShort := npub[:8] + "…" + npub[len(npub)-4:]
-	data.authorLong = npub       // hopefully will be replaced later
-	data.authorShort = npubShort // hopefully will be replaced later
+	data.authorLong = npub // hopefully will be replaced later
 	data.nevent, _ = nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
 	data.neventNaked, _ = nip19.EncodeEvent(event.ID, nil, event.PubKey)
 	data.naddr = ""
@@ -193,7 +191,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		pTags := event.Tags.GetAll([]string{"p", ""})
 		for _, p := range pTags {
 			if p[3] == "host" {
-				data.kind30311Metadata.Host = sdk.FetchProfileMetadata(ctx, pool, p[1], data.relays...)
+				data.kind30311Metadata.Host = sdk.FetchProfileMetadata(ctx, pool, p[1], data.event.relays...)
 				data.kind30311Metadata.HostNpub = data.kind30311Metadata.Host.Npub()
 			}
 		}
@@ -208,7 +206,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		if atag := event.Tags.GetFirst([]string{"a", ""}); atag != nil {
 			parts := strings.Split((*atag)[1], ":")
 			kind, _ := strconv.Atoi(parts[0])
-			parentNevent, _ := nip19.EncodeEntity(parts[1], kind, parts[2], data.relays)
+			parentNevent, _ := nip19.EncodeEntity(parts[1], kind, parts[2], data.event.relays)
 			data.parentLink = template.HTML(replaceNostrURLsWithTags(nostrEveryMatcher, "nostr:"+parentNevent))
 		}
 	default:
@@ -229,8 +227,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			spm, _ := sdk.ParseMetadata(author)
 			data.metadata = Metadata{spm}
 			if data.metadata.Name != "" {
-				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, npub)
-				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, npubShort)
+				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, npubShort)
 			}
 		}
 		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
