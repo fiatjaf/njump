@@ -358,7 +358,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			ParentLink:       data.parentLink,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
-			Clients:          generateClientList(enhancedCode, data.event),
+			Clients:          generateClientList(data.event.Kind, enhancedCode),
 		})
 	case FileMetadata:
 		opengraph.Image = data.kind1063Metadata.DisplayImage()
@@ -378,7 +378,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
-			Clients:          generateClientList(data.nevent, data.event),
+			Clients:          generateClientList(data.event.Kind, data.nevent),
 
 			FileMetadata: *data.kind1063Metadata,
 			IsImage:      data.kind1063Metadata.IsImage(),
@@ -401,7 +401,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
-			Clients:          generateClientList(data.naddr, data.event),
+			Clients:          generateClientList(data.event.Kind, data.naddr),
 
 			LiveEvent: *data.kind30311Metadata,
 		})
@@ -425,7 +425,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
-			Clients:          generateClientList(data.naddr, data.event),
+			Clients:          generateClientList(data.event.Kind, data.naddr),
 
 			LiveEventMessage: *data.kind1311Metadata,
 		})

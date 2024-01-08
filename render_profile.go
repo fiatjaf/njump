@@ -81,7 +81,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			Nprofile:                   data.nprofile,
 			AuthorRelays:               data.authorRelays,
 			LastNotes:                  data.renderableLastNotes,
-			Clients:                    generateClientList(data.nprofile, data.event),
+			Clients:                    generateClientList(data.event.Kind, data.metadata.Npub()),
 		}).Render(r.Context(), w)
 	}
 

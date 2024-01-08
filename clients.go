@@ -4,18 +4,14 @@ import (
 	"strings"
 
 	"github.com/a-h/templ"
-	"github.com/nbd-wtf/go-nostr"
 )
 
 type ClientReference struct {
 	ID       string
 	Name     string
 	Base     string
+	URL      templ.SafeURL
 	Platform string
-}
-
-func (c ClientReference) URL(code string) templ.SafeURL {
-	return templ.SafeURL(strings.Replace(c.Base, "{code}", code, -1))
 }
 
 var (
@@ -53,54 +49,59 @@ var (
 	plebstrIOS  = ClientReference{ID: "plebstr", Name: "Plebstr", Base: "plebstr:{code}", Platform: "ios"}
 )
 
-func generateClientList(code string, event *nostr.Event) []ClientReference {
-	switch event.Kind {
+func generateClientList(kind int, code string) []ClientReference {
+	var clients []ClientReference
+	switch kind {
+	case -1: // relays
+		clients = []ClientReference{
+			native,
+			coracle, nostrrr,
+		}
 	case 1, 6:
-		return []ClientReference{
+		clients = []ClientReference{
 			native,
 			coracle, snort, nostter, nostrudel, primalWeb, satellite, iris,
 			nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
 			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid,
 		}
 	case 0:
-		return []ClientReference{
+		clients = []ClientReference{
 			native,
 			nosta, coracle, snort, nostter, nostrudel, primalWeb, satellite, iris,
 			nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
 			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid,
 		}
 	case 30023, 30024:
-		return []ClientReference{
+		clients = []ClientReference{
 			native,
 			yakihonne, habla, highlighter, blogstack,
 			damus, nos, nostur,
 			amethyst, springAndroid,
 		}
 	case 1063:
-		return []ClientReference{
+		clients = []ClientReference{
 			native,
 			snort, coracle,
 			amethyst,
 		}
 	case 30311:
-		return []ClientReference{
+		clients = []ClientReference{
 			native,
 			zapStream, nostrudel,
 			amethyst,
 		}
 	default:
-		return []ClientReference{
+		clients = []ClientReference{
 			native,
 			coracle, snort, nostter, nostrudel, primalWeb, satellite, iris,
 			nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
 			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid,
 		}
 	}
-}
 
-func generateRelayBrowserClientList(host string) []ClientReference {
-	return []ClientReference{
-		coracle,
-		nostrrr,
+	for i, c := range clients {
+		clients[i].URL = templ.SafeURL(strings.Replace(c.Base, "{code}", code, -1))
 	}
+
+	return clients
 }
