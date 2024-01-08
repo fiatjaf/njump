@@ -1,6 +1,6 @@
 package main
 
-templ clientsTemplate(clients []ClientReference) {
+templ clientsTemplate(clients []ClientReference, code string) {
 	<aside class="fixed bottom-0 left-0 top-auto mt-4 w-full basis-3/12 self-start transition-all duration-500 print:hidden sm:sticky sm:bottom-auto sm:left-auto sm:top-8 sm:w-auto">
 		<div class="absolute right-0 top-0 z-10 mb-4 h-10 w-10 text-center text-sm sm:relative sm:h-auto sm:w-auto">
 			<span class="hidden sm:block">Open in</span>
@@ -70,7 +70,7 @@ templ clientsTemplate(clients []ClientReference) {
 				>
 					<a
 						class="client block basis-full px-3 py-3 text-left text-[17px] font-normal leading-4 text-white no-underline sm:inline sm:py-1.5 sm:text-center sm:font-light"
-						href={ templ.SafeURL(client.URL) }
+						href={ client.URL(code) }
 					>
 						<span class="ml-1.5 pr-2 inline basis-1/5 text-neutral-400 sm:hidden">Open in</span>
 						{ client.Name }

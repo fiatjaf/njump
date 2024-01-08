@@ -43,7 +43,7 @@ templ liveEventMessageTemplate(params LiveEventMessagePageParams) {
 						@detailsTemplate(params.DetailsParams)
 						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
 					</div>
-					@clientsTemplate(params.Clients)
+					@clientsTemplate(params.Clients, params.Nevent)
 				</div>
 			</div>
 			@footerTemplate()
