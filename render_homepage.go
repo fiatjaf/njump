@@ -6,10 +6,9 @@ import (
 
 func renderHomepage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=3600")
-	err := HomePageTemplate.Render(w, &HomePage{
-		HeadCommonPartial: HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
-		Host:              s.Domain,
-	})
+	err := homepageTemplate(HomePageParams{
+		HeadParams: HeadParams{IsProfile: false},
+	}).Render(r.Context(), w)
 	if err != nil {
 		log.Error().Err(err).Msg("error rendering tmpl")
 	}

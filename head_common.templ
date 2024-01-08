@@ -48,8 +48,8 @@ templ headCommonTemplate(params HeadParams) {
 		/>
 	}
 	<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-	if params.TailwindDebugStuff != "" {
-		@templ.Raw(params.TailwindDebugStuff)
+	if tailwindDebugStuff != "" {
+		@templ.Raw(tailwindDebugStuff)
 	} else {
 		<link
 			rel="stylesheet"

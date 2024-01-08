@@ -65,7 +65,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 		ProviderURL:  "https://" + host,
 		Title:        data.metadata.Name + " wrote",
 		AuthorName:   data.authorLong,
-		AuthorURL:    fmt.Sprintf("https://%s/%s", host, data.npub),
+		AuthorURL:    fmt.Sprintf("https://%s/%s", host, data.metadata.Npub()),
 	}
 
 	switch {

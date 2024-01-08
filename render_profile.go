@@ -24,20 +24,15 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 	}
 
 	isLastNotes := false
-	if strings.HasPrefix(code, "profile-last-notes") {
-		code = code[19:]
+	if r.URL.Query().Get("just-last-notes") == "true" {
 		isLastNotes = true
 	}
 
 	data, err := grabData(r.Context(), code, isSitemap)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
-		errorPage := &ErrorPage{
-			Errors: err.Error(),
-		}
-		errorPage.TemplateText()
 		w.WriteHeader(http.StatusNotFound)
-		ErrorTemplate.Render(w, errorPage)
+		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
 		return
 	}
 
@@ -45,20 +40,18 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		w.Header().Add("content-type", "text/xml")
 		w.Header().Set("Cache-Control", "max-age=86400")
 		w.Write([]byte(XML_HEADER))
-		SitemapTemplate.Render(w, &SitemapPage{
+		err = SitemapTemplate.Render(w, &SitemapPage{
 			Host:       s.Domain,
 			ModifiedAt: data.modifiedAt,
-			Npub:       data.npub,
 			LastNotes:  data.renderableLastNotes,
 		})
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
 		w.Header().Set("Cache-Control", "max-age=86400")
 		w.Write([]byte(XML_HEADER))
-		RSSTemplate.Render(w, &RSSPage{
+		err = RSSTemplate.Render(w, &RSSPage{
 			Host:       s.Domain,
 			ModifiedAt: data.modifiedAt,
-			Npub:       data.npub,
 			Metadata:   data.metadata,
 			LastNotes:  data.renderableLastNotes,
 		})
@@ -67,34 +60,29 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		if len(data.renderableLastNotes) != 0 {
 			w.Header().Set("Cache-Control", "max-age=3600")
 		}
-		LastNotesTemplate.Render(w, &LastNotesPage{
-			LastNotes: data.renderableLastNotes,
-		})
+		err = lastNotesTemplate(data.renderableLastNotes).Render(r.Context(), w)
 	} else {
 		w.Header().Add("content-type", "text/html")
 		w.Header().Set("Cache-Control", "max-age=86400")
-		err = ProfileTemplate.Render(w, &ProfilePage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: true, TailwindDebugStuff: tailwindDebugStuff},
-			DetailsPartial: DetailsPartial{
+		err = profileTemplate(ProfilePageParams{
+			HeadParams: HeadParams{IsProfile: true},
+			DetailsParams: DetailsParams{
 				HideDetails:     true,
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,
 				KindNIP:         data.kindNIP,
 				EventJSON:       eventToHTML(data.event),
 				Kind:            data.event.Kind,
+				Metadata:        data.metadata,
 			},
-			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(data.nprofile, data.event),
-			},
-
 			Metadata:                   data.metadata,
 			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
 			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false, false)),
-			Npub:                       data.npub,
 			Nprofile:                   data.nprofile,
 			AuthorRelays:               data.authorRelays,
 			LastNotes:                  data.renderableLastNotes,
-		})
+			Clients:                    generateClientList(data.nprofile, data.event),
+		}).Render(r.Context(), w)
 	}
 
 	if err != nil {

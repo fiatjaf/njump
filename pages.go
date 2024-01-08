@@ -10,6 +10,19 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip11"
 )
 
+type TemplateID int
+
+const (
+	Note TemplateID = iota
+	Profile
+	LongForm
+	TelegramInstantView
+	FileMetadata
+	LiveEvent
+	LiveEventMessage
+	Other
+)
+
 type OpenGraphParams struct {
 	SingleTitle string
 	// x (we will always render just the singletitle if we have that)
@@ -31,9 +44,9 @@ type DetailsParams struct {
 	HideDetails     bool
 	CreatedAt       string
 	EventJSON       template.HTML
+	Metadata        Metadata
 	Nevent          string
 	Nprofile        string
-	Npub            string
 	SeenOn          []string
 	Kind            int
 	KindNIP         string
@@ -45,11 +58,10 @@ type DetailsParams struct {
 }
 
 type HeadParams struct {
-	IsProfile          bool
-	TailwindDebugStuff template.HTML
-	NaddrNaked         string
-	NeventNaked        string
-	Oembed             string
+	IsProfile   bool
+	NaddrNaked  string
+	NeventNaked string
+	Oembed      string
 }
 
 type TelegramInstantViewParams struct {
@@ -69,7 +81,6 @@ type TelegramInstantViewParams struct {
 type HomePageParams struct {
 	HeadParams
 
-	Host      string
 	Npubs     []string
 	LastNotes []string
 }
@@ -103,8 +114,6 @@ type NotePageParams struct {
 	Content          template.HTML
 	CreatedAt        string
 	Metadata         Metadata
-	Npub             string
-	NpubShort        string
 	ParentLink       template.HTML
 	SeenOn           []string
 	Subject          string
@@ -116,8 +125,6 @@ type EmbeddedNoteParams struct {
 	Content   template.HTML
 	CreatedAt string
 	Metadata  Metadata
-	Npub      string
-	NpubShort string
 	SeenOn    []string
 	Subject   string
 	Url       string
@@ -136,7 +143,6 @@ type ProfilePageParams struct {
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
-	Npub                       string
 	Nprofile                   string
 	IsReply                    string
 	Proxy                      string
@@ -153,7 +159,6 @@ type EmbeddedProfileParams struct {
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
-	Npub                       string
 	Nprofile                   string
 	Proxy                      string
 	Title                      string
@@ -167,8 +172,6 @@ type FileMetadataPageParams struct {
 	Content          template.HTML
 	CreatedAt        string
 	Metadata         Metadata
-	Npub             string
-	NpubShort        string
 	ParentLink       template.HTML
 	SeenOn           []string
 	Style            Style
@@ -191,8 +194,6 @@ type LiveEventPageParams struct {
 	Content          template.HTML
 	CreatedAt        string
 	Metadata         Metadata
-	Npub             string
-	NpubShort        string
 	ParentLink       template.HTML
 	SeenOn           []string
 	Style            Style
@@ -213,8 +214,6 @@ type LiveEventMessagePageParams struct {
 	Content          template.HTML
 	CreatedAt        string
 	Metadata         Metadata
-	Npub             string
-	NpubShort        string
 	ParentLink       template.HTML
 	SeenOn           []string
 	Style            Style
@@ -240,14 +239,15 @@ type RelayPageParams struct {
 
 type ErrorPageParams struct {
 	HeadParams
-	Message string
 	Errors  string
+	Message string
 }
 
-func (e *ErrorPageParams) MessageHTML() string {
+func (e *ErrorPageParams) MessageHTML() template.HTML {
 	if e.Message != "" {
-		return "&lt;error omitted&gt;"
+		return template.HTML(e.Message)
 	}
+
 	switch {
 	case strings.Contains(e.Errors, "invalid checksum"):
 		return "It looks like you entered an invalid event code.<br> Check if you copied it fully, a good idea is compare the first and the last characters."

@@ -1,6 +1,6 @@
 package main
 
-templ liveEventTemplate(params LiveEventMessagePageParams) {
+templ liveEventTemplate(params LiveEventPageParams) {
 	<!DOCTYPE html>
 	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
 		<meta charset="UTF-8"/>
@@ -40,7 +40,7 @@ templ liveEventTemplate(params LiveEventMessagePageParams) {
 							<div class="mb-4">
 								if params.LiveEvent.HostNpub != "" {
 									Streaming hosted by
-									<a href="/{params.LiveEvent.HostNpub }">
+									<a href={ templ.URL("/" + params.LiveEvent.HostNpub) }>
 										{ params.LiveEvent.Host.Name }
 									</a>
 								}
@@ -60,12 +60,7 @@ templ liveEventTemplate(params LiveEventMessagePageParams) {
 								<img
 									src={ params.LiveEvent.Image }
 									alt={ params.Alt }
-									_="on load
-									     repeat until '{params.LiveEvent.Status }' == 'ended'
-									       set @src to '{params.LiveEvent.Image }'
-									       wait 5s
-									     end
-									"
+									_="on load repeat set @src to @src wait 5s end"
 								/>
 							}
 						</article>

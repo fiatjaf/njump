@@ -64,12 +64,13 @@ templ clientsTemplate(clients []ClientReference) {
 				<div
 					data-platform={ client.Platform }
 					class="client | hidden w-full items-center border-b border-zinc-800 bg-zinc-700 first-of-type:rounded-t-lg first-of-type:border-0 first-of-type:bg-strongpink hover:bg-zinc-800 sm:mb-3 sm:flex sm:rounded-lg sm:border-0 sm:first-of-type:rounded-lg"
-					_="on load get localStorage['nj:{.ID}'] or 0 then set @count to it then set @title to `used ${it} times`
-					   on click increment localStorage['nj:{client.ID}']"
+					data-id={ client.ID }
+					_="on load get my @data-id then get localStorage[`nj:${it}`] or 0 then set @count to it then set @title to `used ${it} times`
+					   on click get my @data-id then increment localStorage[`nj:${id}`]"
 				>
 					<a
 						class="client block basis-full px-3 py-3 text-left text-[17px] font-normal leading-4 text-white no-underline sm:inline sm:py-1.5 sm:text-center sm:font-light"
-						href="{client.URL}"
+						href={ templ.SafeURL(client.URL) }
 					>
 						<span class="ml-1.5 pr-2 inline basis-1/5 text-neutral-400 sm:hidden">Open in</span>
 						{ client.Name }

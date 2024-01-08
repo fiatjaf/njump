@@ -25,7 +25,7 @@ type Data struct {
 	createdAt           string
 	modifiedAt          string
 	parentLink          template.HTML
-	metadata            sdk.ProfileMetadata
+	metadata            Metadata
 	authorRelays        []string
 	authorLong          string
 	authorShort         string
@@ -217,18 +217,20 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 
 	if event.Kind == 0 {
 		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
-		data.metadata, _ = sdk.ParseMetadata(event)
+		spm, _ := sdk.ParseMetadata(event)
+		data.metadata = Metadata{spm}
 	} else {
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 		defer cancel()
-		author, relays, _ := getEvent(ctx, data.npub, relaysForNip19)
+		author, relays, _ := getEvent(ctx, npub, relaysForNip19)
 		if author == nil {
-			data.metadata = sdk.ProfileMetadata{PubKey: event.PubKey}
+			data.metadata = Metadata{sdk.ProfileMetadata{PubKey: event.PubKey}}
 		} else {
-			data.metadata, _ = sdk.ParseMetadata(author)
+			spm, _ := sdk.ParseMetadata(author)
+			data.metadata = Metadata{spm}
 			if data.metadata.Name != "" {
-				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npub)
-				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, data.npubShort)
+				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, npub)
+				data.authorShort = fmt.Sprintf("%s (%s)", data.metadata.Name, npubShort)
 			}
 		}
 		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))

@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 templ archiveTemplate(params ArchivePageParams) {
 	<!DOCTYPE html>
 	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
@@ -28,10 +30,10 @@ templ archiveTemplate(params ArchivePageParams) {
 						</div>
 						<div class="flex justify-between">
 							if params.PrevPage != 0 {
-								<a href="/{params.PaginationUrl}/{params.PrevPage}">&lt;&lt; Prev page</a>
+								<a href={ templ.URL(fmt.Sprintf("/%s/%d", params.PaginationUrl, params.PrevPage)) }>&lt;&lt; Prev page</a>
 							}
 							if params.NextPage != 0 {
-								<a href="/{params.PaginationUrl}/{params.NextPage}">Next page &gt;&gt;</a>
+								<a href={ templ.URL(fmt.Sprintf("/%s/%d", params.PaginationUrl, params.NextPage)) }>Next page &gt;&gt;</a>
 							}
 						</div>
 					</div>

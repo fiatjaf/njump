@@ -12,6 +12,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/a-h/templ"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/pelletier/go-toml"
@@ -29,11 +30,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if strings.HasPrefix(code, "nostr:") {
 		// remove the "nostr:" prefix
 		http.Redirect(w, r, "/"+code[6:], http.StatusFound)
-		return
-	}
-
-	if strings.HasPrefix(code, "profile-last-notes") {
-		renderProfile(w, r, code)
 		return
 	}
 
@@ -55,12 +51,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		// otherwise error
 		w.Header().Set("Cache-Control", "max-age=60")
-		errorPage := &ErrorPage{
-			Errors: err.Error(),
-		}
-		errorPage.TemplateText()
 		w.WriteHeader(http.StatusNotFound)
-		ErrorTemplate.Render(w, errorPage)
+		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
 		return
 	}
 
@@ -82,18 +74,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	data, err := grabData(r.Context(), code, false)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
-		errorPage := &ErrorPage{
-			Errors: err.Error(),
-		}
-		errorPage.TemplateText()
 		w.WriteHeader(http.StatusNotFound)
-		ErrorTemplate.Render(w, errorPage)
+		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
 		return
 	}
 
 	// if the result is a kind:0 render this as a profile
 	if data.event.Kind == 0 {
-		renderProfile(w, r, data.npub)
+		renderProfile(w, r, data.metadata.Npub())
 		return
 	}
 
@@ -290,7 +278,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Link", "<"+oembed+"&format=xml>; rel=\"alternate\"; type=\"text/xml+oembed\"")
 	}
 
-	detailsData := DetailsPartial{
+	detailsData := DetailsParams{
 		HideDetails:     true,
 		CreatedAt:       data.createdAt,
 		KindDescription: data.kindDescription,
@@ -298,15 +286,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		EventJSON:       eventToHTML(data.event),
 		Kind:            data.event.Kind,
 		SeenOn:          data.relays,
-		Npub:            data.npub,
-		Nprofile:        data.nprofile,
+		Metadata:        data.metadata,
 
 		// kind-specific stuff
 		FileMetadata: data.kind1063Metadata,
 		LiveEvent:    data.kind30311Metadata,
 	}
 
-	opengraph := OpenGraphPartial{
+	opengraph := OpenGraphParams{
 		BigImage:     textImageURL,
 		Image:        data.image,
 		Video:        data.video,
@@ -318,9 +305,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		Text:        strings.TrimSpace(description),
 	}
 
+	var component templ.Component
+
 	switch data.templateId {
 	case TelegramInstantView:
-		err = TelegramInstantViewTemplate.Render(w, &TelegramInstantViewPage{
+		component = telegramInstantViewTemplate(TelegramInstantViewParams{
 			Video:       data.video,
 			VideoType:   data.videoType,
 			Image:       data.image,
@@ -353,56 +342,43 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			enhancedCode = data.naddr
 		}
 
-		err = NoteTemplate.Render(w, &NotePage{
-			OpenGraphPartial: opengraph,
-			HeadCommonPartial: HeadCommonPartial{
-				IsProfile:          false,
-				Oembed:             oembed,
-				TailwindDebugStuff: tailwindDebugStuff,
-				NaddrNaked:         data.naddrNaked,
-				NeventNaked:        data.neventNaked,
+		component = noteTemplate(NotePageParams{
+			OpenGraphParams: opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				Oembed:      oembed,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
 			},
-			DetailsPartial: detailsData,
-			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(enhancedCode, data.event),
-			},
-			FooterPartial: FooterPartial{
-				BigImage: opengraph.BigImage,
-			},
+			DetailsParams: detailsData,
 
 			Content:          template.HTML(data.content),
 			CreatedAt:        data.createdAt,
 			Metadata:         data.metadata,
-			Npub:             data.npub,
-			NpubShort:        data.npubShort,
 			ParentLink:       data.parentLink,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
+			Clients:          generateClientList(enhancedCode, data.event),
 		})
 	case FileMetadata:
 		opengraph.Image = data.kind1063Metadata.DisplayImage()
 
-		err = FileMetadataTemplate.Render(w, &FileMetadataPage{
-			OpenGraphPartial: opengraph,
-			HeadCommonPartial: HeadCommonPartial{
-				IsProfile:          false,
-				TailwindDebugStuff: tailwindDebugStuff,
-				NaddrNaked:         data.naddrNaked,
-				NeventNaked:        data.neventNaked,
+		component = fileMetadataTemplate(FileMetadataPageParams{
+			OpenGraphParams: opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
 			},
-			DetailsPartial: detailsData,
-			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(data.nevent, data.event),
-			},
+			DetailsParams: detailsData,
 
 			CreatedAt:        data.createdAt,
 			Metadata:         data.metadata,
-			Npub:             data.npub,
-			NpubShort:        data.npubShort,
 			Style:            style,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
+			Clients:          generateClientList(data.nevent, data.event),
 
 			FileMetadata: *data.kind1063Metadata,
 			IsImage:      data.kind1063Metadata.IsImage(),
@@ -411,70 +387,58 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	case LiveEvent:
 		opengraph.Image = data.kind30311Metadata.Image
 
-		err = LiveEventTemplate.Render(w, &LiveEventPage{
-			OpenGraphPartial: opengraph,
-			HeadCommonPartial: HeadCommonPartial{
-				IsProfile:          false,
-				TailwindDebugStuff: tailwindDebugStuff,
-				NaddrNaked:         data.naddrNaked,
-				NeventNaked:        data.neventNaked,
+		component = liveEventTemplate(LiveEventPageParams{
+			OpenGraphParams: opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
 			},
-			DetailsPartial: detailsData,
-			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(data.naddr, data.event),
-			},
-
+			DetailsParams:    detailsData,
 			CreatedAt:        data.createdAt,
 			Metadata:         data.metadata,
-			Npub:             data.npub,
-			NpubShort:        data.npubShort,
 			Style:            style,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
+			Clients:          generateClientList(data.naddr, data.event),
 
 			LiveEvent: *data.kind30311Metadata,
 		})
 	case LiveEventMessage:
 		// opengraph.Image = data.kind1311Metadata.Image
 
-		err = LiveEventMessageTemplate.Render(w, &LiveEventMessagePage{
-			OpenGraphPartial: opengraph,
-			HeadCommonPartial: HeadCommonPartial{
-				IsProfile:          false,
-				TailwindDebugStuff: tailwindDebugStuff,
-				NaddrNaked:         data.naddrNaked,
-				NeventNaked:        data.neventNaked,
+		component = liveEventMessageTemplate(LiveEventMessagePageParams{
+			OpenGraphParams: opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
 			},
-			DetailsPartial: detailsData,
-			ClientsPartial: ClientsPartial{
-				Clients: generateClientList(data.naddr, data.event),
-			},
+			DetailsParams: detailsData,
 
 			Content:          template.HTML(data.content),
 			CreatedAt:        data.createdAt,
 			Metadata:         data.metadata,
-			Npub:             data.npub,
-			NpubShort:        data.npubShort,
 			ParentLink:       data.parentLink,
 			Style:            style,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
+			Clients:          generateClientList(data.naddr, data.event),
 
 			LiveEventMessage: *data.kind1311Metadata,
 		})
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
 
-		err = OtherTemplate.Render(w, &OtherPage{
-			HeadCommonPartial: HeadCommonPartial{
-				IsProfile:          false,
-				TailwindDebugStuff: tailwindDebugStuff,
-				NaddrNaked:         data.naddrNaked,
-				NeventNaked:        data.neventNaked,
+		component = otherTemplate(OtherPageParams{
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
 			},
-			DetailsPartial:  detailsData,
+			DetailsParams:   detailsData,
 			Alt:             data.alt,
 			Kind:            data.event.Kind,
 			KindDescription: data.kindDescription,
@@ -482,9 +446,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
 		http.Error(w, "tried to render an unsupported template at render_event.go", 500)
+		return
 	}
 
-	if err != nil {
+	if err := component.Render(r.Context(), w); err != nil {
 		log.Error().Err(err).Msg("error rendering tmpl")
 	}
 	return

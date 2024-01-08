@@ -7,11 +7,9 @@ templ homepageTemplate(params HomePageParams) {
 		<head>
 			<title>njump - the nostr static gateway</title>
 			<meta name="description" content=""/>
-			@head_commonTemplate(params.HeadCommonParams)
+			@headCommonTemplate(params.HeadParams)
 		</head>
-		<body
-			class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
-		>
+		<body class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black">
 			@topTemplate()
 			<div class="mx-auto sm:mt-8 block px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
 				<div class="flex w-full max-w-screen-xl justify-between gap-10 overflow-visible px-1 print:w-full sm:w-9/12 xl:w-3/5">
@@ -29,7 +27,7 @@ templ homepageTemplate(params HomePageParams) {
 							<code>nostr:</code> schema is not (yet) working.
 						</p>
 						<p class="my-3 leading-5">
-							<i>njump</i> currently lives under { params.Host }, you can reach it
+							<i>njump</i> currently lives under { s.Domain }, you can reach it
 							appending a Nostr
 							<a
 								class="underline"
@@ -40,7 +38,7 @@ templ homepageTemplate(params HomePageParams) {
 							entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>,
 							etc) after the domain:
 							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ params.Host }/&lt;nip-19-entity&gt;
+								{ s.Domain }/&lt;nip-19-entity&gt;
 							</span>.
 						</p>
 						<p class="my-3 leading-5">
@@ -78,7 +76,7 @@ templ homepageTemplate(params HomePageParams) {
 								<div
 									class="flex flex-wrap items-center justify-center sm:flex-nowrap sm:justify-normal"
 								>
-									<div class="mb-1.5 text-xl sm:mb-0">{ params.Host }/</div>
+									<div class="mb-1.5 text-xl sm:mb-0">{ s.Domain }/</div>
 									<input
 										name="code"
 										placeholder="paste a npub / nprofile / nevent / ..."
@@ -164,13 +162,13 @@ templ homepageTemplate(params HomePageParams) {
 							</a>
 							inspired permalink:
 							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ params.Host }/&lt;nip-05&gt;
+								{ s.Domain }/&lt;nip-05&gt;
 							</span>
 							, for example:
-							<a class="underline" href="/nvk.org">https://{ params.Host }/nvk.org</a>
+							<a class="underline" href="/nvk.org">https://{ s.Domain }/nvk.org</a>
 							or
 							<a class="underline" href="/mike@mikedilger.com">
-								https://{ params.Host }/mike@mikedilger.com
+								https://{ s.Domain }/mike@mikedilger.com
 							</a>
 							.
 						</p>
@@ -194,11 +192,11 @@ templ homepageTemplate(params HomePageParams) {
 						<p class="my-3 leading-5">
 							You can have a view of the last content posted to a relay using
 							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ params.Host }/r/&lt;relay-host&gt;
+								{ s.Domain }/r/&lt;relay-host&gt;
 							</span>
 							, for example:
 							<a class="underline" href="/r/nostr.wine">
-								https://{ params.Host }/r/nostr.wine
+								https://{ s.Domain }/r/nostr.wine
 							</a>
 						</p>
 						<p class="my-3 leading-5">
@@ -218,7 +216,7 @@ templ homepageTemplate(params HomePageParams) {
 							with a simple script:
 							<br/>
 							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								&lt;script src="https://{ params.Host }/embed/&lt;nip-19-entity&gt;"
+								&lt;script src="https://{ s.Domain }/embed/&lt;nip-19-entity&gt;"
 								/&gt;
 							</span>
 							<div class="mt-4 gap-8 sm:flex">

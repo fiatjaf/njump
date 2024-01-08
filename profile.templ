@@ -10,10 +10,10 @@ templ profileTemplate(params ProfilePageParams) {
 			<title>{ params.Metadata.Name } / { params.Metadata.DisplayName } is on Nostr</title>
 			<meta
 				name="description"
-				content={ fmt.Sprintf("%s is %s's public key on Nostr", params.Npub, params.Metadata.ShortName()) }
+				content={ fmt.Sprintf("%s is %s's public key on Nostr", params.Metadata.Npub(), params.Metadata.ShortName()) }
 			/>
 			<meta property="og:title" content={ params.Title }/>
-			<meta property="og:site_name" content={ params.Npub }/>
+			<meta property="og:site_name" content={ params.Metadata.Npub() }/>
 			if params.Metadata.Picture != "" {
 				<meta property="og:image" content={ params.Metadata.Picture }/>
 				<meta property="twitter:image" content={ params.Proxy + params.Metadata.Picture }/>
@@ -22,18 +22,18 @@ templ profileTemplate(params ProfilePageParams) {
 				<meta property="og:description" content={ params.Metadata.About }/>
 			}
 			<meta name="twitter:card" content="summary"/>
-			<link rel="canonical" href={ "https://njump.me/" + params.Npub }/>
+			<link rel="canonical" href={ "https://njump.me/" + params.Metadata.Npub() }/>
 			<link
 				rel="sitemap"
 				type="application/xml"
-				title={ "Sitemap for " + params.Npub }
-				href={ "/" + params.Npub + ".xml" }
+				title={ "Sitemap for " + params.Metadata.Npub() }
+				href={ "/" + params.Metadata.Npub() + ".xml" }
 			/>
 			<link
 				rel="alternate"
 				type="application/atom+xml"
 				title="RSS"
-				href={ "/" + params.Npub + ".rss" }
+				href={ "/" + params.Metadata.Npub() + ".rss" }
 			/>
 			@headCommonTemplate(params.HeadParams)
 		</head>
@@ -96,7 +96,7 @@ templ profileTemplate(params ProfilePageParams) {
 						}
 						<div class="mb-6 leading-5">
 							<div class="text-sm text-strongpink">Public Key</div>
-							{ params.Npub }
+							{ params.Metadata.Npub() }
 						</div>
 						<div class="mb-6 leading-5">
 							if params.Metadata.NIP05 != "" {
@@ -129,7 +129,7 @@ templ profileTemplate(params ProfilePageParams) {
 						}
 						@detailsTemplate(params.DetailsParams)
 						<div
-							_={ "init fetch /profile-last-notes/" + params.Npub + " then put the result into me end" }
+							_={ "init fetch '?just-last-notes=true' then put the result into me end" }
 						>
 							if len(params.LastNotes) != 0 {
 								<aside>

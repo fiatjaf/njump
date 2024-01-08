@@ -5,7 +5,15 @@ import (
 	"html"
 	"html/template"
 	"net/http"
+
+	"github.com/a-h/templ"
 )
+
+func renderEmbedjs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/javascript")
+	fileContent, _ := static.ReadFile("static/embed.js")
+	w.Write(fileContent)
+}
 
 func renderEmbedded(w http.ResponseWriter, r *http.Request, code string) {
 	fmt.Println(r.URL.Path, "@.", r.Header.Get("user-agent"))
@@ -13,12 +21,8 @@ func renderEmbedded(w http.ResponseWriter, r *http.Request, code string) {
 	data, err := grabData(r.Context(), code, false)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
-		errorPage := &ErrorPage{
-			Errors: err.Error(),
-		}
-		errorPage.TemplateText()
 		w.WriteHeader(http.StatusNotFound)
-		ErrorTemplate.Render(w, errorPage)
+		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
 		return
 	}
 
@@ -39,33 +43,31 @@ func renderEmbedded(w http.ResponseWriter, r *http.Request, code string) {
 		// we must do this because inside <blockquotes> we must treat <img>s differently when telegram_instant_view
 	}
 
+	var component templ.Component
 	switch data.templateId {
 	case Note:
-		err = EmbeddedNoteTemplate.Render(w, &EmbeddedNotePage{
+		component = embeddedNoteTemplate(EmbeddedNoteParams{
 			Content:   template.HTML(data.content),
 			CreatedAt: data.createdAt,
 			Metadata:  data.metadata,
-			Npub:      data.npub,
-			NpubShort: data.npubShort,
 			Subject:   subject,
 			Url:       code,
 		})
 
 	case Profile:
-		err = EmbeddedProfileTemplate.Render(w, &EmbeddedProfilePage{
+		component = embeddedProfileTemplate(EmbeddedProfileParams{
 			Metadata:                   data.metadata,
 			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
 			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false, true)),
-			Npub:                       data.npub,
-			Nprofile:                   data.nprofile,
 			AuthorRelays:               data.authorRelays,
 		})
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
 		http.Error(w, "tried to render an unsupported template at render_event.go", 500)
+		return
 	}
 
-	if err != nil {
+	if err := component.Render(r.Context(), w); err != nil {
 		log.Error().Err(err).Msg("error rendering tmpl")
 	}
 	return

@@ -19,7 +19,7 @@ templ embeddedProfileTemplate(params EmbeddedProfileParams) {
 			<div
 				class="mx-auto w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 pb-4 pt-4 print:w-full sm:w-11/12 md:w-10/12 lg:w-9/12"
 			>
-				<a href="/{params.Npub}" target="_new" class="no-underline">
+				<a href={ templ.URL("/" + params.Metadata.Npub()) } target="_new" class="no-underline">
 					<div class="w-full break-words">
 						<div class="w-full break-words print:w-full">
 							<header class="mb-4 max-w-full">
@@ -29,7 +29,7 @@ templ embeddedProfileTemplate(params EmbeddedProfileParams) {
 									>
 										<img
 											class="block h-auto w-full"
-											src="{params.Metadata.Picture}"
+											src={ params.Metadata.Picture }
 										/>
 									</div>
 									<div class="block print:text-base">
@@ -44,18 +44,18 @@ templ embeddedProfileTemplate(params EmbeddedProfileParams) {
 							</header>
 							if params.Metadata.Website != "" || params.RenderedAuthorAboutText != "" {
 								<div dir="auto">
-									{ params.RenderedAuthorAboutText }
+									@templ.Raw(params.RenderedAuthorAboutText)
 								</div>
 								<div class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
 								<div class="mb-6 leading-5">{ params.Metadata.Website }</div>
 								<div class="prose mb-6 leading-5 dark:prose-invert prose-headings:font-light sm:prose-a:text-justify">
-									{ params.RenderedAuthorAboutText }
+									@templ.Raw(params.RenderedAuthorAboutText)
 								</div>
 							}
 							<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
 							<div class="mb-6 leading-5">
 								<div class="text-sm text-strongpink">Public Key</div>
-								{ params.Npub }
+								{ params.Metadata.Npub() }
 							</div>
 							<div class="mb-6 leading-5">
 								if params.Metadata.NIP05 != "" {
@@ -72,7 +72,7 @@ templ embeddedProfileTemplate(params EmbeddedProfileParams) {
 							if len(params.AuthorRelays) > 0 {
 								<div class="mb-6 leading-5">
 									<div class="text-sm text-strongpink">Publishing to</div>
-									for index, element := range params.AuthorRelays {
+									for _, element := range params.AuthorRelays {
 										<span class="mr-1 mt-2 inline-block max-w-full rounded-lg border border-slate-300 px-2 py-0.5">{ element }</span>
 									}
 								</div>

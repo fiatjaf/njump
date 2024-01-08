@@ -36,13 +36,11 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	info, err := nip11.Fetch(r.Context(), hostname)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
-		errorPage := &ErrorPage{
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{
 			Message: "The relay you are looking for does not exist or is offline; check the name in the url or try later",
 			Errors:  err.Error(),
-		}
-		errorPage.TemplateText()
-		w.WriteHeader(http.StatusNotFound)
-		ErrorTemplate.Render(w, errorPage)
+		}).Render(r.Context(), w)
 		return
 	}
 	if info == nil {
@@ -91,16 +89,14 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		})
 
 	} else {
-		RelayTemplate.Render(w, &RelayPage{
-			HeadCommonPartial: HeadCommonPartial{IsProfile: false, TailwindDebugStuff: tailwindDebugStuff},
-			ClientsPartial: ClientsPartial{
-				Clients: generateRelayBrowserClientList(hostname),
-			},
+		relayTemplate(RelayPageParams{
+			HeadParams: HeadParams{IsProfile: false},
 			Info:       info,
 			Hostname:   hostname,
 			Proxy:      "https://" + hostname + "/njump/proxy?src=",
 			LastNotes:  renderableLastNotes,
 			ModifiedAt: lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
-		})
+			Clients:    generateRelayBrowserClientList(hostname),
+		}).Render(r.Context(), w)
 	}
 }

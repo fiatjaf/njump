@@ -22,7 +22,7 @@ templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
 		<meta property="og:video:type" content={ "video/" + params.VideoType }/>
 	}
 	<!-- stuff that affects the content inside the preview window -->
-	<meta name="author" content={ params.Metadata.ShortName }/>
+	<meta name="author" content={ params.Metadata.ShortName() }/>
 	<meta name="telegram:channel" content="@nostr_protocol"/>
 	<!-- basic content of the preview window -->
 	<article>
@@ -30,21 +30,28 @@ templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
 			if params.Subject != "" {
 				{ params.Subject }
 			} else {
-				<a href={ "/" + params.Metadata.Npub }>{ params.Metadata.ShortName }</a> on Nostr:
+				<a href={ templ.URL("/" + params.Metadata.Npub()) }>
+					{ params.Metadata.ShortName() }
+				</a> on Nostr:
 			}
 		</h1>
 		if params.ParentLink != "" {
-			<aside>in reply to { params.ParentLink }</aside>
+			<aside>
+				in reply to
+				@templ.Raw(params.ParentLink)
+			</aside>
 		}
 		<!---->
 		if params.Summary != "" {
-			<aside>{ params.Summary }</aside>
+			<aside>
+				@templ.Raw(params.Summary)
+			</aside>
 		}
 		<!---->
-		{ params.Content }
+		@templ.Raw(params.Content)
 		if params.Subject != "" {
 			<aside>
-				<a href={ "/" + params.Metadata.Npub }>{ params.Metadata.ShortName }</a>
+				<a href={ templ.URL("/" + params.Metadata.Npub()) }>{ params.Metadata.ShortName() }</a>
 			</aside>
 		}
 	</article>

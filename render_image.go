@@ -16,7 +16,6 @@ import (
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
-	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/nfnt/resize"
 	xfont "golang.org/x/image/font"
 )
@@ -89,7 +88,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func drawImage(paragraphs []string, style Style, metadata sdk.ProfileMetadata, date string) (image.Image, error) {
+func drawImage(paragraphs []string, style Style, metadata Metadata, date string) (image.Image, error) {
 	fontSize := 25
 	width := 700
 	height := 525

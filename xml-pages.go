@@ -4,7 +4,6 @@ import (
 	_ "embed"
 
 	"github.com/nbd-wtf/go-nostr/nip11"
-	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/tylermmorton/tmpl"
 )
 
@@ -48,7 +47,7 @@ type RSSPage struct {
 
 	// for the profile RSS
 	Npub     string
-	Metadata sdk.ProfileMetadata
+	Metadata Metadata
 
 	// for the relay RSS
 	RelayHostname string
