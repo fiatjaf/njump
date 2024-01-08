@@ -16,7 +16,7 @@ deploy: templ tailwind
     ssh njump 'systemctl start njump'
 
 debug-build: templ tailwind
-    go build -tags=nocache -o ./tmp/main .
+    go build -tags=nocache -o /tmp/njump .
 
 templ:
     templ generate
