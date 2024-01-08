@@ -401,7 +401,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
-			Clients:          generateClientList(data.event.Kind, data.naddr),
+			Clients: generateClientList(data.event.Kind, data.naddr,
+				func(s string) string {
+					if strings.Contains(s, "nostrudel") {
+						s = strings.Replace(s, "/u/", "/streams/", 1)
+					}
+					return s
+				},
+			),
 
 			LiveEvent: *data.kind30311Metadata,
 		})

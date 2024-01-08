@@ -49,7 +49,7 @@ var (
 	plebstrIOS  = ClientReference{ID: "plebstr", Name: "Plebstr", Base: "plebstr:{code}", Platform: "ios"}
 )
 
-func generateClientList(kind int, code string) []ClientReference {
+func generateClientList(kind int, code string, withModifiers ...func(string) string) []ClientReference {
 	var clients []ClientReference
 	switch kind {
 	case -1: // relays
@@ -101,6 +101,9 @@ func generateClientList(kind int, code string) []ClientReference {
 
 	for i, c := range clients {
 		clients[i].URL = templ.SafeURL(strings.Replace(c.Base, "{code}", code, -1))
+		for _, modifier := range withModifiers {
+			clients[i].URL = templ.SafeURL(modifier(string(clients[i].URL)))
+		}
 	}
 
 	return clients
