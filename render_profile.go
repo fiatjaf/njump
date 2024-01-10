@@ -66,7 +66,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		w.Header().Set("Cache-Control", "max-age=86400")
 		err = profileTemplate(ProfilePageParams{
 			HeadParams: HeadParams{IsProfile: true},
-			DetailsParams: DetailsParams{
+			Details: DetailsParams{
 				HideDetails:     true,
 				CreatedAt:       data.createdAt,
 				KindDescription: data.kindDescription,

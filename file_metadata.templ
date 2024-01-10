@@ -2,72 +2,59 @@ package main
 
 templ fileMetadataTemplate(params FileMetadataPageParams) {
 	<!DOCTYPE html>
-	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
-		<meta charset="UTF-8"/>
-		<head>
-			<title>File Metadata</title>
-			@openGraphTemplate(params.OpenGraphParams)
-			@headCommonTemplate(params.HeadParams)
-		</head>
-		<body
-			class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
-		>
-			@topTemplate()
-			<div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
-				<div
-					class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 lg:gap-48vw"
-				>
-					<div class="w-full break-words print:w-full sm:w-3/4">
-						@authorHeaderTemplate(params.Metadata)
-						<div class="w-full text-right text-sm text-stone-400">
-							{ params.CreatedAt }
-						</div>
-						<div class="w-full text-right text-sm text-stone-400">
-							if params.ParentLink != "" {
-								in reply to
-								<span class="text-strongpink">
-									@templ.Raw(params.ParentLink)
-								</span>
-							}
-						</div>
-						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
-						<article
-							class="prose-cite:text-sm prose mb-6 leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-gray-100 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-zinc-800 sm:prose-a:text-justify"
-						>
-							if params.Subject != "" {
-								<h1 class="text-2xl">{ params.Subject }</h1>
-							} else {
-								<h1 class="hidden">
-									{ params.Metadata.ShortName() } on Nostr: { params.TitleizedContent }
-								</h1>
-							}
-							<!-- main content -->
-							if params.FileMetadata.Image != "" {
-								<img src={ params.FileMetadata.Image } alt={ params.Alt }/>
-							} else if params.IsImage {
-								<img src={ params.FileMetadata.URL } alt={ params.Alt }/>
-							} else if params.IsVideo {
-								<video
-									controls
-									width="100%%"
-									class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"
-								>
-									<source src={ params.FileMetadata.URL } alt={ params.Alt }/>
-								</video>
-							}
-							<a
-								href={ templ.URL(params.FileMetadata.URL) }
-								target="_new"
-								class="not-prose mx-auto mb-3 block w-4/5 basis-full rounded-lg border-0 bg-strongpink px-4 py-2 text-center text-[17px] font-light text-white no-underline sm:w-2/6"
-							>Download file</a>
-						</article>
-						@detailsTemplate(params.DetailsParams)
-						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
-					</div>
-					@clientsTemplate(params.Clients)
-				</div>
-			</div>
-			@footerTemplate()
-		</body>
-	</html>
+	@eventPageTemplate(
+		"File Metadata",
+		params.OpenGraphParams,
+		params.HeadParams,
+		params.Metadata,
+		params.Clients,
+		params.Details,
+		params.Event,
+	) {
+		if params.FileMetadata.Image != "" {
+			<img src={ params.FileMetadata.Image } alt={ params.Alt }/>
+		} else if params.IsImage {
+			<img src={ params.FileMetadata.URL } alt={ params.Alt }/>
+		} else if params.IsVideo {
+			<video
+				controls
+				width="100%%"
+				class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"
+			>
+				<source src={ params.FileMetadata.URL } alt={ params.Alt }/>
+			</video>
+		}
+		<a
+			href={ templ.URL(params.FileMetadata.URL) }
+			target="_new"
+			class="not-prose mx-auto mb-3 block w-4/5 basis-full rounded-lg border-0 bg-strongpink px-4 py-2 text-center text-[17px] font-light text-white no-underline sm:w-2/6"
+		>Download file</a>
+	}
+}
+
+templ fileMetadataDetails(params FileMetadataPageParams) {
+	if params.FileMetadata.Summary != "" {
+		<div class="mb-6 leading-5">
+			<div class="text-sm text-strongpink">Summary</div>
+			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Summary }</span>
+		</div>
+	}
+	if params.FileMetadata.Dim != "" {
+		<div class="mb-6 leading-5">
+			<div class="text-sm text-strongpink">Dimension</div>
+			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Dim }</span>
+		</div>
+	}
+	if params.FileMetadata.Size != "" {
+		<div class="mb-6 leading-5">
+			<div class="text-sm text-strongpink">Size</div>
+			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Size } bytes</span>
+		</div>
+	}
+	if params.FileMetadata.Magnet != "" {
+		<div class="mb-6 leading-5">
+			<div class="text-sm text-strongpink">Magnet URL</div>
+			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Magnet }</span>
+		</div>
+	}
 }

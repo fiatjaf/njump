@@ -1,0 +1,27 @@
+package main
+
+templ calendarEventTemplate(params CalendarPageParams) {
+	<!DOCTYPE html>
+	@eventPageTemplate(
+		"Calendar Event: " + params.CalendarEvent.Title,
+		params.OpenGraphParams,
+		params.HeadParams,
+		params.Metadata,
+		params.Clients,
+		params.Details,
+		params.Event,
+	) {
+		<h1 class="text-2xl">
+			<span class="mr-2">{ params.CalendarEvent.Title }</span>
+		</h1>
+		<div class="mb-4"></div>
+		<!-- main content -->
+		<div class="mb-4">
+			for _, v := range params.CalendarEvent.Hashtags {
+				<span class="mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white">
+					{ v }
+				</span>
+			}
+		</div>
+	}
+}

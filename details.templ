@@ -4,44 +4,22 @@ import (
 	"strconv"
 )
 
-templ detailsTemplate(params DetailsParams) {
+templ detailsTemplate(details DetailsParams) {
 	<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
-	if params.Metadata.Npub() != "" {
+	if details.Metadata.Npub() != "" {
 		<div class="mb-6 break-all leading-5">
 			<div class="text-sm text-strongpink">Author Public Key</div>
-			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.Metadata.Npub() }</span>
+			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ details.Metadata.Npub() }</span>
 		</div>
 	}
-	if params.FileMetadata != nil {
-		if params.FileMetadata.Summary != "" {
-			<div class="mb-6 leading-5">
-				<div class="text-sm text-strongpink">Summary</div>
-				<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Summary }</span>
-			</div>
-		}
-		if params.FileMetadata.Dim != "" {
-			<div class="mb-6 leading-5">
-				<div class="text-sm text-strongpink">Dimension</div>
-				<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Dim }</span>
-			</div>
-		}
-		if params.FileMetadata.Size != "" {
-			<div class="mb-6 leading-5">
-				<div class="text-sm text-strongpink">Size</div>
-				<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Size } bytes</span>
-			</div>
-		}
-		if params.FileMetadata.Magnet != "" {
-			<div class="mb-6 leading-5">
-				<div class="text-sm text-strongpink">Magnet URL</div>
-				<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.FileMetadata.Magnet }</span>
-			</div>
-		}
+	if details.Extra != nil {
+		@details.Extra
 	}
-	if len(params.SeenOn) != 0 {
+	<span></span>
+	if len(details.SeenOn) != 0 {
 		<div class="mb-6 leading-5 text-neutral-500 dark:text-neutral-300 text-[16px]">
 			<div class="text-sm text-strongpink">Seen on</div>
-			for _, v := range params.SeenOn {
+			for _, v := range details.SeenOn {
 				<a
 					href={ templ.URL("/r/" + v) }
 					class="underline-none pr-2 decoration-neutral-200 decoration-1 underline-offset-[6px] hover:underline"
@@ -50,7 +28,7 @@ templ detailsTemplate(params DetailsParams) {
 		</div>
 	}
 	<!-- details hidden behind a toggle -->
-	if params.HideDetails {
+	if details.HideDetails {
 		<div class="mb-6 flex items-center print:hidden">
 			<input
 				type="checkbox"
@@ -81,25 +59,25 @@ templ detailsTemplate(params DetailsParams) {
 			>Show more details</label>
 		</div>
 	}
-	<div id="hidden-fields" class={ templ.KV("hidden", params.HideDetails) }>
+	<div id="hidden-fields" class={ templ.KV("hidden", details.HideDetails) }>
 		<div class="mb-6 leading-5">
 			<div class="text-sm text-strongpink">Published at</div>
-			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.CreatedAt }</span>
+			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ details.CreatedAt }</span>
 		</div>
 		<div class="mb-6 leading-5">
 			<div class="text-sm text-strongpink">Kind type</div>
-			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ strconv.Itoa(params.Kind) }</span>
-			if params.KindNIP != "" {
+			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ strconv.Itoa(details.Kind) }</span>
+			if details.KindNIP != "" {
 				<a
-					href={ templ.URL("https://github.com/nostr-protocol/nips/blob/master/" + params.KindNIP + ".md") }
+					href={ templ.URL("https://github.com/nostr-protocol/nips/blob/master/" + details.KindNIP + ".md") }
 					class="underline decoration-neutral-200 dark:decoration-neutral-500 decoration-1 underline-offset-[6px] text-neutral-500 dark:text-neutral-300 text-[16px]"
-				>{ params.KindDescription }</a>
+				>{ details.KindDescription }</a>
 			}
 		</div>
-		if params.Nevent != "" {
+		if details.Nevent != "" {
 			<div class="mb-6 leading-5">
 				<div class="text-sm text-strongpink">Address Code</div>
-				<span class="text-[16px] text-neutral-500 dark:text-neutral-300">{ params.Nevent }</span>
+				<span class="text-[16px] text-neutral-500 dark:text-neutral-300">{ details.Nevent }</span>
 			</div>
 		}
 		<div class="-mx-4 my-8 bg-neutral-100 px-4 pb-4 leading-5 dark:bg-neutral-700">
@@ -109,13 +87,13 @@ templ detailsTemplate(params DetailsParams) {
 				Event JSON
 			</div>
 			<div class="mt-4 whitespace-pre-wrap break-all font-mono text-sm">
-				@templ.Raw(params.EventJSON)
+				@templ.Raw(details.EventJSON)
 			</div>
 		</div>
-		if params.Nprofile != "" {
+		if details.Nprofile != "" {
 			<div class="mb-6 break-all leading-5">
 				<div class="text-sm text-strongpink">Author Profile Code</div>
-				<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ params.Nprofile }</span>
+				<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ details.Nprofile }</span>
 			</div>
 		}
 	</div>

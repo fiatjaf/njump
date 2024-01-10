@@ -7,6 +7,7 @@ import (
 	"html"
 	"html/template"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -39,12 +40,36 @@ type EnhancedEvent struct {
 	relays []string
 }
 
-func (ee EnhancedEvent) IsReply() bool {
-	return nip10.GetImmediateReply(ee.Event.Tags) != nil
+func (ee EnhancedEvent) getParentNevent() string {
+	parentNevent := ""
+
+	switch ee.Kind {
+	case 1, 1063:
+		replyTag := nip10.GetImmediateReply(ee.Tags)
+		if replyTag != nil {
+			var relays []string
+			if (len(*replyTag) > 2) && ((*replyTag)[2] != "") {
+				relays = []string{(*replyTag)[2]}
+			}
+			parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], relays, "")
+		}
+	case 1311:
+		if atag := ee.Tags.GetFirst([]string{"a", ""}); atag != nil {
+			parts := strings.Split((*atag)[1], ":")
+			kind, _ := strconv.Atoi(parts[0])
+			var relays []string
+			if (len(*atag) > 2) && ((*atag)[2] != "") {
+				relays = []string{(*atag)[2]}
+			}
+			parentNevent, _ = nip19.EncodeEntity(parts[1], kind, parts[2], relays)
+		}
+	}
+
+	return parentNevent
 }
 
-func (ee EnhancedEvent) Reply() *nostr.Tag {
-	return nip10.GetImmediateReply(ee.Event.Tags)
+func (ee EnhancedEvent) isReply() bool {
+	return nip10.GetImmediateReply(ee.Event.Tags) != nil
 }
 
 func (ee EnhancedEvent) Preview() template.HTML {
@@ -96,8 +121,7 @@ func (ee EnhancedEvent) RssContent() string {
 	content := ee.Event.Content
 	content = basicFormatting(html.EscapeString(content), true, false, false)
 	content = renderQuotesAsHTML(context.Background(), content, false)
-	if ee.IsReply() {
-		nevent, _ := nip19.EncodeEvent(ee.Reply().Value(), ee.relays, ee.Event.PubKey)
+	if nevent := ee.getParentNevent(); nevent != "" {
 		neventShort := nevent[:8] + "…" + nevent[len(nevent)-4:]
 		content = "In reply to <a href='/" + nevent + "'>" + neventShort + "</a><br/>_________________________<br/><br/>" + content
 	}
@@ -187,6 +211,13 @@ type Kind1063Metadata struct {
 type Kind30311Metadata struct {
 	nip53.LiveEvent
 	Host *sdk.ProfileMetadata
+}
+
+func (le Kind30311Metadata) title() string {
+	if le.Host != nil {
+		return le.Title + " by " + le.Host.Name
+	}
+	return le.Title
 }
 
 type Kind31922Or31923Metadata struct {

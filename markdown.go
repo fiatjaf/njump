@@ -52,7 +52,7 @@ var tgivmdrenderer = html.NewRenderer(html.RendererOptions{
 
 func mdToHTML(md string, usingTelegramInstantView bool, skipLinks bool) string {
 	md = strings.ReplaceAll(md, "\u00A0", " ")
-	md = replaceNostrURLsWithTags(nostrEveryMatcher, md)
+	md = replaceNostrURLsWithHTMLTags(nostrEveryMatcher, md)
 
 	// create markdown parser with extensions
 	// this parser is stateful so it must be reinitialized every time

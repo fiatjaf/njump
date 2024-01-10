@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"html/template"
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/nbd-wtf/go-nostr/nip31"
+	"github.com/nbd-wtf/go-nostr/nip52"
 	"github.com/nbd-wtf/go-nostr/nip53"
 	"github.com/nbd-wtf/go-nostr/nip94"
 	sdk "github.com/nbd-wtf/nostr-sdk"
@@ -122,9 +122,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	case 1, 7, 30023, 30024:
 		data.templateId = Note
 		data.content = event.Content
-		if parentNevent := getParentNevent(event); parentNevent != "" {
-			data.parentLink = template.HTML(replaceNostrURLsWithTags(nostrNoteNeventMatcher, "nostr:"+parentNevent))
-		}
 	case 6:
 		data.templateId = Note
 		if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
@@ -145,12 +142,9 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	case 1311:
 		data.templateId = LiveEventMessage
 		data.content = event.Content
-		if atag := event.Tags.GetFirst([]string{"a", ""}); atag != nil {
-			parts := strings.Split((*atag)[1], ":")
-			kind, _ := strconv.Atoi(parts[0])
-			parentNevent, _ := nip19.EncodeEntity(parts[1], kind, parts[2], data.event.relays)
-			data.parentLink = template.HTML(replaceNostrURLsWithTags(nostrEveryMatcher, "nostr:"+parentNevent))
-		}
+	case 31922, 31923:
+		data.templateId = CalendarEvent
+		data.kind31922Or31923Metadata = &Kind31922Or31923Metadata{CalendarEvent: nip52.ParseCalendarEvent(*event)}
 	default:
 		data.templateId = Other
 	}

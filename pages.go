@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"strings"
 
+	"github.com/a-h/templ"
 	"github.com/nbd-wtf/go-nostr/nip11"
 )
 
@@ -20,6 +21,7 @@ const (
 	FileMetadata
 	LiveEvent
 	LiveEventMessage
+	CalendarEvent
 	Other
 )
 
@@ -51,10 +53,7 @@ type DetailsParams struct {
 	Kind            int
 	KindNIP         string
 	KindDescription string
-
-	// kind-specific stuff
-	FileMetadata *Kind1063Metadata
-	LiveEvent    *Kind30311Metadata
+	Extra           templ.Component
 }
 
 type HeadParams struct {
@@ -65,17 +64,17 @@ type HeadParams struct {
 }
 
 type TelegramInstantViewParams struct {
-	Video       string
-	VideoType   string
-	Image       string
-	Summary     template.HTML
-	Content     template.HTML
-	Description string
-	Subject     string
-	Metadata    Metadata
-	AuthorLong  string
-	CreatedAt   string
-	ParentLink  template.HTML
+	Video        string
+	VideoType    string
+	Image        string
+	Summary      template.HTML
+	Content      template.HTML
+	Description  string
+	Subject      string
+	Metadata     Metadata
+	AuthorLong   string
+	CreatedAt    string
+	ParentNevent string
 }
 
 type HomePageParams struct {
@@ -97,30 +96,6 @@ type ArchivePageParams struct {
 	PrevPage      int
 }
 
-type OtherPageParams struct {
-	HeadParams
-	DetailsParams
-
-	Kind            int
-	KindDescription string
-	Alt             string
-}
-
-type NotePageParams struct {
-	OpenGraphParams
-	HeadParams
-	DetailsParams
-
-	Content          template.HTML
-	CreatedAt        string
-	Metadata         Metadata
-	ParentLink       template.HTML
-	SeenOn           []string
-	Subject          string
-	TitleizedContent string
-	Clients          []ClientReference
-}
-
 type EmbeddedNoteParams struct {
 	Content   template.HTML
 	CreatedAt string
@@ -132,8 +107,8 @@ type EmbeddedNoteParams struct {
 
 type ProfilePageParams struct {
 	HeadParams
-	DetailsParams
 
+	Details                    DetailsParams
 	AuthorRelays               []string
 	Content                    string
 	CreatedAt                  string
@@ -144,7 +119,6 @@ type ProfilePageParams struct {
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
 	Nprofile                   string
-	IsReply                    string
 	Proxy                      string
 	Title                      string
 	Clients                    []ClientReference
@@ -162,66 +136,6 @@ type EmbeddedProfileParams struct {
 	Nprofile                   string
 	Proxy                      string
 	Title                      string
-}
-
-type FileMetadataPageParams struct {
-	OpenGraphParams
-	HeadParams
-	DetailsParams
-
-	Content          template.HTML
-	CreatedAt        string
-	Metadata         Metadata
-	ParentLink       template.HTML
-	SeenOn           []string
-	Style            Style
-	Subject          string
-	TitleizedContent string
-	Alt              string
-
-	FileMetadata Kind1063Metadata
-	IsImage      bool
-	IsVideo      bool
-
-	Clients []ClientReference
-}
-
-type LiveEventPageParams struct {
-	OpenGraphParams
-	HeadParams
-	DetailsParams
-
-	Content          template.HTML
-	CreatedAt        string
-	Metadata         Metadata
-	ParentLink       template.HTML
-	SeenOn           []string
-	Style            Style
-	Subject          string
-	TitleizedContent string
-	Alt              string
-
-	LiveEvent Kind30311Metadata
-
-	Clients []ClientReference
-}
-
-type LiveEventMessagePageParams struct {
-	OpenGraphParams
-	HeadParams
-	DetailsParams
-
-	Content          template.HTML
-	CreatedAt        string
-	Metadata         Metadata
-	ParentLink       template.HTML
-	SeenOn           []string
-	Style            Style
-	Subject          string
-	TitleizedContent string
-	Alt              string
-
-	Clients []ClientReference
 }
 
 type RelayPageParams struct {
@@ -258,4 +172,84 @@ func (e *ErrorPageParams) MessageHTML() template.HTML {
 	default:
 		return "I can't give any suggestions to solve the problem.<br> Please tag <a href='/dtonon.com'>daniele</a> and <a href='/fiatjaf.com'>fiatjaf</a> and complain!"
 	}
+}
+
+type BaseEventPageParams struct {
+	Event    EnhancedEvent
+	Metadata Metadata
+	Style    Style
+	Alt      string
+}
+
+type NotePageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details          DetailsParams
+	Content          template.HTML
+	Subject          string
+	TitleizedContent string
+	Clients          []ClientReference
+}
+
+type FileMetadataPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details DetailsParams
+	Content template.HTML
+
+	FileMetadata Kind1063Metadata
+	IsImage      bool
+	IsVideo      bool
+
+	Clients []ClientReference
+}
+
+type LiveEventPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details DetailsParams
+	Content template.HTML
+
+	LiveEvent Kind30311Metadata
+
+	Clients []ClientReference
+}
+
+type LiveEventMessagePageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details          DetailsParams
+	Content          template.HTML
+	TitleizedContent string
+
+	Clients []ClientReference
+}
+
+type CalendarPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+	Details DetailsParams
+
+	Content template.HTML
+
+	CalendarEvent Kind31922Or31923Metadata
+	Clients       []ClientReference
+}
+
+type OtherPageParams struct {
+	BaseEventPageParams
+	HeadParams
+
+	Details         DetailsParams
+	Kind            int
+	KindDescription string
 }

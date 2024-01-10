@@ -15,8 +15,6 @@ import (
 	"mvdan.cc/xurls/v2"
 
 	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip10"
-	"github.com/nbd-wtf/go-nostr/nip19"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
@@ -172,19 +170,6 @@ func getPreviewStyle(r *http.Request) Style {
 	}
 }
 
-func getParentNevent(event *nostr.Event) string {
-	parentNevent := ""
-	replyTag := nip10.GetImmediateReply(event.Tags)
-	if replyTag != nil {
-		var relays []string
-		if (len(*replyTag) > 2) && ((*replyTag)[2] != "") {
-			relays = []string{(*replyTag)[2]}
-		}
-		parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], relays, "")
-	}
-	return parentNevent
-}
-
 func attachRelaysToEvent(eventId string, relays ...string) []string {
 	key := "rls:" + eventId
 	existingRelays := make([]string, 0, 10)
@@ -250,7 +235,7 @@ func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacemen
 	})
 }
 
-func replaceNostrURLsWithTags(matcher *regexp.Regexp, input string) string {
+func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 	// match and replace npup1, nprofile1, note1, nevent1, etc
 	return matcher.ReplaceAllStringFunc(input, func(match string) string {
 		nip19 := match[len("nostr:"):]
@@ -377,7 +362,7 @@ func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstan
 	lines := strings.Split(input, "\n")
 	for i, line := range lines {
 		line = replaceURLsWithTags(line, imageReplacementTemplate, videoReplacementTemplate, skipLinks)
-		line = replaceNostrURLsWithTags(nostrMatcher, line)
+		line = replaceNostrURLsWithHTMLTags(nostrMatcher, line)
 		lines[i] = line
 	}
 	return strings.Join(lines, "<br/>")

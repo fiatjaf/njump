@@ -160,7 +160,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		subscript += " (" + subject + ")"
 	}
 	subscript += " by " + data.metadata.ShortName()
-	if data.event.IsReply() {
+	if data.event.isReply() {
 		subscript += " (reply)"
 	}
 
@@ -290,10 +290,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		Kind:            data.event.Kind,
 		SeenOn:          data.event.relays,
 		Metadata:        data.metadata,
-
-		// kind-specific stuff
-		FileMetadata: data.kind1063Metadata,
-		LiveEvent:    data.kind30311Metadata,
 	}
 
 	opengraph := OpenGraphParams{
@@ -309,21 +305,27 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var component templ.Component
+	baseEventPageParams := BaseEventPageParams{
+		Event:    data.event,
+		Metadata: data.metadata,
+		Style:    style,
+		Alt:      data.alt,
+	}
 
 	switch data.templateId {
 	case TelegramInstantView:
 		component = telegramInstantViewTemplate(TelegramInstantViewParams{
-			Video:       data.video,
-			VideoType:   data.videoType,
-			Image:       data.image,
-			Summary:     template.HTML(summary),
-			Content:     template.HTML(data.content),
-			Description: description,
-			Subject:     subject,
-			Metadata:    data.metadata,
-			AuthorLong:  data.authorLong,
-			CreatedAt:   data.createdAt,
-			ParentLink:  data.parentLink,
+			Video:        data.video,
+			VideoType:    data.videoType,
+			Image:        data.image,
+			Summary:      template.HTML(summary),
+			Content:      template.HTML(data.content),
+			Description:  description,
+			Subject:      subject,
+			Metadata:     data.metadata,
+			AuthorLong:   data.authorLong,
+			CreatedAt:    data.createdAt,
+			ParentNevent: data.event.getParentNevent(),
 		})
 	case Note:
 		if style == StyleTwitter {
@@ -346,64 +348,55 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		component = noteTemplate(NotePageParams{
-			OpenGraphParams: opengraph,
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
 				IsProfile:   false,
 				Oembed:      oembed,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			DetailsParams: detailsData,
 
+			Clients:          generateClientList(data.event.Kind, enhancedCode),
+			Details:          detailsData,
 			Content:          template.HTML(data.content),
-			CreatedAt:        data.createdAt,
-			Metadata:         data.metadata,
-			ParentLink:       data.parentLink,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
-			Clients:          generateClientList(data.event.Kind, enhancedCode),
 		})
 	case FileMetadata:
 		opengraph.Image = data.kind1063Metadata.DisplayImage()
-
-		component = fileMetadataTemplate(FileMetadataPageParams{
-			OpenGraphParams: opengraph,
+		params := FileMetadataPageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			DetailsParams: detailsData,
 
-			CreatedAt:        data.createdAt,
-			Metadata:         data.metadata,
-			Style:            style,
-			Subject:          subject,
-			TitleizedContent: titleizedContent,
-			Alt:              data.alt,
-			Clients:          generateClientList(data.event.Kind, data.nevent),
+			Details: detailsData,
+			Clients: generateClientList(data.event.Kind, data.nevent),
 
 			FileMetadata: *data.kind1063Metadata,
 			IsImage:      data.kind1063Metadata.IsImage(),
 			IsVideo:      data.kind1063Metadata.IsVideo(),
-		})
+		}
+		params.Details.Extra = fileMetadataDetails(params)
+
+		component = fileMetadataTemplate(params)
 	case LiveEvent:
 		opengraph.Image = data.kind30311Metadata.Image
-
 		component = liveEventTemplate(LiveEventPageParams{
-			OpenGraphParams: opengraph,
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			DetailsParams:    detailsData,
-			CreatedAt:        data.createdAt,
-			Metadata:         data.metadata,
-			Style:            style,
-			Subject:          subject,
-			TitleizedContent: titleizedContent,
-			Alt:              data.alt,
+
+			Details:   detailsData,
+			LiveEvent: *data.kind30311Metadata,
 			Clients: generateClientList(data.event.Kind, data.naddr,
 				func(s string) string {
 					if strings.Contains(s, "nostrudel") {
@@ -412,42 +405,51 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 					return s
 				},
 			),
-
-			LiveEvent: *data.kind30311Metadata,
 		})
 	case LiveEventMessage:
-		// opengraph.Image = data.kind1311Metadata.Image
-
 		component = liveEventMessageTemplate(LiveEventMessagePageParams{
-			OpenGraphParams: opengraph,
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			DetailsParams: detailsData,
 
+			Details:          detailsData,
 			Content:          template.HTML(data.content),
-			CreatedAt:        data.createdAt,
-			Metadata:         data.metadata,
-			ParentLink:       data.parentLink,
-			Style:            style,
-			Subject:          subject,
 			TitleizedContent: titleizedContent,
-			Alt:              data.alt,
 			Clients:          generateClientList(data.event.Kind, data.naddr),
+		})
+	case CalendarEvent:
+		if data.kind31922Or31923Metadata.Image != "" {
+			opengraph.Image = data.kind31922Or31923Metadata.Image
+		}
+		component = calendarEventTemplate(CalendarPageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
+			},
+
+			Details: detailsData,
+			Content: template.HTML(data.content),
+			Clients: generateClientList(data.event.Kind, data.naddr),
 		})
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
 
 		component = otherTemplate(OtherPageParams{
+			BaseEventPageParams: baseEventPageParams,
 			HeadParams: HeadParams{
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			DetailsParams:   detailsData,
-			Alt:             data.alt,
+
+			Details:         detailsData,
 			Kind:            data.event.Kind,
 			KindDescription: data.kindDescription,
 		})
