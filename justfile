@@ -7,9 +7,7 @@ build: templ tailwind
     go build -o ./njump
 
 deploy: templ tailwind
-    sed -i.bak "s#/tailwind-bundle.min.css#/tailwind-bundle.min.css?$(date +'%Y%m%d%H%M')#g" templates/head_common.html
-    GOOS=linux GOARCH=amd64 go build -o ./njump
-    mv -f templates/head_common.html.bak templates/head_common.html
+    GOOS=linux GOARCH=amd64 go build -ldflags="-X main.compileTimeTs=$(date '+%s')" -o ./njump
     rsync --progress njump njump:njump/njump-new
     ssh njump 'systemctl stop njump'
     ssh njump 'mv njump/njump-new njump/njump'

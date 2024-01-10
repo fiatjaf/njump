@@ -1,5 +1,7 @@
 package main
 
+var compileTimeTs string
+
 templ headCommonTemplate(params HeadParams) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	if params.Oembed != "" {
@@ -19,7 +21,7 @@ templ headCommonTemplate(params HeadParams) {
 	if tailwindDebugStuff != "" {
 		@templ.Raw(tailwindDebugStuff)
 	} else {
-		<link rel="stylesheet" type="text/css" href="/njump/static/tailwind-bundle.min.css"/>
+		<link rel="stylesheet" type="text/css" href={ "/njump/static/tailwind-bundle.min.css?t=" + compileTimeTs }/>
 	}
 	<style> @media print { @page { margin: 2cm 3cm; } } </style>
 	<meta name="theme-color" content="#e42a6d"/>
