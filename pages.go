@@ -221,8 +221,6 @@ type LiveEventMessagePageParams struct {
 	TitleizedContent string
 	Alt              string
 
-	LiveEventMessage Kind1311Metadata
-
 	Clients []ClientReference
 }
 

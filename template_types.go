@@ -13,6 +13,9 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/go-nostr/nip52"
+	"github.com/nbd-wtf/go-nostr/nip53"
+	"github.com/nbd-wtf/go-nostr/nip94"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
 )
@@ -178,42 +181,14 @@ func (ee EnhancedEvent) ToJSONHTML() template.HTML {
 }
 
 type Kind1063Metadata struct {
-	Magnet    string
-	Dim       string
-	Size      string
-	Summary   string
-	Image     string
-	URL       string
-	AES256GCM string
-	M         string
-	X         string
-	I         string
-	Blurhash  string
-	Thumb     string
+	nip94.FileMetadata
 }
 
 type Kind30311Metadata struct {
-	Title    string
-	Summary  string
-	Image    string
-	Status   string
-	Host     sdk.ProfileMetadata
-	HostNpub string
-	Tags     []string
+	nip53.LiveEvent
+	Host *sdk.ProfileMetadata
 }
 
-type Kind1311Metadata struct {
-	// ...
-}
-
-func (fm Kind1063Metadata) IsVideo() bool { return strings.Split(fm.M, "/")[0] == "video" }
-func (fm Kind1063Metadata) IsImage() bool { return strings.Split(fm.M, "/")[0] == "image" }
-func (fm Kind1063Metadata) DisplayImage() string {
-	if fm.Image != "" {
-		return fm.Image
-	} else if fm.IsImage() {
-		return fm.URL
-	} else {
-		return ""
-	}
+type Kind31922Or31923Metadata struct {
+	nip52.CalendarEvent
 }

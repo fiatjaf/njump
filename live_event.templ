@@ -38,19 +38,19 @@ templ liveEventTemplate(params LiveEventPageParams) {
 								}
 							</h1>
 							<div class="mb-4">
-								if params.LiveEvent.HostNpub != "" {
+								if params.LiveEvent.Host != nil {
 									Streaming hosted by
-									<a href={ templ.URL("/" + params.LiveEvent.HostNpub) }>
+									<a href={ templ.URL("/" + params.LiveEvent.Host.Npub()) }>
 										{ params.LiveEvent.Host.Name }
 									</a>
 								}
 							</div>
 							<!-- main content -->
 							<div class="mb-4">
-								for _, v := range params.LiveEvent.Tags {
-									<span
-										class="mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white"
-									>{ v }</span>
+								for _, v := range params.LiveEvent.Hashtags {
+									<span class="mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white">
+										{ v }
+									</span>
 								}
 							</div>
 							if params.LiveEvent.Summary != "" {

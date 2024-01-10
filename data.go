@@ -9,34 +9,37 @@ import (
 	"time"
 
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/go-nostr/nip31"
+	"github.com/nbd-wtf/go-nostr/nip53"
+	"github.com/nbd-wtf/go-nostr/nip94"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
 type Data struct {
-	templateId          TemplateID
-	event               EnhancedEvent
-	nprofile            string
-	nevent              string
-	neventNaked         string
-	naddr               string
-	naddrNaked          string
-	createdAt           string
-	modifiedAt          string
-	parentLink          template.HTML
-	metadata            Metadata
-	authorRelays        []string
-	authorLong          string
-	renderableLastNotes []EnhancedEvent
-	kindDescription     string
-	kindNIP             string
-	video               string
-	videoType           string
-	image               string
-	content             string
-	alt                 string
-	kind1063Metadata    *Kind1063Metadata
-	kind30311Metadata   *Kind30311Metadata
-	kind1311Metadata    *Kind1311Metadata
+	templateId               TemplateID
+	event                    EnhancedEvent
+	nprofile                 string
+	nevent                   string
+	neventNaked              string
+	naddr                    string
+	naddrNaked               string
+	createdAt                string
+	modifiedAt               string
+	parentLink               template.HTML
+	metadata                 Metadata
+	authorRelays             []string
+	authorLong               string
+	renderableLastNotes      []EnhancedEvent
+	kindDescription          string
+	kindNIP                  string
+	video                    string
+	videoType                string
+	image                    string
+	content                  string
+	alt                      string
+	kind1063Metadata         *Kind1063Metadata
+	kind30311Metadata        *Kind30311Metadata
+	kind31922Or31923Metadata *Kind31922Or31923Metadata
 }
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
@@ -85,9 +88,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	}
 
-	if tag := event.Tags.GetFirst([]string{"alt", ""}); tag != nil {
-		data.alt = (*tag)[1]
-	}
+	data.alt = nip31.GetAlt(*event)
 
 	switch event.Kind {
 	case 0:
@@ -132,76 +133,17 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	case 1063:
 		data.templateId = FileMetadata
-		data.kind1063Metadata = &Kind1063Metadata{}
-
-		if tag := event.Tags.GetFirst([]string{"url", ""}); tag != nil {
-			data.kind1063Metadata.URL = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"m", ""}); tag != nil {
-			data.kind1063Metadata.M = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"aes-256-gcm", ""}); tag != nil {
-			data.kind1063Metadata.AES256GCM = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"x", ""}); tag != nil {
-			data.kind1063Metadata.X = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"size", ""}); tag != nil {
-			data.kind1063Metadata.Size = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"dim", ""}); tag != nil {
-			data.kind1063Metadata.Dim = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"magnet", ""}); tag != nil {
-			data.kind1063Metadata.Magnet = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"i", ""}); tag != nil {
-			data.kind1063Metadata.I = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"blurhash", ""}); tag != nil {
-			data.kind1063Metadata.Blurhash = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"thumb", ""}); tag != nil {
-			data.kind1063Metadata.Thumb = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
-			data.kind1063Metadata.Image = (*tag)[1]
-			data.image = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
-			data.kind1063Metadata.Summary = (*tag)[1]
-		}
+		data.kind1063Metadata = &Kind1063Metadata{nip94.ParseFileMetadata(*event)}
 	case 30311:
 		data.templateId = LiveEvent
-		data.kind30311Metadata = &Kind30311Metadata{}
-
-		if tag := event.Tags.GetFirst([]string{"title", ""}); tag != nil {
-			data.kind30311Metadata.Title = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"summary", ""}); tag != nil {
-			data.kind30311Metadata.Summary = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"image", ""}); tag != nil {
-			data.kind30311Metadata.Image = (*tag)[1]
-			data.image = (*tag)[1]
-		}
-		if tag := event.Tags.GetFirst([]string{"status", ""}); tag != nil {
-			data.kind30311Metadata.Status = (*tag)[1]
-		}
-		pTags := event.Tags.GetAll([]string{"p", ""})
-		for _, p := range pTags {
-			if p[3] == "host" {
-				data.kind30311Metadata.Host = sdk.FetchProfileMetadata(ctx, pool, p[1], data.event.relays...)
-				data.kind30311Metadata.HostNpub = data.kind30311Metadata.Host.Npub()
-			}
-		}
-		tTags := event.Tags.GetAll([]string{"t", ""})
-		for _, t := range tTags {
-			data.kind30311Metadata.Tags = append(data.kind30311Metadata.Tags, t[1])
+		data.kind30311Metadata = &Kind30311Metadata{LiveEvent: nip53.ParseLiveEvent(*event)}
+		host := data.kind30311Metadata.GetHost()
+		if host != nil {
+			hostProfile := sdk.FetchProfileMetadata(ctx, pool, host.PubKey, data.event.relays...)
+			data.kind30311Metadata.Host = &hostProfile
 		}
 	case 1311:
 		data.templateId = LiveEventMessage
-		data.kind1311Metadata = &Kind1311Metadata{}
 		data.content = event.Content
 		if atag := event.Tags.GetFirst([]string{"a", ""}); atag != nil {
 			parts := strings.Split((*atag)[1], ":")

@@ -436,8 +436,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			TitleizedContent: titleizedContent,
 			Alt:              data.alt,
 			Clients:          generateClientList(data.event.Kind, data.naddr),
-
-			LiveEventMessage: *data.kind1311Metadata,
 		})
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event

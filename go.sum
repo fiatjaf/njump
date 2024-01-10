@@ -159,8 +159,8 @@ github.com/microcosm-cc/bluemonday v1.0.24 h1:NGQoPtwGVcbGkKfvyYk1yRqknzBuoMiUrO
 github.com/microcosm-cc/bluemonday v1.0.24/go.mod h1:ArQySAMps0790cHSkdPEJ7bGkF2VePWH773hsJNSHf8=
 github.com/nbd-wtf/emoji v0.0.3 h1:YtkT7MVPXvqU1SQjvC/CShlWexnREzqNCxmhUnL00CA=
 github.com/nbd-wtf/emoji v0.0.3/go.mod h1:tS6D9iI34qwBmWc5g8X7tVDkWXulqbTJRsvsM6QsS88=
-github.com/nbd-wtf/go-nostr v0.27.3 h1:u9fdP5h+Ap3LcDFD2j6F2buU/xOM9ddMY0LCDcC6ZyY=
-github.com/nbd-wtf/go-nostr v0.27.3/go.mod h1:e5WOFsKEpslDOxIgK00NqemH7KuAvKIW6sBXeJYCfUs=
+github.com/nbd-wtf/go-nostr v0.28.0 h1:SLYyoFeCNYb7HyWtmPUzD6rifBOMR66Spj5fzCk+5GE=
+github.com/nbd-wtf/go-nostr v0.28.0/go.mod h1:OQ8sNLFJnsj17BdqZiLSmjJBIFTfDqckEYC3utS4qoY=
 github.com/nbd-wtf/nostr-sdk v0.0.4 h1:vMCiYpFElKMHPXpZjFVEq4utoTLdTYbkqXVYH1/4uzs=
 github.com/nbd-wtf/nostr-sdk v0.0.4/go.mod h1:KQZOtzcrXBlVhpZYG1tw83ADIONNMMPjUU3ZAH5U2RY=
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 h1:zYyBkD/k9seD2A7fsi6Oo2LfFZAehjjQMERAvZLEDnQ=
@@ -185,6 +185,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/puzpuzpuz/xsync/v2 v2.5.1 h1:mVGYAvzDSu52+zaGyNjC+24Xw2bQi3kTr4QJ6N9pIIU=
 github.com/puzpuzpuz/xsync/v2 v2.5.1/go.mod h1:gD2H2krq/w52MfPLE+Uy64TzJDVY7lP2znR9qmR35kU=
+github.com/puzpuzpuz/xsync/v3 v3.0.2 h1:3yESHrRFYr6xzkz61LLkvNiPFXxJEAABanTQpKbAaew=
+github.com/puzpuzpuz/xsync/v3 v3.0.2/go.mod h1:VjzYrABPabuM4KyBh1Ftq6u8nhwY5tBPKP9jpmh0nnA=
 github.com/rogpeppe/go-internal v1.10.0 h1:TMyTOH3F/DB16zRVcYyreMH6GnZZrwQVAoYjRBZyWFQ=
 github.com/rogpeppe/go-internal v1.10.0/go.mod h1:UQnix2H7Ngw/k4C5ijL5+65zddjncjaFoBhdsK/akog=
 github.com/rs/cors v1.10.0 h1:62NOS1h+r8p1mW6FM0FSB0exioXLhd/sh15KpjWBZ+8=
