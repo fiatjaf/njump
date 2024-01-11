@@ -214,6 +214,9 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 		}
 
 		if isMediaURL(paragraph) {
+			if i == 0 {
+				yPos = 0
+			}
 			yPos = drawMediaAt(img, paragraph, yPos)
 			continue
 		}
