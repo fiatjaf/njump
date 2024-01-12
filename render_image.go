@@ -217,8 +217,15 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 			if i == 0 {
 				yPos = 0
 			}
-			yPos = drawMediaAt(img, paragraph, yPos)
-			continue
+			next := drawMediaAt(img, paragraph, yPos)
+			if next != -1 {
+				yPos = next
+				// this means the media picture was successfully drawn
+				continue
+			}
+
+			// if we reach here that means we didn't draw anything, so proceed to
+			// draw the text
 		}
 
 		rawText := []rune(paragraph)

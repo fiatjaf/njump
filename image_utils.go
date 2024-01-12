@@ -733,11 +733,14 @@ func drawShapedBlockAt(
 func drawImageAt(img draw.Image, imageUrl string, startY int) int {
 	resp, err := http.Get(imageUrl)
 	if err != nil {
-		return startY
+		return -1
 	}
 	defer resp.Body.Close()
 
 	srcImg, _, err := image.Decode(resp.Body)
+	if err != nil {
+		return -1
+	}
 
 	// Resize the fetched image to fit the width of the destination image (img)
 	width := img.Bounds().Dx()
@@ -756,13 +759,16 @@ func drawVideoAt(img draw.Image, videoUrl string, startY int) int {
 	cmd.Stdout = nil
 	cmd.Stderr = nil
 	if err := cmd.Run(); err != nil {
-		return startY
+		return -1
 	}
 	frame, _ := os.Open(tempImagePath)
 	defer os.Remove(tempImagePath)
 	defer frame.Close()
 
-	imgData, _, _ := image.Decode(frame)
+	imgData, _, err := image.Decode(frame)
+	if err != nil {
+		return -1
+	}
 
 	width := img.Bounds().Dx()
 	resizedFrame := resize.Resize(uint(width), 0, imgData, resize.Lanczos3)
