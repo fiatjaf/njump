@@ -18,10 +18,10 @@ var (
 	native = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
 
 	nosta     = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: "web"}
-	snort     = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/p/{code}", Platform: "web"}
+	snort     = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: "web"}
 	satellite = ClientReference{ID: "satellite", Name: "Satellite", Base: "https://satellite.earth/@{code}", Platform: "web"}
 	primalWeb = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/p/{code}", Platform: "web"}
-	nostrudel = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/#/u/{code}", Platform: "web"}
+	nostrudel = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/#/n/{code}", Platform: "web"}
 	nostter   = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: "web"}
 	iris      = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
 	coracle   = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: "web"}
@@ -50,7 +50,11 @@ var (
 	plebstrIOS  = ClientReference{ID: "plebstr", Name: "Plebstr", Base: "plebstr:{code}", Platform: "ios"}
 )
 
-func generateClientList(kind int, code string, withModifiers ...func(string) string) []ClientReference {
+func generateClientList(
+	kind int,
+	code string,
+	withModifiers ...func(ClientReference, string) string,
+) []ClientReference {
 	var clients []ClientReference
 	switch kind {
 	case -1: // relays
@@ -94,7 +98,7 @@ func generateClientList(kind int, code string, withModifiers ...func(string) str
 	case 31922, 31923:
 		clients = []ClientReference{
 			native,
-			flockstr, nostrudel,
+			coracle, flockstr,
 			amethyst,
 		}
 	default:
@@ -109,7 +113,7 @@ func generateClientList(kind int, code string, withModifiers ...func(string) str
 	for i, c := range clients {
 		clients[i].URL = templ.SafeURL(strings.Replace(c.Base, "{code}", code, -1))
 		for _, modifier := range withModifiers {
-			clients[i].URL = templ.SafeURL(modifier(string(clients[i].URL)))
+			clients[i].URL = templ.SafeURL(modifier(c, string(clients[i].URL)))
 		}
 	}
 

@@ -81,7 +81,14 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			Nprofile:                   data.nprofile,
 			AuthorRelays:               data.authorRelays,
 			LastNotes:                  data.renderableLastNotes,
-			Clients:                    generateClientList(data.event.Kind, data.metadata.Npub()),
+			Clients: generateClientList(data.event.Kind, data.metadata.Npub(),
+				func(c ClientReference, s string) string {
+					if c == nostrudel {
+						s = strings.Replace(s, "/n/", "/u/", 1)
+					}
+					return s
+				},
+			),
 		}).Render(r.Context(), w)
 	}
 
