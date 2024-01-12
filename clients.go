@@ -92,7 +92,7 @@ func generateClientList(
 	case 30311:
 		clients = []ClientReference{
 			native,
-			zapStream, nostrudel,
+			zapStream, coracle, nostrudel,
 			amethyst,
 		}
 	case 31922, 31923:
