@@ -361,7 +361,6 @@ func lookupScript(r rune) int {
 // shortenURLs takes a text content and returns the same content, but with all big URLs like https://image.nostr.build/0993112ab590e04b978ad32002005d42c289d43ea70d03dafe9ee99883fb7755.jpg#m=image%2Fjpeg&dim=1361x1148&blurhash=%3B7Jjhw00.l.QEh%3FuIA-pMe00%7EVjXX8x%5DE2xuSgtQcr%5E%2500%3FHxD%24%25%25Ms%2Bt%2B-%3BVZK59a%252MyD%2BV%5BI.8%7Ds%3B%25Lso-oi%5ENINHnjI%3BR*%3DdM%7BX7%25MIUtksn%24LM%7BMySeR%25R*%251M%7DRkv%23RjtjS%239as%3AxDnO%251&x=61be75a3e3e0cc88e7f0e625725d66923fdd777b3b691a1c7072ba494aef188d shortened to something like https://image.nostr.build/.../...7755.jpg
 func shortenURLs(text string, skipImages bool) string {
 	return urlMatcher.ReplaceAllStringFunc(text, func(match string) string {
-
 		if skipImages && isMediaURL(match) {
 			return match // Skip media URLs
 		}
@@ -468,6 +467,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 		// remove from mainBuffer characters that are not present in emojiBuffer
 		newMainBufferInfo := make([]harfbuzz.GlyphInfo, len(emojiBuffer.Info))
 		newMainBufferPos := make([]harfbuzz.GlyphPosition, len(emojiBuffer.Info))
+	outer:
 		for e, m := 0, 0; e < len(emojiBuffer.Info); {
 			ec := emojiBuffer.Info[e].Codepoint
 			if ec == mainBuffer.Info[m].Codepoint {
@@ -482,7 +482,18 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 				m++
 			} else {
 				m++
-				for ; emojiBuffer.Info[e].Codepoint != mainBuffer.Info[m].Codepoint; m++ {
+				for ; ec != mainBuffer.Info[m].Codepoint; m++ {
+					// we increase m until mainBuffer catches up with emojiBuffer
+					// if we reach the end of mainBuffer and that never happens, then that means it was actually
+					// emojiBuffer that had to catch up with mainBuffer -- but we don't handle this for now
+					// we just break out of the outer loop and render whatever we had ignoring emojis
+					if len(mainBuffer.Info) < m {
+						newMainBufferInfo = mainBuffer.Info
+						newMainBufferPos = mainBuffer.Pos
+						emojiMask = make([]bool, len(emojiBuffer.Info))
+						log.Debug().Interface("raw", rawText).Msg("unexpected mismatch between main and emoji buffers")
+						break outer
+					}
 				}
 			}
 		}
