@@ -41,16 +41,16 @@ templ relayTemplate(params RelayPageParams) {
 					class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:flex md:w-10/12 lg:w-9/12 lg:gap-48vw"
 				>
 					<div
-						class="relative top-auto flex basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:items-start"
+						class="relative top-auto flex flex-row sm:flex-col basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:items-start"
 					>
 						<div
-							class="hidden basis-2/3 items-center overflow-hidden text-left text-2xl sm:break-all"
+							class="hidden items-center overflow-hidden text-left text-2xl sm:break-word sm:text-center sm:basis-full"
 							_="on load or scroll from window or resize from window get #relay_name then measure its top, height then if top is less than height / -2 or height is 0 add .flex then remove .hidden otherwise remove .flex then add .hidden"
 						>
 							{ params.Info.Name }
 						</div>
 						<div
-							class="imgclip max-w-full basis-2/5 overflow-hidden sm:basis-auto"
+							class="imgclip max-w-full basis-2/5 overflow-hidden sm:basis-full"
 						>
 							<img class="block h-auto w-full" src={ params.Info.Icon }/>
 						</div>
