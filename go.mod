@@ -8,6 +8,7 @@ require (
 	github.com/dgraph-io/badger/v4 v4.2.0
 	github.com/fiatjaf/eventstore v0.3.6
 	github.com/fiatjaf/khatru v0.2.1
+	github.com/fiatjaf/set v0.0.4
 	github.com/fogleman/gg v1.3.0
 	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0

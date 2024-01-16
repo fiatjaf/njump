@@ -72,6 +72,8 @@ github.com/fiatjaf/eventstore v0.3.6 h1:m4+Cspx60RxqwSsJ0AhzE3qrvh+h+BW7HjtP34k3
 github.com/fiatjaf/eventstore v0.3.6/go.mod h1:iqGHNXOMz+ztLHXxG13WBXgz/2bG0q/p1L3olof4dYo=
 github.com/fiatjaf/khatru v0.2.1 h1:NlgjBYH7iJpjFyOJVNEX/E2I1v4d5+KINhA+VxgDr4o=
 github.com/fiatjaf/khatru v0.2.1/go.mod h1:DsiQEmQmb6/hTXV6/OMcF7C7h19u1tJG5zAgaQVjseY=
+github.com/fiatjaf/set v0.0.4 h1:1+vprHBRtVXUNHxPBFKG0ZpdU5Q793cJNUKF3i//x/Q=
+github.com/fiatjaf/set v0.0.4/go.mod h1:hdSwBrO+CwMEbYQAMaHtsib30KQLDtVjbX/1OgDK3tY=
 github.com/fiatjaf/typesetting v0.0.0-20231228183257-7c3f6f5a0ccc h1:8QpOKCVr8jpuvpmLCZUnsZ50faseCym2r6f5crpODKM=
 github.com/fiatjaf/typesetting v0.0.0-20231228183257-7c3f6f5a0ccc/go.mod h1:d22AnmeKq/on0HNv73UFriMKc4Ez6EqZAofLhAzpSzI=
 github.com/fogleman/gg v1.3.0 h1:/7zJX8F6AaYQc57WQCyN9cAIz+4bCJGO9B+dyW29am8=

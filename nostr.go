@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/fiatjaf/eventstore"
+	"github.com/fiatjaf/set"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
@@ -65,6 +66,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	if len(relayHints) > 0 {
 		withRelays = true
 	}
+	priorityRelays := set.NewSliceSet(relayHints...)
 
 	prefix, data, err := nip19.Decode(code)
 	if err != nil {
@@ -88,12 +90,14 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 		filter.Kinds = []int{0}
 		relays = append(relays, profiles...)
 		relays = append(relays, v.Relays...)
+		priorityRelays.Add(v.Relays...)
 		withRelays = true
 	case nostr.EventPointer:
 		author = v.Author
 		filter.IDs = []string{v.ID}
 		relays = append(relays, v.Relays...)
 		relays = append(relays, justIds...)
+		priorityRelays.Add(v.Relays...)
 		withRelays = true
 	case nostr.EntityPointer:
 		author = v.PublicKey
@@ -106,6 +110,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 		}
 		relays = append(relays, getRandomRelay(), getRandomRelay())
 		relays = append(relays, v.Relays...)
+		priorityRelays.Add(v.Relays...)
 		withRelays = true
 	case string:
 		if prefix == "note" {
@@ -182,6 +187,15 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	wdb.Publish(ctx, *result)
 	// save relays if we got them
 	allRelays := attachRelaysToEvent(result.ID, successRelays...)
+	// put priority relays first so they get used in nevent and nprofile
+	slices.SortFunc(allRelays, func(a, b string) int {
+		if priorityRelays.Has(a) && !priorityRelays.Has(b) {
+			return -1
+		} else if priorityRelays.Has(b) && !priorityRelays.Has(a) {
+			return 1
+		}
+		return 0
+	})
 	// keep track of what we have to delete later
 	scheduleEventExpiration(result.ID, time.Hour*24*7)
 
