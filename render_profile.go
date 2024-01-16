@@ -81,10 +81,13 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			Nprofile:                   data.nprofile,
 			AuthorRelays:               data.authorRelays,
 			LastNotes:                  data.renderableLastNotes,
-			Clients: generateClientList(data.event.Kind, data.metadata.Npub(),
+			Clients: generateClientList(data.event.Kind, data.nprofile,
 				func(c ClientReference, s string) string {
 					if c == nostrudel {
 						s = strings.Replace(s, "/n/", "/u/", 1)
+					}
+					if c == primalWeb {
+						s = strings.Replace(s, data.nprofile, data.metadata.Npub(), 1)
 					}
 					return s
 				},
