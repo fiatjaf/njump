@@ -88,6 +88,7 @@ func main() {
 	// expose our internal cache as a relay (mostly for debugging purposes)
 	relay := khatru.NewRelay()
 	relay.QueryEvents = append(relay.QueryEvents, db.QueryEvents)
+	relay.DeleteEvent = append(relay.DeleteEvent, db.DeleteEvent)
 	relay.RejectEvent = append(relay.RejectEvent,
 		func(context.Context, *nostr.Event) (bool, string) {
 			return true, "this relay is not writable"
