@@ -1,4 +1,4 @@
-//go:generate tmpl bind ./...
+//go:generate go run -mod=mod github.com/a-h/templ/cmd/templ@latest generate
 
 package main
 
