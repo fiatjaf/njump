@@ -5,13 +5,13 @@ FROM node:20 as tailwindbuilder
 WORKDIR /app/tailwind
 
 # Copy in the project files
-COPY . .
+COPY --link . .
 
 # Install Tailwind CLI
 RUN npm install tailwindcss
 
 # Generate minified Tailwind CSS bundle
-RUN npx tailwind -i tailwind.css -o tailwind-bundle.min.css --minify
+RUN npx tailwind -i node_modules/tailwindcss/tailwind.css -o tailwind-bundle.min.css --minify
 
 #### Go build stage
 FROM golang:1.21.4 as gobuilder
@@ -20,14 +20,17 @@ FROM golang:1.21.4 as gobuilder
 WORKDIR /app
 
 # Add necessary go files
-COPY go.mod go.sum ./
+COPY --link go.mod go.sum ./
 
 RUN go mod download
 
-COPY . .
+COPY --link . .
 
 # Copy minified Tailwind CSS bundle
 COPY --from=tailwindbuilder /app/tailwind/tailwind-bundle.min.css ./static/tailwind-bundle.min.css
+
+# Generate Go codes from template files
+RUN go run -mod=mod github.com/a-h/templ/cmd/templ@latest generate
 
 # Build the go binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
