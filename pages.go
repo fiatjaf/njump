@@ -1,3 +1,5 @@
+//go:generate npm install tailwindcss
+//go:generate npx tailwind -i node_modules/tailwindcss/tailwind.css -o tailwind-bundle.min.css --minify
 //go:generate go run -mod=mod github.com/a-h/templ/cmd/templ@latest generate
 
 package main
