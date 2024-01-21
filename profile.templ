@@ -42,16 +42,16 @@ templ profileTemplate(params ProfilePageParams) {
 			<div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
 				<div class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 lg:gap-48vw">
 					<header
-						class="relative top-auto flex basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:block sm:items-start"
+						class="relative top-auto flex basis-1/5 sm:max-w-[20%] items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:block sm:items-start"
 					>
 						<div
-							class="hidden basis-[64%] items-center overflow-hidden text-left"
+							class="hidden basis-[60%] pr-4 sm:pr-0 items-center overflow-hidden text-left break-words"
 							_="on load or scroll from window or resize from window get #profile_name then measure its top, height then if top is less than height / -2 or height is 0 remove .hidden otherwise add .hidden"
 						>
 							<div class="mb-3 sm:text-center">
-								<div class="text-2xl">{ params.Metadata.Name }</div>
+								<div class="text-2xl break-words">{ params.Metadata.Name }</div>
 								if params.Metadata.Name != params.Metadata.DisplayName {
-									<div class="text-base text-stone-400">
+									<div class="text-base text-stone-400 break-words">
 										{ params.Metadata.DisplayName }
 									</div>
 								}
@@ -63,12 +63,12 @@ templ profileTemplate(params ProfilePageParams) {
 							<img class="block h-auto w-full" src={ params.Metadata.Picture }/>
 						</div>
 					</header>
-					<div class="w-full break-words print:w-full sm:w-1/2">
+					<div class="w-full flex-1 break-words print:w-full sm:w-1/2">
 						<header class="mb-6 hidden leading-5 sm:flex sm:items-center">
-							<h1>
-								<div id="profile_name" class="text-2xl">{ params.Metadata.Name }</div>
+							<h1 class="sm:max-w-full">
+								<div id="profile_name" class="text-2xl break-words">{ params.Metadata.Name }</div>
 								if params.Metadata.Name != params.Metadata.DisplayName {
-									<div class="text-xl text-stone-400">
+									<div class="text-xl text-stone-400 break-words">
 										{ params.Metadata.DisplayName }
 									</div>
 								}
