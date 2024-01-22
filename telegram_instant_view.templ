@@ -22,7 +22,7 @@ templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
 		<meta property="og:video:type" content={ "video/" + params.VideoType }/>
 	}
 	<!-- stuff that affects the content inside the preview window -->
-	<meta name="author" content={ params.Metadata.ShortName() }/>
+	<meta name="author" content={ params.Metadata.ShortName() + " on Nostr" }/>
 	<meta name="telegram:channel" content="@nostr_protocol"/>
 	<!-- basic content of the preview window -->
 	<article>
