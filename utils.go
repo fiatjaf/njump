@@ -197,20 +197,15 @@ func getRelaysForEvent(eventId string) []string {
 	return relays
 }
 
-func scheduleEventExpiration(eventId string, ts time.Duration) {
-	key := "ttl:" + eventId
+func scheduleEventExpiration(id string, ts time.Duration) {
+	key := "ttl:" + id
 	nextExpiration := time.Now().Add(ts).Unix()
 	var currentExpiration int64
 	if exists := cache.GetJSON(key, &currentExpiration); exists {
-		if nextExpiration < currentExpiration {
-			return
-		}
+		return
 	}
 	cache.SetJSON(key, nextExpiration)
 }
-
-// Rendering functions
-// ### ### ### ### ### ### ### ### ### ### ###
 
 func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacementTemplate string, skipLinks bool) string {
 	return urlMatcher.ReplaceAllStringFunc(input, func(match string) string {
