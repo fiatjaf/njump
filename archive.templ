@@ -13,13 +13,16 @@ templ archiveTemplate(params ArchivePageParams) {
 		<body class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black">
 			@topTemplate()
 			<div class="mx-auto block px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
-				<div class="flex w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:w-11/12 md:w-10/12 lg:w-9/12 lg:gap-48vw">
-					<div class="relative top-auto flex basis-1/4 items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:items-start">
-						<div class="text-2xl">{ params.Title }</div>
+				<div class="w-full max-w-screen-2xl gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 lg:gap-48vw">
+					<div class="relative top-auto flex basis-1/5 sm:max-w-[20%] items-center self-start sm:sticky sm:top-8 sm:mt-8 sm:block sm:items-start">
+						<div
+							class="hidden text-2xl"
+							_="on load or scroll from window or resize from window get #page_name then measure its top, height then if top is less than height / -2 or height is 0 remove .hidden otherwise add .hidden"
+						>{ params.Title }</div>
 					</div>
-					<div class="w-full break-words break-all print:w-full sm:w-1/2">
-						<div class="mb-6 leading-5">
-							<h1 class="text-xl">{ params.Title }</h1>
+					<div class="w-full break-words break-all print:w-full basis-3/5">
+						<div id="page_name" class="mb-6 leading-5">
+							<h1 class="hidden sm:block text-2xl">{ params.Title }</h1>
 						</div>
 						<div class="mb-6 leading-5">
 							for _, v:= range params.Data {
