@@ -129,7 +129,14 @@ templ profileTemplate(params ProfilePageParams) {
 						}
 						@detailsTemplate(params.Details)
 						<div
-							_={ "init fetch '?just-last-notes=true' then put the result into me end" }
+							_="init if navigator's userAgent contains 'Googlebot' or
+									navigator's userAgent contains 'bingbot' or
+									navigator's userAgent contains 'DuckDuckBot' or
+									navigator's userAgent contains 'Baiduspider'
+									// It is not necessary to provide search engines with a preview of the notes
+								else
+									fetch '?just-last-notes=true' then put the result into me end
+								end"
 						>
 							if len(params.LastNotes) != 0 {
 								<aside>
