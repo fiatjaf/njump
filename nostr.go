@@ -36,6 +36,7 @@ var (
 	profiles = []string{
 		"wss://purplepag.es",
 		"wss://relay.noswhere.com",
+		"wss://relay.nos.social",
 	}
 	justIds = []string{
 		"wss://cache2.primal.net/v1",
