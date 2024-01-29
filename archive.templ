@@ -23,7 +23,7 @@ templ archiveTemplate(params ArchivePageParams) {
 						</div>
 						<div class="mb-6 leading-5">
 							for _, v:= range params.Data {
-								<a class="block" href="/{params.PathPrefix}{v}">
+								<a class="block" href={ templ.URL("/" + params.PathPrefix + v) }>
 									{ v }
 								</a>
 							}
