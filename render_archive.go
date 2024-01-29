@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -11,6 +12,7 @@ import (
 )
 
 func renderArchive(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path, "@.", r.Header.Get("user-agent"))
 	code := r.URL.Path[1:]
 	hostname := code[2:]
 	resultsPerPage := 50
@@ -94,7 +96,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 			PaginationUrl: area,
 			NextPage:      nextPage,
 			PrevPage:      prevPage,
-		})
+		}).Render(r.Context(), w)
 	} else {
 		w.Header().Add("content-type", "text/xml")
 		w.Write([]byte(XML_HEADER))
