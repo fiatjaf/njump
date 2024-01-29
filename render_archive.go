@@ -41,6 +41,8 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	area := ""
 	if strings.HasPrefix(r.URL.Path[1:], "npubs-archive") {
 		area = "npubs-archive"
+	} else if strings.HasPrefix(r.URL.Path[1:], "relays-archive") {
+		area = "relays-archive"
 	}
 
 	if area == "npubs-archive" {
