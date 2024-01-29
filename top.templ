@@ -7,6 +7,10 @@ templ topTemplate() {
 			class="text-md text-right text-sm print:hidden md:basis-1/6"
 			target="_blank"
 		>What is <span class="text-strongpink">Nostr</span>?</a>
+		<div class="hidden">
+			<a href="/npubs-archive/">Nostr npubs archive</a>
+			<a href="/relays-archive/">Nostr relays archive</a>
+		</div>
 		<div
 			class="print:hidden; relative float-right h-4 w-4 cursor-pointer rounded-full text-gray-100 dark:text-gray-700 sm:fixed sm:right-4 sm:top-4 sm:float-none"
 			_="on click tell <html /> toggle between .theme--dark and .theme--default then get your @class then get it[0].split('--')[1].split(' ')[0] then set localStorage.theme to it
