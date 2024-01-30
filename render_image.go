@@ -209,7 +209,7 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 		paragraph := paragraphs[i]
 
 		// Skip empty lines if the next element is an image
-		if paragraph == "" && len(paragraphs) > i && isMediaURL(paragraphs[i+1]) {
+		if paragraph == "" && len(paragraphs) > i+1 && isMediaURL(paragraphs[i+1]) {
 			continue
 		}
 
