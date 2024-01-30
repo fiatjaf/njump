@@ -32,4 +32,24 @@
     <updated>{{$ee.ModifiedAtStr}}</updated>
   </entry>
 {{end}}
+
+{{if gt (len .DaysSummaryNotes) 0}}
+{{range $i, $summary := .DaysSummaryNotes}}
+{{$first := index $summary 0}}
+  <entry>
+    <id>{{$first.Nevent}}</id>
+    <title>posts in {{$first.ModifiedAtStr}}</title>
+    <link rel="alternate" href="https://{{$.Host}}/{{$first.Nevent}}" />
+    <content type="html">
+      {{range $j, $ee := $summary}}
+      <div>
+          <p>posted at {{$ee.ModifiedAtStr}}</p>
+          <p>{{$ee.RssContent}}</p>
+      </div>
+      {{end}}
+    </content>
+    <updated>{{$first.ModifiedAtStr}}</updated>
+  </entry>
+{{end}}
+{{end}}
 </feed>

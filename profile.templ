@@ -35,6 +35,12 @@ templ profileTemplate(params ProfilePageParams) {
 				title="RSS"
 				href={ "/" + params.Metadata.Npub() + ".rss" }
 			/>
+			<link
+				rel="alternate"
+				type="application/atom+xml"
+				title="RSS (Days Summary)"
+				href={ "/" + params.Metadata.Npub() + "-summary.rss" }
+			/>
 			@headCommonTemplate(params.HeadParams)
 		</head>
 		<body class="mb-16 bg-white text-gray-600 print:text-black dark:bg-neutral-900 dark:text-neutral-50">
