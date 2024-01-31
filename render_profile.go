@@ -87,7 +87,9 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 						s = strings.Replace(s, "/n/", "/u/", 1)
 					}
 					if c == primalWeb {
-						s = strings.Replace(s, data.nprofile, data.metadata.Npub(), 1)
+						s = strings.Replace(
+							strings.Replace(s, "/e/", "/p/", 1),
+							data.nprofile, data.metadata.Npub(), 1)
 					}
 					return s
 				},

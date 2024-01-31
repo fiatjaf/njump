@@ -20,7 +20,7 @@ var (
 	nosta     = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: "web"}
 	snort     = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: "web"}
 	satellite = ClientReference{ID: "satellite", Name: "Satellite", Base: "https://satellite.earth/@{code}", Platform: "web"}
-	primalWeb = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/p/{code}", Platform: "web"}
+	primalWeb = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: "web"}
 	nostrudel = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/#/n/{code}", Platform: "web"}
 	nostter   = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: "web"}
 	iris      = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
