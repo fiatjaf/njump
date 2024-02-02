@@ -482,7 +482,7 @@ func shapeText(rawText []rune, fontSize int) (shaping.Output, []bool, []hlstate)
 				m++
 			} else {
 				m++
-				for ; ec != mainBuffer.Info[m].Codepoint; m++ {
+				for ; m < len(mainBuffer.Info) && ec != mainBuffer.Info[m].Codepoint; m++ {
 					// we increase m until mainBuffer catches up with emojiBuffer
 					// if we reach the end of mainBuffer and that never happens, then that means it was actually
 					// emojiBuffer that had to catch up with mainBuffer -- but we don't handle this for now
