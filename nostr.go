@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"time"
 
+	"slices"
+
 	"github.com/fiatjaf/eventstore"
 	"github.com/fiatjaf/set"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	sdk "github.com/nbd-wtf/nostr-sdk"
-	"golang.org/x/exp/slices"
 )
 
 var (

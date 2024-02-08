@@ -22,6 +22,8 @@ import (
 
 	"github.com/nfnt/resize"
 
+	"slices"
+
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
@@ -32,7 +34,6 @@ import (
 	"github.com/nbd-wtf/emoji"
 	"github.com/pemistahl/lingua-go"
 	"github.com/srwiley/rasterx"
-	"golang.org/x/exp/slices"
 	"golang.org/x/image/math/fixed"
 )
 

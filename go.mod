@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/a-h/templ v0.2.513
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/fiatjaf/eventstore v0.3.6
+	github.com/fiatjaf/eventstore v0.3.11
 	github.com/fiatjaf/khatru v0.2.1
 	github.com/fiatjaf/set v0.0.4
 	github.com/fogleman/gg v1.3.0
@@ -16,7 +16,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/emoji v0.0.3
-	github.com/nbd-wtf/go-nostr v0.28.0
+	github.com/nbd-wtf/go-nostr v0.28.1
 	github.com/nbd-wtf/nostr-sdk v0.0.4
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
@@ -27,7 +27,6 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
-	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b
 	golang.org/x/image v0.14.0
 	mvdan.cc/xurls/v2 v2.5.0
 )
@@ -74,6 +73,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.47.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
+	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.14.0 // indirect

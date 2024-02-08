@@ -10,8 +10,9 @@ import (
 	"strings"
 	"time"
 
+	"slices"
+
 	"github.com/microcosm-cc/bluemonday"
-	"golang.org/x/exp/slices"
 	"mvdan.cc/xurls/v2"
 
 	"github.com/nbd-wtf/go-nostr"
