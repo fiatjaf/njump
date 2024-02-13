@@ -350,7 +350,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		content := data.content
 		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
 			if len(tag) >= 3 {
-				content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img src="`+tag[2]+`"/>`)
+				content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img class="emoji" src="`+tag[2]+`"/>`)
 			}
 		}
 		component = noteTemplate(NotePageParams{
