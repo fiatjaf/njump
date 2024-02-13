@@ -23,6 +23,9 @@ templ headCommonTemplate(params HeadParams) {
 	} else {
 		<link rel="stylesheet" type="text/css" href={ "/njump/static/tailwind-bundle.min.css?t=" + compileTimeTs }/>
 	}
+	<style>
+		@media print { @page { margin: 2cm 3cm; } }
+	</style>
 	<meta name="theme-color" content="#e42a6d"/>
 	if params.NaddrNaked != "" {
 		<link rel="canonical" href={ "https://njump.me/" + params.NaddrNaked }/>
