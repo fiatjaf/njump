@@ -358,10 +358,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		content := data.content
 		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
+			// custom emojis
 			if len(tag) >= 3 && isValidShortcode(tag[1]) {
 				u, err := url.Parse(tag[2])
 				if err == nil {
-					content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img class="inline leading-5 m-0" src="`+u.String()+`"/>`)
+					content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img class="h-4 inline leading-5 m-0" src="`+u.String()+`"/>`)
 				}
 			}
 		}
