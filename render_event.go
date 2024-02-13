@@ -18,6 +18,15 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
+func isValidShortcode(s string) bool {
+	for _, r := range s {
+		if !('a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || '0' <= r && r <= '9' || r == '_') {
+			return false
+		}
+	}
+	return true
+}
+
 func renderEvent(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Path[1:] // hopefully a nip19 code
 
@@ -349,8 +358,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		content := data.content
 		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
-			if len(tag) >= 3 {
-				content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img class="emoji" src="`+tag[2]+`"/>`)
+			if len(tag) >= 3 && isValidShortcode(tag[1]) {
+				u, err := url.Parse(tag[2])
+				if err == nil {
+					content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img class="emoji" src="`+u.String()+`"/>`)
+				}
 			}
 		}
 		component = noteTemplate(NotePageParams{
