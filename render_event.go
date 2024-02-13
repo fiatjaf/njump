@@ -347,6 +347,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			enhancedCode = data.naddr
 		}
 
+		content := data.content
+		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
+			if len(tag) >= 3 {
+				content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img src="`+tag[2]+`"/>`)
+			}
+		}
 		component = noteTemplate(NotePageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
@@ -359,7 +365,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 			Clients:          generateClientList(data.event.Kind, enhancedCode),
 			Details:          detailsData,
-			Content:          template.HTML(data.content),
+			Content:          template.HTML(content),
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 		})
