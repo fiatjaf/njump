@@ -99,7 +99,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 			rawAuthorRelays = relaysForPubkey(ctx, event.PubKey)
 			cancel()
 			for _, relay := range rawAuthorRelays {
-				for _, excluded := range excludedRelays {
+				for _, excluded := range relayConfig.ExcludedRelays {
 					if strings.Contains(relay, excluded) {
 						continue
 					}

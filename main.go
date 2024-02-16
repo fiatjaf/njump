@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"embed"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -25,6 +26,7 @@ type Settings struct {
 	EventStorePath    string `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
 	TailwindDebug     bool   `envconfig:"TAILWIND_DEBUG"`
 	SkipLanguageModel bool   `envconfig:"SKIP_LANGUAGE_MODEL"`
+	RelayConfigPath   string `envconfig:"RELAY_CONFIG_PATH"`
 }
 
 //go:embed static/*
@@ -44,6 +46,23 @@ func main() {
 	} else {
 		if canonicalHost := os.Getenv("CANONICAL_HOST"); canonicalHost != "" {
 			s.Domain = canonicalHost
+		}
+	}
+
+	if s.RelayConfigPath != "" {
+		configr, err := os.ReadFile(s.RelayConfigPath)
+		if err != nil {
+			log.Fatal().Err(err).Msgf("failed to load %q", s.RelayConfigPath)
+			return
+		}
+		err = json.Unmarshal(configr, &relayConfig)
+		if err != nil {
+			log.Fatal().Err(err).Msgf("failed to load %q", s.RelayConfigPath)
+			return
+		}
+		if !relayConfig.Valid() {
+			log.Fatal().Err(err).Msgf("invalid relay config file %q", s.RelayConfigPath)
+			return
 		}
 	}
 
