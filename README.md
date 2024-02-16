@@ -55,7 +55,7 @@ TAILWIND_DEBUG=
 RELAY_CONFIG_PATH=
 ```
 
-`RELAY_CONFIG_FILE` is path to json file which is relay configuration. You can set relay list like below:
+`RELAY_CONFIG_FILE` is path to json file to update relay configuration. You can set relay list like below:
 
 ```json
 {
