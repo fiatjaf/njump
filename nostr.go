@@ -19,12 +19,11 @@ type RelayConfig struct {
 	Everything     []string `json:"everything"`
 	Profiles       []string `json:"profiles"`
 	JustIds        []string `json:"justIds"`
-	TrustedPubKeys []string `json:"trustedPubKeys"`
 	ExcludedRelays []string `json:"excludeRelays"`
 }
 
 func (r *RelayConfig) Valid() bool {
-	if len(r.Everything) == 0 || len(r.Profiles) == 0 || len(r.JustIds) == 0 || len(r.TrustedPubKeys) == 0 || len(r.ExcludedRelays) == 0 {
+	if len(r.Everything) == 0 || len(r.Profiles) == 0 || len(r.JustIds) == 0 || len(r.ExcludedRelays) == 0 {
 		return false
 	}
 	return true
@@ -59,15 +58,16 @@ var (
 			"wss://cache2.primal.net/v1",
 			"wss://relay.noswhere.com",
 		},
-		TrustedPubKeys: []string{
-			"7bdef7be22dd8e59f4600e044aa53a1cf975a9dc7d27df5833bc77db784a5805", // dtonon
-			"3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d", // fiatjaf
-			"97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322", // hodlbod
-			"ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49", // Michael Dilger
-		},
 		ExcludedRelays: []string{
 			"wss://filter.nostr.wine", // paid
 		},
+	}
+
+	defaultTrustedPubKeys = []string{
+		"7bdef7be22dd8e59f4600e044aa53a1cf975a9dc7d27df5833bc77db784a5805", // dtonon
+		"3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d", // fiatjaf
+		"97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322", // hodlbod
+		"ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49", // Michael Dilger
 	}
 )
 
