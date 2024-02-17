@@ -3,9 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
-
 	"slices"
+	"time"
 
 	"github.com/fiatjaf/eventstore"
 	"github.com/fiatjaf/set"
@@ -53,6 +52,7 @@ var (
 			"wss://purplepag.es",
 			"wss://relay.noswhere.com",
 			"wss://relay.nos.social",
+			"wss://relay.snort.social",
 		},
 		JustIds: []string{
 			"wss://cache2.primal.net/v1",
