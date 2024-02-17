@@ -1,0 +1,29 @@
+{
+  "everything": [
+    "wss://nostr-pub.wellorder.net",
+    "wss://saltivka.org",
+    "wss://relay.damus.io",
+    "wss://relay.nostr.bg",
+    "wss://nostr.wine",
+    "wss://nos.lol",
+    "wss://nostr.mom",
+    "wss://atlas.nostr.land",
+    "wss://relay.snort.social",
+    "wss://offchain.pub",
+    "wss://relay.primal.net",
+    "wss://relay.nostr.band",
+    "wss://public.relaying.io"
+  ],
+  "profiles": [
+    "wss://purplepag.es",
+    "wss://relay.noswhere.com",
+    "wss://relay.nos.social"
+  ],
+  "justIds": [
+    "wss://cache2.primal.net/v1",
+    "wss://relay.noswhere.com"
+  ],
+  "excludeRelays": [
+    "wss://filter.nostr.wine"
+  ]
+}

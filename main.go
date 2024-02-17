@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"embed"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -19,12 +20,14 @@ import (
 )
 
 type Settings struct {
-	Port              string `envconfig:"PORT" default:"2999"`
-	Domain            string `envconfig:"DOMAIN" default:"njump.me"`
-	DiskCachePath     string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
-	EventStorePath    string `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
-	TailwindDebug     bool   `envconfig:"TAILWIND_DEBUG"`
-	SkipLanguageModel bool   `envconfig:"SKIP_LANGUAGE_MODEL"`
+	Port              string   `envconfig:"PORT" default:"2999"`
+	Domain            string   `envconfig:"DOMAIN" default:"njump.me"`
+	DiskCachePath     string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
+	EventStorePath    string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
+	TailwindDebug     bool     `envconfig:"TAILWIND_DEBUG"`
+	SkipLanguageModel bool     `envconfig:"SKIP_LANGUAGE_MODEL"`
+	RelayConfigPath   string   `envconfig:"RELAY_CONFIG_PATH"`
+	TrustedPubKeys    []string `envconfig:"TRUSTED_PUBKEYS"`
 }
 
 //go:embed static/*
@@ -44,6 +47,27 @@ func main() {
 	} else {
 		if canonicalHost := os.Getenv("CANONICAL_HOST"); canonicalHost != "" {
 			s.Domain = canonicalHost
+		}
+	}
+
+	if len(s.TrustedPubKeys) == 0 {
+		s.TrustedPubKeys = defaultTrustedPubKeys
+	}
+
+	if s.RelayConfigPath != "" {
+		configr, err := os.ReadFile(s.RelayConfigPath)
+		if err != nil {
+			log.Fatal().Err(err).Msgf("failed to load %q", s.RelayConfigPath)
+			return
+		}
+		err = json.Unmarshal(configr, &relayConfig)
+		if err != nil {
+			log.Fatal().Err(err).Msgf("failed to load %q", s.RelayConfigPath)
+			return
+		}
+		if !relayConfig.Valid() {
+			log.Fatal().Err(err).Msgf("invalid relay config file %q", s.RelayConfigPath)
+			return
 		}
 	}
 

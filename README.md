@@ -52,6 +52,21 @@ DOMAIN="njump.me"
 DISK_CACHE_PATH="/tmp/njump-internal"
 EVENT_STORE_PATH="/tmp/njump-db"
 TAILWIND_DEBUG=
+RELAY_CONFIG_PATH=
+TRUSTED_PUBKEYS=npub1...,npub1...
 ```
+
+`RELAY_CONFIG_FILE` is path to json file to update relay configuration. You can set relay list like below:
+
+```json
+{
+  "everything": [
+    "wss://relay.nostr.band",
+    "wss://nostr.lol"
+  ]
+}
+```
+
+See `relay-config.json.sample` for example.
 
 For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump`.

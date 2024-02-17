@@ -430,10 +430,10 @@ func humanDate(createdAt nostr.Timestamp) string {
 
 func getRandomRelay() string {
 	if serial == 0 {
-		serial = rand.Intn(len(everything))
+		serial = rand.Intn(len(relayConfig.Everything))
 	}
-	serial = (serial + 1) % len(everything)
-	return everything[serial]
+	serial = (serial + 1) % len(relayConfig.Everything)
+	return relayConfig.Everything[serial]
 }
 
 func isntRealRelay(url string) bool {
