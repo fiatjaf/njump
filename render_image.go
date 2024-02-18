@@ -173,9 +173,9 @@ func drawImage(paragraphs []string, style Style, metadata Metadata, date string)
 	// a gradient to cover too long names
 	img.SetColor(BAR_BACKGROUND)
 	img.DrawRectangle(float64(authorTextX+authorMaxWidth), float64(height-barHeight), float64(width-authorTextX-authorMaxWidth), float64(barHeight))
-	gradientLenght := 60
-	for x := 0; x < gradientLenght; x++ {
-		alpha := uint8(255 - 255*(math.Pow(float64(x)/float64(gradientLenght), 2)))
+	gradientLength := 60
+	for x := 0; x < gradientLength; x++ {
+		alpha := uint8(255 - 255*(math.Pow(float64(x)/float64(gradientLength), 2)))
 		img.SetRGBA255(int(BAR_BACKGROUND.R), int(BAR_BACKGROUND.G), int(BAR_BACKGROUND.B), int(alpha))
 		img.DrawRectangle(float64(authorTextX+authorMaxWidth-x), float64(height-barHeight), 1, float64(barHeight))
 		img.Fill()
