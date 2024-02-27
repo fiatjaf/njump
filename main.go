@@ -141,7 +141,6 @@ func main() {
 	log.Print("listening at http://0.0.0.0:" + s.Port)
 	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: cors.Default().Handler(relay)}
 	go func() {
-		server.ListenAndServe()
 		if err := server.ListenAndServe(); err != nil {
 			log.Error().Err(err).Msg("")
 		}
