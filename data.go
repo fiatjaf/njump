@@ -145,6 +145,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	case 31922, 31923:
 		data.templateId = CalendarEvent
 		data.kind31922Or31923Metadata = &Kind31922Or31923Metadata{CalendarEvent: nip52.ParseCalendarEvent(*event)}
+		data.content = event.Content
 	default:
 		data.templateId = Other
 	}
