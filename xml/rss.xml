@@ -1,13 +1,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <updated>{{.ModifiedAt}}</updated>
   <generator>https://{{.Host}}</generator>
-{{if not (eq "" .Npub)}}
+{{if not (eq "" .Metadata.Npub)}}
   <title>Nostr notes by {{.Metadata.Name}}</title>
   <author>
     <name>{{.Metadata.Name}}</name>
   </author>
-  <link href="https://{{.Host}}/{{.Npub}}" />
-  <id>{{.Npub}}</id>
+  <link href="https://{{.Host}}/{{.Metadata.Npub}}" />
+  <id>{{.Metadata.Npub}}</id>
   <icon>{{.Metadata.Picture}}</icon>
   <logo>{{.Metadata.Picture}}</logo>
 {{end}}
