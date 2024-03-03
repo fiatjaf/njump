@@ -7,21 +7,21 @@
     <name>{{.Metadata.Name}}</name>
   </author>
   <link href="https://{{.Host}}/{{.Metadata.Npub}}" />
-  <id>{{.Metadata.Npub}}</id>
+  <id>https://{{.Host}}/{{.Metadata.Npub}}</id>
   <icon>{{.Metadata.Picture}}</icon>
   <logo>{{.Metadata.Picture}}</logo>
 {{end}}
 {{if not (eq "" .RelayHostname)}}
   <title>Nostr notes on {{.RelayHostname}}</title>
   <link href="https://{{.Host}}/r/{{.RelayHostname}}" />
-  <id>{{.RelayHostname}}</id>
+  <id>https://{{.Host}}/r/{{.RelayHostname}}</id>
   <icon>{{.Info.Icon}}</icon>
   <logo>{{.Info.Icon}}</logo>
 {{end}}
 
 {{range $i, $ee := .LastNotes}}
   <entry>
-    <id>{{$ee.Nevent}}</id>
+    <id>https://{{$.Host}}/{{$ee.Nevent}}</id>
     {{if not (eq "" $ee.RssTitle)}}
       <title>{{$ee.RssTitle}}</title>
     {{end}}
