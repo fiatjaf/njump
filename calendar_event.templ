@@ -60,11 +60,11 @@ templ calendarEventTemplate(params CalendarPageParams) {
 					}
 				</div>
 			}
+			if params.CalendarEvent.Image != "" {
+				<img class="w-full mt-2" src={ params.CalendarEvent.Image } />
+			}
 			@templ.Raw(params.Content)
 		</div>
-		if params.CalendarEvent.Image != "" {
-			<img class="w-full" src={ params.CalendarEvent.Image } />
-		}
 		
 		<div class="mb-4">
 			for _, v := range params.CalendarEvent.Hashtags {
