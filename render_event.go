@@ -470,6 +470,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			data.kind31922Or31923Metadata.End.Second() != 0 {
 			EndAtTime = data.kind31922Or31923Metadata.End.Format("15:04")
 		}
+		var People []string
+		for _, value := range data.event.Tags {
+			nreplace := ""
+			if value[0] == "p" {
+				nreplace, _ = nip19.EncodePublicKey(value[1])
+				People = append(People, nreplace)
+			}
+		}
 
 		component = calendarEventTemplate(CalendarPageParams{
 			BaseEventPageParams: baseEventPageParams,
@@ -485,6 +493,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			EndAtDate:     EndAtDate,
 			EndAtTime:     EndAtTime,
 			CalendarEvent: *data.kind31922Or31923Metadata,
+			People:        People,
 			Details:       detailsData,
 			Content:       template.HTML(data.content),
 			Clients:       generateClientList(data.event.Kind, data.naddr),

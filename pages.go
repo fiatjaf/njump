@@ -246,6 +246,7 @@ type CalendarPageParams struct {
 	EndAtTime     string
 	Content       template.HTML
 	CalendarEvent Kind31922Or31923Metadata
+	People        []string
 	Clients       []ClientReference
 }
 

@@ -50,7 +50,15 @@ templ calendarEventTemplate(params CalendarPageParams) {
 			</div>
 		</div>
 
-		<div class="mb-4">
+		<div class="mb-4 pt-6">
+			if len(params.People) != 0 {
+				<div class="pb-4">
+					<strong>People</strong>:
+					for _, p := range params.People {
+						@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNpubNprofileMatcher, "nostr:" + p))
+					}
+				</div>
+			}
 			@templ.Raw(params.Content)
 		</div>
 		if params.CalendarEvent.Image != "" {
