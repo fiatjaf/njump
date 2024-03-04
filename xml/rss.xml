@@ -24,6 +24,8 @@
     <id>https://{{$.Host}}/{{$ee.Nevent}}</id>
     {{if not (eq "" $ee.RssTitle)}}
       <title>{{$ee.RssTitle}}</title>
+    {{else}}
+      <title>{{$ee.ModifiedAtStr}}</title>
     {{end}}
     <link rel="alternate" href="https://{{$.Host}}/{{$ee.Nevent}}" />
     <content type="html">
