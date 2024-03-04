@@ -14,7 +14,6 @@ templ calendarEventTemplate(params CalendarPageParams) {
 		<h1 class="text-2xl">
 			{ params.CalendarEvent.Title }
 		</h1>
-
 		<div class="flex flex-col sm:flex-row">
 			if params.StartAtDate == params.EndAtDate {
 				<div class="sm:w-[30%] sm:mr-4 mb-4 sm:mb-0">
@@ -27,16 +26,16 @@ templ calendarEventTemplate(params CalendarPageParams) {
 					</div>
 				</div>
 			} else {
-				<div class="sm:w-1/4 sm:mr-4">
+				<div class="sm:w-1/5 sm:mr-4">
 					<div class="font-semibold text-sm ml-2">Start date</div>
-					<div class="py-2 px-4 bg-accent text-white rounded-md">
+					<div class="py-2 px-4 bg-strongpink text-white rounded-md">
 						<div>{ params.StartAtDate }</div>
 						<div class="text-sm">{ params.StartAtTime }</div>
 					</div>
 				</div>
-				<div class="sm:w-1/4 sm:mr-4">
+				<div class="sm:w-1/5 sm:mr-4">
 					<div class="font-semibold text-sm ml-2">End date</div>
-					<div class="py-2 px-4 bg-accent text-white rounded-md">
+					<div class="py-2 px-4 bg-strongpink text-white rounded-md">
 						<div>{ params.EndAtDate }</div>
 						<div class="text-sm">{ params.EndAtTime }</div>
 					</div>
