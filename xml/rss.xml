@@ -27,7 +27,7 @@
     {{if not (eq "" $ee.RssTitle)}}
       <title type="html">{{$ee.RssTitle}}</title>
     {{else}}
-      <title>{{$ee.ModifiedAtStr}}</title>
+      <title>Nostr event {{$ee.Nevent}}</title>
     {{end}}
     <link rel="alternate" href="https://{{$.Host}}/{{$ee.Nevent}}" />
     <content type="html">
