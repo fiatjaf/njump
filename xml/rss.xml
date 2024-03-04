@@ -23,7 +23,7 @@
   <entry>
     <id>https://{{$.Host}}/{{$ee.Nevent}}</id>
     {{if not (eq "" $ee.RssTitle)}}
-      <title>{{$ee.RssTitle}}</title>
+      <title type="html">{{$ee.RssTitle}}</title>
     {{else}}
       <title>{{$ee.ModifiedAtStr}}</title>
     {{end}}
