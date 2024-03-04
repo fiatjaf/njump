@@ -1,7 +1,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{{if not (eq "" .Npub)}}
+{{if not (eq "" .Metadata.Npub)}}
 	<url>
-		<loc>https://{{.Host}}/{{.Npub}}</loc>
+		<loc>https://{{.Host}}/{{.Metadata.Npub}}</loc>
 		<lastmod>{{.ModifiedAt}}</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>

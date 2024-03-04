@@ -18,7 +18,7 @@ type SitemapPage struct {
 	ModifiedAt string
 
 	// for the profile sitemap
-	Npub string
+	Metadata Metadata
 
 	// for the relay sitemap
 	RelayHostname string
@@ -46,7 +46,6 @@ type RSSPage struct {
 	Title      string
 
 	// for the profile RSS
-	Npub     string
 	Metadata Metadata
 
 	// for the relay RSS
