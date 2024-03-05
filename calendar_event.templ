@@ -1,5 +1,29 @@
 package main
 
+import (
+	_ "embed"
+	"strings"
+	"unicode"
+	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/go-nostr/nip52"
+)
+
+func formatPartecipants(partecipants []nip52.Participant) string {
+	var list = make([]string, 0)
+	for _, p := range partecipants {
+		nreplace, _ := nip19.EncodePublicKey(p.PubKey)
+		bytes := []byte(p.Role)
+    bytes[0] = byte(unicode.ToUpper(rune(bytes[0])))
+    role := string(bytes)
+		nreplace = replaceNostrURLsWithHTMLTags(nostrNpubNprofileMatcher, "nostr:" + nreplace)
+		if p.Role != "" {
+			nreplace = nreplace + " as " + role
+		}
+		list = append(list, nreplace)
+	}
+	return strings.Join(list, ", ")
+}
+
 templ calendarEventTemplate(params CalendarPageParams) {
 	<!DOCTYPE html>
 	@eventPageTemplate(
@@ -52,12 +76,10 @@ templ calendarEventTemplate(params CalendarPageParams) {
 		</div>
 
 		<div class="mb-4 pt-6">
-			if len(params.People) != 0 {
+			if len(params.CalendarEvent.Participants) != 0 {
 				<div class="pb-4">
-					<strong>People</strong>:
-					for _, p := range params.People {
-						@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNpubNprofileMatcher, "nostr:" + p))
-					}
+					<span class="font-medium">People</span>:
+					@templ.Raw(formatPartecipants(params.CalendarEvent.Participants))
 				</div>
 			}
 			if params.CalendarEvent.Image != "" {
