@@ -18,7 +18,11 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 	}
 
 	isRSS := false
-	if strings.HasSuffix(code, ".rss") {
+	isDaysSummary := false
+	if strings.HasSuffix(code, "-summary.rss") {
+		code = code[:len(code)-12]
+		isDaysSummary = true
+	} else if strings.HasSuffix(code, ".rss") {
 		code = code[:len(code)-4]
 		isRSS = true
 	}
@@ -44,6 +48,33 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			Host:       s.Domain,
 			ModifiedAt: data.modifiedAt,
 			LastNotes:  data.renderableLastNotes,
+		})
+	} else if isDaysSummary {
+		w.Header().Add("content-type", "text/xml")
+		w.Header().Set("Cache-Control", "max-age=86400")
+		w.Write([]byte(XML_HEADER))
+		summaries := [][]EnhancedEvent{}
+		summary := []EnhancedEvent{}
+		from := ""
+		for _, note := range data.renderableLastNotes {
+			current := note.CreatedAt.Time().Format("2006/01/02")
+			if from != current {
+				if len(summary) > 0 {
+					summaries = append(summaries, summary)
+					summary = []EnhancedEvent{}
+				}
+				from = current
+			}
+			summary = append(summary, note)
+		}
+		if len(summary) > 0 {
+			summaries = append(summaries, summary)
+		}
+		err = RSSTemplate.Render(w, &RSSPage{
+			Host:             s.Domain,
+			ModifiedAt:       data.modifiedAt,
+			Metadata:         data.metadata,
+			DaysSummaryNotes: summaries,
 		})
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
