@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html"
 	"html/template"
@@ -10,6 +11,21 @@ import (
 
 func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 	fmt.Println(r.URL.Path, "@.", r.Header.Get("user-agent"))
+
+	if strings.HasSuffix(code, ".json") {
+		code = code[:len(code)-5]
+		event, _, err := getEvent(r.Context(), code, nil)
+		if err != nil {
+			w.Header().Set("Cache-Control", "max-age=60")
+			w.WriteHeader(http.StatusNotFound)
+			errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
+			return
+		}
+		w.Header().Add("content-type", "application/json")
+		w.Header().Add("access-control-allow-origin", "*")
+		json.NewEncoder(w).Encode(event)
+		return
+	}
 
 	isSitemap := false
 	if strings.HasSuffix(code, ".xml") {
