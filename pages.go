@@ -239,10 +239,12 @@ type CalendarPageParams struct {
 	BaseEventPageParams
 	OpenGraphParams
 	HeadParams
-	Details DetailsParams
-
-	Content template.HTML
-
+	Details       DetailsParams
+	StartAtDate   string
+	StartAtTime   string
+	EndAtDate     string
+	EndAtTime     string
+	Content       template.HTML
 	CalendarEvent Kind31922Or31923Metadata
 	Clients       []ClientReference
 }

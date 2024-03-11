@@ -362,7 +362,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			if len(tag) >= 3 && isValidShortcode(tag[1]) {
 				u, err := url.Parse(tag[2])
 				if err == nil {
-					content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img class="h-5 inline leading-4 m-0" src="`+u.String()+`" alt=":`+tag[1]+`:"/>`)
+					content = strings.ReplaceAll(content, ":"+tag[1]+":", `<img class="h-[29px] inline m-0" src="`+u.String()+`" alt=":`+tag[1]+`:"/>`)
 				}
 			}
 		}
@@ -444,6 +444,33 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		if data.kind31922Or31923Metadata.Image != "" {
 			opengraph.Image = data.kind31922Or31923Metadata.Image
 		}
+
+		// Fallback for deprecated 'name' field
+		if data.kind31922Or31923Metadata.Title == "" {
+			for _, tag := range data.event.Tags {
+				if tag[0] == "name" {
+					data.kind31922Or31923Metadata.Title = tag[1]
+					break
+				}
+			}
+		}
+
+		var StartAtDate, StartAtTime string
+		StartAtDate = data.kind31922Or31923Metadata.Start.Format("02 Jan 2006")
+		if data.kind31922Or31923Metadata.Start.Hour() != 0 ||
+			data.kind31922Or31923Metadata.Start.Minute() != 0 ||
+			data.kind31922Or31923Metadata.Start.Second() != 0 {
+			StartAtTime = data.kind31922Or31923Metadata.Start.Format("15:04")
+		}
+
+		var EndAtDate, EndAtTime string
+		EndAtDate = data.kind31922Or31923Metadata.End.Format("02 Jan 2006")
+		if data.kind31922Or31923Metadata.End.Hour() != 0 ||
+			data.kind31922Or31923Metadata.End.Minute() != 0 ||
+			data.kind31922Or31923Metadata.End.Second() != 0 {
+			EndAtTime = data.kind31922Or31923Metadata.End.Format("15:04")
+		}
+
 		component = calendarEventTemplate(CalendarPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
@@ -453,9 +480,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NeventNaked: data.neventNaked,
 			},
 
-			Details: detailsData,
-			Content: template.HTML(data.content),
-			Clients: generateClientList(data.event.Kind, data.naddr),
+			StartAtDate:   StartAtDate,
+			StartAtTime:   StartAtTime,
+			EndAtDate:     EndAtDate,
+			EndAtTime:     EndAtTime,
+			CalendarEvent: *data.kind31922Or31923Metadata,
+			Details:       detailsData,
+			Content:       template.HTML(data.content),
+			Clients:       generateClientList(data.event.Kind, data.naddr),
 		})
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
