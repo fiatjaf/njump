@@ -14,6 +14,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/pelletier/go-toml"
 )
@@ -53,7 +54,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// it may be a NIP-05
-		if strings.Contains(code, ".") {
+		if nip05.IsValidIdentifier(code) {
 			renderProfile(w, r, code)
 			return
 		}
