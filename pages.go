@@ -59,6 +59,8 @@ type DetailsParams struct {
 }
 
 type HeadParams struct {
+	IsHome      bool
+	IsAbout     bool
 	IsProfile   bool
 	NaddrNaked  string
 	NeventNaked string
@@ -84,6 +86,10 @@ type HomePageParams struct {
 
 	Npubs     []string
 	LastNotes []string
+}
+
+type AboutParams struct {
+	HeadParams
 }
 
 type ArchivePageParams struct {

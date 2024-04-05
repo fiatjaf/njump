@@ -37,6 +37,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if code == "about" {
+		renderAbout(w, r)
+		return
+	}
+
 	if strings.HasPrefix(code, "nostr:") {
 		// remove the "nostr:" prefix
 		http.Redirect(w, r, "/"+code[6:], http.StatusFound)

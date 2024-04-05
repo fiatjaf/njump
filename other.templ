@@ -11,7 +11,7 @@ templ otherTemplate(params OtherPageParams) {
 			@headCommonTemplate(params.HeadParams)
 		</head>
 		<body class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black">
-			@topTemplate()
+			@topTemplate(params.HeadParams)
 			<div class="mx-auto block px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
 				<div class="flex w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:w-11/12 md:w-10/12 lg:w-9/12 lg:gap-48vw">
 					<div class="w-full break-words print:w-full md:w-10/12 lg:w-9/12">

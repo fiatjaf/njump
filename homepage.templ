@@ -1,245 +1,163 @@
 package main
 
 templ homepageTemplate(params HomePageParams) {
-	<!DOCTYPE html>
-	<html class="theme--default font-light">
-		<meta charset="UTF-8"/>
-		<head>
-			<title>njump - the nostr static gateway</title>
-			<meta name="description" content=""/>
-			@headCommonTemplate(params.HeadParams)
-		</head>
-		<body class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black">
-			@topTemplate()
-			<div class="mx-auto sm:mt-8 block px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
-				<div class="flex w-full max-w-screen-xl justify-between gap-10 overflow-visible px-1 print:w-full sm:w-9/12 xl:w-3/5">
-					<div>
-						<h2 class="text-2xl text-strongpink">What is njump?</h2>
-						<p class="my-3 leading-5">
-							<i>njump</i> is a HTTP
-							<a class="underline" href="https://github.com/nostr-protocol/nostr">
-								Nostr
-							</a>
-							gateway that allows you to browse profiles, notes and relays; it is
-							an easy way to preview a resource and then open it with your
-							preferred client. The typical use of <i>njump</i> is to share a
-							resource outside the Nostr world, where the
-							<code>nostr:</code> schema is not (yet) working.
-						</p>
-						<p class="my-3 leading-5">
-							<i>njump</i> currently lives under { s.Domain }, you can reach it
-							appending a Nostr
-							<a
-								class="underline"
-								href="https://github.com/nostr-protocol/nips/blob/master/19.md"
-							>
-								NIP-19
-							</a>
-							entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>,
-							etc) after the domain:
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ s.Domain }/&lt;nip-19-entity&gt;
-							</span>.
-						</p>
-						<p class="my-3 leading-5">
-							For example, here's
-							<a
-								class="underline"
-								href="/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9"
-							>
-								a user profile
-							</a>,
-							<a
-								class="underline"
-								href="/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2"
-							>
-								a note
-							</a>
-							and a
-							<a
-								class="underline"
-								href="/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv"
-							>
-								long blog post
-							</a>
-							.
-						</p>
-						<h2 class="text-xl text-strongpink">
-							Try it now, jump to some Nostr content
-						</h2>
-						<div
-							class="my-3 mb-8 rounded-lg bg-zinc-100 p-4 pb-3 dark:bg-neutral-900 sm:p-6 sm:pb-4"
-						>
-							<form
-								_="on submit halt the event's default then go to url `/${event.target.code.value}`"
-							>
-								<div
-									class="flex flex-wrap items-center justify-center sm:flex-nowrap sm:justify-normal"
-								>
-									<div class="mb-1.5 text-xl sm:mb-0">{ s.Domain }/</div>
-									<input
-										name="code"
-										placeholder="paste a npub / nprofile / nevent / ..."
-										autofocus
-										class="ml-0 w-full basis-full rounded-lg border-0 bg-white p-2 text-base text-gray-700 placeholder:text-gray-300 focus:outline-0 dark:bg-zinc-900 dark:text-neutral-50 dark:placeholder:text-gray-400 sm:ml-1 sm:basis-11/12 sm:rounded-s-lg"
-									/>
-									<button
-										class="ml-0 w-full basis-full rounded-lg border-0 bg-strongpink p-2 text-base uppercase text-white sm:-ml-4 sm:basis-2/12 sm:rounded-s-lg"
-									>
-										View
-									</button>
-								</div>
-							</form>
-							<div class="mt-3 text-center text-sm sm:mt-1 sm:text-left">
-								or pick
-								<a
-									class="underline"
-									href="/random"
-									_="on click halt the event then fetch /random with method:'POST' then tell <input[name='code'] /> set @value to result"
-								>
-									some random content
-								</a>
-							</div>
-						</div>
-						<p class="my-3 leading-5">
-							There are several reasons to choose <i>njump</i> when sharing Nostr
-							content outside of Nostr:
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Clean, fast and solid</h2>
-						<p class="my-3 leading-5">
-							Pages by <i>njump</i> are extremely lightweight and fast to load
-							because there isn't any client side javascript involved; they are
-							minimalistic with the right attention to typography, focusing the
-							content without unnecessary details. Furthermore they are cached, so
-							when sharing a page you can expect the other part will load it
-							without any glitch in a fraction of second: the perfect tool to
-							onboard new users!
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Good preview</h2>
-						<p class="my-3 leading-5">
-							<i>njump</i> renders everything on the server-side, so it is able to
-							generate useful rich previews that work on Telegram, Discord,
-							Twitter and other places.
-						</p>
-						<p class="my-3 leading-5">
-							When opening the URL directly in a browser, visitors will find
-							referenced content like images, video and links to referenced Nostr
-							events displayed in a simple but effective way. It shows the note
-							parent, allowing the visitor to follow it up and it has custom CSS for
-							printing or exporting to PDF.
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Cooperative (jump-out)</h2>
-						<p class="my-3 leading-5">
-							<i>njump</i> is not interested capturing users at all, on the
-							contrary it invites them to "jump" to the Nostr resource by picking
-							from a list of web clients or with a <code>nostr:</code> prefix for native
-							clients. It even remembers the most used one for each visitor and
-							puts it on the top for fast clicking or tap.
-						</p>
-						<p class="my-3 leading-5">
-							<a class="underline" href="https://github.com/nostr-protocol/nips/blob/master/89.md">NIP-89</a>
-							support coming!
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">
-							Search friendly (jump-in)
-						</h2>
-						<p class="my-3 leading-5">
-							This is crucial: <i>njump</i> pages are static so search engines can
-							index them, this means that <i>njump</i> can help others to discover
-							great content on Nostr, jump in and join us! <i>njump</i> is the
-							only nostr resource that has this explicit goal, if you care that a
-							good note can be found online use <i>njump</i> to share it, this way
-							you also help Nostr flourish.
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Share NIP-05 profiles</h2>
-						<p class="my-3 leading-5">
-							Now you can share your own profile with a pretty
-							<a
-								class="underline"
-								href="https://github.com/nostr-protocol/nips/blob/master/05.md"
-							>
-								NIP-05
-							</a>
-							inspired permalink:
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ s.Domain }/&lt;nip-05&gt;
-							</span>
-							, for example:
-							<a class="underline" href="/nvk.org">https://{ s.Domain }/nvk.org</a>
-							or
-							<a class="underline" href="/mike@mikedilger.com">
-								https://{ s.Domain }/mike@mikedilger.com
-							</a>
-							.
-						</p>
-						<p class="my-3 leading-5">
-							A profile shows the basic metadata infos, the used "outbox" relays
-							and the last notes.
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">
-							Share on Twitter and Telegram
-						</h2>
-						<p class="my-3 leading-5">
-							Now you can quickly and effortlessly share Nostr notes on Twitter
-							and Telegram, and maybe on many other "social platforms": just drop
-							a link, and njump will render the note text using the preview image
-							as a canvas, to maximize the sharing experience and utility.
-							<br/>
-							On Telegram we have also the Instant View to access long content
-							in-app!
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Relays view</h2>
-						<p class="my-3 leading-5">
-							You can have a view of the last content posted to a relay using
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ s.Domain }/r/&lt;relay-host&gt;
-							</span>
-							, for example:
-							<a class="underline" href="/r/nostr.wine">
-								https://{ s.Domain }/r/nostr.wine
-							</a>
-						</p>
-						<p class="my-3 leading-5">
-							Some basic infos (
-							<a
-								href="https://github.com/nostr-protocol/nips/blob/master/11.md"
-							>
-								NIP-11
-							</a>
-							) are available; We hope operators will start to make them more
-							personal and informative so users can have a way to evaluate if/when
-							to join a relay.
-						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Website widgets</h2>
-						<div class="my-3 leading-5">
-							You can embed notes, long form contents and profiles in a web page
-							with a simple script:
-							<br/>
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								&lt;script src="https://{ s.Domain }/embed/&lt;nip-19-entity&gt;"
-								/&gt;
-							</span>
-							<div class="mt-4 gap-8 sm:flex">
-								<div class="mb-4 flex-auto sm:mb-0">
-									<script src="/embed/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9"></script>
-								</div>
-								<div class="flex-auto">
-									<script src="/embed/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv"></script>
-								</div>
-							</div>
-						</div>
-						<h2 class="mt-7 text-2xl text-strongpink">Inspector tool</h2>
-						<p class="my-3 leading-5">
-							You know, we are all programmers, including our moms, so for every
-							<i>njump</i> page you can toggle the "Show more details" switch and
-							inspect the full event JSON. Without installing other tools (like
-							<a class="underline" href="https://github.com/fiatjaf/nak">nak</a>)
-							this is probably the fastest way to access that.
-						</p>
-					</div>
-				</div>
-			</div>
-			@footerTemplate()
-		</body>
-	</html>
+<!doctype html>
+<html class="theme--default font-light">
+  <meta charset="UTF-8" />
+  <head>
+    <title>njump - the nostr static gateway</title>
+    <meta name="description" content="" />
+
+    @headCommonTemplate(params.HeadParams)
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+  </head>
+
+  <body
+    class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
+  >
+    @topTemplate(params.HeadParams)
+    <div
+      class="mx-auto block px-4 sm:flex sm:flex-col sm:items-center sm:justify-center sm:px-0"
+    >
+      <div
+        class="sm:w-[72%] print:w-full"
+      >
+
+        <!-- Title nimation -->
+        <div class="mb-10 sm:mb-20 mt-8 border-l-[0.8rem] border-strongpink pl-4">
+          <h1 class="font-bold">
+            <div class="text-[3.5em] sm:text-[4em] leading-[1em] text-neutral-300">
+              NOSTR <span class="text-neutral-400">IS</span>
+            </div>
+            <div class="text-[3.5em] sm:text-[5em] leading-[1em] break-words" id="tw"></div>
+            <script>
+              var tw = document.getElementById('tw')
+              new Typewriter(tw, {
+                strings: [
+                  '',
+                  '',
+                  'A PROTOCOL',
+                  'MANY PLATFORMS',
+                  'FREEDOM',
+                  'A SOCIAL PLACE',
+                  'REALLY WEIRD',
+                  'ENERGY',
+                  'UNIVERSAL',
+                  'YOUR HAPPINESS',
+                  'PERMISSIONLESS',
+                  'HEALTHY',
+                  'UNCENSORED',
+                  'COOL TO DEVELOP',
+                  'YOUR NEXT IDEA',
+                  '.......'
+                ],
+                autoStart: true,
+                loop: true,
+                cursorClassName: 'typewriter-cursor'
+              })
+            </script>
+          </h1>
+        </div>
+      </div>
+
+      <div
+        class="sm:w-[72%] sm:gap-10 print:w-full font-extralight"
+      >
+        <!-- Intro -->
+        <div class="sm:flex sm:gap-20">
+          <div>
+            <h2 class="text-4xl text-strongpink">Freedom at risk</h2>
+            <div class="text-xl mt-2">The original principles of the internet, rooted in decentralization, user empowerment, openness, collaboration, and freedom of expression, were not designed to be dominated by centralized control systems led by governments and capitalist markets.</div>
+            <div class="mt-2 text-neutral-500 dark:text-neutral-300">Current social networks such as Twitter, Mastodon, and Secure Scuttlebutt, struggle with challenges of censorship, user bans, server closures, and spam. This underscores the necessity for a decentralized, censorship-resistant, and user-centric social network.</div>
+          </div>
+
+          <div class="mt-8 sm:mt-0">
+            <h2 class="text-4xl text-strongpink">The Nostr revolution</h2>
+            <div class="text-xl mt-2">Nostr, acronym for  “Notes and Other Stuff Transmitted by Relays”, revolutionizes social networking and online communication by eliminating dependency of centralized servers.It employs a client-relay model, where users run clients, and anyone can operate relays.</div>
+            <div class="mt-2 text-neutral-500 dark:text-neutral-300">This protocol ensures tamperproof communication through cryptographic keys and signatures. By enabling users to establish pathways and publish notes to relays and incentivizing relay operators, Nostr addresses many shortcomings of existing systems.</div>
+          </div>
+        </div>
+
+        <!-- Main section -->
+
+        <div id="why-nostr" class="mt-16 mb-12 text-center">
+          <div class="text-4xl text-strongpink">Empowering freedom in Nostr</div>
+          <div class="text-2xl">A secure, user-centric protocol and social network</div>
+        </div>
+
+        <div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
+          <div class="sm:w-1/2">
+            <h3 class="text-2xl mb-4 text-strongpink">You own your identity, signed</h3>
+            <p>Nostr uses a public key system, where your identity is tied to a unique cryptographic key. You have full control over your identity without relying on a central authority. Nostr's protocol eliminates the need for Know Your Customer (KYC) processes. No email, ID, thumbprint, or eyeball scans required. Your privacy is entirely yours to safeguard.</p>
+          </div>
+          <div class="sm:w-1/2 mt-4 sm:mt-0">
+            <img class="dark:hidden" src="/njump/static/home/home01.png" />
+            <img class="hidden dark:inline" src="/njump/static/home/home01-dark.png" />
+          </div>
+        </div>
+        
+        <div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
+          <div class="sm:w-1/2">
+            <h3 class="text-2xl mb-4 text-strongpink">You own your data, signed</h3>
+            <p>Users sign their posts with their cryptographic keys in Nostr. This cryptographic signature ensures the authenticity of your data, and you maintain ownership over it. Each client validates these signatures, ensuring data integrity. Users select relays for data exchange, and relays communicate directly with users, not with each other.</p>
+          </div>
+          <div class="sm:w-1/2 mt-4 sm:mt-0">
+            <img class="dark:hidden" src="/njump/static/home/home02.png" />
+            <img class="hidden dark:inline" src="/njump/static/home/home02-dark.png" />
+          </div>
+        </div>
+
+        <div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
+          <div class="sm:w-1/2">
+            <h3 class="text-2xl mb-4 text-strongpink">You own your audience</h3>
+            <p>In Nostr, you have full control over your audience. Users choose their preferred relay servers and can recommend relays to maintain their follower base, even if they switch relays. Additionally, users can mute other users, words, and contents (if the feature is available), shaping their social media feed according to their preferences.</p>
+          </div>
+          <div class="sm:w-1/2 mt-4 sm:mt-0">
+            <img class="dark:hidden" src="/njump/static/home/home03.png" />
+            <img class="hidden dark:inline" src="/njump/static/home/home03-dark.png" />
+          </div>
+        </div>
+
+        <div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
+          <div class="sm:w-1/2">
+            <h3 class="text-2xl mb-4 text-strongpink">You are free to speak</h3>
+            <p>There’s no censorship on Nostr. If users are censored by a relay or a client, they can always opt for different clients and relays which ensures they will be able to freely express themselves. Relay blocking has no impact on a user's ability to publish to other relays or own relays, ensuring freedom of speech.</p>
+          </div>
+          <div class="sm:w-1/2 mt-4 sm:mt-0">
+            <img class="dark:hidden" src="/njump/static/home/home04.png" />
+            <img class="hidden dark:inline" src="/njump/static/home/home04-dark.png" />
+          </div>
+        </div>
+
+        <div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
+          <div class="sm:w-1/2">
+            <h3 class="text-2xl mb-4 text-strongpink">You are free to be anonymous</h3>
+            <p>Nostr supports user anonymity. Users can choose to be anonymous or use pseudonyms without compromising their ability to participate. Nostr is also available On TOR that prevents tracking of users. Nostr does not have the capacity to provide user data to governments, safeguarding users' freedom of expression from prohibitions or restrictions.</p>
+          </div>
+          <div class="sm:w-1/2 mt-4 sm:mt-0">
+            <img class="dark:hidden" src="/njump/static/home/home05.png" />
+            <img class="hidden dark:inline" src="/njump/static/home/home05-dark.png" />
+          </div>
+        </div>
+
+        <div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
+          <div class="sm:w-1/2">
+            <h3 class="text-2xl mb-4 text-strongpink">You are free to develop</h3>
+            <p>Nostr encourages development and customization. Users are free to develop on the platform, contributing to the growth and evolution of the network. Anyone can build on Nostr, creating clients, relays, tools, and apps. Users have the freedom to establish payment methods for their features, providing developers with a potential source of revenue.</p>
+          </div>
+          <div class="sm:w-1/2 mt-4 sm:mt-0">
+            <img class="dark:hidden" src="/njump/static/home/home06.png" />
+            <img class="hidden dark:inline" src="/njump/static/home/home06-dark.png" />
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Title nimation -->
+
+    </div>
+
+    @footerTemplate()
+  </body>
+</html>
 }

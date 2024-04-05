@@ -24,4 +24,16 @@
       margin: 1cm 3cm;
     }
   }
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  /* Apply the animation to the cursor */
+  .typewriter-cursor {
+    animation: blink 1s infinite;
+    color: rgb(222, 222, 222);
+  }
 }

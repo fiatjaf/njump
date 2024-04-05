@@ -35,7 +35,7 @@ templ relayTemplate(params RelayPageParams) {
 		<body
 			class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
 		>
-			@topTemplate()
+			@topTemplate(params.HeadParams)
 			<div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
 				<div
 					class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:flex md:w-10/12 lg:w-9/12 lg:gap-48vw"
