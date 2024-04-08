@@ -17,14 +17,14 @@ templ homepageTemplate(params HomePageParams) {
   >
     @topTemplate(params.HeadParams)
     <div
-      class="mx-auto block px-4 sm:flex sm:flex-col sm:items-center sm:justify-center sm:px-0"
+      class="mx-auto block sm:flex sm:flex-col sm:items-center sm:justify-center sm:px-0"
     >
       <div
-        class="w-full max-w-screen-2xl sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 print:w-full"
+        class="w-full px-4 max-w-screen-2xl sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 print:w-full"
       >
 
         <!-- Title nimation -->
-        <div class="mb-10 sm:mb-20 mt-8 border-l-[0.8rem] border-strongpink pl-4">
+        <div class="mb-10 px-4 sm:mb-20 mt-8 border-l-[0.8rem] border-strongpink pl-4">
           <h1 class="font-bold">
             <div class="text-[3.5em] sm:text-[4em] leading-[1em] text-neutral-300">
               NOSTR <span class="text-neutral-400">IS</span>
@@ -61,7 +61,7 @@ templ homepageTemplate(params HomePageParams) {
       </div>
 
       <div
-        class="w-full max-w-screen-2xl sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 sm:gap-10 print:w-full font-extralight"
+        class="w-full px-4 max-w-screen-2xl sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 sm:gap-10 print:w-full font-extralight"
       >
         <!-- Intro -->
         <div class="sm:flex sm:gap-20">
@@ -153,7 +153,34 @@ templ homepageTemplate(params HomePageParams) {
 
       </div>
 
-      <!-- Title nimation -->
+      <!-- Get started -->
+
+      <div class="relative px-4 sm:px-0 sm:flex mt-20 py-10 sm:py-28 justify-center bg-gradient-to-br from-slate-600 to-slate-900 text-neutral-50">
+        <div class="w-full max-w-screen-2xl sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12">
+          <h2 class="text-4xl">Get started with Nostr</h2>
+          <div class="sm:flex sm:flex-row sm:flex-wrap sm:w-4/5 mt-12">
+            <div class="sm:basis-1/2 sm:pr-20 mb-8">
+              <h3 class="text-2xl mb-1 text-strongpink">Create an account</h3>
+              <p>With Nostr there is not a central provider that give you an account, in fact your account is powered just by cryptography, and you could create one (or more!) yourself by hand, without any limit. But usually the easist way is to use a <a href="#social" class="underline">Nostr app</a> to bootstrap a new account and then use it everywhere.</p>
+            </div>
+            <div class="sm:basis-1/2 sm:pr-20 mb-8">
+              <h3 class="text-2xl mb-1 text-strongpink">Secure your key</h3>
+              <p>An account is a key-pair. The private key (nsec) is your digital identity, if you loose or leak it, you are burned; so you need to keep your key-pair secure and private. Use a password manager, make a backup on paper and use it only in trusted apps. Never enter your nsec in a website, install a <a href="#signers" class="underline">signer extension</a>.</p>
+            </div>
+            <div class="sm:basis-1/2 sm:pr-20 mb-8 sm:mb-0">
+              <h3 class="text-2xl mb-1 text-strongpink">Pick an app</h3>
+              <p>Nostr developers already have built several applications that cover different areas; probably the easist way to start using Nostr and learn more is downloading a <a href="#social" class="underline">social client</a> and start getting involved with the community and learn more. Need help? Use the #asknostr hashtag!</p>
+            </div>
+            <div class="sm:basis-1/2 sm:pr-20 mb-8 sm:mb-0">
+              <h3 class="text-2xl mb-1 text-strongpink">Explore Nostr</h3>
+              <p>After you are familiar with the basic concepts you can explore other "social" clients and other <a href="#readwrite" class="underline">Nostr applications</a>; remember: your already have your digital identity and it works everywhere, so you can simply login in using your nsec. Always be sure that the app came from a trusted source/dev!</p>
+            </div>
+          </div>
+        </div>
+        <div class="sm:absolute sm:flex sm:flex-row-reverse sm:top-1/2 sm:right-0 sm:transform sm:-translate-y-1/2 sm:w-1/4">
+          <img src="/njump/static/home/client.png" class="sm:h-full sm:object-cover" alt="Nostr Client" />
+        </div>
+      </div>
 
     </div>
 
