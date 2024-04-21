@@ -26,9 +26,10 @@ var (
 	iris      = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
 	coracle   = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: "web"}
 
-	zapStream = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: "web"}
-	nostrrr   = ClientReference{ID: "nostrrr", Name: "Nostrrr", Base: "https://nostrrr.com/relay/{code}", Platform: "web"}
-	flockstr  = ClientReference{ID: "flockstr", Name: "Flockstr", Base: "https://www.flockstr.com/event/{code}", Platform: "web"}
+	zapStream      = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: "web"}
+	nostrrrRelay   = ClientReference{ID: "nostrrr", Name: "Nostrrr", Base: "https://nostrrr.com/relay/{code}", Platform: "web"}
+	nostrrrProfile = ClientReference{ID: "nostrrr", Name: "Nostrrr", Base: "https://nostrrr.com/p/{code}", Platform: "web"}
+	flockstr       = ClientReference{ID: "flockstr", Name: "Flockstr", Base: "https://www.flockstr.com/event/{code}", Platform: "web"}
 
 	yakihonne   = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/article/{code}", Platform: "web"}
 	habla       = ClientReference{ID: "habla", Name: "Habla", Base: "https://habla.news/a/{code}", Platform: "web"}
@@ -60,7 +61,7 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			coracle, nostrrr,
+			coracle, nostrrrRelay,
 		}
 	case 1, 6:
 		clients = []ClientReference{
@@ -72,8 +73,8 @@ func generateClientList(
 	case 0:
 		clients = []ClientReference{
 			native,
-			nosta, coracle, snort, nostter, nostrudel, primalWeb, satellite, iris,
-			nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
+			nostrrrProfile, nosta, coracle, snort, nostter, nostrudel, primalWeb,
+			satellite, iris, nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
 			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid,
 		}
 	case 30023, 30024:
