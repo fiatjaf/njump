@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/a-h/templ v0.2.543
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/fiatjaf/eventstore v0.3.11
+	github.com/fiatjaf/eventstore v0.4.2
 	github.com/fiatjaf/khatru v0.2.1
 	github.com/fiatjaf/set v0.0.4
 	github.com/fogleman/gg v1.3.0
