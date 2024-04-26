@@ -136,7 +136,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		data.kind30311Metadata = &Kind30311Metadata{LiveEvent: nip53.ParseLiveEvent(*event)}
 		host := data.kind30311Metadata.GetHost()
 		if host != nil {
-			hostProfile := sdk.FetchProfileMetadata(ctx, pool, host.PubKey, data.event.relays...)
+			hostProfile := sys.FetchProfileMetadata(ctx, host.PubKey)
 			data.kind30311Metadata.Host = &hostProfile
 		}
 	case 1311:

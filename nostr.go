@@ -30,6 +30,7 @@ func (r *RelayConfig) Valid() bool {
 
 var (
 	pool   = nostr.NewSimplePool(context.Background())
+	sys    = sdk.System(sdk.WithPool(pool))
 	serial int
 
 	relayConfig = RelayConfig{
@@ -315,12 +316,8 @@ func relaysForPubkey(ctx context.Context, pubkey string, extraRelays ...string) 
 	pubkeyRelays := make([]string, 0, 12)
 	if ok := cache.GetJSON("io:"+pubkey, &pubkeyRelays); !ok {
 		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
-		for _, relay := range sdk.FetchRelaysForPubkey(ctx, pool, pubkey, extraRelays...) {
-			if relay.Outbox {
-				pubkeyRelays = append(pubkeyRelays, relay.URL)
-			}
-		}
-		cancel()
+		defer cancel()
+		pubkeyRelays = sys.FetchOutboxRelays(ctx, pubkey)
 		if len(pubkeyRelays) > 0 {
 			cache.SetJSONWithTTL("io:"+pubkey, pubkeyRelays, time.Hour*24*7)
 		}
