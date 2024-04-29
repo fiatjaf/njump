@@ -36,13 +36,12 @@ var (
 	relayConfig = RelayConfig{
 		Everything: []string{
 			"wss://nostr-pub.wellorder.net",
-			"wss://saltivka.org",
 			"wss://relay.damus.io",
 			"wss://relay.nostr.bg",
 			"wss://nostr.wine",
 			"wss://nos.lol",
 			"wss://nostr.mom",
-			"wss://atlas.nostr.land",
+			"wss://nostr.land",
 			"wss://relay.snort.social",
 			"wss://offchain.pub",
 			"wss://relay.primal.net",
@@ -154,13 +153,10 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	if author != "" {
 		// fetch relays for author
 		authorRelays := relaysForPubkey(ctx, author, relays...)
-		if len(authorRelays) > 5 {
-			authorRelays = authorRelays[:5]
+		if len(authorRelays) > 3 {
+			authorRelays = authorRelays[:3]
 		}
 		relays = append(relays, authorRelays...)
-	}
-	for len(relays) < 5 {
-		relays = append(relays, getRandomRelay())
 	}
 
 	relays = unique(relays)
