@@ -233,42 +233,34 @@ func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSite
 	}
 	var lastNotes []*nostr.Event
 
-	// fetch from external relays asynchronously
-	external := make(chan []*nostr.Event)
-	go func() {
-		notes := make([]*nostr.Event, 0, filter.Limit)
-		defer func() {
-			external <- notes
-		}()
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-		defer cancel()
-		relays = unique(append(relays, getRandomRelay(), getRandomRelay()))
-		ch := pool.SubManyEose(ctx, relays, nostr.Filters{filter})
-		for {
-			select {
-			case ie, more := <-ch:
-				if !more {
-					return
-				}
-				notes = append(notes, ie.Event)
-				if store {
-					db.SaveEvent(ctx, ie.Event)
-					attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
-					scheduleEventExpiration(ie.Event.ID, time.Hour*24)
-				}
-			case <-ctx.Done():
-				return
-			}
-		}
-	}()
-
 	// fetch from local store if available
 	if useLocalStore {
 		lastNotes, _ = eventstore.RelayWrapper{Store: db}.QuerySync(ctx, filter)
 	}
 	if len(lastNotes) < 5 {
 		// if we didn't get enough notes (or if we didn't even query the local store), wait for the external relays
-		lastNotes = <-external
+		lastNotes = make([]*nostr.Event, 0, filter.Limit)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+		defer cancel()
+		relays = unique(append(relays, getRandomRelay(), getRandomRelay()))
+		ch := pool.SubManyEose(ctx, relays, nostr.Filters{filter})
+	out:
+		for {
+			select {
+			case ie, more := <-ch:
+				if !more {
+					break out
+				}
+				lastNotes = append(lastNotes, ie.Event)
+				if store {
+					db.SaveEvent(ctx, ie.Event)
+					attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
+					scheduleEventExpiration(ie.Event.ID, time.Hour*24)
+				}
+			case <-ctx.Done():
+				break out
+			}
+		}
 	}
 
 	// sort before returning
