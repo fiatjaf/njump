@@ -38,13 +38,12 @@ templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
 				} else {
 					on Nostr (reply):
 				}
-				:
 			}
 		</h1>
 		if params.ParentNevent != "" {
 			<aside>
 				in reply to{ " " }
-				@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:" + params.ParentNevent))
+				@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:"+params.ParentNevent))
 			</aside>
 		}
 		<!---->
