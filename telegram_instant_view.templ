@@ -32,9 +32,11 @@ templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
 			} else {
 				<a href={ templ.URL("/" + params.Metadata.Npub()) }>
 					{ params.Metadata.ShortName() }
-				</a> on Nostr
-				if params.ParentNevent != "" {
-					(reply)
+				</a>
+				if params.ParentNevent == "" {
+					on Nostr:
+				} else {
+					on Nostr (reply):
 				}
 				:
 			}
