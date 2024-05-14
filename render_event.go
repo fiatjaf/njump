@@ -462,18 +462,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var StartAtDate, StartAtTime string
-		StartAtDate = data.kind31922Or31923Metadata.Start.Format("02 Jan 2006")
-		if data.kind31922Or31923Metadata.Start.Hour() != 0 ||
-			data.kind31922Or31923Metadata.Start.Minute() != 0 ||
-			data.kind31922Or31923Metadata.Start.Second() != 0 {
-			StartAtTime = data.kind31922Or31923Metadata.Start.Format("15:04")
-		}
-
 		var EndAtDate, EndAtTime string
+		StartAtDate = data.kind31922Or31923Metadata.Start.Format("02 Jan 2006")
 		EndAtDate = data.kind31922Or31923Metadata.End.Format("02 Jan 2006")
-		if data.kind31922Or31923Metadata.End.Hour() != 0 ||
-			data.kind31922Or31923Metadata.End.Minute() != 0 ||
-			data.kind31922Or31923Metadata.End.Second() != 0 {
+		if data.kind31922Or31923Metadata.CalendarEventKind == 31923 {
+			StartAtTime = data.kind31922Or31923Metadata.Start.Format("15:04")
 			EndAtTime = data.kind31922Or31923Metadata.End.Format("15:04")
 		}
 
