@@ -39,11 +39,11 @@ on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.include
 
 templ authorHeaderTemplate(metadata Metadata) {
 	<header class="mb-4 max-w-full">
-		<a class="flex flex-wrap items-center" href={ templ.URL("/" + metadata.Npub()) }>
-			<div class="print:basis-1-12 imgclip mr-2 max-w-full basis-1/6 overflow-hidden sm:mr-4">
+		<a class="flex items-center" href={ templ.URL("/" + metadata.Npub()) }>
+			<div class="print:basis-1-12 imgclip mr-2 flex-shrink-0 basis-1/6 overflow-hidden sm:mr-4">
 				<img class="block h-auto w-full" src={ metadata.Picture }/>
 			</div>
-			<div class="block print:text-base sm:grow">
+			<div class="block print:text-base grow">
 				<div class="leading-4 sm:text-2xl">
 					{ metadata.Name }
 					if metadata.Name != metadata.DisplayName {
