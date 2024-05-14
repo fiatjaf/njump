@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/a-h/templ"
 	"github.com/nbd-wtf/go-nostr"
@@ -468,6 +469,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		if data.kind31922Or31923Metadata.CalendarEventKind == 31923 {
 			StartAtTime = data.kind31922Or31923Metadata.Start.Format("15:04")
 			EndAtTime = data.kind31922Or31923Metadata.End.Format("15:04")
+		}
+
+		// Reset EndDate/Time if it is non initialized (beginning of the Unix epoch)
+		if data.kind31922Or31923Metadata.End == (time.Time{}) {
+			EndAtDate = ""
+			EndAtTime = ""
 		}
 
 		component = calendarEventTemplate(CalendarPageParams{

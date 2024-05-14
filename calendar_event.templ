@@ -57,6 +57,7 @@ templ calendarEventTemplate(params CalendarPageParams) {
 						<div class="text-sm">{ params.StartAtTime } (UTC)</div>
 					</div>
 				</div>
+				if params.EndAtTime != "" {
 				<div class="sm:w-auto sm:grow xl:grow-0 xl:w-1/3">
 					<div class="font-semibold text-sm ml-2">End date</div>
 					<div class="py-2 px-4 bg-strongpink text-white rounded-md">
@@ -64,6 +65,7 @@ templ calendarEventTemplate(params CalendarPageParams) {
 						<div class="text-sm">{ params.EndAtTime } (UTC)</div>
 					</div>
 				</div>
+				}
 			}
 			if params.CalendarEvent.Locations[0] != "" {
 				<div class="w-full">
