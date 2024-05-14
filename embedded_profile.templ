@@ -23,9 +23,9 @@ templ embeddedProfileTemplate(params EmbeddedProfileParams) {
 					<div class="w-full break-words">
 						<div class="w-full break-words print:w-full">
 							<header class="mb-4 max-w-full">
-								<div class="flex flex-wrap items-center">
+								<div class="flex items-center">
 									<div
-										class="print:basis-1-12 imgclip mr-2 max-w-full basis-1/6 overflow-hidden sm:mr-4 sm:basis-[10%]"
+										class="print:basis-1-12 imgclip mr-2 flex-shrink-0 basis-1/5 overflow-hidden sm:mr-4"
 									>
 										<img
 											class="block h-auto w-full"
@@ -43,9 +43,6 @@ templ embeddedProfileTemplate(params EmbeddedProfileParams) {
 								</div>
 							</header>
 							if params.Metadata.Website != "" || params.RenderedAuthorAboutText != "" {
-								<div dir="auto">
-									@templ.Raw(params.RenderedAuthorAboutText)
-								</div>
 								<div class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
 								<div class="mb-6 leading-5">{ params.Metadata.Website }</div>
 								<div class="prose mb-6 leading-5 dark:prose-invert prose-headings:font-light sm:prose-a:text-justify">
