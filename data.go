@@ -27,7 +27,7 @@ type Data struct {
 	modifiedAt               string
 	parentLink               template.HTML
 	metadata                 Metadata
-	authorRelays             []string
+	authorRelaysPretty       []string
 	authorLong               string
 	renderableLastNotes      []EnhancedEvent
 	kindDescription          string
@@ -70,6 +70,20 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		},
 	}
 
+	data.authorRelaysPretty = make([]string, 0, len(relays))
+	for _, url := range relaysForPubkey(ctx, event.PubKey) {
+		if isntRealRelay(url) {
+			continue
+		}
+		for _, excluded := range relayConfig.ExcludedRelays {
+			if strings.Contains(url, excluded) {
+				continue
+			}
+		}
+		data.authorRelaysPretty = append(data.authorRelaysPretty, trimProtocol(url))
+	}
+	data.authorRelaysPretty = unique(data.authorRelaysPretty)
+
 	npub, _ := nip19.EncodePublicKey(event.PubKey)
 	npubShort := npub[:8] + "…" + npub[len(npub)-4:]
 	data.authorLong = npub // hopefully will be replaced later
@@ -79,7 +93,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data.naddrNaked = ""
 	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
 	data.modifiedAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
-	data.authorRelays = []string{}
 
 	if event.Kind >= 30000 && event.Kind < 40000 {
 		if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
@@ -93,25 +106,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	switch event.Kind {
 	case 0:
 		data.templateId = Profile
-		{
-			rawAuthorRelays := []string{}
-			ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-			rawAuthorRelays = relaysForPubkey(ctx, event.PubKey)
-			cancel()
-			for _, relay := range rawAuthorRelays {
-				for _, excluded := range relayConfig.ExcludedRelays {
-					if strings.Contains(relay, excluded) {
-						continue
-					}
-				}
-				if strings.Contains(relay, "/npub1") {
-					continue // skip relays with personalyzed query like filter.nostr.wine
-				}
-				data.authorRelays = append(data.authorRelays, trimProtocol(relay))
-			}
-		}
-
-		lastNotes := authorLastNotes(ctx, event.PubKey, data.authorRelays, isProfileSitemap)
+		lastNotes := authorLastNotes(ctx, event.PubKey, isProfileSitemap)
 		data.renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
 		for i, levt := range lastNotes {
 			data.renderableLastNotes[i] = EnhancedEvent{levt, []string{}}

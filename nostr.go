@@ -216,7 +216,7 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	return result, allRelays, nil
 }
 
-func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSitemap bool) []*nostr.Event {
+func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []*nostr.Event {
 	limit := 100
 	store := true
 	useLocalStore := true
@@ -242,7 +242,11 @@ func authorLastNotes(ctx context.Context, pubkey string, relays []string, isSite
 		lastNotes = make([]*nostr.Event, 0, filter.Limit)
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()
-		relays = unique(append(relays, getRandomRelay(), getRandomRelay()))
+
+		relays := limitAt(relaysForPubkey(ctx, pubkey), 5)
+		for len(relays) < 4 {
+			relays = unique(append(relays, getRandomRelay()))
+		}
 		ch := pool.SubManyEose(ctx, relays, nostr.Filters{filter})
 	out:
 		for {

@@ -17,7 +17,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/emoji v0.0.3
 	github.com/nbd-wtf/go-nostr v0.30.2
-	github.com/nbd-wtf/nostr-sdk v0.2.0
+	github.com/nbd-wtf/nostr-sdk v0.2.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
 	github.com/pemistahl/lingua-go v1.4.0
