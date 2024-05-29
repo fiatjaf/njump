@@ -28,7 +28,7 @@ const (
 var (
 	urlSuffixMatcher         = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
 	nostrEveryMatcher        = regexp.MustCompile(`nostr:((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`)
-	nostrNoteNeventMatcher   = regexp.MustCompile(`nostr:((note|nevent)1[a-z0-9]+)\b`)
+	nostrNoteNeventMatcher   = regexp.MustCompile(`nostr:((note|nevent|naddr)1[a-z0-9]+)\b`)
 	nostrNpubNprofileMatcher = regexp.MustCompile(`nostr:((npub|nprofile)1[a-z0-9]+)\b`)
 
 	urlMatcher = func() *regexp.Regexp {
@@ -313,9 +313,16 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 			return nip19
 		}
 
-		content := fmt.Sprintf(
-			`<blockquote class="border-l-05rem border-l-strongpink border-solid"><div class="-ml-4 bg-gradient-to-r from-gray-100 dark:from-zinc-800 to-transparent mr-0 mt-0 mb-4 pl-4 pr-2 py-2">quoting %s </div> %s </blockquote>`, match, event.Content)
-		return basicFormatting(content, false, usingTelegramInstantView, false)
+		quotedEvent := basicFormatting(match, false, usingTelegramInstantView, false)
+		content := ""
+		if event.Kind == 30023 {
+			content = mdToHTML(event.Content, usingTelegramInstantView, false)
+		} else {
+			content = basicFormatting(event.Content, false, usingTelegramInstantView, false)
+		}
+		content = fmt.Sprintf(
+			`<blockquote class="border-l-05rem border-l-strongpink border-solid"><div class="-ml-4 bg-gradient-to-r from-gray-100 dark:from-zinc-800 to-transparent mr-0 mt-0 mb-4 pl-4 pr-2 py-2">quoting %s </div> %s </blockquote>`, quotedEvent, content)
+		return content
 	})
 }
 
