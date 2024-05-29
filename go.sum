@@ -165,8 +165,8 @@ github.com/microcosm-cc/bluemonday v1.0.24 h1:NGQoPtwGVcbGkKfvyYk1yRqknzBuoMiUrO
 github.com/microcosm-cc/bluemonday v1.0.24/go.mod h1:ArQySAMps0790cHSkdPEJ7bGkF2VePWH773hsJNSHf8=
 github.com/nbd-wtf/emoji v0.0.3 h1:YtkT7MVPXvqU1SQjvC/CShlWexnREzqNCxmhUnL00CA=
 github.com/nbd-wtf/emoji v0.0.3/go.mod h1:tS6D9iI34qwBmWc5g8X7tVDkWXulqbTJRsvsM6QsS88=
-github.com/nbd-wtf/go-nostr v0.30.2 h1:dG/2X52/XDg+7phZH+BClcvA5D+S6dXvxJKkBaySEzI=
-github.com/nbd-wtf/go-nostr v0.30.2/go.mod h1:tiKJY6fWYSujbTQb201Y+IQ3l4szqYVt+fsTnsm7FCk=
+github.com/nbd-wtf/go-nostr v0.31.4 h1:Qq+PHyKixRZR6Tn+omF7LykK/IR6qcdmThNY132pKsA=
+github.com/nbd-wtf/go-nostr v0.31.4/go.mod h1:vHKtHyLXDXzYBN0fi/9Y/Q5AD0p+hk8TQVKlldAi0gI=
 github.com/nbd-wtf/nostr-sdk v0.2.1 h1:Ae1186pm//Byy5gOIsB3Nhy6EQfTzOHeU9enRWVd204=
 github.com/nbd-wtf/nostr-sdk v0.2.1/go.mod h1:iYZYgu0lilem16G8fk08FipgMOzsQs2bO1j6uEnRhvA=
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 h1:zYyBkD/k9seD2A7fsi6Oo2LfFZAehjjQMERAvZLEDnQ=
