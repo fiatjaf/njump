@@ -246,6 +246,7 @@ type CalendarPageParams struct {
 	OpenGraphParams
 	HeadParams
 	Details       DetailsParams
+	TimeZone      string
 	StartAtDate   string
 	StartAtTime   string
 	EndAtDate     string

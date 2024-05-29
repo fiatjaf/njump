@@ -45,7 +45,7 @@ templ calendarEventTemplate(params CalendarPageParams) {
 					<div class="py-2 px-4 bg-strongpink text-white rounded-md">
 						<div>{ params.StartAtDate }</div>
 						if params.StartAtTime != "" && params.EndAtTime != "" {
-							<div class="text-sm whitespace-nowrap">From { params.StartAtTime } to { params.EndAtTime } (UTC)</div>
+							<div class="text-sm whitespace-nowrap">From { params.StartAtTime } to { params.EndAtTime } ({ params.TimeZone })</div>
 						}
 					</div>
 				</div>
@@ -54,7 +54,7 @@ templ calendarEventTemplate(params CalendarPageParams) {
 					<div class="font-semibold text-sm ml-2">Start date</div>
 					<div class="py-2 px-4 bg-strongpink text-white rounded-md">
 						<div class="whitespace-nowrap">{ params.StartAtDate }</div>
-						<div class="text-sm">{ params.StartAtTime } (UTC)</div>
+						<div class="text-sm">{ params.StartAtTime } ({ params.TimeZone })</div>
 					</div>
 				</div>
 				if params.EndAtTime != "" {
@@ -62,7 +62,7 @@ templ calendarEventTemplate(params CalendarPageParams) {
 					<div class="font-semibold text-sm ml-2">End date</div>
 					<div class="py-2 px-4 bg-strongpink text-white rounded-md">
 						<div class="whitespace-nowrap">{ params.EndAtDate }</div>
-						<div class="text-sm">{ params.EndAtTime } (UTC)</div>
+						<div class="text-sm">{ params.EndAtTime } ({ params.TimeZone })</div>
 					</div>
 				</div>
 				}

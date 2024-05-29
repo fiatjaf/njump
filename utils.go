@@ -478,3 +478,19 @@ func clamp(val, low, high int) int {
 	}
 	return val
 }
+
+func getUTCOffset(loc *time.Location) string {
+	// Get the offset from UTC
+	_, offset := time.Now().In(loc).Zone()
+
+	// Calculate the offset in hours
+	offsetHours := offset / 3600
+
+	// Format the UTC offset string
+	sign := "+"
+	if offsetHours < 0 {
+		sign = "-"
+		offsetHours = -offsetHours
+	}
+	return fmt.Sprintf("UTC%s%d", sign, offsetHours)
+}

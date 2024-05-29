@@ -464,11 +464,20 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		var StartAtDate, StartAtTime string
 		var EndAtDate, EndAtTime string
-		StartAtDate = data.kind31922Or31923Metadata.Start.Format("02 Jan 2006")
-		EndAtDate = data.kind31922Or31923Metadata.End.Format("02 Jan 2006")
+		var TimeZone string
+
+		location, err := time.LoadLocation(data.kind31922Or31923Metadata.StartTzid)
+		if err != nil {
+			// Set default TimeZone to UTC
+			location = time.UTC
+		}
+		TimeZone = getUTCOffset(location)
+
+		StartAtDate = data.kind31922Or31923Metadata.Start.In(location).Format("02 Jan 2006")
+		EndAtDate = data.kind31922Or31923Metadata.End.In(location).Format("02 Jan 2006")
 		if data.kind31922Or31923Metadata.CalendarEventKind == 31923 {
-			StartAtTime = data.kind31922Or31923Metadata.Start.Format("15:04")
-			EndAtTime = data.kind31922Or31923Metadata.End.Format("15:04")
+			StartAtTime = data.kind31922Or31923Metadata.Start.In(location).Format("15:04")
+			EndAtTime = data.kind31922Or31923Metadata.End.In(location).Format("15:04")
 		}
 
 		// Reset EndDate/Time if it is non initialized (beginning of the Unix epoch)
@@ -485,7 +494,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-
+			TimeZone:      TimeZone,
 			StartAtDate:   StartAtDate,
 			StartAtTime:   StartAtTime,
 			EndAtDate:     EndAtDate,
