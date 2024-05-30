@@ -42,7 +42,6 @@ type EnhancedEvent struct {
 
 func (ee EnhancedEvent) getParentNevent() string {
 	parentNevent := ""
-
 	switch ee.Kind {
 	case 1, 1063:
 		replyTag := nip10.GetImmediateReply(ee.Tags)
@@ -51,7 +50,11 @@ func (ee EnhancedEvent) getParentNevent() string {
 			if (len(*replyTag) > 2) && ((*replyTag)[2] != "") {
 				relays = []string{(*replyTag)[2]}
 			}
-			parentNevent, _ = nip19.EncodeEvent((*replyTag)[1], relays, "")
+			eventId := (*replyTag)[1]
+			if (*replyTag)[0] == "a" {
+				eventId = strings.Split(eventId, ":")[1]
+			}
+			parentNevent, _ = nip19.EncodeEvent(eventId, relays, "")
 		}
 	case 1311:
 		if atag := ee.Tags.GetFirst([]string{"a", ""}); atag != nil {
