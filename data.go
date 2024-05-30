@@ -35,6 +35,7 @@ type Data struct {
 	video                    string
 	videoType                string
 	image                    string
+	cover                    string
 	content                  string
 	alt                      string
 	kind1063Metadata         *Kind1063Metadata
@@ -170,6 +171,11 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		data.kindDescription = fmt.Sprintf("Kind %d", event.Kind)
 	}
 	data.kindNIP = kindNIPs[event.Kind]
+
+	image := event.Tags.GetFirst([]string{"image", ""})
+	if event.Kind == 30023 && image != nil {
+		data.cover = (*image)[1]
+	}
 
 	if event.Kind == 1063 {
 		if data.kind1063Metadata.IsImage() {

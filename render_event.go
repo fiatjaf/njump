@@ -386,6 +386,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Clients:          generateClientList(data.event.Kind, enhancedCode),
 			Details:          detailsData,
 			Content:          template.HTML(content),
+			Cover:            data.cover,
 			Subject:          subject,
 			TitleizedContent: titleizedContent,
 		})

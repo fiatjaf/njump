@@ -196,6 +196,7 @@ type NotePageParams struct {
 
 	Details          DetailsParams
 	Content          template.HTML
+	Cover            string
 	Subject          string
 	TitleizedContent string
 	Clients          []ClientReference
