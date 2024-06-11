@@ -12,17 +12,17 @@ templ noteTemplate(params NotePageParams) {
 		params.Event,
 	) {
 		if params.Subject != "" {
-			<h1 class="text-2xl">{ params.Subject }</h1>
+			<h1 class="text-2xl" itemprop="headline">{ params.Subject }</h1>
 		} else {
 			<h1 class="hidden">
 				{ params.Metadata.ShortName() } on Nostr: { params.TitleizedContent }
 			</h1>
 		}
 		if params.Cover != "" {
-			<img src={ params.Cover } alt={ params.Alt } class="mt-1" />
+			<img src={ params.Cover } alt={ params.Alt } class="mt-1"/>
 		}
 		<!-- main content -->
-		<div dir="auto" class="leading-5">
+		<div dir="auto" class="leading-5" itemprop="articleBody">
 			@templ.Raw(params.Content)
 		</div>
 	}

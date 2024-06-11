@@ -36,7 +36,12 @@ templ relayTemplate(params RelayPageParams) {
 			class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
 		>
 			@topTemplate(params.HeadParams)
-			<div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
+			<div
+				itemscope
+				itemtype="https://schema.org/Organization"
+				class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0"
+			>
+				<span class="hidden" itemprop="identifier name">{ params.Hostname }</span>
 				<div
 					class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 print:w-full sm:flex md:w-10/12 lg:w-9/12 lg:gap-48vw"
 				>
@@ -46,11 +51,13 @@ templ relayTemplate(params RelayPageParams) {
 						<div
 							class="hidden items-center overflow-hidden text-left text-2xl sm:break-word sm:text-center sm:basis-full"
 							_="on load or scroll from window or resize from window get #relay_name then measure its top, height then if top is less than height / -2 or height is 0 add .flex then remove .hidden otherwise remove .flex then add .hidden"
+							itemprop="alternateName"
 						>
 							{ params.Info.Name }
 						</div>
 						<div
 							class="imgclip max-w-full basis-2/5 overflow-hidden sm:basis-full"
+							itemprop="image logo"
 						>
 							<img class="block h-auto w-full" src={ params.Info.Icon }/>
 						</div>
@@ -67,6 +74,7 @@ templ relayTemplate(params RelayPageParams) {
 						<div class="mb-6 leading-5">
 							<a
 								class="border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink"
+								itemprop="url"
 								href={ templ.URL("https://" + params.Hostname) }
 								target="_blank"
 								_="on mouseenter set my innerText to my.innerText.replace('wss://', 'https://')
@@ -76,6 +84,7 @@ templ relayTemplate(params RelayPageParams) {
 						<div
 							class="prose mb-6 leading-5 dark:prose-invert prose-headings:font-light sm:prose-a:text-justify"
 							dir="auto"
+							itemprop="description"
 						>
 							{ params.Info.Description }
 						</div>
@@ -102,41 +111,53 @@ templ relayTemplate(params RelayPageParams) {
 							<div class="mb-6 leading-5">
 								<h2 class="text-2xl text-strongpink">Last Notes</h2>
 								for _, ee := range params.LastNotes {
-									<a
+									<div
+										itemscope
+										itemtype="https://schema.org/SocialMediaPosting"
 										class="my-8 block no-underline hover:-ml-6 hover:border-l-05rem hover:border-solid hover:border-l-gray-100 hover:pl-4 dark:hover:border-l-zinc-700"
-										href={ templ.URL("/" + ee.Nevent()) }
 									>
-										<div
-											class="-ml-2.5 mb-1.5 flex flex-row border-b-4 border-solid border-b-gray-100 pb-1 pl-2.5 dark:border-b-neutral-800"
-										>
-											<div class="text-sm text-strongpink">
-												{ ee.CreatedAtStr() }
-											</div>
-											<br/>
+										<div class="-ml-2.5 mb-1.5 flex flex-row border-b-4 border-solid border-b-gray-100 pb-1 pl-2.5 dark:border-b-neutral-800">
+											<a
+												itemprop="url"
+												href={ templ.URL("/" + ee.Nevent()) }
+											>
+												<span class="text-sm text-strongpink" itemprop="dateCreated">
+													{ ee.CreatedAtStr() }
+												</span>
+											</a>
 											if ee.isReply() {
 												<div class="ml-2 text-xs text-gray-300 dark:text-gray-400">
 													- reply
 												</div>
 											}
-											<div class="ml-auto text-xs text-zinc-700 dark:text-neutral-50">
+											<span
+												class="ml-auto text-xs text-zinc-700 dark:text-neutral-50"
+												itemprop="author"
+												itemscope
+												itemtype="https://schema.org/Person"
+											>
+												<span class="hidden" itemprop="identifier">{ ee.Npub() }</span>
 												by
-												<span
+												<a
+													itemprop="url"
 													class="rounded bg-lavender px-1 hover:bg-strongpink hover:text-white dark:bg-garnet dark:hover:bg-strongpink"
-													_="on click halt the event then set the window's location to @loc"
-													loc={ templ.EscapeString("/" + ee.Npub()) }
+													href={ templ.SafeURL("/" + ee.Npub()) }
 												>
 													{ ee.NpubShort() }
-												</span>
-											</div>
+												</a>
+											</span>
 										</div>
 										<div
-											class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink"
-											_="on load if my scrollHeight > my offsetHeight add .gradient"
+											class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink cursor-pointer"
+											_="on load if my scrollHeight > my offsetHeight add .gradient end
+											   on click halt the event then set the window's location to @loc"
+											loc={ "/" + ee.Nevent() }
 											dir="auto"
+											itemprop="articleBody"
 										>
 											@templ.Raw(ee.Preview())
 										</div>
-									</a>
+									</div>
 								}
 							</div>
 						</aside>

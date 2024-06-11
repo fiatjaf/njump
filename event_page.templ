@@ -19,17 +19,21 @@ templ eventPageTemplate(
 		<body class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black">
 			@topTemplate(head)
 			<div class="mx-auto px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
-				<div class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 lg:gap-48vw">
+				<div
+					itemscope
+					itemtype="https://schema.org/SocialMediaPosting"
+					class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 lg:gap-48vw"
+				>
 					<div class="w-full break-words print:w-full sm:w-3/4">
 						@authorHeaderTemplate(author)
-						<div class="w-full text-right text-sm text-stone-400">
+						<div itemprop="dateCreated" class="w-full text-right text-sm text-stone-400">
 							{ event.CreatedAtStr() }
 						</div>
 						<div class="w-full text-right text-sm text-stone-400">
 							if nevent := event.getParentNevent(); nevent != "" {
 								in reply to
 								<span class="text-strongpink">
-									@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:" + nevent))
+									@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:"+nevent))
 								</span>
 							}
 						</div>

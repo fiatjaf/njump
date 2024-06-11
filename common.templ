@@ -38,16 +38,21 @@ on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.include
 }
 
 templ authorHeaderTemplate(metadata Metadata) {
-	<header class="mb-4 max-w-full">
-		<a class="flex items-center" href={ templ.URL("/" + metadata.Npub()) }>
+	<header
+		itemprop="author"
+		itemscope
+		itemtype="https://schema.org/Person"
+		class="mb-4 max-w-full"
+	>
+		<a class="flex items-center" itemprop="url" href={ templ.URL("/" + metadata.Npub()) }>
 			<div class="print:basis-1-12 imgclip mr-2 flex-shrink-0 basis-1/6 overflow-hidden sm:mr-4">
-				<img class="block h-auto w-full" src={ metadata.Picture }/>
+				<img itemprop="image" class="block h-auto w-full" src={ metadata.Picture }/>
 			</div>
 			<div class="block print:text-base grow">
 				<div class="leading-4 sm:text-2xl">
-					{ metadata.Name }
+					<span itemprop="name">{ metadata.Name }</span>
 					if metadata.Name != metadata.DisplayName {
-						<span class="text-stone-400 sm:text-xl">/ { metadata.DisplayName } </span>
+						<span class="text-stone-400 sm:text-xl" itemprop="alternateName">/ { metadata.DisplayName } </span>
 					}
 				</div>
 				<div class="text-sm leading-4 text-stone-400 sm:text-base">
@@ -56,26 +61,4 @@ templ authorHeaderTemplate(metadata Metadata) {
 			</div>
 		</a>
 	</header>
-}
-
-templ lastNotesTemplate(lastNotes []EnhancedEvent) {
-	<aside>
-		<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
-		<nav class="mb-6 leading-5">
-			<h2 class="text-2xl text-strongpink">Last Notes</h2>
-			for _, ee := range lastNotes {
-				<a class="my-8 block no-underline hover:-ml-6 hover:border-l-05rem hover:border-solid hover:border-l-gray-100 hover:pl-4 dark:hover:border-l-zinc-700" href={ templ.URL("/" + ee.Nevent()) }>
-					<div class="-ml-2.5 mb-1.5 flex flex-row flex-wrap border-b-4 border-solid border-b-gray-100 pb-1 pl-2.5 dark:border-b-neutral-800">
-						<div class="text-sm text-strongpink">{ ee.CreatedAtStr() }</div>
-						if ee.isReply() {
-							<div class="ml-2 text-sm text-gray-300 dark:text-gray-400">- reply</div>
-						}
-					</div>
-					<div class="mt-0.5 max-h-40 basis-full overflow-hidden hover:text-strongpink" _="on load if my scrollHeight > my offsetHeight add .gradient" dir="auto">
-						@templ.Raw(ee.Preview())
-					</div>
-				</a>
-			}
-		</nav>
-	</aside>
 }
