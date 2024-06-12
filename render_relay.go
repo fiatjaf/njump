@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -10,8 +9,6 @@ import (
 )
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path, "@.", r.Header.Get("user-agent"))
-
 	hostname := r.URL.Path[3:]
 
 	if strings.HasPrefix(hostname, "wss:/") || strings.HasPrefix(hostname, "ws:/") {

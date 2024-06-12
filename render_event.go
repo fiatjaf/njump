@@ -109,7 +109,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// from here onwards we know we're rendering an event
-	fmt.Println(r.URL.Path, "#/", r.Header.Get("user-agent"))
+	//
 
 	// gather page style from user-agent
 	style := getPreviewStyle(r)
@@ -125,7 +125,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	for _, tag := range data.event.Tags {
 		if tag[0] == "subject" || tag[0] == "title" {
 			subject = tag[1]
-
 		}
 		if tag[0] == "summary" {
 			summary = tag[1]

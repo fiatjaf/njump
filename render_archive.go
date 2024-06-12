@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -17,8 +16,6 @@ const (
 )
 
 func renderArchive(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path, "@.", r.Header.Get("user-agent"))
-
 	lastIndex := strings.LastIndex(r.URL.Path, "/")
 	page := 1
 	if lastIndex != -1 {

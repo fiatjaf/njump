@@ -36,8 +36,6 @@ var fonts embed.FS
 var multiNewlineRe = regexp.MustCompile(`\n\n+`)
 
 func renderImage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path, ":~", r.Header.Get("user-agent"))
-
 	code := r.URL.Path[1+len("njump/image/"):]
 	if code == "" {
 		fmt.Fprintf(w, "call /njump/image/<nip19 code>")

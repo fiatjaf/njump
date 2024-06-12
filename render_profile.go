@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html"
 	"html/template"
 	"net/http"
@@ -9,8 +8,6 @@ import (
 )
 
 func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
-	fmt.Println(r.URL.Path, "@.", r.Header.Get("user-agent"))
-
 	isSitemap := false
 	if strings.HasSuffix(code, ".xml") {
 		code = code[:len(code)-4]

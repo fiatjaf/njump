@@ -43,7 +43,6 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	code := strings.Split(targetURL.Path, "/")[1]
-	fmt.Println(targetURL.Path, "&^", r.Header.Get("user-agent"))
 
 	if !strings.HasPrefix(code, "nevent1") {
 		http.Error(w, "oembed is only supported for nevent1 codes, not '"+code+"'", 400)
