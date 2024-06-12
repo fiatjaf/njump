@@ -1,5 +1,5 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{{if not (eq "" .Metadata.Npub)}}
+{{if not (eq "" .Metadata.PubKey)}}
 	<url>
 		<loc>https://{{.Host}}/{{.Metadata.Npub}}</loc>
 		<lastmod>{{.ModifiedAt}}</lastmod>

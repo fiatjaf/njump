@@ -43,13 +43,13 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 
 	keys := cache.GetPaginatedKeys(prefix, page, 5000)
 	data := []string{}
-	for i := 0; i < len(keys); i++ {
+	for _, key := range keys {
 		switch area {
 		case NPUBS_ARCHIVE:
-			npub, _ := nip19.EncodePublicKey(keys[i][3:])
+			npub, _ := nip19.EncodePublicKey(key[3:])
 			data = append(data, npub)
 		case RELAYS_ARCHIVE:
-			data = append(data, trimProtocol(keys[i][3:]))
+			data = append(data, trimProtocol(key[3:]))
 		}
 	}
 
