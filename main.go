@@ -125,8 +125,6 @@ func main() {
 	mux.HandleFunc("/relays-archive.xml", renderArchive)
 	mux.HandleFunc("/npubs-archive.xml", renderArchive)
 	mux.HandleFunc("/services/oembed", renderOEmbed)
-	mux.HandleFunc("/relays-archive/", renderArchive)
-	mux.HandleFunc("/npubs-archive/", renderArchive)
 	mux.HandleFunc("/njump/image/", renderImage)
 	mux.HandleFunc("/njump/proxy/", proxy)
 	mux.HandleFunc("/robots.txt", renderRobots)
