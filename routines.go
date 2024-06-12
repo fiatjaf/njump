@@ -35,33 +35,33 @@ func deleteOldCachedEvents(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case <-time.After(time.Hour):
-		}
-		log.Debug().Msg("deleting old cached events")
-		now := time.Now().Unix()
-		for _, key := range cache.GetPaginatedKeys("ttl:", 1, 500) {
-			spl := strings.Split(key, ":")
-			if len(spl) != 2 {
-				log.Error().Str("key", key).Msg("broken 'ttl:' key")
-				continue
-			}
-
-			var expires int64
-			if ok := cache.GetJSON(key, &expires); !ok {
-				log.Error().Str("key", key).Msg("failed to get 'ttl:' key")
-				continue
-			}
-
-			if expires < now {
-				// time to delete this
-				id := spl[1]
-				res, _ := wdb.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
-				if len(res) > 0 {
-					log.Debug().Msgf("deleting %s", res[0].ID)
-					if err := db.DeleteEvent(ctx, res[0]); err != nil {
-						log.Warn().Err(err).Stringer("event", res[0]).Msg("failed to delete")
-					}
+			log.Debug().Msg("deleting old cached events")
+			now := time.Now().Unix()
+			for _, key := range cache.GetPaginatedKeys("ttl:", 1, 500) {
+				spl := strings.Split(key, ":")
+				if len(spl) != 2 {
+					log.Error().Str("key", key).Msg("broken 'ttl:' key")
+					continue
 				}
-				cache.Delete(key)
+
+				var expires int64
+				if ok := cache.GetJSON(key, &expires); !ok {
+					log.Error().Str("key", key).Msg("failed to get 'ttl:' key")
+					continue
+				}
+
+				if expires < now {
+					// time to delete this
+					id := spl[1]
+					res, _ := wdb.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
+					if len(res) > 0 {
+						log.Debug().Msgf("deleting %s", res[0].ID)
+						if err := db.DeleteEvent(ctx, res[0]); err != nil {
+							log.Warn().Err(err).Stringer("event", res[0]).Msg("failed to delete")
+						}
+					}
+					cache.Delete(key)
+				}
 			}
 		}
 	}
