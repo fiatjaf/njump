@@ -9,18 +9,20 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 )
 
+var npubsArchive = make([]string, 0, 5000)
+
 func updateArchives(ctx context.Context) {
 	// do this so we don't run this every time we restart it locally
 
 	time.Sleep(10 * time.Minute)
 
 	for {
+		loadNpubsArchive(ctx)
+		loadRelaysArchive(ctx)
 		select {
 		case <-ctx.Done():
 			return
 		case <-time.After(24 * time.Hour):
-			loadNpubsArchive(ctx)
-			loadRelaysArchive(ctx)
 		}
 	}
 }

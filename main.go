@@ -27,7 +27,7 @@ type Settings struct {
 	TailwindDebug     bool     `envconfig:"TAILWIND_DEBUG"`
 	SkipLanguageModel bool     `envconfig:"SKIP_LANGUAGE_MODEL"`
 	RelayConfigPath   string   `envconfig:"RELAY_CONFIG_PATH"`
-	TrustedPubKeys    []string `envconfig:"TRUSTED_PUBKEYS" default:"7bdef7be22dd8e59f4600e044aa53a1cf975a9dc7d27df5833bc77db784a5805,3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d,97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322,ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49"`
+	TrustedPubKeys    []string `envconfig:"TRUSTED_PUBKEYS"`
 }
 
 //go:embed static/*
