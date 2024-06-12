@@ -18,7 +18,6 @@ func updateArchives(ctx context.Context) {
 
 	for {
 		loadNpubsArchive(ctx)
-		loadRelaysArchive(ctx)
 		select {
 		case <-ctx.Done():
 			return
@@ -81,32 +80,5 @@ func loadNpubsArchive(ctx context.Context) {
 	for _, contact := range unique(contactsArchive) {
 		log.Debug().Msgf("adding contact %s", contact)
 		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
-	}
-}
-
-func loadRelaysArchive(ctx context.Context) {
-	log.Debug().Msg("refreshing the relays archive")
-
-	relaysArchive := make([]string, 0, 500)
-
-	for _, pubkey := range s.TrustedPubKeys {
-		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-		pubkeyContacts := relaysForPubkey(ctx, pubkey, relayConfig.Profiles...)
-		relaysArchive = append(relaysArchive, pubkeyContacts...)
-		cancel()
-	}
-
-	for _, relay := range unique(relaysArchive) {
-		for _, excluded := range relayConfig.ExcludedRelays {
-			if strings.Contains(relay, excluded) {
-				log.Debug().Msgf("skipping relay %s", relay)
-				continue
-			}
-		}
-		if strings.Contains(relay, "/npub1") {
-			continue // skip relays with personalyzed query like filter.nostr.wine
-		}
-		log.Debug().Msgf("adding relay %s", relay)
-		cache.SetWithTTL("ra:"+relay, nil, time.Hour*24*7)
 	}
 }

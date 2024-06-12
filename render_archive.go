@@ -10,11 +10,6 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-const (
-	NPUBS_ARCHIVE  = iota
-	RELAYS_ARCHIVE = iota
-)
-
 func renderArchive(w http.ResponseWriter, r *http.Request) {
 	lastIndex := strings.LastIndex(r.URL.Path, "/")
 	page := 1
@@ -28,28 +23,21 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	prefix := ""
+	var data []string
 	pathPrefix := ""
-	var area int
 	if strings.HasPrefix(r.URL.Path[1:], "npubs-archive") {
-		area = NPUBS_ARCHIVE
-		prefix = "pa:"
 		pathPrefix = ""
-	} else if strings.HasPrefix(r.URL.Path[1:], "relays-archive") {
-		area = RELAYS_ARCHIVE
-		prefix = "ra:"
-		pathPrefix = "r/"
-	}
-
-	keys := cache.GetPaginatedKeys(prefix, page, 5000)
-	data := []string{}
-	for _, key := range keys {
-		switch area {
-		case NPUBS_ARCHIVE:
+		data = make([]string, 0, 5000)
+		keys := cache.GetPaginatedKeys("pa:", page, 5000)
+		for _, key := range keys {
 			npub, _ := nip19.EncodePublicKey(key[3:])
 			data = append(data, npub)
-		case RELAYS_ARCHIVE:
-			data = append(data, trimProtocol(key[3:]))
+		}
+	} else if strings.HasPrefix(r.URL.Path[1:], "relays-archive") {
+		data = []string{
+			"pyramid.fiatjaf.com",
+			"nostr.wine",
+			"140.f7z.io",
 		}
 	}
 
@@ -68,7 +56,6 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("content-type", "text/xml")
-	w.Header().Set("Cache-Control", "public, max-age=3600")
 	w.Write([]byte(XML_HEADER))
 	SitemapTemplate.Render(w, &SitemapPage{
 		Host:       s.Domain,
