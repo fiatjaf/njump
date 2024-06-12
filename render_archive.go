@@ -71,6 +71,7 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("content-type", "text/xml")
+	w.Header().Set("Cache-Control", "public, max-age=3600")
 	w.Write([]byte(XML_HEADER))
 	SitemapTemplate.Render(w, &SitemapPage{
 		Host:       s.Domain,
