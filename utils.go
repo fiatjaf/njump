@@ -338,10 +338,9 @@ func sanitizeXSS(html string) string {
 	p := bluemonday.UGCPolicy()
 	p.AllowStyling()
 	p.RequireNoFollowOnLinks(false)
-	p.AllowElements("video", "source", "iframe")
+	p.AllowElements("video", "source")
 	p.AllowAttrs("controls", "width").OnElements("video")
 	p.AllowAttrs("src", "width").OnElements("source")
-	p.AllowAttrs("src", "frameborder").OnElements("iframe")
 	return p.Sanitize(html)
 }
 
