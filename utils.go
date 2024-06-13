@@ -27,7 +27,7 @@ const (
 var (
 	urlSuffixMatcher         = regexp.MustCompile(`[\w-_.]+\.[\w-_.]+(\/[\/\w]*)?$`)
 	nostrEveryMatcher        = regexp.MustCompile(`nostr:((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)\b`)
-	nostrNoteNeventMatcher   = regexp.MustCompile(`nostr:((note|nevent|naddr)1[a-z0-9]+)\b`)
+	nostrNoteNeventMatcher   = regexp.MustCompile(`(?:^|<br/>|\s)nostr:((note|nevent|naddr)1[a-z0-9]+)\b(?:\s|<br/>|$)`)
 	nostrNpubNprofileMatcher = regexp.MustCompile(`nostr:((npub|nprofile)1[a-z0-9]+)\b`)
 
 	urlMatcher = func() *regexp.Regexp {
