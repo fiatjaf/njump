@@ -6,7 +6,7 @@
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
 	</url>
-{{end}}
+{{- end}}
 {{if not (eq "" .RelayHostname)}}
 	<url>
 		<loc>https://{{.Host}}/r/{{.RelayHostname}}</loc>
@@ -14,7 +14,7 @@
 		<changefreq>daily</changefreq>
 		<priority>0.8</priority>
 	</url>
-{{end}}
+{{- end}}
 {{range $i, $ee := .LastNotes}}
 	<url>
 		<loc>https://{{$.Host}}/{{$ee.Nevent}}</loc>
@@ -22,7 +22,7 @@
 		<changefreq>never</changefreq>
 		<priority>0.5</priority>
 	</url>
-{{end}}
+{{- end}}
 {{range $element := .Data }}
 	<url>
 		<loc>https://{{$.Host}}/{{$.PathPrefix}}{{$element}}</loc>
@@ -30,5 +30,5 @@
 		<changefreq>daily</changefreq>
 		<priority>0.5</priority>
 	</url>
-{{end}}
+{{- end}}
 </urlset>

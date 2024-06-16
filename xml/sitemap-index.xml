@@ -1,0 +1,7 @@
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{{- range $npub := .Npubs }}
+	<sitemap>
+		<loc>https://{{$.Host}}/{{$npub}}.xml</loc>
+	</sitemap>
+{{- end}}
+</sitemapindex>

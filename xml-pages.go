@@ -35,6 +35,19 @@ type SitemapPage struct {
 func (*SitemapPage) TemplateText() string { return tmplSitemap }
 
 var (
+	//go:embed xml/sitemap-index.xml
+	tmplSitemapIndex     string
+	SitemapIndexTemplate = tmpl.MustCompile(&SitemapIndexPage{})
+)
+
+type SitemapIndexPage struct {
+	Host  string
+	Npubs []string
+}
+
+func (*SitemapIndexPage) TemplateText() string { return tmplSitemapIndex }
+
+var (
 	//go:embed xml/rss.xml
 	tmplRSS     string
 	RSSTemplate = tmpl.MustCompile(&RSSPage{})
