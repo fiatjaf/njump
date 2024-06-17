@@ -58,6 +58,7 @@ func isImageNSFW(url string) bool {
 	tempFile.Close() // close here so the thing can read it below
 
 	res := nsfwPredictor.Predict(nsfwPredictor.NewImage(tempPath, 3))
+	log.Debug().Str("url", url).Str("desc", res.Describe()).Msg("image analyzed")
 
 	return res.Porn > 0.75 || res.Hentai > 0.75
 }
