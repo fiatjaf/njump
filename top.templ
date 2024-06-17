@@ -2,16 +2,12 @@ package main
 
 templ topTemplate(params HeadParams) {
 	<header class="items-center p-4 pb-6 print:block flex flex-row text-base">
-
-		<div class="hidden sm:block sm:w-[14%]">
-		</div>
-
+		<div class="hidden sm:block sm:w-[14%]"></div>
 		<div class="w-[90%] sm:w-[72%] sm:text-right">
 			<div class="hidden">
 				<a href="/npubs-archive/">Nostr npubs archive</a>
 				<a href="/relays-archive/">Nostr relays archive</a>
 			</div>
-			
 			if !(params.IsHome) {
 				<a href="/" class="mr-4">Why <span class="text-strongpink">Nostr</span>?</a>
 			}
@@ -24,7 +20,6 @@ templ topTemplate(params HeadParams) {
 				<a href="/about" class="mr-4">What is <span class="text-strongpink">Njump</span>?</a>
 			}
 		</div>
-
 		<div class="w-[10%] sm:w-[14%]">
 			<div
 				class="print:hidden; relative float-right h-4 w-4 cursor-pointer rounded-full text-gray-100 dark:text-gray-700 sm:fixed sm:right-4 sm:top-4 sm:float-none"
@@ -60,10 +55,8 @@ templ topTemplate(params HeadParams) {
 			</div>
 		</div>
 	</header>
-
 	<script type="text/hyperscript">
   on beforeprint from window tell <html /> remove .theme--dark add .theme--default
   on afterprint from window tell <html /> add .theme--dark remove .theme--default
 	</script>
-
 }
