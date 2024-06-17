@@ -37,8 +37,9 @@ var (
 		xurls.SchemesUnofficial = []string{"http"}
 		return xurls.Strict()
 	}()
-	imageExtensionMatcher = regexp.MustCompile(`.*\.(png|jpg|jpeg|gif|webp)((\?|\#).*)?$`)
+	imageExtensionMatcher = regexp.MustCompile(`.*\.(png|jpg|jpeg|gif|webp|avif)((\?|\#).*)?$`)
 	videoExtensionMatcher = regexp.MustCompile(`.*\.(mp4|ogg|webm|mov)((\?|\#).*)?$`)
+	urlRegex              = xurls.Strict()
 )
 
 var kindNames = map[int]string{

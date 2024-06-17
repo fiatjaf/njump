@@ -7,3 +7,4 @@ static/tailwind-bundle.min.css
 yarn.lock
 package-lock.json
 *_templ.go
+.models

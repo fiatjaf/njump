@@ -3,27 +3,26 @@ package main
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
 	_ "image/gif"
+	_ "image/jpeg"
 	"image/png"
+	_ "image/png"
 	"math"
 	"net/http"
 	"net/url"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 	"sync"
 	"time"
 	"unicode"
 
-	_ "golang.org/x/image/webp"
-
-	"github.com/nfnt/resize"
-
-	"slices"
-
+	_ "github.com/Kagami/go-avif"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
@@ -32,9 +31,11 @@ import (
 	"github.com/go-text/typesetting/opentype/api"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/nbd-wtf/emoji"
+	"github.com/nfnt/resize"
 	"github.com/pemistahl/lingua-go"
 	"github.com/srwiley/rasterx"
 	"golang.org/x/image/math/fixed"
+	_ "golang.org/x/image/webp"
 )
 
 const (
@@ -299,13 +300,13 @@ gotScriptIndex:
 func fetchImageFromURL(url string) (image.Image, error) {
 	response, err := http.Get(url)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to fetch image from %s: %w", url, err)
 	}
 	defer response.Body.Close()
 
 	img, _, err := image.Decode(response.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to decode image from %s: %w", url, err)
 	}
 
 	return img, nil
@@ -732,13 +733,7 @@ func drawShapedBlockAt(
 }
 
 func drawImageAt(img draw.Image, imageUrl string, startY int) int {
-	resp, err := http.Get(imageUrl)
-	if err != nil {
-		return -1
-	}
-	defer resp.Body.Close()
-
-	srcImg, _, err := image.Decode(resp.Body)
+	srcImg, err := fetchImageFromURL(imageUrl)
 	if err != nil {
 		return -1
 	}

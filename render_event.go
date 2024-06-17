@@ -9,7 +9,6 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strings"
 	"time"
 
@@ -110,6 +109,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	// from here onwards we know we're rendering an event
 	//
+
+	// if it's porn we return a 404
+	for _, url := range urlRegex.FindAllString(data.event.Content, len(data.event.Content)+1) {
+		if imageExtensionMatcher.MatchString(url) {
+			if isImageNSFW(url) {
+				log.Warn().Str("url", url).Str("event", data.nevent).Msg("detect nsfw image")
+				http.Error(w, "event is unsuitable: "+err.Error(), 404)
+				return
+			}
+		}
+	}
 
 	// gather page style from user-agent
 	style := getPreviewStyle(r)
@@ -217,18 +227,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// titleizedContent
-	titleizedContent := strings.TrimSpace(
-		strings.Replace(
+	titleizedContent := urlRegex.ReplaceAllString(
+		strings.TrimSpace(
 			strings.Replace(
-				replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "", "")[0],
-				"\r\n", " ", -1),
-			"\n", " ", -1,
+				strings.Replace(
+					replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "", "")[0],
+					"\r\n", " ", -1),
+				"\n", " ", -1,
+			),
 		),
+		"",
 	)
-
-	// Remove image/video urls
-	urlRegex := regexp.MustCompile(`(https?)://[^\s/$.?#]+\.(?i:jpg|jpeg|png|gif|bmp|mp4|mov|avi|mkv|webm|ogg)`)
-	titleizedContent = urlRegex.ReplaceAllString(titleizedContent, "")
 
 	if titleizedContent == "" {
 		titleizedContent = subscript
