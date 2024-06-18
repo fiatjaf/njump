@@ -1,0 +1,74 @@
+package main
+
+import (
+	"fmt"
+	"regexp"
+	"slices"
+	"strings"
+
+	"github.com/nbd-wtf/go-nostr"
+)
+
+func hasProhibitedWordOrTag(event *nostr.Event) bool {
+	for _, tag := range event.Tags {
+		if len(tag) >= 2 && tag[0] == "t" && slices.Contains(pornTags, tag[1]) {
+			return true
+		}
+	}
+
+	return pornWordsRe.MatchString(event.Content)
+}
+
+// list copied from https://jsr.io/@gleasonator/policy/0.2.0/data/porntags.json
+var pornTags = []string{
+	"adult",
+	"ass",
+	"assworship",
+	"boobs",
+	"boobies",
+	"butt",
+	"cock",
+	"dick",
+	"dickpic",
+	"explosionloli",
+	"femboi",
+	"femboy",
+	"fetish",
+	"fuck",
+	"freeporn",
+	"girls",
+	"loli",
+	"milf",
+	"nude",
+	"nudity",
+	"nsfw",
+	"pantsu",
+	"pussy",
+	"porn",
+	"porno",
+	"porntube",
+	"pornvideo",
+	"sex",
+	"sexpervertsyndicate",
+	"sexporn",
+	"sexy",
+	"slut",
+	"teen",
+	"tits",
+	"teenporn",
+	"teens",
+	"transnsfw",
+	"xxx",
+}
+
+var pornWordsRe = func() *regexp.Regexp {
+	// list copied from https://jsr.io/@gleasonator/policy/0.2.0/data/pornwords.json
+	pornWords := []string{
+		"loli",
+		"nsfw",
+		"teen porn",
+	}
+	concat := strings.Join(pornWords, "|")
+	regex := fmt.Sprintf(`\b()\b`, concat)
+	return regexp.MustCompile(regex)
+}()
