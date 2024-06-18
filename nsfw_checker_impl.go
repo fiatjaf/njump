@@ -9,7 +9,10 @@ import (
 	"sync"
 
 	"github.com/ccuetoh/nsfw"
+	lru "github.com/hashicorp/golang-lru/v2"
 )
+
+var nsfwCache, _ = lru.New[string, bool](64)
 
 var nsfwPredictor = func() *nsfw.Predictor {
 	p, err := nsfw.NewLatestPredictor()
@@ -24,6 +27,10 @@ var nsfwPredictor = func() *nsfw.Predictor {
 var tempFileLocks = [3]sync.Mutex{{}, {}, {}}
 
 func isImageNSFW(url string) bool {
+	if is, ok := nsfwCache.Get(url); ok {
+		return is
+	}
+
 	img, err := fetchImageFromURL(url)
 	if err != nil {
 		return false // if we can't read it that means it's ok
@@ -60,5 +67,7 @@ func isImageNSFW(url string) bool {
 	res := nsfwPredictor.Predict(nsfwPredictor.NewImage(tempPath, 3))
 	log.Debug().Str("url", url).Str("desc", res.Describe()).Msg("image analyzed")
 
-	return res.Porn > 0.85 || res.Hentai > 0.85
+	is := res.Porn > 0.85 || res.Hentai > 0.85
+	nsfwCache.Add(url, is)
+	return is
 }
