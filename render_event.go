@@ -115,7 +115,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		if imageExtensionMatcher.MatchString(url) {
 			if isImageNSFW(url) {
 				log.Warn().Str("url", url).Str("event", data.nevent).Msg("detect nsfw image")
-				http.Error(w, "event is unsuitable: "+err.Error(), 404)
+				http.Error(w, "event is unsuitable", 404)
 				return
 			}
 		}
