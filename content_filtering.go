@@ -69,6 +69,6 @@ var pornWordsRe = func() *regexp.Regexp {
 		"teen porn",
 	}
 	concat := strings.Join(pornWords, "|")
-	regex := fmt.Sprintf(`\b()\b`, concat)
+	regex := fmt.Sprintf(`\b(%s)\b`, concat)
 	return regexp.MustCompile(regex)
 }()
