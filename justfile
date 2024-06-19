@@ -1,13 +1,13 @@
 export PATH := "./node_modules/.bin:" + env_var('PATH')
 
-dev:
-    fd 'go|templ|base.css' | entr -r bash -c 'TAILWIND_DEBUG=true SKIP_LANGUAGE_MODEL=true && templ generate && go build -tags=nsfw -o /tmp/njump && /tmp/njump'
+dev tags='':
+    fd 'go|templ|base.css' | entr -r bash -c 'TAILWIND_DEBUG=true SKIP_LANGUAGE_MODEL=true && templ generate && go build -tags={{tags}} -o /tmp/njump && /tmp/njump'
 
 build: templ tailwind
     go build -o ./njump
 
 deploy: templ tailwind
-    GOOS=linux GOARCH=amd64 go build -ldflags="-X main.compileTimeTs=$(date '+%s')" -o ./njump
+    GOOS=linux GOARCH=amd64 go build -tags=nsfw -ldflags="-X main.compileTimeTs=$(date '+%s')" -o ./njump
     rsync --progress njump njump:njump/njump-new
     ssh njump 'systemctl stop njump'
     ssh njump 'mv njump/njump-new njump/njump'
