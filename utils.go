@@ -243,7 +243,7 @@ func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 			name, _ := getNameFromNip19(ctx, nip19)
 			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/Person"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a></span>`, nip19, name, firstChars+"…"+lastChars)
 		} else {
-			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/SocialMediaPosting"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">%s</a></span>`, nip19, firstChars+"…"+lastChars)
+			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/Article"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">%s</a></span>`, nip19, firstChars+"…"+lastChars)
 		}
 	})
 }
