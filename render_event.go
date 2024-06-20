@@ -118,6 +118,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, url := range allUrls {
+		url = strings.Split(strings.Split(url, "?")[0], "#")[0]
 		if imageExtensionMatcher.MatchString(url) {
 			if isImageNSFW(url) {
 				log.Warn().Str("url", url).Str("event", data.nevent).Msg("detect nsfw image")

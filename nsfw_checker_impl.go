@@ -27,6 +27,13 @@ var nsfwPredictor = func() *nsfw.Predictor {
 var tempFileLocks = [3]sync.Mutex{{}, {}, {}}
 
 func isImageNSFW(url string) bool {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Error().Interface("err", r).Str("url", url).Msg("panic while checking nsfw")
+			return
+		}
+	}()
+
 	if is, ok := nsfwCache.Get(url); ok {
 		return is
 	}
