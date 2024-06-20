@@ -46,16 +46,16 @@ func renderEmbedded(w http.ResponseWriter, r *http.Request, code string) {
 		component = embeddedNoteTemplate(EmbeddedNoteParams{
 			Content:   template.HTML(data.content),
 			CreatedAt: data.createdAt,
-			Metadata:  data.metadata,
+			Metadata:  data.event.author,
 			Subject:   subject,
 			Url:       code,
 		})
 
 	case Profile:
 		component = embeddedProfileTemplate(EmbeddedProfileParams{
-			Metadata:                   data.metadata,
-			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
-			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false, true)),
+			Metadata:                   data.event.author,
+			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.event.author.Website),
+			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.event.author.About), false, false, true)),
 			AuthorRelays:               data.authorRelaysPretty,
 		})
 	default:

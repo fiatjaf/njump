@@ -12,7 +12,6 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip52"
 	"github.com/nbd-wtf/go-nostr/nip53"
 	"github.com/nbd-wtf/go-nostr/nip94"
-	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
 type Data struct {
@@ -26,9 +25,7 @@ type Data struct {
 	createdAt                string
 	modifiedAt               string
 	parentLink               template.HTML
-	metadata                 Metadata
 	authorRelaysPretty       []string
-	authorLong               string
 	renderableLastNotes      []EnhancedEvent
 	kindDescription          string
 	kindNIP                  string
@@ -65,10 +62,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	data := &Data{
-		event: EnhancedEvent{
-			Event:  event,
-			relays: relays,
-		},
+		event: NewEnhancedEvent(ctx, event, relays),
 	}
 
 	data.authorRelaysPretty = make([]string, 0, len(relays))
@@ -85,9 +79,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 	data.authorRelaysPretty = unique(data.authorRelaysPretty)
 
-	npub, _ := nip19.EncodePublicKey(event.PubKey)
-	npubShort := npub[:8] + "…" + npub[len(npub)-4:]
-	data.authorLong = npub // hopefully will be replaced later
 	data.nevent, _ = nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
 	data.neventNaked, _ = nip19.EncodeEvent(event.ID, nil, event.PubKey)
 	data.naddr = ""
@@ -110,7 +101,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		lastNotes := authorLastNotes(ctx, event.PubKey, isProfileSitemap)
 		data.renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
 		for i, levt := range lastNotes {
-			data.renderableLastNotes[i] = EnhancedEvent{levt, []string{}}
+			data.renderableLastNotes[i] = NewEnhancedEvent(ctx, levt, []string{})
 		}
 		if err != nil {
 			return nil, err
@@ -146,25 +137,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		data.templateId = Other
 	}
 
-	if event.Kind == 0 {
-		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
-		spm, _ := sdk.ParseMetadata(event)
-		data.metadata = Metadata{spm}
-	} else {
-		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-		defer cancel()
-		author, relays, _ := getEvent(ctx, npub, relaysForNip19)
-		if author == nil {
-			data.metadata = Metadata{sdk.ProfileMetadata{PubKey: event.PubKey}}
-		} else {
-			spm, _ := sdk.ParseMetadata(author)
-			data.metadata = Metadata{spm}
-			if data.metadata.Name != "" {
-				data.authorLong = fmt.Sprintf("%s (%s)", data.metadata.Name, npubShort)
-			}
-		}
-		data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
-	}
+	data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
 
 	data.kindDescription = kindNames[event.Kind]
 	if data.kindDescription == "" {

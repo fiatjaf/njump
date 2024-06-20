@@ -4,7 +4,6 @@ templ eventPageTemplate(
 	title string,
 	og OpenGraphParams,
 	head HeadParams,
-	author Metadata,
 	clients []ClientReference,
 	details DetailsParams,
 	event EnhancedEvent,
@@ -25,7 +24,7 @@ templ eventPageTemplate(
 					class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 lg:gap-48vw"
 				>
 					<div class="w-full break-words print:w-full sm:w-3/4">
-						@authorHeaderTemplate(author)
+						@authorHeaderTemplate(event.author)
 						<div itemprop="dateCreated" class="w-full text-right text-sm text-stone-400">
 							{ event.CreatedAtStr() }
 						</div>

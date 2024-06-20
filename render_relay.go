@@ -30,20 +30,9 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// relay metadata
-	info, err := nip11.Fetch(r.Context(), hostname)
-	if err != nil {
-		w.Header().Set("Cache-Control", "max-age=60")
-		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{
-			Message: "The relay you are looking for does not exist or is offline; check the name in the url or try later",
-			Errors:  err.Error(),
-		}).Render(r.Context(), w)
-		return
-	}
-	if info == nil {
-		info = &nip11.RelayInformationDocument{
-			Name: hostname,
-		}
+	info, _ := nip11.Fetch(r.Context(), hostname)
+	if info.Name == "" {
+		info.Name = hostname
 	}
 
 	// last notes
@@ -54,7 +43,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		lastEventAt = time.Unix(int64(lastNotes[0].CreatedAt), 0)
 	}
 	for i, levt := range lastNotes {
-		renderableLastNotes[i] = EnhancedEvent{levt, []string{"wss://" + hostname}}
+		renderableLastNotes[i] = NewEnhancedEvent(nil, levt, []string{"wss://" + hostname})
 	}
 
 	if len(renderableLastNotes) != 0 {

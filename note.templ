@@ -6,7 +6,6 @@ templ noteTemplate(params NotePageParams) {
 		params.TitleizedContent,
 		params.OpenGraphParams,
 		params.HeadParams,
-		params.Metadata,
 		params.Clients,
 		params.Details,
 		params.Event,
@@ -15,7 +14,7 @@ templ noteTemplate(params NotePageParams) {
 			<h1 class="text-2xl" itemprop="headline">{ params.Subject }</h1>
 		} else {
 			<h1 class="hidden">
-				{ params.Metadata.ShortName() } on Nostr: { params.TitleizedContent }
+				{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }
 			</h1>
 		}
 		if params.Cover != "" {

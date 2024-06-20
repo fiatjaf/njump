@@ -11,6 +11,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/nbd-wtf/go-nostr/nip11"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
 type TemplateID int
@@ -48,7 +49,7 @@ type DetailsParams struct {
 	HideDetails     bool
 	CreatedAt       string
 	EventJSON       template.HTML
-	Metadata        Metadata
+	Metadata        sdk.ProfileMetadata
 	Nevent          string
 	Nprofile        string
 	SeenOn          []string
@@ -75,7 +76,7 @@ type TelegramInstantViewParams struct {
 	Content      template.HTML
 	Description  string
 	Subject      string
-	Metadata     Metadata
+	Metadata     sdk.ProfileMetadata
 	AuthorLong   string
 	CreatedAt    string
 	ParentNevent string
@@ -95,7 +96,7 @@ type AboutParams struct {
 type EmbeddedNoteParams struct {
 	Content   template.HTML
 	CreatedAt string
-	Metadata  Metadata
+	Metadata  sdk.ProfileMetadata
 	SeenOn    []string
 	Subject   string
 	Url       string
@@ -110,7 +111,7 @@ type ProfilePageParams struct {
 	CreatedAt                  string
 	Domain                     string
 	LastNotes                  []EnhancedEvent
-	Metadata                   Metadata
+	Metadata                   sdk.ProfileMetadata
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
@@ -125,7 +126,7 @@ type EmbeddedProfileParams struct {
 	Content                    string
 	CreatedAt                  string
 	Domain                     string
-	Metadata                   Metadata
+	Metadata                   sdk.ProfileMetadata
 	NormalizedAuthorWebsiteURL string
 	RenderedAuthorAboutText    template.HTML
 	Nevent                     string
@@ -137,7 +138,7 @@ type EmbeddedProfileParams struct {
 type RelayPageParams struct {
 	HeadParams
 
-	Info       *nip11.RelayInformationDocument
+	Info       nip11.RelayInformationDocument
 	Hostname   string
 	Proxy      string
 	LastNotes  []EnhancedEvent
@@ -171,10 +172,9 @@ func (e *ErrorPageParams) MessageHTML() template.HTML {
 }
 
 type BaseEventPageParams struct {
-	Event    EnhancedEvent
-	Metadata Metadata
-	Style    Style
-	Alt      string
+	Event EnhancedEvent
+	Style Style
+	Alt   string
 }
 
 type NotePageParams struct {

@@ -44,7 +44,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		err = RSSTemplate.Render(w, &RSSPage{
 			Host:       s.Domain,
 			ModifiedAt: data.modifiedAt,
-			Metadata:   data.metadata,
+			Metadata:   data.event.author,
 			LastNotes:  data.renderableLastNotes,
 		})
 	} else {
@@ -59,11 +59,11 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 				KindNIP:         data.kindNIP,
 				EventJSON:       data.event.ToJSONHTML(),
 				Kind:            data.event.Kind,
-				Metadata:        data.metadata,
+				Metadata:        data.event.author,
 			},
-			Metadata:                   data.metadata,
-			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.metadata.Website),
-			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.metadata.About), false, false, false)),
+			Metadata:                   data.event.author,
+			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.event.author.Website),
+			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.event.author.About), false, false, false)),
 			Nprofile:                   data.nprofile,
 			AuthorRelays:               data.authorRelaysPretty,
 			LastNotes:                  data.renderableLastNotes,
@@ -75,7 +75,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 					if c == primalWeb {
 						s = strings.Replace(
 							strings.Replace(s, "/e/", "/p/", 1),
-							data.nprofile, data.metadata.Npub(), 1)
+							data.nprofile, data.event.author.Npub(), 1)
 					}
 					return s
 				},

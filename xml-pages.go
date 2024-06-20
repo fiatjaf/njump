@@ -4,6 +4,7 @@ import (
 	_ "embed"
 
 	"github.com/nbd-wtf/go-nostr/nip11"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/tylermmorton/tmpl"
 )
 
@@ -18,11 +19,11 @@ type SitemapPage struct {
 	ModifiedAt string
 
 	// for the profile sitemap
-	Metadata Metadata
+	Metadata sdk.ProfileMetadata
 
 	// for the relay sitemap
 	RelayHostname string
-	Info          *nip11.RelayInformationDocument
+	Info          nip11.RelayInformationDocument
 
 	// for the profile and relay sitemaps
 	LastNotes []EnhancedEvent
@@ -59,11 +60,11 @@ type RSSPage struct {
 	Title      string
 
 	// for the profile RSS
-	Metadata Metadata
+	Metadata sdk.ProfileMetadata
 
 	// for the relay RSS
 	RelayHostname string
-	Info          *nip11.RelayInformationDocument
+	Info          nip11.RelayInformationDocument
 
 	// for the profile and relay RSSs
 	LastNotes []EnhancedEvent

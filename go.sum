@@ -182,10 +182,10 @@ github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9G
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/nbd-wtf/emoji v0.0.3 h1:YtkT7MVPXvqU1SQjvC/CShlWexnREzqNCxmhUnL00CA=
 github.com/nbd-wtf/emoji v0.0.3/go.mod h1:tS6D9iI34qwBmWc5g8X7tVDkWXulqbTJRsvsM6QsS88=
-github.com/nbd-wtf/go-nostr v0.32.0 h1:ShRerjhXvqZbiVUc11iPqxLuOImxqbJQ0zTz4t6Tjps=
-github.com/nbd-wtf/go-nostr v0.32.0/go.mod h1:NZQkxl96ggbO8rvDpVjcsojJqKTPwqhP4i82O7K5DJs=
-github.com/nbd-wtf/nostr-sdk v0.2.1 h1:Ae1186pm//Byy5gOIsB3Nhy6EQfTzOHeU9enRWVd204=
-github.com/nbd-wtf/nostr-sdk v0.2.1/go.mod h1:iYZYgu0lilem16G8fk08FipgMOzsQs2bO1j6uEnRhvA=
+github.com/nbd-wtf/go-nostr v0.33.0 h1:6hZx25JAgwEOY49gCjrVZYFno7Z8L7HIwF6IMDGPjaU=
+github.com/nbd-wtf/go-nostr v0.33.0/go.mod h1:NZQkxl96ggbO8rvDpVjcsojJqKTPwqhP4i82O7K5DJs=
+github.com/nbd-wtf/nostr-sdk v0.2.3 h1:wQrr92VwYhOl+r1Cg3hUvggQT4S2wcTRRFHMD3znbe4=
+github.com/nbd-wtf/nostr-sdk v0.2.3/go.mod h1:AZZW6QzMk3Tc14fXRPktHFEEAAywLZ/TZf+Wdkr2ksI=
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 h1:zYyBkD/k9seD2A7fsi6Oo2LfFZAehjjQMERAvZLEDnQ=
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646/go.mod h1:jpp1/29i3P1S/RLdc7JQKbRpFeM1dOBd8T9ki5s+AY8=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=

@@ -1,5 +1,7 @@
 package main
 
+import "github.com/nbd-wtf/nostr-sdk"
+
 var compileTimeTs string
 
 templ headCommonTemplate(params HeadParams) {
@@ -37,7 +39,7 @@ on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.include
 	</script>
 }
 
-templ authorHeaderTemplate(metadata Metadata) {
+templ authorHeaderTemplate(metadata sdk.ProfileMetadata) {
 	<header
 		itemprop="author"
 		itemscope

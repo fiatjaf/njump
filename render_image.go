@@ -16,6 +16,7 @@ import (
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/nfnt/resize"
 	xfont "golang.org/x/image/font"
 )
@@ -70,7 +71,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		"",
 	)
 
-	img, err := drawImage(paragraphs, getPreviewStyle(r), data.metadata, data.createdAt)
+	img, err := drawImage(paragraphs, getPreviewStyle(r), data.event.author, data.createdAt)
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to draw paragraphs as image")
 		http.Error(w, "error writing image!", 500)
@@ -86,7 +87,12 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func drawImage(paragraphs []string, style Style, metadata Metadata, date string) (image image.Image, err error) {
+func drawImage(
+	paragraphs []string,
+	style Style,
+	metadata sdk.ProfileMetadata,
+	date string,
+) (image image.Image, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic while drawing image")

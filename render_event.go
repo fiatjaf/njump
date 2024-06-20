@@ -96,7 +96,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	// if the result is a kind:0 render this as a profile
 	if data.event.Kind == 0 {
-		renderProfile(w, r, data.metadata.Npub())
+		renderProfile(w, r, data.event.author.Npub())
 		return
 	}
 
@@ -134,17 +134,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	host := r.Header.Get("X-Forwarded-Host")
 	if host == "" {
 		host = r.Host
-	}
-
-	var subject string
-	var summary string
-	for _, tag := range data.event.Tags {
-		if tag[0] == "subject" || tag[0] == "title" {
-			subject = tag[1]
-		}
-		if tag[0] == "summary" {
-			summary = tag[1]
-		}
 	}
 
 	useTextImage := false
@@ -188,10 +177,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	} else {
 		subscript = fmt.Sprintf("kind:%d event", data.event.Kind)
 	}
-	if subject != "" {
-		subscript += " (" + subject + ")"
+	if data.event.subject != "" {
+		subscript += " (" + data.event.subject + ")"
 	}
-	subscript += " by " + data.metadata.ShortName()
+	subscript += " by " + data.event.author.ShortName()
 	if data.event.isReply() {
 		subscript += " (reply)"
 	}
@@ -205,17 +194,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	description := ""
 	if useTextImage {
 		textImageURL = fmt.Sprintf("https://%s/njump/image/%s?%s", host, code, r.URL.RawQuery)
-		if subject != "" {
+		if data.event.subject != "" {
 			if seenOnRelays != "" {
-				description = fmt.Sprintf("%s -- %s", subject, seenOnRelays)
+				description = fmt.Sprintf("%s -- %s", data.event.subject, seenOnRelays)
 			} else {
-				description = subject
+				description = data.event.subject
 			}
 		} else {
 			description = seenOnRelays
 		}
-	} else if summary != "" {
-		description = summary
+	} else if data.event.summary != "" {
+		description = data.event.summary
 	} else {
 		// if content is valid JSON, parse that and print as TOML for easier readability
 		var parsedJson any
@@ -280,7 +269,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	if data.event.Kind == 30023 || data.event.Kind == 30024 {
 		// Remove duplicate title inside the body
-		data.content = strings.ReplaceAll(data.content, "# "+subject, "")
+		data.content = strings.ReplaceAll(data.content, "# "+data.event.subject, "")
 		data.content = mdToHTML(data.content, data.templateId == TelegramInstantView, false)
 	} else {
 		// first we run basicFormatting, which turns URLs into their appropriate HTML tags
@@ -322,7 +311,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		EventJSON:       data.event.ToJSONHTML(),
 		Kind:            data.event.Kind,
 		SeenOn:          data.event.relays,
-		Metadata:        data.metadata,
+		Metadata:        data.event.author,
 	}
 
 	opengraph := OpenGraphParams{
@@ -332,17 +321,16 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		VideoType:    data.videoType,
 		ProxiedImage: "https://" + host + "/njump/proxy?src=" + data.image,
 
-		Superscript: data.authorLong,
+		Superscript: data.event.authorLong(),
 		Subscript:   subscript,
 		Text:        strings.TrimSpace(description),
 	}
 
 	var component templ.Component
 	baseEventPageParams := BaseEventPageParams{
-		Event:    data.event,
-		Metadata: data.metadata,
-		Style:    style,
-		Alt:      data.alt,
+		Event: data.event,
+		Style: style,
+		Alt:   data.alt,
 	}
 
 	switch data.templateId {
@@ -351,12 +339,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Video:        data.video,
 			VideoType:    data.videoType,
 			Image:        data.image,
-			Summary:      template.HTML(summary),
+			Summary:      template.HTML(data.event.summary),
 			Content:      template.HTML(data.content),
 			Description:  description,
-			Subject:      subject,
-			Metadata:     data.metadata,
-			AuthorLong:   data.authorLong,
+			Subject:      data.event.subject,
+			Metadata:     data.event.author,
+			AuthorLong:   data.event.authorLong(),
 			CreatedAt:    data.createdAt,
 			ParentNevent: data.event.getParentNevent(),
 		})
@@ -399,12 +387,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-
 			Clients:          generateClientList(data.event.Kind, enhancedCode),
 			Details:          detailsData,
 			Content:          template.HTML(content),
 			Cover:            data.cover,
-			Subject:          subject,
 			TitleizedContent: titleizedContent,
 		})
 	case FileMetadata:
