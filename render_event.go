@@ -111,21 +111,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	//
 
 	// if it's porn we return a 404
-	allUrls := urlRegex.FindAllString(data.event.Content, len(data.event.Content)+1)
-	if len(allUrls) > 0 && hasProhibitedWordOrTag(data.event.Event) {
+	hasURL := urlRegex.MatchString(data.event.Content)
+	if hasURL && hasProhibitedWordOrTag(data.event.Event) {
 		log.Warn().Str("event", data.nevent).Msg("detect prohibited porn content")
 		http.Error(w, "event is not allowed", 404)
 		return
-	}
-	for _, url := range allUrls {
-		url = strings.Split(strings.Split(url, "?")[0], "#")[0]
-		if imageExtensionMatcher.MatchString(url) {
-			if isImageNSFW(url) {
-				log.Warn().Str("url", url).Str("event", data.nevent).Msg("detect nsfw image")
-				http.Error(w, "event is unsuitable for work", 404)
-				return
-			}
-		}
 	}
 
 	// gather page style from user-agent
