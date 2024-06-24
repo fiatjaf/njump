@@ -178,7 +178,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	seenOnRelays := ""
 	if len(data.event.relays) > 0 {
-		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(data.event.relays, ", "))
+		relays := make([]string, len(data.event.relays))
+		for i, r := range data.event.relays {
+			relays[i] = trimProtocol(r)
+		}
+		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(relays, ", "))
 	}
 
 	textImageURL := ""
