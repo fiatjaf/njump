@@ -25,6 +25,7 @@ const (
 	LiveEvent
 	LiveEventMessage
 	CalendarEvent
+	WikiEvent
 	Other
 )
 
@@ -243,6 +244,17 @@ type CalendarPageParams struct {
 	Content       template.HTML
 	CalendarEvent Kind31922Or31923Metadata
 	Clients       []ClientReference
+}
+
+type WikiPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+	Details     DetailsParams
+	PublishedAt string
+	Content     string
+	WikiEvent   Kind30818Metadata
+	Clients     []ClientReference
 }
 
 type OtherPageParams struct {

@@ -1,0 +1,22 @@
+package main
+
+templ wikiEventTemplate(params WikiPageParams) {
+	<!DOCTYPE html>
+	@eventPageTemplate(
+		"Wiki - " + params.WikiEvent.Title,
+		params.OpenGraphParams,
+		params.HeadParams,
+		params.Clients,
+		params.Details,
+		params.Event,
+	) {
+		<h1 class="text-2xl">
+			{ params.WikiEvent.Title }
+		</h1>
+
+		<!-- main content -->
+		<div dir="auto" class="leading-5" itemprop="articleBody">
+			@templ.Raw(params.Content)
+		</div>
+	}
+}
