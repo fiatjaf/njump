@@ -78,6 +78,7 @@ var kindNames = map[int]string{
 	30018: "Create or update a product",
 	30023: "Long-form Content",
 	30078: "Application-specific Data",
+	30818: "Wiki article",
 	30311: "Live Event",
 }
 
@@ -117,6 +118,7 @@ var kindNIPs = map[int]string{
 	30018: "15",
 	30023: "23",
 	30078: "78",
+	30818: "54",
 	30311: "53",
 }
 
