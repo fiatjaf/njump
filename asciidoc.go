@@ -24,7 +24,7 @@ func parseWikilinks(asciidoc string) string {
 		}
 
 		targetFormatted := strings.ToLower(strings.ReplaceAll(target, " ", "-"))
-		return fmt.Sprintf("link:/wiki/%s[%s]", targetFormatted, display)
+		return fmt.Sprintf("[.bg-lavender.dark:prose:text-neutral-50.dark:text-neutral-50.dark:bg-garnet.px-1]#%s# [.wikilinks]#(link:https://wikistr.com/%s[Wikistr], link:https://wikifreedia.xyz/%s[Wikifreedia])#", display, targetFormatted, targetFormatted)
 	}
 
 	// Use regex ReplaceAllStringFunc with the replacement function
