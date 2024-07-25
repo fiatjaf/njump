@@ -508,6 +508,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	case WikiEvent:
 		var PublishedAt = data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006")
+		npub, _ := nip19.EncodePublicKey(data.event.PubKey)
 
 		component = wikiEventTemplate(WikiPageParams{
 			BaseEventPageParams: baseEventPageParams,
@@ -521,7 +522,19 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			WikiEvent:   data.Kind30818Metadata,
 			Details:     detailsData,
 			Content:     data.content,
-			Clients:     generateClientList(data.event.Kind, data.naddr),
+			Clients: generateClientList(
+				data.event.Kind,
+				data.naddr,
+				func(client ClientReference, url string) string {
+					return strings.Replace(url, "{handle}", data.Kind30818Metadata.Handle, -1)
+				},
+				func(client ClientReference, url string) string {
+					return strings.Replace(url, "{authorPubkey}", data.event.PubKey, -1)
+				},
+				func(client ClientReference, url string) string {
+					return strings.Replace(url, "{npub}", npub, -1)
+				},
+			),
 		})
 
 	case Other:
