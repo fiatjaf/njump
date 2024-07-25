@@ -266,6 +266,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		// Remove duplicate title inside the body
 		data.content = strings.ReplaceAll(data.content, "# "+data.event.subject, "")
 		data.content = mdToHTML(data.content, data.templateId == TelegramInstantView, false)
+	} else if data.event.Kind == 30818 {
+		data.content = asciidocToHTML(data.content)
 	} else {
 		// first we run basicFormatting, which turns URLs into their appropriate HTML tags
 		data.content = basicFormatting(html.EscapeString(data.content), true, false, false)
@@ -503,6 +505,38 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Content:       template.HTML(data.content),
 			Clients:       generateClientList(data.event.Kind, data.naddr),
 		})
+
+	case WikiEvent:
+		var PublishedAt = data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006")
+		npub, _ := nip19.EncodePublicKey(data.event.PubKey)
+
+		component = wikiEventTemplate(WikiPageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
+			},
+			PublishedAt: PublishedAt,
+			WikiEvent:   data.Kind30818Metadata,
+			Details:     detailsData,
+			Content:     data.content,
+			Clients: generateClientList(
+				data.event.Kind,
+				data.naddr,
+				func(client ClientReference, url string) string {
+					return strings.Replace(url, "{handle}", data.Kind30818Metadata.Handle, -1)
+				},
+				func(client ClientReference, url string) string {
+					return strings.Replace(url, "{authorPubkey}", data.event.PubKey, -1)
+				},
+				func(client ClientReference, url string) string {
+					return strings.Replace(url, "{npub}", npub, -1)
+				},
+			),
+		})
+
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
 
