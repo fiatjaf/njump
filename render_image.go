@@ -68,7 +68,6 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 			strings.Split(content, "\n"),
 		),
 		string(INVISIBLE_SPACE),
-		"",
 	)
 
 	img, err := drawImage(paragraphs, getPreviewStyle(r), data.event.author, data.createdAt)
