@@ -16,7 +16,6 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/nbd-wtf/nostr-sdk/hints/memory"
 	"github.com/pelletier/go-toml"
 )
 
@@ -30,8 +29,6 @@ func isValidShortcode(s string) bool {
 }
 
 func renderEvent(w http.ResponseWriter, r *http.Request) {
-	sys.Hints.(*memory.HintDB).PrintScores()
-
 	code := r.URL.Path[1:] // hopefully a nip19 code
 
 	// it's the homepage
