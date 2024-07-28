@@ -121,7 +121,14 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 	// try to fetch in our internal eventstore first
 	if res, _ := wdb.QuerySync(ctx, filter); len(res) != 0 {
 		evt := res[0]
-		scheduleEventExpiration(evt.ID, time.Hour*24*7)
+
+		// keep this event in cache for a while more
+		// unless it's a metadata event
+		// (people complaining about njump keeping their metadata will try to load their metadata all the time)
+		if evt.Kind != 0 {
+			scheduleEventExpiration(evt.ID, time.Hour*24*7)
+		}
+
 		return evt, getRelaysForEvent(evt.ID), nil
 	}
 
