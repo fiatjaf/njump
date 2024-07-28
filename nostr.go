@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/fiatjaf/eventstore"
-	"github.com/fiatjaf/set"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	sdk "github.com/nbd-wtf/nostr-sdk"
+	cache_memory "github.com/nbd-wtf/nostr-sdk/cache/memory"
 )
 
 type RelayConfig struct {
@@ -21,39 +21,18 @@ type RelayConfig struct {
 	ExcludedRelays []string `json:"excludeRelays"`
 }
 
-func (r *RelayConfig) Valid() bool {
-	if len(r.Everything) == 0 || len(r.Profiles) == 0 || len(r.JustIds) == 0 || len(r.ExcludedRelays) == 0 {
-		return false
-	}
-	return true
-}
-
 var (
-	pool   = nostr.NewSimplePool(context.Background())
-	sys    = sdk.System(sdk.WithPool(pool))
+	metadataCache  = cache_memory.New32[sdk.ProfileMetadata](1000)
+	relayListCache = cache_memory.New32[sdk.RelayList](5000)
+	sys            = sdk.NewSystem(
+		sdk.WithMetadataCache(metadataCache),
+		sdk.WithRelayListCache(relayListCache),
+	)
 	serial int
 
 	relayConfig = RelayConfig{
-		Everything: []string{
-			"wss://nostr-pub.wellorder.net",
-			"wss://relay.damus.io",
-			"wss://relay.nostr.bg",
-			"wss://nostr.wine",
-			"wss://nos.lol",
-			"wss://nostr.mom",
-			"wss://nostr.land",
-			"wss://relay.snort.social",
-			"wss://offchain.pub",
-			"wss://relay.primal.net",
-			"wss://relay.nostr.band",
-			"wss://public.relaying.io",
-		},
-		Profiles: []string{
-			"wss://purplepag.es",
-			"wss://relay.noswhere.com",
-			"wss://relay.nos.social",
-			"wss://relay.snort.social",
-		},
+		Everything: nil, // use the defaults from nostr-sdk
+		Profiles:   nil, // use the defaults from nostr-sdk
 		JustIds: []string{
 			"wss://cache2.primal.net/v1",
 			"wss://relay.noswhere.com",
@@ -76,14 +55,11 @@ type CachedEvent struct {
 	Relays []string     `json:"r"`
 }
 
-func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Event, []string, error) {
+func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) {
 	wdb := eventstore.RelayWrapper{Store: db}
 
-	withRelays := false
-	if len(relayHints) > 0 {
-		withRelays = true
-	}
-	priorityRelays := set.NewSliceSet(relayHints...)
+	// this is for deciding what relays will go on nevent and nprofile later
+	priorityRelays := make(map[string]int)
 
 	prefix, data, err := nip19.Decode(code)
 	if err != nil {
@@ -94,51 +70,51 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 		data = *pp
 	}
 
-	var author string
+	author := ""
+	authorRelaysPosition := 0
 
 	var filter nostr.Filter
-	relays := make([]string, 0, 25)
-	relays = append(relays, relayHints...)
+	relays := make([]string, 0, 10)
 
 	switch v := data.(type) {
 	case nostr.ProfilePointer:
 		author = v.PublicKey
 		filter.Authors = []string{v.PublicKey}
 		filter.Kinds = []int{0}
-		relays = append(relays, relayConfig.Profiles...)
 		relays = append(relays, v.Relays...)
-		priorityRelays.Add(v.Relays...)
-		withRelays = true
+		authorRelaysPosition = len(v.Relays) // ensure author relays are checked after hinted relays
+		relays = append(relays, sys.MetadataRelays...)
+		for _, r := range v.Relays {
+			priorityRelays[r] = 2
+		}
 	case nostr.EventPointer:
 		author = v.Author
 		filter.IDs = []string{v.ID}
 		relays = append(relays, v.Relays...)
 		relays = append(relays, relayConfig.JustIds...)
-		priorityRelays.Add(v.Relays...)
-		withRelays = true
+		authorRelaysPosition = len(v.Relays) // ensure author relays are checked after hinted relays
+		for _, r := range v.Relays {
+			priorityRelays[r] = 2
+		}
 	case nostr.EntityPointer:
 		author = v.PublicKey
-		filter.Authors = []string{v.PublicKey}
 		filter.Tags = nostr.TagMap{
 			"d": []string{v.Identifier},
 		}
 		if v.Kind != 0 {
 			filter.Kinds = append(filter.Kinds, v.Kind)
 		}
-		relays = append(relays, getRandomRelay(), getRandomRelay())
 		relays = append(relays, v.Relays...)
-		priorityRelays.Add(v.Relays...)
-		withRelays = true
+		authorRelaysPosition = len(v.Relays) // ensure author relays are checked after hinted relays
 	case string:
 		if prefix == "note" {
 			filter.IDs = []string{v}
-			relays = append(relays, getRandomRelay())
 			relays = append(relays, relayConfig.JustIds...)
 		} else if prefix == "npub" {
 			author = v
 			filter.Authors = []string{v}
 			filter.Kinds = []int{0}
-			relays = append(relays, relayConfig.Profiles...)
+			relays = append(relays, sys.MetadataRelays...)
 		}
 	}
 
@@ -149,14 +125,17 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 		return evt, getRelaysForEvent(evt.ID), nil
 	}
 
-	// otherwise fetch from external relays
 	if author != "" {
 		// fetch relays for author
-		authorRelays := relaysForPubkey(ctx, author, relays...)
-		if len(authorRelays) > 3 {
-			authorRelays = authorRelays[:3]
+		authorRelays := sys.FetchOutboxRelays(ctx, author, 3)
+		relays = slices.Insert(relays, authorRelaysPosition, authorRelays...)
+		for _, r := range authorRelays {
+			priorityRelays[r] = 1
 		}
-		relays = append(relays, authorRelays...)
+	}
+
+	for len(relays) < 5 {
+		relays = append(relays, getRandomRelay())
 	}
 
 	relays = unique(relays)
@@ -166,30 +145,25 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	// actually fetch the event here
 	var result *nostr.Event
 	var successRelays []string = nil
-	if withRelays {
-		successRelays = make([]string, 0, len(relays))
-		countdown := 7.5
-		go func() {
-			for {
-				time.Sleep(500 * time.Millisecond)
-				if countdown <= 0 {
-					cancel()
-					break
-				}
-				countdown -= 0.5
-			}
-		}()
 
-		for ie := range pool.SubManyEoseNonUnique(ctx, relays, nostr.Filters{filter}) {
-			successRelays = append(successRelays, ie.Relay.URL)
-			result = ie.Event
-			countdown = min(countdown, 1)
+	// keep track of where we have actually found the event so we can show that
+	successRelays = make([]string, 0, len(relays))
+	countdown := 7.5
+	go func() {
+		for {
+			time.Sleep(500 * time.Millisecond)
+			if countdown <= 0 {
+				cancel()
+				break
+			}
+			countdown -= 0.5
 		}
-	} else {
-		ie := pool.QuerySingle(ctx, relays, filter)
-		if ie != nil {
-			result = ie.Event
-		}
+	}()
+
+	for ie := range sys.Pool.SubManyEoseNonUnique(ctx, relays, nostr.Filters{filter}) {
+		successRelays = append(successRelays, ie.Relay.URL)
+		result = ie.Event
+		countdown = min(countdown, 1)
 	}
 
 	if result == nil {
@@ -203,12 +177,9 @@ func getEvent(ctx context.Context, code string, relayHints []string) (*nostr.Eve
 	allRelays := attachRelaysToEvent(result.ID, successRelays...)
 	// put priority relays first so they get used in nevent and nprofile
 	slices.SortFunc(allRelays, func(a, b string) int {
-		if priorityRelays.Has(a) && !priorityRelays.Has(b) {
-			return -1
-		} else if priorityRelays.Has(b) && !priorityRelays.Has(a) {
-			return 1
-		}
-		return 0
+		vpa, _ := priorityRelays[a]
+		vpb, _ := priorityRelays[b]
+		return vpb - vpa
 	})
 	// keep track of what we have to delete later
 	scheduleEventExpiration(result.ID, time.Hour*24*7)
@@ -243,11 +214,11 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []*nost
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()
 
-		relays := limitAt(relaysForPubkey(ctx, pubkey), 5)
+		relays := sys.FetchOutboxRelays(ctx, pubkey, 5)
 		for len(relays) < 4 {
 			relays = unique(append(relays, getRandomRelay()))
 		}
-		ch := pool.SubManyEose(ctx, relays, nostr.Filters{filter})
+		ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter})
 	out:
 		for {
 			select {
@@ -290,7 +261,7 @@ func relayLastNotes(ctx context.Context, relayUrl string, isSitemap bool) []*nos
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 	defer cancel()
 
-	if relay, err := pool.EnsureRelay(relayUrl); err == nil {
+	if relay, err := sys.Pool.EnsureRelay(relayUrl); err == nil {
 		lastNotes, _ = relay.QuerySync(ctx, nostr.Filter{
 			Kinds: []int{1},
 			Limit: limit,
@@ -304,31 +275,18 @@ func relayLastNotes(ctx context.Context, relayUrl string, isSitemap bool) []*nos
 	return lastNotes
 }
 
-func relaysForPubkey(ctx context.Context, pubkey string, extraRelays ...string) []string {
-	pubkeyRelays := make([]string, 0, 12)
-	if ok := cache.GetJSON("io:"+pubkey, &pubkeyRelays); !ok {
-		ctx, cancel := context.WithTimeout(ctx, time.Millisecond*1500)
-		defer cancel()
-		pubkeyRelays = sys.FetchOutboxRelays(ctx, pubkey)
-		if len(pubkeyRelays) > 0 {
-			cache.SetJSONWithTTL("io:"+pubkey, pubkeyRelays, time.Hour*24*7)
-		}
-	}
-	return unique(pubkeyRelays)
-}
-
-func contactsForPubkey(ctx context.Context, pubkey string, extraRelays ...string) []string {
+func contactsForPubkey(ctx context.Context, pubkey string) []string {
 	pubkeyContacts := make([]string, 0, 300)
 	relays := make([]string, 0, 12)
 	if ok := cache.GetJSON("cc:"+pubkey, &pubkeyContacts); !ok {
 		log.Debug().Msgf("searching contacts for %s", pubkey)
 		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 
-		pubkeyRelays := relaysForPubkey(ctx, pubkey, relays...)
+		pubkeyRelays := sys.FetchOutboxRelays(ctx, pubkey, 3)
 		relays = append(relays, pubkeyRelays...)
-		relays = append(relays, relayConfig.Profiles...)
+		relays = append(relays, sys.MetadataRelays...)
 
-		ch := pool.SubManyEose(ctx, relays, nostr.Filters{
+		ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{
 			{
 				Kinds:   []int{3},
 				Authors: []string{pubkey},

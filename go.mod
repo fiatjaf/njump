@@ -1,6 +1,8 @@
 module github.com/fiatjaf/njump
 
-go 1.21.4
+go 1.22
+
+toolchain go1.22.4
 
 require (
 	github.com/Kagami/go-avif v0.1.0
@@ -8,9 +10,8 @@ require (
 	github.com/a-h/templ v0.2.747
 	github.com/bytesparadise/libasciidoc v0.8.0
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/fiatjaf/eventstore v0.4.2
+	github.com/fiatjaf/eventstore v0.7.1
 	github.com/fiatjaf/khatru v0.4.2
-	github.com/fiatjaf/set v0.0.4
 	github.com/fogleman/gg v1.3.0
 	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
@@ -18,15 +19,15 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/emoji v0.0.3
-	github.com/nbd-wtf/go-nostr v0.33.0
-	github.com/nbd-wtf/nostr-sdk v0.2.3
+	github.com/nbd-wtf/go-nostr v0.34.4
+	github.com/nbd-wtf/nostr-sdk v0.4.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
 	github.com/pemistahl/lingua-go v1.4.0
 	github.com/rs/cors v1.11.0
 	github.com/rs/zerolog v1.29.1
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
 	golang.org/x/image v0.17.0
@@ -64,7 +65,7 @@ require (
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/graph-gophers/dataloader/v7 v7.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/klauspost/compress v1.17.3 // indirect
+	github.com/klauspost/compress v1.17.8 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

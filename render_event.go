@@ -16,6 +16,7 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/nostr-sdk/hints/memory"
 	"github.com/pelletier/go-toml"
 )
 
@@ -29,6 +30,8 @@ func isValidShortcode(s string) bool {
 }
 
 func renderEvent(w http.ResponseWriter, r *http.Request) {
+	sys.Hints.(*memory.HintDB).PrintScores()
+
 	code := r.URL.Path[1:] // hopefully a nip19 code
 
 	// it's the homepage
@@ -180,7 +183,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if len(data.event.relays) > 0 {
 		relays := make([]string, len(data.event.relays))
 		for i, r := range data.event.relays {
-			relays[i] = trimProtocol(r)
+			relays[i] = trimProtocolAndEndingSlash(r)
 		}
 		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(relays, ", "))
 	}
@@ -209,7 +212,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {
 			// otherwise replace npub/nprofiles with names and trim length
-			description = replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "", "")[0]
+			description = replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "")[0]
 			if len(description) > 240 {
 				description = description[:240]
 			}
@@ -221,7 +224,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		strings.TrimSpace(
 			strings.Replace(
 				strings.Replace(
-					replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "", "")[0],
+					replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "")[0],
 					"\r\n", " ", -1),
 				"\n", " ", -1,
 			),
@@ -507,7 +510,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 
 	case WikiEvent:
-		var PublishedAt = data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006")
+		PublishedAt := data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006")
 		npub, _ := nip19.EncodePublicKey(data.event.PubKey)
 
 		component = wikiEventTemplate(WikiPageParams{

@@ -12,6 +12,7 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip52"
 	"github.com/nbd-wtf/go-nostr/nip53"
 	"github.com/nbd-wtf/go-nostr/nip94"
+	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
 type Data struct {
@@ -43,7 +44,7 @@ type Data struct {
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
 	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
-	event, relays, err := getEvent(ctx, code, nil)
+	event, relays, err := getEvent(ctx, code)
 	if err != nil {
 		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
 		return nil, fmt.Errorf("error fetching event: %w", err)
@@ -52,7 +53,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	relaysForNip19 := make([]string, 0, 3)
 	c := 0
 	for _, relayUrl := range relays {
-		if isntRealRelay(relayUrl) {
+		if sdk.IsVirtualRelay(relayUrl) {
 			continue
 		}
 
@@ -67,8 +68,8 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	}
 
 	data.authorRelaysPretty = make([]string, 0, len(relays))
-	for _, url := range relaysForPubkey(ctx, event.PubKey) {
-		if isntRealRelay(url) {
+	for _, url := range sys.FetchOutboxRelays(ctx, event.PubKey, 3) {
+		if sdk.IsVirtualRelay(url) {
 			continue
 		}
 		for _, excluded := range relayConfig.ExcludedRelays {
@@ -76,7 +77,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 				continue
 			}
 		}
-		data.authorRelaysPretty = append(data.authorRelaysPretty, trimProtocol(url))
+		data.authorRelaysPretty = append(data.authorRelaysPretty, trimProtocolAndEndingSlash(url))
 	}
 	data.authorRelaysPretty = unique(data.authorRelaysPretty)
 
@@ -103,9 +104,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		data.renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
 		for i, levt := range lastNotes {
 			data.renderableLastNotes[i] = NewEnhancedEvent(ctx, levt, []string{})
-		}
-		if err != nil {
-			return nil, err
 		}
 	case 1, 7, 30023, 30024:
 		data.templateId = Note

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"math/rand"
@@ -183,7 +182,7 @@ func attachRelaysToEvent(eventId string, relays ...string) []string {
 	// cleanup
 	filtered := make([]string, 0, len(relays))
 	for _, relay := range relays {
-		if isntRealRelay(relay) {
+		if sdk.IsVirtualRelay(relay) {
 			continue
 		}
 		filtered = append(filtered, relay)
@@ -265,7 +264,7 @@ func shortenNostrURLs(input string) string {
 }
 
 func getNameFromNip19(ctx context.Context, nip19 string) (string, bool) {
-	author, _, err := getEvent(ctx, nip19, nil)
+	author, _, err := getEvent(ctx, nip19)
 	if err != nil {
 		return nip19, false
 	}
@@ -281,7 +280,7 @@ func getNameFromNip19(ctx context.Context, nip19 string) (string, bool) {
 
 // replaces an npub/nprofile with the name of the author, if possible
 // meant to be used when plaintext is expected, not formatted HTML
-func replaceUserReferencesWithNames(ctx context.Context, input []string, prefix, suffix string) []string {
+func replaceUserReferencesWithNames(ctx context.Context, input []string, prefix string) []string {
 	// Match and replace npup1 or nprofile1
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
@@ -309,7 +308,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 		submatch := nostrNoteNeventMatcher.FindStringSubmatch(match)
 		nip19 := submatch[1]
 
-		event, _, err := getEvent(ctx, nip19, nil)
+		event, _, err := getEvent(ctx, nip19)
 		if err != nil {
 			log.Warn().Str("nip19", nip19).Msg("failed to get nip19")
 			return nip19
@@ -402,11 +401,12 @@ func unique(strSlice []string) []string {
 	return strSlice[:j+1]
 }
 
-func trimProtocol(relay string) string {
+func trimProtocolAndEndingSlash(relay string) string {
 	relay = strings.TrimPrefix(relay, "wss://")
 	relay = strings.TrimPrefix(relay, "ws://")
-	relay = strings.TrimPrefix(relay, "wss:/") // Some browsers replace upfront '//' with '/'
-	relay = strings.TrimPrefix(relay, "ws:/")  // Some browsers replace upfront '//' with '/'
+	relay = strings.TrimPrefix(relay, "wss:/") // some browsers replace upfront '//' with '/'
+	relay = strings.TrimPrefix(relay, "ws:/")  // some browsers replace upfront '//' with '/'
+	relay = strings.TrimSuffix(relay, "/")
 	return relay
 }
 
@@ -438,23 +438,10 @@ func humanDate(createdAt nostr.Timestamp) string {
 
 func getRandomRelay() string {
 	if serial == 0 {
-		serial = rand.Intn(len(relayConfig.Everything))
+		serial = rand.Intn(len(sys.FallbackRelays))
 	}
-	serial = (serial + 1) % len(relayConfig.Everything)
-	return relayConfig.Everything[serial]
-}
-
-func isntRealRelay(url string) bool {
-	if len(url) < 6 {
-		// this is just invalid
-		return true
-	}
-
-	// if there is a "/" after the initial "wss://" part that means this is probably a "virtual relay"
-	// like wss://feeds.nostr.band/topic or wss://filter.nostr.wine/pubkey or wss://cache2.primal.net/v1
-	// and should not be used in computing outbox model relay recommendations
-	substr := []byte(url[6:])
-	return bytes.IndexByte(substr, '/') != -1
+	serial = (serial + 1) % len(sys.FallbackRelays)
+	return sys.FallbackRelays[serial]
 }
 
 func maxIndex(slice []int) int {
@@ -467,17 +454,6 @@ func maxIndex(slice []int) int {
 		}
 	}
 	return maxIndex
-}
-
-// clamp ensures val is in the inclusive range [low,high].
-func clamp(val, low, high int) int {
-	if val < low {
-		return low
-	}
-	if val > high {
-		return high
-	}
-	return val
 }
 
 func getUTCOffset(loc *time.Location) string {

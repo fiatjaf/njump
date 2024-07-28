@@ -12,7 +12,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	hostname := r.URL.Path[3:]
 
 	if strings.HasPrefix(hostname, "wss:/") || strings.HasPrefix(hostname, "ws:/") {
-		hostname = trimProtocol(hostname)
+		hostname = trimProtocolAndEndingSlash(hostname)
 		http.Redirect(w, r, "/r/"+hostname, http.StatusFound)
 		return
 	}

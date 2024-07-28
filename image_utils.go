@@ -231,7 +231,7 @@ func quotesAsBlockPrefixedText(ctx context.Context, lines []string) []string {
 			submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
 			nip19 := submatch[0][6:]
 
-			event, _, err := getEvent(ctx, nip19, nil)
+			event, _, err := getEvent(ctx, nip19)
 			if err != nil {
 				// error case concat this to previous block
 				blocks[b] += matchText
@@ -883,4 +883,15 @@ func fixed266ToFloat(i fixed.Int26_6) float32 {
 
 func floatToFixed266(f float32) fixed.Int26_6 {
 	return fixed.Int26_6(int(float64(f) * 64))
+}
+
+// clamp ensures val is in the inclusive range [low,high].
+func clamp(val, low, high int) int {
+	if val < low {
+		return low
+	}
+	if val > high {
+		return high
+	}
+	return val
 }

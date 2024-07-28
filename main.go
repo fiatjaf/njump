@@ -20,14 +20,15 @@ import (
 )
 
 type Settings struct {
-	Port              string   `envconfig:"PORT" default:"2999"`
-	Domain            string   `envconfig:"DOMAIN" default:"njump.me"`
-	DiskCachePath     string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
-	EventStorePath    string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
-	TailwindDebug     bool     `envconfig:"TAILWIND_DEBUG"`
-	SkipLanguageModel bool     `envconfig:"SKIP_LANGUAGE_MODEL"`
-	RelayConfigPath   string   `envconfig:"RELAY_CONFIG_PATH"`
-	TrustedPubKeys    []string `envconfig:"TRUSTED_PUBKEYS"`
+	Port                string   `envconfig:"PORT" default:"2999"`
+	Domain              string   `envconfig:"DOMAIN" default:"njump.me"`
+	DiskCachePath       string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
+	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
+	HintsMemoryDumpPath string   `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
+	TailwindDebug       bool     `envconfig:"TAILWIND_DEBUG"`
+	SkipLanguageModel   bool     `envconfig:"SKIP_LANGUAGE_MODEL"`
+	RelayConfigPath     string   `envconfig:"RELAY_CONFIG_PATH"`
+	TrustedPubKeys      []string `envconfig:"TRUSTED_PUBKEYS"`
 }
 
 //go:embed static/*
@@ -65,9 +66,11 @@ func main() {
 			log.Fatal().Err(err).Msgf("failed to load %q", s.RelayConfigPath)
 			return
 		}
-		if !relayConfig.Valid() {
-			log.Fatal().Err(err).Msgf("invalid relay config file %q", s.RelayConfigPath)
-			return
+		if len(relayConfig.Everything) > 0 {
+			sys.FallbackRelays = relayConfig.Everything
+		}
+		if len(relayConfig.Profiles) > 0 {
+			sys.MetadataRelays = relayConfig.Profiles
 		}
 	}
 
@@ -108,6 +111,7 @@ func main() {
 	defer cancel()
 	go updateArchives(ctx)
 	go deleteOldCachedEvents(ctx)
+	go outboxHintsFileLoaderSaver(ctx)
 
 	// expose our internal cache as a relay (mostly for debugging purposes)
 	relay := khatru.NewRelay()
