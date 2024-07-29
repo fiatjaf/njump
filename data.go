@@ -53,12 +53,12 @@ func (d Data) authorRelaysPretty(ctx context.Context) []string {
 	return s
 }
 
-func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
+func grabData(ctx context.Context, code string, isProfileSitemap bool) (Data, error) {
 	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
 	event, relays, err := getEvent(ctx, code)
 	if err != nil {
 		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
-		return nil, fmt.Errorf("error fetching event: %w", err)
+		return Data{}, fmt.Errorf("error fetching event: %w", err)
 	}
 
 	relaysForNip19 := make([]string, 0, 3)
@@ -73,7 +73,7 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		}
 	}
 
-	data := &Data{
+	data := Data{
 		event: NewEnhancedEvent(ctx, event, relays),
 	}
 
