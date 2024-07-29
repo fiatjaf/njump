@@ -29,6 +29,11 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		isRSS = true
 	}
 
+	if len(hostname) < 3 {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
 	// relay metadata
 	info, _ := nip11.Fetch(r.Context(), hostname)
 	if info.Name == "" {
