@@ -22,11 +22,9 @@ type RelayConfig struct {
 }
 
 var (
-	metadataCache  = cache_memory.New32[sdk.ProfileMetadata](1000)
-	relayListCache = cache_memory.New32[sdk.RelayList](5000)
-	sys            = sdk.NewSystem(
-		sdk.WithMetadataCache(metadataCache),
-		sdk.WithRelayListCache(relayListCache),
+	sys = sdk.NewSystem(
+		sdk.WithMetadataCache(cache_memory.New32[sdk.ProfileMetadata](10000)),
+		sdk.WithRelayListCache(cache_memory.New32[sdk.RelayList](10000)),
 	)
 	serial int
 
