@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"html/template"
+	"slices"
 	"strings"
 	"time"
 
@@ -18,7 +19,6 @@ import (
 type Data struct {
 	templateId               TemplateID
 	event                    EnhancedEvent
-	nprofile                 string
 	nevent                   string
 	neventNaked              string
 	naddr                    string
@@ -26,7 +26,6 @@ type Data struct {
 	createdAt                string
 	modifiedAt               string
 	parentLink               template.HTML
-	authorRelaysPretty       []string
 	renderableLastNotes      []EnhancedEvent
 	kindDescription          string
 	kindNIP                  string
@@ -40,6 +39,18 @@ type Data struct {
 	kind30311Metadata        *Kind30311Metadata
 	kind31922Or31923Metadata *Kind31922Or31923Metadata
 	Kind30818Metadata        Kind30818Metadata
+}
+
+func (d Data) authorRelaysPretty(ctx context.Context) []string {
+	s := make([]string, 0, 3)
+	for _, url := range sys.FetchOutboxRelays(ctx, d.event.PubKey, 3) {
+		trimmed := trimProtocolAndEndingSlash(url)
+		if slices.Contains(s, trimmed) {
+			continue
+		}
+		s = append(s, trimmed)
+	}
+	return s
 }
 
 func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, error) {
@@ -56,7 +67,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 		if sdk.IsVirtualRelay(relayUrl) {
 			continue
 		}
-
 		relaysForNip19 = append(relaysForNip19, relayUrl)
 		if c == 2 {
 			break
@@ -66,20 +76,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	data := &Data{
 		event: NewEnhancedEvent(ctx, event, relays),
 	}
-
-	data.authorRelaysPretty = make([]string, 0, len(relays))
-	for _, url := range sys.FetchOutboxRelays(ctx, event.PubKey, 3) {
-		if sdk.IsVirtualRelay(url) {
-			continue
-		}
-		for _, excluded := range relayConfig.ExcludedRelays {
-			if strings.Contains(url, excluded) {
-				continue
-			}
-		}
-		data.authorRelaysPretty = append(data.authorRelaysPretty, trimProtocolAndEndingSlash(url))
-	}
-	data.authorRelaysPretty = unique(data.authorRelaysPretty)
 
 	data.nevent, _ = nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
 	data.neventNaked, _ = nip19.EncodeEvent(event.ID, nil, event.PubKey)
@@ -147,8 +143,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (*Data, e
 	default:
 		data.templateId = Other
 	}
-
-	data.nprofile, _ = nip19.EncodeProfile(event.PubKey, limitAt(relays, 2))
 
 	data.kindDescription = kindNames[event.Kind]
 	if data.kindDescription == "" {

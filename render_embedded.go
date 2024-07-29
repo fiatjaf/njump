@@ -56,7 +56,7 @@ func renderEmbedded(w http.ResponseWriter, r *http.Request, code string) {
 			Metadata:                   data.event.author,
 			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.event.author.Website),
 			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.event.author.About), false, false, true)),
-			AuthorRelays:               data.authorRelaysPretty,
+			AuthorRelays:               data.authorRelaysPretty(r.Context()),
 		})
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")

@@ -50,6 +50,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 	} else {
 		w.Header().Add("content-type", "text/html")
 		w.Header().Set("Cache-Control", "max-age=86400")
+		nprofile := data.event.author.Nprofile(r.Context(), sys, 2)
 		err = profileTemplate(ProfilePageParams{
 			HeadParams: HeadParams{IsProfile: true},
 			Details: DetailsParams{
@@ -64,10 +65,10 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 			Metadata:                   data.event.author,
 			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.event.author.Website),
 			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.event.author.About), false, false, false)),
-			Nprofile:                   data.nprofile,
-			AuthorRelays:               data.authorRelaysPretty,
+			Nprofile:                   nprofile,
+			AuthorRelays:               data.authorRelaysPretty(r.Context()),
 			LastNotes:                  data.renderableLastNotes,
-			Clients: generateClientList(data.event.Kind, data.nprofile,
+			Clients: generateClientList(data.event.Kind, nprofile,
 				func(c ClientReference, s string) string {
 					if c == nostrudel {
 						s = strings.Replace(s, "/n/", "/u/", 1)
@@ -75,7 +76,7 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 					if c == primalWeb {
 						s = strings.Replace(
 							strings.Replace(s, "/e/", "/p/", 1),
-							data.nprofile, data.event.author.Npub(), 1)
+							nprofile, data.event.author.Npub(), 1)
 					}
 					return s
 				},
