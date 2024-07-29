@@ -559,7 +559,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := component.Render(r.Context(), w); err != nil {
-		log.Error().Err(err).Msg("error rendering tmpl")
+		log.Warn().Err(err).Msg("error rendering tmpl")
 	}
 	return
 }
