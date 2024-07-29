@@ -15,10 +15,9 @@ import (
 )
 
 type RelayConfig struct {
-	Everything     []string `json:"everything"`
-	Profiles       []string `json:"profiles"`
-	JustIds        []string `json:"justIds"`
-	ExcludedRelays []string `json:"excludeRelays"`
+	Everything []string `json:"everything"`
+	Profiles   []string `json:"profiles"`
+	JustIds    []string `json:"justIds"`
 }
 
 var (
@@ -34,9 +33,6 @@ var (
 		JustIds: []string{
 			"wss://cache2.primal.net/v1",
 			"wss://relay.noswhere.com",
-		},
-		ExcludedRelays: []string{
-			"wss://filter.nostr.wine", // paid
 		},
 	}
 
