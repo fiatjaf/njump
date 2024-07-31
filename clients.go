@@ -42,6 +42,7 @@ var (
 	freeFromAndroid = ClientReference{ID: "freefrom", Name: "FreeFrom", Base: "intent:{code}#Intent;scheme=nostr;package=com.freefrom;end`;", Platform: "android"}
 	currentAndroid  = ClientReference{ID: "current", Name: "Current", Base: "intent:{code}#Intent;scheme=nostr;package=io.getcurrent.current;end`;", Platform: "android"}
 	plebstrAndroid  = ClientReference{ID: "plebstr", Name: "Plebstr", Base: "intent:{code}#Intent;scheme=nostr;package=com.plebstr.client;end`;", Platform: "android"}
+	voyage          = ClientReference{ID: "voyage", Name: "Voyage", Base: "intent:{code}#Intent;scheme=nostr;package=com.dluvian.voyage;end`;", Platform: "android"}
 
 	nos         = ClientReference{ID: "nos", Name: "Nos", Base: "nos:{code}", Platform: "ios"}
 	damus       = ClientReference{ID: "damus", Name: "Damus", Base: "damus:{code}", Platform: "ios"}
@@ -71,14 +72,14 @@ func generateClientList(
 			native,
 			coracle, snort, nostter, nostrudel, primalWeb, satellite, iris,
 			nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
-			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid,
+			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid, voyage,
 		}
 	case 0:
 		clients = []ClientReference{
 			native,
 			nostrrrProfile, nosta, coracle, snort, nostter, nostrudel, primalWeb,
 			satellite, iris, nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
-			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid,
+			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid, voyage,
 		}
 	case 30023, 30024:
 		clients = []ClientReference{
@@ -115,7 +116,7 @@ func generateClientList(
 			native,
 			coracle, snort, nostter, nostrudel, primalWeb, satellite, iris,
 			nos, damus, nostur, primalIOS, freeFromIOS, plebstrIOS,
-			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid,
+			yanaAndroid, springAndroid, amethyst, currentAndroid, plebstrAndroid, freeFromAndroid, voyage,
 		}
 	}
 
