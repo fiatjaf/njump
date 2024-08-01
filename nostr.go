@@ -163,7 +163,9 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 
 	for ie := range sys.Pool.SubManyEoseNonUnique(ctx, relays, nostr.Filters{filter}) {
 		successRelays = append(successRelays, ie.Relay.URL)
-		result = ie.Event
+		if result == nil || ie.CreatedAt > result.CreatedAt {
+			result = ie.Event
+		}
 		countdown = min(countdown, 1)
 	}
 
