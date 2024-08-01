@@ -167,6 +167,8 @@ func (e *ErrorPageParams) MessageHTML() template.HTML {
 		strings.Contains(e.Errors, "invalid separator"),
 		strings.Contains(e.Errors, "not part of charset"):
 		return "You have typed a wrong event code, we need a URL path that starts with /npub1, /nprofile1, /nevent1, /naddr1, or something like /name@domain.com (or maybe just /domain.com) or an event id as hex (like /aef8b32af...)"
+	case strings.Contains(e.Errors, "profile metadata not found"):
+		return "We couldn't find the metadata (name, picture etc) for the specified user. Please check back here in 6 hours."
 	default:
 		return "I can't give any suggestions to solve the problem.<br> Please tag <a href='/dtonon.com'>daniele</a> and <a href='/fiatjaf.com'>fiatjaf</a> and complain!"
 	}

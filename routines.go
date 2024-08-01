@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fiatjaf/eventstore"
 	"github.com/nbd-wtf/go-nostr"
 )
 
@@ -27,8 +26,6 @@ func updateArchives(ctx context.Context) {
 }
 
 func deleteOldCachedEvents(ctx context.Context) {
-	wdb := eventstore.RelayWrapper{Store: db}
-
 	for {
 		select {
 		case <-ctx.Done():
@@ -52,10 +49,10 @@ func deleteOldCachedEvents(ctx context.Context) {
 				if expires < now {
 					// time to delete this
 					id := spl[1]
-					res, _ := wdb.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
+					res, _ := sys.StoreRelay.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
 					if len(res) > 0 {
 						log.Debug().Msgf("deleting %s", res[0].ID)
-						if err := db.DeleteEvent(ctx, res[0]); err != nil {
+						if err := sys.Store.DeleteEvent(ctx, res[0]); err != nil {
 							log.Warn().Err(err).Stringer("event", res[0]).Msg("failed to delete")
 						}
 					}

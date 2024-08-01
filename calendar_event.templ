@@ -8,9 +8,9 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip52"
 )
 
-func formatPartecipants(partecipants []nip52.Participant) string {
+func formatParticipants(participants []nip52.Participant) string {
 	var list = make([]string, 0)
-	for _, p := range partecipants {
+	for _, p := range participants {
 		nreplace, _ := nip19.EncodePublicKey(p.PubKey)
 		bytes := []byte(p.Role)
 		bytes[0] = byte(unicode.ToUpper(rune(bytes[0])))
@@ -79,7 +79,7 @@ templ calendarEventTemplate(params CalendarPageParams) {
 			if len(params.CalendarEvent.Participants) != 0 {
 				<div class="pb-4">
 					<span class="font-medium">People</span>:
-					@templ.Raw(formatPartecipants(params.CalendarEvent.Participants))
+					@templ.Raw(formatParticipants(params.CalendarEvent.Participants))
 				</div>
 			}
 			if params.CalendarEvent.Image != "" {

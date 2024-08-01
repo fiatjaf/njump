@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type OEmbedResponse struct {
@@ -37,6 +40,8 @@ type OEmbedResponse struct {
 }
 
 func renderOEmbed(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	targetURL, err := url.Parse(r.URL.Query().Get("url"))
 	if err != nil {
 		http.Error(w, "invalid url: "+err.Error(), 400)
@@ -49,9 +54,12 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ctx, span := tracer.Start(ctx, "render-oembed", trace.WithAttributes(attribute.String("code", code)))
+	defer span.End()
+
 	host := r.Header.Get("X-Forwarded-Host")
 
-	data, err := grabData(r.Context(), code, false)
+	data, err := grabData(ctx, code)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
 		http.Error(w, "error fetching event: "+err.Error(), 404)

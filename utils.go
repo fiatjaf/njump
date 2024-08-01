@@ -2,15 +2,21 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"html"
+	"html/template"
 	"math/rand"
 	"net/http"
 	"regexp"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/microcosm-cc/bluemonday"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"mvdan.cc/xurls/v2"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -234,14 +240,33 @@ func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacemen
 
 func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 	// match and replace npup1, nprofile1, note1, nevent1, etc
-	return matcher.ReplaceAllStringFunc(input, func(match string) string {
+	names := make(map[string]string)
+	wg := sync.WaitGroup{}
+
+	// first we run it without waiting for the results of getNameFromNip19() as they will be async
+	firstPass := matcher.ReplaceAllStringFunc(input, func(match string) string {
+		nip19 := match[len("nostr:"):]
+		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
+			defer cancel()
+			wg.Add(1)
+			go func() {
+				name, _ := getNameFromNip19(ctx, nip19)
+				names[nip19] = name
+				wg.Done()
+			}()
+		}
+		return match
+	})
+
+	// in the second time now that we got all the names we actually perform replacement
+	wg.Wait()
+	return matcher.ReplaceAllStringFunc(firstPass, func(match string) string {
 		nip19 := match[len("nostr:"):]
 		firstChars := nip19[:8]
 		lastChars := nip19[len(nip19)-4:]
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
-			defer cancel()
-			name, _ := getNameFromNip19(ctx, nip19)
+			name, _ := names[nip19]
 			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/Person"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a></span>`, nip19, name, firstChars+"…"+lastChars)
 		} else {
 			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/Article"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">%s</a></span>`, nip19, firstChars+"…"+lastChars)
@@ -263,23 +288,19 @@ func shortenNostrURLs(input string) string {
 	})
 }
 
-func getNameFromNip19(ctx context.Context, nip19 string) (string, bool) {
-	author, _, err := getEvent(ctx, nip19)
-	if err != nil {
-		return nip19, false
-	}
-	metadata, err := sdk.ParseMetadata(author)
-	if err != nil {
-		return nip19, false
-	}
+func getNameFromNip19(ctx context.Context, nip19code string) (string, bool) {
+	ctx, span := tracer.Start(ctx, "get-name-from-nip19", trace.WithAttributes(attribute.String("nip19", nip19code)))
+	defer span.End()
+
+	metadata, _ := sys.FetchProfileFromInput(ctx, nip19code)
 	if metadata.Name == "" {
-		return nip19, false
+		return nip19code, false
 	}
 	return metadata.Name, true
 }
 
-// replaces an npub/nprofile with the name of the author, if possible
-// meant to be used when plaintext is expected, not formatted HTML
+// replaces an npub/nprofile with the name of the author, if possible.
+// meant to be used when plaintext is expected, not formatted HTML.
 func replaceUserReferencesWithNames(ctx context.Context, input []string, prefix string) []string {
 	// Match and replace npup1 or nprofile1
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
@@ -470,4 +491,47 @@ func getUTCOffset(loc *time.Location) string {
 		offsetHours = -offsetHours
 	}
 	return fmt.Sprintf("UTC%s%d", sign, offsetHours)
+}
+
+func toJSONHTML(evt *nostr.Event) template.HTML {
+	tagsHTML := "["
+	for t, tag := range evt.Tags {
+		tagsHTML += "\n    ["
+		for i, item := range tag {
+			cls := `"text-zinc-500 dark:text-zinc-50"`
+			if i == 0 {
+				cls = `"text-amber-500 dark:text-amber-200"`
+			}
+			itemJSON, _ := json.Marshal(item)
+			tagsHTML += "\n      <span class=" + cls + ">" + html.EscapeString(string(itemJSON))
+			if i < len(tag)-1 {
+				tagsHTML += ","
+			} else {
+				tagsHTML += "\n    "
+			}
+		}
+		tagsHTML += "]"
+		if t < len(evt.Tags)-1 {
+			tagsHTML += ","
+		} else {
+			tagsHTML += "\n  "
+		}
+	}
+	tagsHTML += "]"
+
+	contentJSON, _ := json.Marshal(evt.Content)
+
+	keyCls := "text-purple-700 dark:text-purple-300"
+
+	return template.HTML(fmt.Sprintf(
+		`{
+  <span class="`+keyCls+`">"id":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
+  <span class="`+keyCls+`">"pubkey":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
+  <span class="`+keyCls+`">"created_at":</span> <span class="text-green-600">%d</span>,
+  <span class="`+keyCls+`">"kind":</span> <span class="text-amber-500 dark:text-amber-200">%d</span>,
+  <span class="`+keyCls+`">"tags":</span> %s,
+  <span class="`+keyCls+`">"content":</span> <span class="text-zinc-500 dark:text-zinc-50">%s</span>,
+  <span class="`+keyCls+`">"sig":</span> <span class="text-zinc-500 dark:text-zinc-50 content">"%s"</span>
+}`, evt.ID, evt.PubKey, evt.CreatedAt, evt.Kind, tagsHTML, html.EscapeString(string(contentJSON)), evt.Sig),
+	)
 }

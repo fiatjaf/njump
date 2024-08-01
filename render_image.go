@@ -18,6 +18,8 @@ import (
 	"github.com/golang/freetype/truetype"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/nfnt/resize"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	xfont "golang.org/x/image/font"
 )
 
@@ -37,11 +39,16 @@ var fonts embed.FS
 var multiNewlineRe = regexp.MustCompile(`\n\n+`)
 
 func renderImage(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	code := r.URL.Path[1+len("njump/image/"):]
 	if code == "" {
 		fmt.Fprintf(w, "call /njump/image/<nip19 code>")
 		return
 	}
+
+	ctx, span := tracer.Start(ctx, "render-image", trace.WithAttributes(attribute.String("code", code)))
+	defer span.End()
 
 	// Trim fake extensions
 	extensions := []string{".png", ".jpg", ".jpeg"}
@@ -49,7 +56,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		code = strings.TrimSuffix(code, ext)
 	}
 
-	data, err := grabData(r.Context(), code, false)
+	data, err := grabData(ctx, code)
 	if err != nil {
 		http.Error(w, "error fetching event: "+err.Error(), 404)
 		return
@@ -63,8 +70,8 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	content = shortenURLs(content, true)
 
 	// this turns the raw event.Content into a series of lines ready to drawn
-	paragraphs := replaceUserReferencesWithNames(r.Context(),
-		quotesAsBlockPrefixedText(r.Context(),
+	paragraphs := replaceUserReferencesWithNames(ctx,
+		quotesAsBlockPrefixedText(ctx,
 			strings.Split(content, "\n"),
 		),
 		string(INVISIBLE_SPACE),

@@ -11,7 +11,6 @@ import (
 	"os/signal"
 	"strings"
 
-	eventstore_badger "github.com/fiatjaf/eventstore/badger"
 	"github.com/fiatjaf/khatru"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/nbd-wtf/go-nostr"
@@ -49,6 +48,15 @@ func main() {
 		if canonicalHost := os.Getenv("CANONICAL_HOST"); canonicalHost != "" {
 			s.Domain = canonicalHost
 		}
+	}
+
+	if os.Getenv("OTEL_RESOURCE_ATTRIBUTES") != "" {
+		shutdown, err := setupOTelSDK(context.Background())
+		if err != nil {
+			log.Fatal().Err(err).Msg("otel error")
+			return
+		}
+		defer shutdown(context.Background())
 	}
 
 	if len(s.TrustedPubKeys) == 0 {
@@ -102,9 +110,11 @@ func main() {
 	// image rendering stuff
 	initializeImageDrawingStuff()
 
-	// eventstore and internal db
-	deinitCache := initCache()
-	defer deinitCache()
+	// internal db
+	defer cache.initializeCache()()
+
+	// eventstore and nostr system
+	defer initSystem()()
 
 	// initialize routines
 	ctx, cancel := context.WithCancel(context.Background())
@@ -115,8 +125,8 @@ func main() {
 
 	// expose our internal cache as a relay (mostly for debugging purposes)
 	relay := khatru.NewRelay()
-	relay.QueryEvents = append(relay.QueryEvents, db.QueryEvents)
-	relay.DeleteEvent = append(relay.DeleteEvent, db.DeleteEvent)
+	relay.QueryEvents = append(relay.QueryEvents, sys.Store.QueryEvents)
+	relay.DeleteEvent = append(relay.DeleteEvent, sys.Store.DeleteEvent)
 	relay.RejectEvent = append(relay.RejectEvent,
 		func(context.Context, *nostr.Event) (bool, string) {
 			return true, "this relay is not writable"
@@ -126,6 +136,7 @@ func main() {
 	// routes
 	mux := relay.Router()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
+
 	mux.HandleFunc("/relays-archive.xml", renderArchive)
 	mux.HandleFunc("/npubs-archive.xml", renderArchive)
 	mux.HandleFunc("/npubs-sitemaps.xml", renderSitemapIndex)
@@ -141,8 +152,10 @@ func main() {
 	mux.HandleFunc("/embed/", renderEmbedjs)
 	mux.HandleFunc("/", renderEvent)
 
+	corsHandler := cors.Default().Handler(relay)
+
 	log.Print("listening at http://0.0.0.0:" + s.Port)
-	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: cors.Default().Handler(relay)}
+	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: corsHandler}
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Error().Err(err).Msg("")
@@ -153,21 +166,4 @@ func main() {
 	signal.Notify(sc, os.Interrupt)
 	<-sc
 	server.Close()
-}
-
-func initCache() func() {
-	// initialize disk cache
-	deinit := cache.initialize()
-
-	// initialize eventstore database
-	if badgerBackend, ok := db.(*eventstore_badger.BadgerBackend); ok {
-		// it may be NullStore, in which case we do nothing
-		badgerBackend.Path = s.EventStorePath
-	}
-	db.Init()
-
-	return func() {
-		deinit()
-		db.Close()
-	}
 }

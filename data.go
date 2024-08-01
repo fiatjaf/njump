@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"html/template"
-	"slices"
 	"strings"
 	"time"
 
@@ -24,9 +23,7 @@ type Data struct {
 	naddr                    string
 	naddrNaked               string
 	createdAt                string
-	modifiedAt               string
 	parentLink               template.HTML
-	renderableLastNotes      []EnhancedEvent
 	kindDescription          string
 	kindNIP                  string
 	video                    string
@@ -41,20 +38,11 @@ type Data struct {
 	Kind30818Metadata        Kind30818Metadata
 }
 
-func (d Data) authorRelaysPretty(ctx context.Context) []string {
-	s := make([]string, 0, 3)
-	for _, url := range sys.FetchOutboxRelays(ctx, d.event.PubKey, 3) {
-		trimmed := trimProtocolAndEndingSlash(url)
-		if slices.Contains(s, trimmed) {
-			continue
-		}
-		s = append(s, trimmed)
-	}
-	return s
-}
+func grabData(ctx context.Context, code string) (Data, error) {
+	ctx, span := tracer.Start(ctx, "grab-data")
+	defer span.End()
 
-func grabData(ctx context.Context, code string, isProfileSitemap bool) (Data, error) {
-	// code can be a nevent, nprofile, npub or nip05 identifier, in which case we try to fetch the associated event
+	// code can be a nevent or naddr, in which case we try to fetch the associated event
 	event, relays, err := getEvent(ctx, code)
 	if err != nil {
 		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
@@ -73,8 +61,11 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (Data, er
 		}
 	}
 
+	ee := NewEnhancedEvent(ctx, event)
+	ee.relays = relays
+
 	data := Data{
-		event: NewEnhancedEvent(ctx, event, relays),
+		event: ee,
 	}
 
 	data.nevent, _ = nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
@@ -82,7 +73,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (Data, er
 	data.naddr = ""
 	data.naddrNaked = ""
 	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
-	data.modifiedAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
 
 	if event.Kind >= 30000 && event.Kind < 40000 {
 		if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
@@ -94,13 +84,6 @@ func grabData(ctx context.Context, code string, isProfileSitemap bool) (Data, er
 	data.alt = nip31.GetAlt(*event)
 
 	switch event.Kind {
-	case 0:
-		data.templateId = Profile
-		lastNotes := authorLastNotes(ctx, event.PubKey, isProfileSitemap)
-		data.renderableLastNotes = make([]EnhancedEvent, len(lastNotes))
-		for i, levt := range lastNotes {
-			data.renderableLastNotes[i] = NewEnhancedEvent(ctx, levt, []string{})
-		}
 	case 1, 7, 30023, 30024:
 		data.templateId = Note
 		data.content = event.Content

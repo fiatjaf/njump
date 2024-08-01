@@ -1,7 +1,7 @@
 export PATH := "./node_modules/.bin:" + env_var('PATH')
 
 dev tags='':
-    fd 'go|templ|base.css' | entr -r bash -c 'TAILWIND_DEBUG=true SKIP_LANGUAGE_MODEL=true && templ generate && go build -tags={{tags}} -o /tmp/njump && /tmp/njump'
+    fd 'go|templ|base.css' | entr -r bash -c 'TAILWIND_DEBUG=true SKIP_LANGUAGE_MODEL=true && templ generate && go build -tags={{tags}} -o /tmp/njump && PORT=3001 /tmp/njump'
 
 build: templ tailwind
     go build -o ./njump
