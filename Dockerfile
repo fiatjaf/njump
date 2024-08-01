@@ -1,5 +1,5 @@
 #### Tailwind CSS build stage
-FROM node:20 as tailwindbuilder
+FROM node:20 AS tailwindbuilder
 
 # Set a temporary work directory
 WORKDIR /app/tailwind
@@ -11,10 +11,10 @@ COPY --link . .
 RUN npm install tailwindcss
 
 # Generate minified Tailwind CSS bundle
-RUN npx tailwind -i node_modules/tailwindcss/tailwind.css -o tailwind-bundle.min.css --minify
+RUN npx tailwind -i base.css -o tailwind-bundle.min.css --minify
 
 #### Go build stage
-FROM golang:1.21.4 as gobuilder
+FROM golang:1.22.5-alpine AS gobuilder
 
 # Set a temporary work directory
 WORKDIR /app
@@ -44,6 +44,9 @@ WORKDIR /root/
 
 # Copy Go binary
 COPY --from=gobuilder /app/main .
+
+# Expose port
+EXPOSE 2999
 
 # Run the application
 CMD ["./main"]
