@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/puzpuzpuz/xsync/v3"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 	"mvdan.cc/xurls/v2"
@@ -240,7 +241,7 @@ func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacemen
 
 func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 	// match and replace npup1, nprofile1, note1, nevent1, etc
-	names := make(map[string]string)
+	names := xsync.NewMapOf[string, string]()
 	wg := sync.WaitGroup{}
 
 	// first we run it without waiting for the results of getNameFromNip19() as they will be async
@@ -252,7 +253,7 @@ func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 			wg.Add(1)
 			go func() {
 				name, _ := getNameFromNip19(ctx, nip19)
-				names[nip19] = name
+				names.Store(nip19, name)
 				wg.Done()
 			}()
 		}
@@ -266,7 +267,7 @@ func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 		firstChars := nip19[:8]
 		lastChars := nip19[len(nip19)-4:]
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
-			name, _ := names[nip19]
+			name, _ := names.Load(nip19)
 			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/Person"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a></span>`, nip19, name, firstChars+"…"+lastChars)
 		} else {
 			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/Article"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">%s</a></span>`, nip19, firstChars+"…"+lastChars)
