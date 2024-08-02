@@ -245,8 +245,9 @@ func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 	wg := sync.WaitGroup{}
 
 	// first we run it without waiting for the results of getNameFromNip19() as they will be async
-	firstPass := matcher.ReplaceAllStringFunc(input, func(match string) string {
+	for _, match := range matcher.FindAllString(input, len(input)+1) {
 		nip19 := match[len("nostr:"):]
+
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
 			defer cancel()
@@ -257,15 +258,15 @@ func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 				wg.Done()
 			}()
 		}
-		return match
-	})
+	}
 
 	// in the second time now that we got all the names we actually perform replacement
 	wg.Wait()
-	return matcher.ReplaceAllStringFunc(firstPass, func(match string) string {
+	return matcher.ReplaceAllStringFunc(input, func(match string) string {
 		nip19 := match[len("nostr:"):]
 		firstChars := nip19[:8]
 		lastChars := nip19[len(nip19)-4:]
+
 		if strings.HasPrefix(nip19, "npub1") || strings.HasPrefix(nip19, "nprofile1") {
 			name, _ := names.Load(nip19)
 			return fmt.Sprintf(`<span itemprop="mentions" itemscope itemtype="https://schema.org/Person"><a itemprop="url" href="/%s" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1"><span>%s</span> (<span class="italic">%s</span>)</a></span>`, nip19, name, firstChars+"…"+lastChars)
@@ -326,26 +327,44 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
 
+	quotes := xsync.NewMapOf[string, string]()
+	wg := sync.WaitGroup{}
+
+	// first we run it without waiting for the results of getEvent() as they will be async
+	for _, submatches := range nostrNoteNeventMatcher.FindAllStringSubmatch(input, len(input)+1) {
+		nip19 := submatches[1]
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*4)
+		defer cancel()
+		wg.Add(1)
+		go func() {
+			event, _, err := getEvent(ctx, nip19)
+			if err == nil {
+				quotedEvent := basicFormatting(submatches[0], false, usingTelegramInstantView, false)
+
+				var content string
+				if event.Kind == 30023 {
+					content = mdToHTML(event.Content, usingTelegramInstantView, false)
+				} else {
+					content = basicFormatting(event.Content, false, usingTelegramInstantView, false)
+				}
+				content = fmt.Sprintf(
+					`<blockquote class="border-l-05rem border-l-strongpink border-solid"><div class="-ml-4 bg-gradient-to-r from-gray-100 dark:from-zinc-800 to-transparent mr-0 mt-0 mb-4 pl-4 pr-2 py-2">quoting %s </div> %s </blockquote>`, quotedEvent, content)
+
+				quotes.Store(submatches[0], content)
+			}
+			wg.Done()
+		}()
+	}
+
+	// in the second time now that we got all the quoted events we actually perform replacement
+	wg.Wait()
 	return nostrNoteNeventMatcher.ReplaceAllStringFunc(input, func(match string) string {
-		submatch := nostrNoteNeventMatcher.FindStringSubmatch(match)
-		nip19 := submatch[1]
-
-		event, _, err := getEvent(ctx, nip19)
-		if err != nil {
-			log.Warn().Str("nip19", nip19).Msg("failed to get nip19")
-			return nip19
+		quote, ok := quotes.Load(match)
+		if !ok {
+			return match
 		}
-
-		quotedEvent := basicFormatting(match, false, usingTelegramInstantView, false)
-		content := ""
-		if event.Kind == 30023 {
-			content = mdToHTML(event.Content, usingTelegramInstantView, false)
-		} else {
-			content = basicFormatting(event.Content, false, usingTelegramInstantView, false)
-		}
-		content = fmt.Sprintf(
-			`<blockquote class="border-l-05rem border-l-strongpink border-solid"><div class="-ml-4 bg-gradient-to-r from-gray-100 dark:from-zinc-800 to-transparent mr-0 mt-0 mb-4 pl-4 pr-2 py-2">quoting %s </div> %s </blockquote>`, quotedEvent, content)
-		return content
+		return quote
 	})
 }
 
