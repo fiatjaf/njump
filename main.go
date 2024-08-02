@@ -50,15 +50,6 @@ func main() {
 		}
 	}
 
-	if os.Getenv("OTEL_RESOURCE_ATTRIBUTES") != "" {
-		shutdown, err := setupOTelSDK(context.Background())
-		if err != nil {
-			log.Fatal().Err(err).Msg("otel error")
-			return
-		}
-		defer shutdown(context.Background())
-	}
-
 	if len(s.TrustedPubKeys) == 0 {
 		s.TrustedPubKeys = defaultTrustedPubKeys
 	}

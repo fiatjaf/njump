@@ -16,8 +16,6 @@ import (
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/puzpuzpuz/xsync/v3"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 	"mvdan.cc/xurls/v2"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -291,9 +289,6 @@ func shortenNostrURLs(input string) string {
 }
 
 func getNameFromNip19(ctx context.Context, nip19code string) (string, bool) {
-	ctx, span := tracer.Start(ctx, "get-name-from-nip19", trace.WithAttributes(attribute.String("nip19", nip19code)))
-	defer span.End()
-
 	metadata, _ := sys.FetchProfileFromInput(ctx, nip19code)
 	if metadata.Name == "" {
 		return nip19code, false

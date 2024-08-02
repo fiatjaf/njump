@@ -12,8 +12,6 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 	cache_memory "github.com/nbd-wtf/nostr-sdk/cache/memory"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type RelayConfig struct {
@@ -65,9 +63,6 @@ func initSystem() func() {
 }
 
 func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) {
-	ctx, span := tracer.Start(ctx, "get-event", trace.WithAttributes(attribute.String("code", code)))
-	defer span.End()
-
 	// this is for deciding what relays will go on nevent and nprofile later
 	priorityRelays := make(map[string]int)
 
@@ -110,7 +105,6 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 	}
 
 	// try to fetch in our internal eventstore first
-	ctx, span = tracer.Start(ctx, "query-eventstore")
 	if res, _ := sys.StoreRelay.QuerySync(ctx, filter); len(res) != 0 {
 		evt := res[0]
 
@@ -123,13 +117,10 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 
 		return evt, getRelaysForEvent(evt.ID), nil
 	}
-	span.End()
 
 	if author != "" {
 		// fetch relays for author
-		ctx, span = tracer.Start(ctx, "fetch-outbox-relays")
 		authorRelays := sys.FetchOutboxRelays(ctx, author, 3)
-		span.End()
 		relays = slices.Insert(relays, authorRelaysPosition, authorRelays...)
 		for _, r := range authorRelays {
 			priorityRelays[r] = 1
@@ -166,7 +157,6 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 
 		fetchProfileOnce := sync.Once{}
 
-		ctx, span = tracer.Start(subManyCtx, "sub-many-eose-non-unique")
 		for ie := range sys.Pool.SubManyEoseNonUnique(subManyCtx, relays, nostr.Filters{filter}) {
 			fetchProfileOnce.Do(func() {
 				go sys.FetchProfileMetadata(ctx, ie.PubKey)
@@ -178,7 +168,6 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 			}
 			countdown = min(countdown, 1)
 		}
-		span.End()
 	}
 
 	if result == nil {
@@ -187,9 +176,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 	}
 
 	// save stuff in cache and in internal store
-	ctx, span = tracer.Start(ctx, "save-local")
 	sys.StoreRelay.Publish(ctx, *result)
-	span.End()
 	// save relays if we got them
 	allRelays := attachRelaysToEvent(result.ID, successRelays...)
 	// put priority relays first so they get used in nevent and nprofile
@@ -205,9 +192,6 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 }
 
 func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []EnhancedEvent {
-	ctx, span := tracer.Start(ctx, "author-last-notes")
-	defer span.End()
-
 	var limit int
 	var store bool
 	var useLocalStore bool
@@ -246,21 +230,16 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 	}
 	if len(lastNotes) < 5 {
 		// if we didn't get enough notes (or if we didn't even query the local store), wait for the external relays
-		ctx, span = tracer.Start(ctx, "querying-external")
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()
 
-		_, span2 := tracer.Start(ctx, "fetch-outbox-relays-for-author-last-notes")
 		relays := sys.FetchOutboxRelays(ctx, pubkey, 3)
-		span2.End()
 
 		for len(relays) < 3 {
 			relays = unique(append(relays, getRandomRelay()))
 		}
 
-		ctx, span2 = tracer.Start(ctx, "sub-many-eose")
 		ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter})
-		span2.End()
 	out:
 		for {
 			select {
@@ -282,7 +261,6 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 				break out
 			}
 		}
-		span.End()
 	}
 
 	// sort before returning
@@ -368,8 +346,6 @@ func contactsForPubkey(ctx context.Context, pubkey string) []string {
 
 func relaysPretty(ctx context.Context, pubkey string) []string {
 	s := make([]string, 0, 3)
-	ctx, span := tracer.Start(ctx, "author-relays-pretty")
-	defer span.End()
 	for _, url := range sys.FetchOutboxRelays(ctx, pubkey, 3) {
 		trimmed := trimProtocolAndEndingSlash(url)
 		if slices.Contains(s, trimmed) {

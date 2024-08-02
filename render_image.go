@@ -18,8 +18,6 @@ import (
 	"github.com/golang/freetype/truetype"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 	"github.com/nfnt/resize"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 	xfont "golang.org/x/image/font"
 )
 
@@ -46,9 +44,6 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "call /njump/image/<nip19 code>")
 		return
 	}
-
-	ctx, span := tracer.Start(ctx, "render-image", trace.WithAttributes(attribute.String("code", code)))
-	defer span.End()
 
 	// Trim fake extensions
 	extensions := []string{".png", ".jpg", ".jpeg"}

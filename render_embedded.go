@@ -6,8 +6,6 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 )
 
 func renderEmbedjs(w http.ResponseWriter, r *http.Request) {
@@ -18,9 +16,6 @@ func renderEmbedjs(w http.ResponseWriter, r *http.Request) {
 
 func renderEmbedded(w http.ResponseWriter, r *http.Request, code string) {
 	ctx := r.Context()
-
-	ctx, span := tracer.Start(ctx, "render-embedded", trace.WithAttributes(attribute.String("code", code)))
-	defer span.End()
 
 	data, err := grabData(ctx, code)
 	if err != nil {

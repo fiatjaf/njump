@@ -39,9 +39,6 @@ type Data struct {
 }
 
 func grabData(ctx context.Context, code string) (Data, error) {
-	ctx, span := tracer.Start(ctx, "grab-data")
-	defer span.End()
-
 	// code can be a nevent or naddr, in which case we try to fetch the associated event
 	event, relays, err := getEvent(ctx, code)
 	if err != nil {

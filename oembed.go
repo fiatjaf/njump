@@ -7,9 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type OEmbedResponse struct {
@@ -53,9 +50,6 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "oembed is only supported for nevent1 codes, not '"+code+"'", 400)
 		return
 	}
-
-	ctx, span := tracer.Start(ctx, "render-oembed", trace.WithAttributes(attribute.String("code", code)))
-	defer span.End()
 
 	host := r.Header.Get("X-Forwarded-Host")
 

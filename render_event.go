@@ -17,8 +17,6 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/pelletier/go-toml"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 )
 
 func isValidShortcode(s string) bool {
@@ -88,9 +86,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx, span := tracer.Start(ctx, "render-event", trace.WithAttributes(attribute.String("code", code)))
-	defer span.End()
-
 	// get data for this event
 	data, err := grabData(ctx, code)
 	if err != nil {
@@ -109,9 +104,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	// from here onwards we know we're rendering an event
 	//
-
-	ctx, span = tracer.Start(ctx, "actually-render")
-	defer span.End()
 
 	// if it's porn we return a 404
 	hasURL := urlRegex.MatchString(data.event.Content)

@@ -6,15 +6,9 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
-
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 )
 
 func renderProfile(ctx context.Context, w http.ResponseWriter, code string) {
-	ctx, span := tracer.Start(ctx, "render-profile", trace.WithAttributes(attribute.String("code", code)))
-	defer span.End()
-
 	isSitemap := false
 	if strings.HasSuffix(code, ".xml") {
 		code = code[:len(code)-4]

@@ -29,9 +29,6 @@ func NewEnhancedEvent(
 	ctx context.Context,
 	event *nostr.Event,
 ) EnhancedEvent {
-	ctx, span := tracer.Start(ctx, "make-enhanced-event")
-	defer span.End()
-
 	ee := EnhancedEvent{Event: event}
 
 	for _, tag := range event.Tags {
