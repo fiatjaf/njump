@@ -550,3 +550,12 @@ func toJSONHTML(evt *nostr.Event) template.HTML {
 }`, evt.ID, evt.PubKey, evt.CreatedAt, evt.Kind, tagsHTML, html.EscapeString(string(contentJSON)), evt.Sig),
 	)
 }
+
+func isValidShortcode(s string) bool {
+	for _, r := range s {
+		if !('a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || '0' <= r && r <= '9' || r == '_') {
+			return false
+		}
+	}
+	return true
+}

@@ -19,29 +19,11 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-func isValidShortcode(s string) bool {
-	for _, r := range s {
-		if !('a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || '0' <= r && r <= '9' || r == '_') {
-			return false
-		}
-	}
-	return true
-}
-
 func renderEvent(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	code := r.URL.Path[1:] // hopefully a nip19 code
+	code := r.PathValue("code")
 
-	// it's the homepage
-	if code == "" {
-		renderHomepage(w, r)
-		return
-	}
-
-	if code == "about" {
-		renderAbout(w, r)
-		return
-	}
+	isEmbed := r.URL.Query().Get("embed") != ""
 
 	if strings.HasPrefix(code, "nostr:") {
 		// remove the "nostr:" prefix
@@ -61,7 +43,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		// it may be a NIP-05
 		if nip05.IsValidIdentifier(code) {
-			renderProfile(ctx, w, code)
+			renderProfile(ctx, r, w, code)
 			return
 		}
 
@@ -72,17 +54,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if the embed parameter is set to "yes"
-	embedParam := r.URL.Query().Get("embed")
-	if embedParam == "yes" {
-		renderEmbedded(w, r, code)
-		return
-	}
-
 	// render npub and nprofile using a separate function
 	if prefix == "npub" || prefix == "nprofile" {
 		// it's a profile
-		renderProfile(ctx, w, code)
+		renderProfile(ctx, r, w, code)
 		return
 	}
 
@@ -370,7 +345,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		component = noteTemplate(NotePageParams{
+
+		params := NotePageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -384,7 +360,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Content:          template.HTML(content),
 			Cover:            data.cover,
 			TitleizedContent: titleizedContent,
-		})
+		}
+
+		if isEmbed {
+			component = embeddedNoteTemplate(params)
+		} else {
+			component = noteTemplate(params)
+		}
 	case FileMetadata:
 		opengraph.Image = data.kind1063Metadata.DisplayImage()
 		params := FileMetadataPageParams{

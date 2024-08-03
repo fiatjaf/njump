@@ -8,7 +8,9 @@ import (
 	"strings"
 )
 
-func renderProfile(ctx context.Context, w http.ResponseWriter, code string) {
+func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, code string) {
+	isEmbed := r.URL.Query().Get("embed") != ""
+
 	isSitemap := false
 	if strings.HasSuffix(code, ".xml") {
 		code = code[:len(code)-4]
@@ -37,7 +39,10 @@ func renderProfile(ctx context.Context, w http.ResponseWriter, code string) {
 	createdAt := profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
 	modifiedAt := profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
 
-	lastNotes := authorLastNotes(ctx, profile.PubKey, isSitemap)
+	var lastNotes []EnhancedEvent
+	if !isEmbed {
+		lastNotes = authorLastNotes(ctx, profile.PubKey, isSitemap)
+	}
 
 	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
@@ -63,8 +68,7 @@ func renderProfile(ctx context.Context, w http.ResponseWriter, code string) {
 		w.Header().Set("Cache-Control", "max-age=86400")
 
 		nprofile := profile.Nprofile(ctx, sys, 2)
-
-		err = profileTemplate(ProfilePageParams{
+		params := ProfilePageParams{
 			HeadParams: HeadParams{IsProfile: true},
 			Details: DetailsParams{
 				HideDetails:     true,
@@ -94,7 +98,13 @@ func renderProfile(ctx context.Context, w http.ResponseWriter, code string) {
 					return s
 				},
 			),
-		}).Render(ctx, w)
+		}
+
+		if isEmbed {
+			err = embeddedProfileTemplate(params).Render(ctx, w)
+		} else {
+			err = profileTemplate(params).Render(ctx, w)
+		}
 	}
 
 	if err != nil {

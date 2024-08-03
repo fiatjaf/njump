@@ -140,8 +140,10 @@ func main() {
 	mux.HandleFunc("/e/", redirectFromESlash)
 	mux.HandleFunc("/p/", redirectFromPSlash)
 	mux.HandleFunc("/favicon.ico", redirectToFavicon)
-	mux.HandleFunc("/embed/", renderEmbedjs)
-	mux.HandleFunc("/", renderEvent)
+	mux.HandleFunc("/embed/{code}", renderEmbedjs)
+	mux.HandleFunc("/about", renderAbout)
+	mux.HandleFunc("/{code}", renderEvent)
+	mux.HandleFunc("/{$}", renderHomepage)
 
 	corsHandler := cors.Default().Handler(relay)
 
