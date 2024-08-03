@@ -1,5 +1,22 @@
 package main
 
+import "html/template"
+
+type FileMetadataPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details DetailsParams
+	Content template.HTML
+
+	FileMetadata Kind1063Metadata
+	IsImage      bool
+	IsVideo      bool
+
+	Clients []ClientReference
+}
+
 templ fileMetadataTemplate(params FileMetadataPageParams) {
 	<!DOCTYPE html>
 	@eventPageTemplate(

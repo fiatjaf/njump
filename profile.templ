@@ -1,6 +1,29 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"html/template"
+	sdk "github.com/nbd-wtf/nostr-sdk"
+)
+
+type ProfilePageParams struct {
+	HeadParams
+
+	Details                    DetailsParams
+	AuthorRelays               []string
+	Content                    string
+	CreatedAt                  string
+	Domain                     string
+	LastNotes                  []EnhancedEvent
+	Metadata                   sdk.ProfileMetadata
+	NormalizedAuthorWebsiteURL string
+	RenderedAuthorAboutText    template.HTML
+	Nevent                     string
+	Nprofile                   string
+	Proxy                      string
+	Title                      string
+	Clients                    []ClientReference
+}
 
 templ profileTemplate(params ProfilePageParams) {
 	<!DOCTYPE html>

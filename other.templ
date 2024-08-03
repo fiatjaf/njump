@@ -2,6 +2,15 @@ package main
 
 import "strconv"
 
+type OtherPageParams struct {
+	BaseEventPageParams
+	HeadParams
+
+	Details         DetailsParams
+	Kind            int
+	KindDescription string
+}
+
 templ otherTemplate(params OtherPageParams) {
 	<!DOCTYPE html>
 	<html class="theme--default text-lg font-light print:text-base sm:text-xl">

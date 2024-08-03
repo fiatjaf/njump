@@ -1,5 +1,20 @@
 package main
 
+import "html/template"
+
+type NotePageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details          DetailsParams
+	Content          template.HTML
+	Cover            string
+	Subject          string
+	TitleizedContent string
+	Clients          []ClientReference
+}
+
 templ noteTemplate(params NotePageParams) {
 	<!DOCTYPE html>
 	@eventPageTemplate(

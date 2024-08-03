@@ -1,5 +1,18 @@
 package main
 
+import "github.com/nbd-wtf/go-nostr/nip11"
+
+type RelayPageParams struct {
+	HeadParams
+
+	Info       nip11.RelayInformationDocument
+	Hostname   string
+	Proxy      string
+	LastNotes  []EnhancedEvent
+	ModifiedAt string
+	Clients    []ClientReference
+}
+
 templ relayTemplate(params RelayPageParams) {
 	<!DOCTYPE html>
 	<html class="theme--default text-lg font-light print:text-base sm:text-xl">

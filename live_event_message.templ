@@ -1,5 +1,19 @@
 package main
 
+import "html/template"
+
+type LiveEventMessagePageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details          DetailsParams
+	Content          template.HTML
+	TitleizedContent string
+
+	Clients []ClientReference
+}
+
 templ liveEventMessageTemplate(params LiveEventMessagePageParams) {
 	<!DOCTYPE html>
 	@eventPageTemplate(
