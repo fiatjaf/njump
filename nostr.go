@@ -89,6 +89,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 		}
 	case nostr.EntityPointer:
 		author = v.PublicKey
+		filter.Authors = []string{v.PublicKey}
 		filter.Tags = nostr.TagMap{
 			"d": []string{v.Identifier},
 		}
