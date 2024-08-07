@@ -54,6 +54,9 @@ func main() {
 		s.TrustedPubKeys = defaultTrustedPubKeys
 	}
 
+	// eventstore and nostr system
+	defer initSystem()()
+
 	if s.RelayConfigPath != "" {
 		configr, err := os.ReadFile(s.RelayConfigPath)
 		if err != nil {
@@ -103,9 +106,6 @@ func main() {
 
 	// internal db
 	defer cache.initializeCache()()
-
-	// eventstore and nostr system
-	defer initSystem()()
 
 	// initialize routines
 	ctx, cancel := context.WithCancel(context.Background())
