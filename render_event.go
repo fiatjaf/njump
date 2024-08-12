@@ -390,7 +390,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		component = fileMetadataTemplate(params)
 	case LiveEvent:
 		opengraph.Image = data.kind30311Metadata.Image
-		component = liveEventTemplate(LiveEventPageParams{
+		params := LiveEventPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -409,7 +409,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 					return s
 				},
 			),
-		})
+		}
+		if isEmbed {
+			component = embeddedLiveEventTemplate(params)
+		} else {
+			component = liveEventTemplate(params)
+		}
 	case LiveEventMessage:
 		component = liveEventMessageTemplate(LiveEventMessagePageParams{
 			BaseEventPageParams: baseEventPageParams,
