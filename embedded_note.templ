@@ -2,12 +2,12 @@ package main
 
 templ embeddedNoteTemplate(params NotePageParams) {
 	<!DOCTYPE html>
-		@embeddedPageTemplate(){
+		@embeddedPageTemplate(
+			params.Event,
+		) {
 			<a href={ templ.URL("/" + params.NeventNaked) } target="_blank" class="no-underline">
 				<div class="w-full break-words">
-					@authorHeaderTemplate(params.Event.author)
-					<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
-					<article class="prose-cite:text-sm prose mb-6 leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:mb-2 prose-blockquote:mt-2 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-neutral-200 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-blockquote:pt-0 prose-blockquote:font-light prose-blockquote:not-italic prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-neutral-700 sm:prose-a:text-justify">
+					<article class="prose-cite:text-sm prose leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:mb-2 prose-blockquote:mt-2 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-neutral-200 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-blockquote:pt-0 prose-blockquote:font-light prose-blockquote:not-italic prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-neutral-700 sm:prose-a:text-justify">
 						if params.Subject != "" {
 							<h1 class="text-2xl">{ params.Subject }</h1>
 						}
@@ -15,11 +15,7 @@ templ embeddedNoteTemplate(params NotePageParams) {
 						<div dir="auto">
 							@templ.Raw(params.Content)
 						</div>
-						<div class="mt-2 w-full text-right text-sm text-stone-400">
-							{ params.Event.CreatedAtStr() }
-						</div>
 					</article>
-					<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
 				</div>
 			</a>
 		}
