@@ -94,6 +94,12 @@ templ embeddedProfileTemplate(params ProfilePageParams) {
 				</defs>
 			</svg>
 			<script>
+// Open links in a new tab
+var links = document.getElementsByTagName('a');
+for (var i = 0; i < links.length; i++) {
+		links[i].setAttribute('target', '_blank');
+}
+
 window.addEventListener('load', function () {
   var contentHeight = document.body.scrollHeight
   window.parent.postMessage({height: contentHeight}, '*')
