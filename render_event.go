@@ -487,7 +487,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		})
 
 	case WikiEvent:
-		component = wikiEventTemplate(WikiPageParams{
+		params := WikiPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -512,7 +512,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 					return strings.Replace(url, "{npub}", data.event.author.Npub(), -1)
 				},
 			),
-		})
+		}
+
+		if isEmbed {
+			component = embeddedWikiTemplate(params)
+		} else {
+			component = wikiEventTemplate(params)
+		}
 
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event

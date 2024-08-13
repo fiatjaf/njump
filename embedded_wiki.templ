@@ -1,0 +1,19 @@
+package main
+
+templ embeddedWikiTemplate(params WikiPageParams) {
+	<!DOCTYPE html>
+		@embeddedPageTemplate(
+			params.Event,
+		) {
+			<a href={ templ.URL("/" + params.NeventNaked) } target="_blank" class="no-underline">
+				<h1 class="flex text-2xl items-center">
+          <div class="inline-block px-2 mr-2 text-base bg-strongpink text-white rounded-md">Wiki <span class="text-base">＞</span></div>
+          <div class="inline-block">{ params.WikiEvent.Title }</div>
+        </h1>
+        <!-- main content -->
+        <div dir="auto" class="leading-5" itemprop="articleBody">
+          @templ.Raw(params.Content)
+        </div>
+			</a>
+		}
+}
