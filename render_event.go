@@ -315,6 +315,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:    data.createdAt,
 			ParentNevent: data.event.getParentNevent(),
 		})
+
 	case Note:
 		if style == StyleTwitter {
 			// twitter has started sprinkling this over our image, so let's make it invisible
@@ -362,11 +363,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			TitleizedContent: titleizedContent,
 		}
 
-		if isEmbed {
-			component = embeddedNoteTemplate(params)
-		} else {
-			component = noteTemplate(params)
-		}
+		component = noteTemplate(params, isEmbed)
+
 	case FileMetadata:
 		opengraph.Image = data.kind1063Metadata.DisplayImage()
 		params := FileMetadataPageParams{
@@ -387,7 +385,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 		params.Details.Extra = fileMetadataDetails(params)
 
-		component = fileMetadataTemplate(params)
+		component = fileMetadataTemplate(params, isEmbed)
+
 	case LiveEvent:
 		opengraph.Image = data.kind30311Metadata.Image
 		params := LiveEventPageParams{
@@ -410,13 +409,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				},
 			),
 		}
-		if isEmbed {
-			component = embeddedLiveEventTemplate(params)
-		} else {
-			component = liveEventTemplate(params)
-		}
+
+		component = liveEventTemplate(params, isEmbed)
+
 	case LiveEventMessage:
-		component = liveEventMessageTemplate(LiveEventMessagePageParams{
+		params := LiveEventMessagePageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -429,7 +426,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Content:          template.HTML(data.content),
 			TitleizedContent: titleizedContent,
 			Clients:          generateClientList(data.event.Kind, data.naddr),
-		})
+		}
+
+		component = liveEventMessageTemplate(params, isEmbed)
+
 	case CalendarEvent:
 		if data.kind31922Or31923Metadata.Image != "" {
 			opengraph.Image = data.kind31922Or31923Metadata.Image
@@ -467,7 +467,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			endAtTime = ""
 		}
 
-		component = calendarEventTemplate(CalendarPageParams{
+		params := CalendarPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -484,7 +484,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:       detailsData,
 			Content:       template.HTML(data.content),
 			Clients:       generateClientList(data.event.Kind, data.naddr),
-		})
+		}
+
+		component = calendarEventTemplate(params, isEmbed)
 
 	case WikiEvent:
 		params := WikiPageParams{
@@ -514,16 +516,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			),
 		}
 
-		if isEmbed {
-			component = embeddedWikiTemplate(params)
-		} else {
-			component = wikiEventTemplate(params)
-		}
+		component = wikiEventTemplate(params, isEmbed)
 
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
 
-		component = otherTemplate(OtherPageParams{
+		params := OtherPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			HeadParams: HeadParams{
 				IsProfile:   false,
@@ -534,7 +532,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:         detailsData,
 			Kind:            data.event.Kind,
 			KindDescription: data.kindDescription,
-		})
+		}
+
+		component = otherTemplate(params)
+
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
 		http.Error(w, "tried to render an unsupported template at render_event.go", 500)

@@ -17,34 +17,48 @@ type FileMetadataPageParams struct {
 	Clients []ClientReference
 }
 
-templ fileMetadataTemplate(params FileMetadataPageParams) {
+templ fileMetadataInnerBlock(params FileMetadataPageParams) {
+	if params.FileMetadata.Image != "" {
+		<img src={ params.FileMetadata.Image } alt={ params.Alt }/>
+	} else if params.IsImage {
+		<img src={ params.FileMetadata.URL } alt={ params.Alt }/>
+	} else if params.IsVideo {
+		<video
+			controls
+			width="100%%"
+			class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"
+		>
+			<source src={ params.FileMetadata.URL } alt={ params.Alt }/>
+		</video>
+	}
+	<a
+		href={ templ.URL(params.FileMetadata.URL) }
+		target="_new"
+		class="not-prose mx-auto mb-3 block w-4/5 basis-full rounded-lg border-0 bg-strongpink px-4 py-2 text-center text-[17px] font-light text-white no-underline sm:w-2/6"
+	>Download file</a>
+}
+
+templ fileMetadataTemplate(params FileMetadataPageParams, isEmbed bool) {
 	<!DOCTYPE html>
-	@eventPageTemplate(
-		"File Metadata",
-		params.OpenGraphParams,
-		params.HeadParams,
-		params.Clients,
-		params.Details,
-		params.Event,
-	) {
-		if params.FileMetadata.Image != "" {
-			<img src={ params.FileMetadata.Image } alt={ params.Alt }/>
-		} else if params.IsImage {
-			<img src={ params.FileMetadata.URL } alt={ params.Alt }/>
-		} else if params.IsVideo {
-			<video
-				controls
-				width="100%%"
-				class="max-h-[90vh] bg-neutral-300 dark:bg-zinc-700"
-			>
-				<source src={ params.FileMetadata.URL } alt={ params.Alt }/>
-			</video>
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			isEmbed,
+		) {
+			@fileMetadataInnerBlock(params)
 		}
-		<a
-			href={ templ.URL(params.FileMetadata.URL) }
-			target="_new"
-			class="not-prose mx-auto mb-3 block w-4/5 basis-full rounded-lg border-0 bg-strongpink px-4 py-2 text-center text-[17px] font-light text-white no-underline sm:w-2/6"
-		>Download file</a>
+	} else {
+		@eventPageTemplate(
+			"File Metadata",
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+			isEmbed,
+		) {
+			@fileMetadataInnerBlock(params)
+		}
 	}
 }
 

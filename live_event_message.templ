@@ -14,16 +14,30 @@ type LiveEventMessagePageParams struct {
 	Clients []ClientReference
 }
 
-templ liveEventMessageTemplate(params LiveEventMessagePageParams) {
+templ liveEventMessageInnerBlock(params LiveEventMessagePageParams) {
+	@templ.Raw(params.Content)
+}
+
+templ liveEventMessageTemplate(params LiveEventMessagePageParams, isEmbed bool) {
 	<!DOCTYPE html>
-	@eventPageTemplate(
-		params.TitleizedContent,
-		params.OpenGraphParams,
-		params.HeadParams,
-		params.Clients,
-		params.Details,
-		params.Event,
-	) {
-		@templ.Raw(params.Content)
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			isEmbed,
+		) {
+			@liveEventMessageInnerBlock(params)
+		}
+	} else {
+		@eventPageTemplate(
+			params.TitleizedContent,
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+			isEmbed,
+		) {
+			@liveEventMessageInnerBlock(params)
+		}
 	}
 }

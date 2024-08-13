@@ -15,29 +15,43 @@ type NotePageParams struct {
 	Clients          []ClientReference
 }
 
-templ noteTemplate(params NotePageParams) {
+templ noteInnerBlock(params NotePageParams) {
+	if params.Event.subject != "" {
+		<h1 class="text-2xl" itemprop="headline">{ params.Event.subject }</h1>
+	} else {
+		<h1 class="hidden">
+			{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }
+		</h1>
+	}
+	if params.Cover != "" {
+		<img src={ params.Cover } alt={ params.Alt } class="mt-1"/>
+	}
+	<!-- main content -->
+	<div dir="auto" class="leading-6" itemprop="articleBody">
+		@templ.Raw(params.Content)
+	</div>
+}
+
+templ noteTemplate(params NotePageParams, isEmbed bool) {
 	<!DOCTYPE html>
-	@eventPageTemplate(
-		params.TitleizedContent,
-		params.OpenGraphParams,
-		params.HeadParams,
-		params.Clients,
-		params.Details,
-		params.Event,
-	) {
-		if params.Event.subject != "" {
-			<h1 class="text-2xl" itemprop="headline">{ params.Event.subject }</h1>
-		} else {
-			<h1 class="hidden">
-				{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }
-			</h1>
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			isEmbed,
+		) {
+			@noteInnerBlock(params)
 		}
-		if params.Cover != "" {
-			<img src={ params.Cover } alt={ params.Alt } class="mt-1"/>
+	} else {
+		@eventPageTemplate(
+			params.TitleizedContent,
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+			isEmbed,
+		) {
+			@noteInnerBlock(params)
 		}
-		<!-- main content -->
-		<div dir="auto" class="leading-6" itemprop="articleBody">
-			@templ.Raw(params.Content)
-		</div>
 	}
 }

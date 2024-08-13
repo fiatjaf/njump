@@ -14,50 +14,64 @@ type LiveEventPageParams struct {
 	Clients   []ClientReference
 }
 
-templ liveEventTemplate(params LiveEventPageParams) {
-	<!DOCTYPE html>
-	@eventPageTemplate(
-		params.LiveEvent.title(),
-		params.OpenGraphParams,
-		params.HeadParams,
-		params.Clients,
-		params.Details,
-		params.Event,
-	) {
-		<h1 class="text-2xl">
-			<span class="mr-2">{ params.LiveEvent.Title }</span>
-			switch params.LiveEvent.Status {
-				case "ended":
-					<span class="whitespace-nowrap rounded bg-neutral-400 px-4 py-1 align-text-top text-base text-white dark:bg-neutral-700">Ended</span>
-				case "live":
-					<span class="whitespace-nowrap rounded bg-strongpink px-4 py-1 align-text-top text-base text-white">Live now!</span>
-			}
-		</h1>
-		<div class="mb-4">
-			if params.LiveEvent.Host != nil {
-				Streaming hosted by
-				<a href={ templ.URL("/" + params.LiveEvent.Host.Npub()) }>
-					{ params.LiveEvent.Host.Name }
-				</a>
-			}
-		</div>
-		<!-- main content -->
-		<div class="mb-4">
-			for _, v := range params.LiveEvent.Hashtags {
-				<span class="mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white">
-					{ v }
-				</span>
-			}
-		</div>
-		if params.LiveEvent.Summary != "" {
-			<div>{ params.LiveEvent.Summary }</div>
+templ liveEventInnerBlock(params LiveEventPageParams) {
+	<h1 class="text-2xl">
+		<span class="mr-2">{ params.LiveEvent.Title }</span>
+		switch params.LiveEvent.Status {
+			case "ended":
+				<span class="whitespace-nowrap rounded bg-neutral-400 px-4 py-1 align-text-top text-base text-white dark:bg-neutral-700">Ended</span>
+			case "live":
+				<span class="whitespace-nowrap rounded bg-strongpink px-4 py-1 align-text-top text-base text-white">Live now!</span>
 		}
-		if params.LiveEvent.Image != "" {
-			<img
-				src={ params.LiveEvent.Image }
-				alt={ params.Alt }
-				_="on load repeat set @src to @src wait 5s end"
-			/>
+	</h1>
+	<div class="mb-4">
+		if params.LiveEvent.Host != nil {
+			Streaming hosted by
+			<a href={ templ.URL("/" + params.LiveEvent.Host.Npub()) }>
+				{ params.LiveEvent.Host.Name }
+			</a>
+		}
+	</div>
+	<!-- main content -->
+	<div class="mb-4">
+		for _, v := range params.LiveEvent.Hashtags {
+			<span class="mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white">
+				{ v }
+			</span>
+		}
+	</div>
+	if params.LiveEvent.Summary != "" {
+		<div>{ params.LiveEvent.Summary }</div>
+	}
+	if params.LiveEvent.Image != "" {
+		<img
+			src={ params.LiveEvent.Image }
+			alt={ params.Alt }
+			_="on load repeat set @src to @src wait 5s end"
+		/>
+	}
+}
+
+templ liveEventTemplate(params LiveEventPageParams, isEmbed bool) {
+	<!DOCTYPE html>
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			isEmbed,
+		) {
+			@liveEventInnerBlock(params)
+		}
+	} else {
+		@eventPageTemplate(
+			params.LiveEvent.title(),
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+			isEmbed,
+		) {
+			@liveEventInnerBlock(params)
 		}
 	}
 }
