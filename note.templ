@@ -25,8 +25,8 @@ templ noteTemplate(params NotePageParams) {
 		params.Details,
 		params.Event,
 	) {
-		if params.Subject != "" {
-			<h1 class="text-2xl" itemprop="headline">{ params.Subject }</h1>
+		if params.Event.subject != "" {
+			<h1 class="text-2xl" itemprop="headline">{ params.Event.subject }</h1>
 		} else {
 			<h1 class="hidden">
 				{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }
