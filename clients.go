@@ -52,7 +52,7 @@ var (
 	plebstrIOS  = ClientReference{ID: "plebstr", Name: "Plebstr", Base: "plebstr:{code}", Platform: "ios"}
 
 	wikistr     = ClientReference{ID: "wikistr", Name: "Wikistr", Base: "https://Wikistr.com/{handle}*{authorPubkey}", Platform: "web"}
-	wikifreedia = ClientReference{ID: "wikifreedia", Name: "Wikifredia", Base: "https://wikifreedia.xyz/{handle}/{npub}", Platform: "web"}
+	wikifreedia = ClientReference{ID: "wikifreedia", Name: "Wikifreedia", Base: "https://wikifreedia.xyz/{handle}/{npub}", Platform: "web"}
 )
 
 func generateClientList(
