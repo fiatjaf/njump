@@ -57,6 +57,7 @@ templ liveEventTemplate(params LiveEventPageParams, isEmbed bool) {
 	if isEmbed {
 		@embeddedPageTemplate(
 			params.Event,
+			params.NeventNaked,
 			isEmbed,
 		) {
 			@liveEventInnerBlock(params)

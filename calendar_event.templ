@@ -108,6 +108,7 @@ templ calendarEventTemplate(params CalendarPageParams, isEmbed bool) {
 	if isEmbed {
 		@embeddedPageTemplate(
 			params.Event,
+			params.NeventNaked,
 			isEmbed,
 		) {
 			@calendarEventInnerBlock(params)

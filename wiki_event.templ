@@ -26,6 +26,7 @@ templ wikiEventTemplate(params WikiPageParams, isEmbed bool) {
 	if isEmbed {
 		@embeddedPageTemplate(
 			params.Event,
+			params.NeventNaked,
 			isEmbed,
 		) {
 			@wikiInnerBlock(params)

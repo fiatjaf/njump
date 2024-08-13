@@ -43,6 +43,7 @@ templ fileMetadataTemplate(params FileMetadataPageParams, isEmbed bool) {
 	if isEmbed {
 		@embeddedPageTemplate(
 			params.Event,
+			params.NeventNaked,
 			isEmbed,
 		) {
 			@fileMetadataInnerBlock(params)

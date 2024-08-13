@@ -2,6 +2,7 @@ package main
 
 templ embeddedPageTemplate(
 	event EnhancedEvent,
+	NeventNaked string,
 	isEmbed bool,
 ) {
 	<!DOCTYPE html>
@@ -15,7 +16,10 @@ templ embeddedPageTemplate(
 				href="/njump/static/tailwind-bundle.min.css"
 			/>
 		</head>
-		<body class="relative bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black sm:items-center sm:justify-center">
+		<body 
+			class="relative bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black sm:items-center sm:justify-center cursor-pointer"
+			event-data={ templ.JSONString(NeventNaked) }
+		>
 			<style> ::-webkit-scrollbar { display: none; } </style>
 			<div class="mx-auto w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 pb-4 pt-4 print:w-full sm:w-11/12 md:w-10/12 lg:w-9/12">
 				@authorHeaderTemplate(event.author)
@@ -49,6 +53,14 @@ var links = document.getElementsByTagName('a');
 for (var i = 0; i < links.length; i++) {
 		links[i].setAttribute('target', '_blank');
 }
+
+// Open the njump page if the target is not a link
+document.onclick = function(event) {
+	if (event.target.tagName.toLowerCase() !== 'a') {
+		const neventNaked = JSON.parse(document.body.getAttribute('event-data'));
+		window.open("/" + neventNaked, '_blank');
+	}
+};
 
 window.addEventListener('load', function () {
   var contentHeight = document.body.scrollHeight

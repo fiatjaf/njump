@@ -37,6 +37,7 @@ templ noteTemplate(params NotePageParams, isEmbed bool) {
 	if isEmbed {
 		@embeddedPageTemplate(
 			params.Event,
+			params.NeventNaked,
 			isEmbed,
 		) {
 			@noteInnerBlock(params)
