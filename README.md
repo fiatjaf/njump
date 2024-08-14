@@ -20,6 +20,9 @@ For more information about njump's philosophy and its use, read the presentation
 | `30023` | Long-form Content          | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
 | `30024` | Draft Long-form Content    | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
 | `30311` | Live Event                 | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
+| `30818` | Wiki article               | [54](https://github.com/nostr-protocol/nips/blob/master/54.md) |
+| `31922` | Date-Based Calendar Event  | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
+| `31923` | Time-Based Calendar Event  | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
 
 ## Running
 
