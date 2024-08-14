@@ -12,14 +12,14 @@ For more information about njump's philosophy and its use, read the presentation
 
 | kind    | description                | NIP         |
 | ------- | -------------------------- | ----------- |
-| `0`     | Metadata                   | [1](01.md)  |
-| `1`     | Short Text Note            | [1](01.md)  |
-| `6`     | Repost                     | [18](18.md) |
-| `1063`  | File Metadata              | [94](94.md) |
-| `1311`  | Live Chat Message          | [53](53.md) |
-| `30023` | Long-form Content          | [23](23.md) |
-| `30024` | Draft Long-form Content    | [23](23.md) |
-| `30311` | Live Event                 | [53](53.md) |
+| `0`     | Metadata                   | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
+| `1`     | Short Text Note            | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
+| `6`     | Repost                     | [18](https://github.com/nostr-protocol/nips/blob/master/18.md) |
+| `1063`  | File Metadata              | [94](https://github.com/nostr-protocol/nips/blob/master/94.md) |
+| `1311`  | Live Chat Message          | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
+| `30023` | Long-form Content          | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
+| `30024` | Draft Long-form Content    | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
+| `30311` | Live Event                 | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
 
 ## Running
 
