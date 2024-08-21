@@ -32,6 +32,10 @@ func NewEnhancedEvent(
 	ee := EnhancedEvent{Event: event}
 
 	for _, tag := range event.Tags {
+		if len(tag) < 2 {
+			continue
+		}
+
 		if tag[0] == "subject" || tag[0] == "title" {
 			ee.subject = tag[1]
 		}
