@@ -6,9 +6,9 @@ dev tags='':
 build: templ tailwind
     go build -o ./njump
 
-deploy: templ tailwind
+deploy target: templ tailwind
     GOOS=linux GOARCH=amd64 go build -ldflags="-X main.compileTimeTs=$(date '+%s')" -o ./njump
-    rsync --progress njump njump:njump/njump-new
+    rsync --progress njump {{target}}:njump/njump-new
     ssh njump 'systemctl stop njump'
     ssh njump 'mv njump/njump-new njump/njump'
     ssh njump 'systemctl start njump'
