@@ -22,8 +22,5 @@
   "justIds": [
     "wss://cache2.primal.net/v1",
     "wss://relay.noswhere.com"
-  ],
-  "excludeRelays": [
-    "wss://filter.nostr.wine"
   ]
 }
