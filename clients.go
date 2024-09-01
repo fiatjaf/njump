@@ -17,14 +17,15 @@ type ClientReference struct {
 var (
 	native = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
 
-	nosta     = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: "web"}
-	snort     = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: "web"}
-	satellite = ClientReference{ID: "satellite", Name: "Satellite", Base: "https://satellite.earth/@{code}", Platform: "web"}
-	primalWeb = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: "web"}
-	nostrudel = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/#/n/{code}", Platform: "web"}
-	nostter   = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: "web"}
-	iris      = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
-	coracle   = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: "web"}
+	nosta        = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: "web"}
+	snort        = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: "web"}
+	satellite    = ClientReference{ID: "satellite", Name: "Satellite", Base: "https://satellite.earth/@{code}", Platform: "web"}
+	primalWeb    = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: "web"}
+	nostrudel    = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/#/n/{code}", Platform: "web"}
+	nostter      = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: "web"}
+	iris         = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
+	coracle      = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: "web"}
+	coracleRelay = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/{code}", Platform: "web"}
 
 	zapStream      = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: "web"}
 	nostrrrRelay   = ClientReference{ID: "nostrrr", Name: "Nostrrr", Base: "https://nostrrr.com/relay/{code}", Platform: "web"}
@@ -65,7 +66,7 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			coracle, nostrrrRelay,
+			coracleRelay, nostrrrRelay,
 		}
 	case 1, 6:
 		clients = []ClientReference{
