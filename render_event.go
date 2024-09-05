@@ -331,11 +331,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			opengraph.BigImage = opengraph.Image
 		}
 
-		enhancedCode := data.nevent
-		if data.naddr != "" {
-			enhancedCode = data.naddr
-		}
-
 		content := data.content
 		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
 			// custom emojis
@@ -356,9 +351,35 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			Clients:          generateClientList(data.event.Kind, enhancedCode),
+			Clients:          generateClientList(data.event.Kind, data.nevent),
 			Details:          detailsData,
 			Content:          template.HTML(content),
+			TitleizedContent: titleizedContent,
+		}
+
+		component = noteTemplate(params, isEmbed)
+
+	case LongForm:
+		if data.cover != "" {
+			opengraph.Image = data.cover
+			opengraph.BigImage = data.cover
+		} else if style == StyleTwitter {
+			// twitter has started sprinkling this over our image, so let's make it invisible
+			opengraph.SingleTitle = string(INVISIBLE_SPACE)
+		}
+
+		params := NotePageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				Oembed:      oembed,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
+			},
+			Clients:          generateClientList(data.event.Kind, data.naddr),
+			Details:          detailsData,
+			Content:          template.HTML(data.content),
 			Cover:            data.cover,
 			TitleizedContent: titleizedContent,
 		}
