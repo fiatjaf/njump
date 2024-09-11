@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -19,6 +20,7 @@ import (
 	"mvdan.cc/xurls/v2"
 
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip19"
 	sdk "github.com/nbd-wtf/nostr-sdk"
 )
 
@@ -517,8 +519,43 @@ func toJSONHTML(evt *nostr.Event) template.HTML {
 			if i == 0 {
 				cls = `"text-amber-500 dark:text-amber-200"`
 			}
-			itemJSON, _ := json.Marshal(item)
-			tagsHTML += "\n      <span class=" + cls + ">" + html.EscapeString(string(itemJSON))
+
+			tagsHTML += "\n      <span class=" + cls + ">"
+
+			// if it's tagging another event, pubkey or address, make it a clickable link
+			linkCls := "underline underline-offset-4 text-amber-700 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-200"
+			if i == 1 && tag[0] == "e" && nostr.IsValid32ByteHex(item) {
+				var relayHints []string
+				var authorHint string
+				if len(tag) > 2 {
+					relayHints = []string{tag[2]}
+					if len(tag) > 4 {
+						authorHint = tag[4]
+					}
+				}
+				nevent, _ := nip19.EncodeEvent(item, relayHints, authorHint)
+				tagsHTML += `<a class="` + linkCls + `" href="/` + nevent + `">"` + item + `"</a>`
+			} else if spl := strings.Split(item, ":"); i == 1 && tag[0] == "a" && len(spl) == 3 && nostr.IsValidPublicKey(spl[1]) {
+				var relayHints []string
+				if len(tag) > 2 {
+					relayHints = []string{tag[2]}
+				}
+				kind, _ := strconv.Atoi(spl[0])
+				naddr, _ := nip19.EncodeEntity(spl[1], kind, spl[2], relayHints)
+				tagsHTML += `<a class="` + linkCls + `" href="/` + naddr + `">"` + item + `"</a>`
+			} else if i == 1 && tag[0] == "p" && nostr.IsValidPublicKey(item) {
+				var relayHints []string
+				if len(tag) > 2 {
+					relayHints = []string{tag[2]}
+				}
+				nprofile, _ := nip19.EncodeProfile(item, relayHints)
+				tagsHTML += `<a class="` + linkCls + `" href="/` + nprofile + `">"` + item + `"</a>`
+			} else {
+				// otherwise just print normally
+				itemJSON, _ := json.Marshal(item)
+				tagsHTML += html.EscapeString(string(itemJSON))
+			}
+
 			if i < len(tag)-1 {
 				tagsHTML += ","
 			} else {
