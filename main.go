@@ -91,9 +91,9 @@ func main() {
 			"module.exports", "tailwind.config", 1,
 		)
 
-		styleb, err := os.ReadFile("tailwind.css")
+		styleb, err := os.ReadFile("base.css")
 		if err != nil {
-			log.Fatal().Err(err).Msg("failed to load tailwind.css")
+			log.Fatal().Err(err).Msg("failed to load base.css")
 			return
 		}
 		style := string(styleb)
