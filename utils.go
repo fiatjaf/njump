@@ -133,6 +133,7 @@ type Style string
 const (
 	StyleTelegram   Style = "telegram"
 	StyleTwitter          = "twitter"
+	StyleFacebook         = "facebook" // Both Facebook and Instagram
 	StyleIOS              = "ios"
 	StyleAndroid          = "android"
 	StyleMattermost       = "mattermost"
@@ -152,12 +153,13 @@ func getPreviewStyle(r *http.Request) Style {
 
 	ua := strings.ToLower(r.Header.Get("User-Agent"))
 	accept := r.Header.Get("Accept")
-
 	switch {
 	case strings.Contains(ua, "telegrambot"):
 		return StyleTelegram
 	case strings.Contains(ua, "twitterbot"):
 		return StyleTwitter
+	case strings.Contains(ua, "facebookexternalhit"):
+		return StyleFacebook
 	case strings.Contains(ua, "iphone"), strings.Contains(ua, "ipad"), strings.Contains(ua, "ipod"):
 		return StyleIOS
 	case strings.Contains(ua, "android"):

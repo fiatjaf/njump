@@ -107,12 +107,19 @@ func drawImage(
 	paddingLeft := 25
 	gradientRectHeight := 140
 	barHeight := 70
+	barScale := 1.0
 	switch style {
 	case StyleTelegram:
 		paddingLeft += 10
 		width -= 10
 	case StyleTwitter:
 		height = width * 268 / 512
+	case StyleFacebook:
+		height = width * 355 / 680
+		paddingLeft = 180
+		barScale = 0.55
+		barHeight = int(float64(barHeight) * barScale)
+		fontSize = 18
 	}
 
 	img := gg.NewContext(width, height)
@@ -145,7 +152,7 @@ func drawImage(
 	fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
 	ttf, _ := truetype.Parse(fontData)
 	img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
-		Size:    6,
+		Size:    (6 * barScale),
 		DPI:     260,
 		Hinting: xfont.HintingFull,
 	}))
@@ -168,46 +175,57 @@ func drawImage(
 
 	// draw author's name
 	authorTextX := paddingLeft
+	picHeight := barHeight - 20
 	if metadata.Picture != "" {
 		authorImage, err := fetchImageFromURL(metadata.Picture)
 		if err == nil {
-			resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(barHeight-20), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
+			resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(picHeight), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
 			img.DrawImage(resizedAuthorImage, paddingLeft, height-barHeight+10)
-			authorTextX += 65
 		}
 	}
-	authorTextY := height - barHeight + 15
-	authorMaxWidth := width/2.0 - paddingLeft*2
+
+	authorTextY := height - barHeight + (barHeight-picHeight)/2 + 4
+
+	if style == StyleFacebook {
+		authorTextY = height - barHeight + (barHeight-picHeight)/2 - 5
+		authorTextX += 25
+	} else {
+		authorTextX += 65
+	}
+
 	img.SetColor(color.White)
 	textImg, _ = drawParagraphs([]string{metadata.ShortName()}, fontSize, width, barHeight)
 	img.DrawImage(textImg, authorTextX, authorTextY)
 
 	// a gradient to cover too long names
+	authorMaxWidth := width/2.0 - paddingLeft*2
 	img.SetColor(BAR_BACKGROUND)
-	img.DrawRectangle(float64(authorTextX+authorMaxWidth), float64(height-barHeight), float64(width-authorTextX-authorMaxWidth), float64(barHeight))
+	img.DrawRectangle(float64(paddingLeft+authorTextX+authorMaxWidth), float64(height-barHeight), float64(width-authorTextX-authorMaxWidth), float64(barHeight))
 	gradientLength := 60
 	for x := 0; x < gradientLength; x++ {
 		alpha := uint8(255 - 255*(math.Pow(float64(x)/float64(gradientLength), 2)))
 		img.SetRGBA255(int(BAR_BACKGROUND.R), int(BAR_BACKGROUND.G), int(BAR_BACKGROUND.B), int(alpha))
-		img.DrawRectangle(float64(authorTextX+authorMaxWidth-x), float64(height-barHeight), 1, float64(barHeight))
+		img.DrawRectangle(float64(paddingLeft+authorTextX+authorMaxWidth-x), float64(height-barHeight), 1, float64(barHeight))
 		img.Fill()
 	}
 
 	// bottom bar logo
 	logo, _ := static.ReadFile("static/logo.png")
 	stampImg, _ := png.Decode(bytes.NewBuffer(logo))
-	stampWidth := stampImg.Bounds().Dx()
-	stampHeight := stampImg.Bounds().Dy()
-	stampX := width - stampWidth - paddingLeft
-	stampY := height - stampHeight - 20
-	img.DrawImage(stampImg, stampX, stampY)
+	stampRatio := float64(stampImg.Bounds().Dx() / stampImg.Bounds().Dy())
+	stampHeight := float64(barHeight) * 0.45
+	stampWidth := stampHeight * stampRatio
+	resizedStampImg := resize.Resize(uint(stampWidth), uint(stampHeight), stampImg, resize.Lanczos3)
+	stampX := width - int(stampWidth) - paddingLeft
+	stampY := height - barHeight + (barHeight-int(stampHeight))/2
+	img.DrawImage(resizedStampImg, stampX, stampY)
 
 	// Draw event date
 	layout := "2006-01-02 15:04:05"
 	parsedTime, _ := time.Parse(layout, date)
 	formattedDate := parsedTime.Format("Jan 02, 2006")
 	img.SetColor(color.RGBA{160, 160, 160, 255})
-	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-stampWidth-260), float64(height-barHeight+22), 0, 0, float64(240), 1.5, gg.AlignRight)
+	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-int(stampWidth)-250), float64(height-barHeight+(barHeight-int(stampHeight))/2)+3, 0, 0, float64(240), 1.5, gg.AlignRight)
 
 	return img.Image(), nil
 }
