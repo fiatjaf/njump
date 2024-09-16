@@ -1,8 +1,8 @@
 package main
 
 import (
+	stdhtml "html"
 	"io"
-	"regexp"
 	"strings"
 
 	"github.com/gomarkdown/markdown"
@@ -12,7 +12,19 @@ import (
 )
 
 var mdrenderer = html.NewRenderer(html.RendererOptions{
-	Flags: html.CommonFlags | html.HrefTargetBlank,
+	Flags: html.HrefTargetBlank | html.SkipHTML,
+	RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
+		switch v := node.(type) {
+		case *ast.HTMLSpan:
+			w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
+			return ast.GoToNext, true
+		case *ast.HTMLBlock:
+			w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
+			return ast.GoToNext, true
+		}
+
+		return ast.GoToNext, false
+	},
 })
 
 func stripLinksFromMarkdown(md string) string {
