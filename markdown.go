@@ -50,17 +50,19 @@ var tgivmdrenderer = html.NewRenderer(html.RendererOptions{
 	},
 })
 
-func mdToHTML(md string, usingTelegramInstantView bool, skipLinks bool) string {
+func mdToHTML(md string, usingTelegramInstantView bool) string {
 	md = strings.ReplaceAll(md, "\u00A0", " ")
 	md = replaceNostrURLsWithHTMLTags(nostrEveryMatcher, md)
 
 	// create markdown parser with extensions
 	// this parser is stateful so it must be reinitialized every time
 	doc := parser.NewWithExtensions(
-		parser.CommonExtensions |
-			parser.AutoHeadingIDs |
-			parser.NoEmptyLineBeforeBlock |
-			parser.Footnotes,
+		parser.AutoHeadingIDs |
+			parser.NoIntraEmphasis |
+			parser.FencedCode |
+			parser.Autolink |
+			parser.Footnotes |
+			parser.SpaceHeadings,
 	).Parse([]byte(md))
 
 	renderer := mdrenderer
