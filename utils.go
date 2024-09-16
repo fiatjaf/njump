@@ -545,7 +545,7 @@ func toJSONHTML(evt *nostr.Event) template.HTML {
 				kind, _ := strconv.Atoi(spl[0])
 				naddr, _ := nip19.EncodeEntity(spl[1], kind, spl[2], relayHints)
 				tagsHTML += `<a class="` + linkCls + `" href="/` + naddr + `">"` + item + `"</a>`
-			} else if i == 1 && tag[0] == "p" && nostr.IsValidPublicKey(item) {
+			} else if i == 1 && strings.ToLower(tag[0]) == "p" && nostr.IsValidPublicKey(item) {
 				var relayHints []string
 				if len(tag) > 2 {
 					relayHints = []string{tag[2]}
