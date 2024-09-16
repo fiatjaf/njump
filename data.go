@@ -12,7 +12,7 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip52"
 	"github.com/nbd-wtf/go-nostr/nip53"
 	"github.com/nbd-wtf/go-nostr/nip94"
-	sdk "github.com/nbd-wtf/nostr-sdk"
+	"github.com/nbd-wtf/go-nostr/sdk"
 )
 
 type Data struct {

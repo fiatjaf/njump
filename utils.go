@@ -21,7 +21,7 @@ import (
 
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	sdk "github.com/nbd-wtf/nostr-sdk"
+	"github.com/nbd-wtf/go-nostr/sdk"
 )
 
 const (

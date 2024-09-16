@@ -9,7 +9,7 @@ import (
 	"html/template"
 
 	"github.com/a-h/templ"
-	sdk "github.com/nbd-wtf/nostr-sdk"
+	"github.com/nbd-wtf/go-nostr/sdk"
 )
 
 type TemplateID int

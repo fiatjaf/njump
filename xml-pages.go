@@ -4,7 +4,7 @@ import (
 	_ "embed"
 
 	"github.com/nbd-wtf/go-nostr/nip11"
-	sdk "github.com/nbd-wtf/nostr-sdk"
+	"github.com/nbd-wtf/go-nostr/sdk"
 	"github.com/tylermmorton/tmpl"
 )
 

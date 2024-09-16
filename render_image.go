@@ -16,7 +16,7 @@ import (
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
-	sdk "github.com/nbd-wtf/nostr-sdk"
+	"github.com/nbd-wtf/go-nostr/sdk"
 	"github.com/nfnt/resize"
 	xfont "golang.org/x/image/font"
 )

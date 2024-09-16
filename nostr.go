@@ -10,8 +10,8 @@ import (
 	"github.com/fiatjaf/eventstore/badger"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	sdk "github.com/nbd-wtf/nostr-sdk"
-	cache_memory "github.com/nbd-wtf/nostr-sdk/cache/memory"
+	"github.com/nbd-wtf/go-nostr/sdk"
+	cache_memory "github.com/nbd-wtf/go-nostr/sdk/cache/memory"
 )
 
 type RelayConfig struct {
