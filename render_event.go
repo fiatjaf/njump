@@ -235,7 +235,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if data.event.Kind == 30023 || data.event.Kind == 30024 {
 		// Remove duplicate title inside the body
 		data.content = strings.ReplaceAll(data.content, "# "+data.event.subject, "")
-		data.content = mdToHTML(data.content, data.templateId == TelegramInstantView, false)
+		data.content = mdToHTML(data.content, data.templateId == TelegramInstantView)
 	} else if data.event.Kind == 30818 {
 		data.content = asciidocToHTML(data.content)
 	} else {

@@ -27,16 +27,6 @@ var mdrenderer = html.NewRenderer(html.RendererOptions{
 	},
 })
 
-func stripLinksFromMarkdown(md string) string {
-	// Regular expression to match Markdown links and HTML links
-	linkRegex := regexp.MustCompile(`\[([^\]]*)\]\([^)]*\)|<a[^>]*>(.*?)</a>`)
-
-	// Replace both Markdown and HTML links with just the link text
-	strippedMD := linkRegex.ReplaceAllString(md, "$1$2")
-
-	return strippedMD
-}
-
 var tgivmdrenderer = html.NewRenderer(html.RendererOptions{
 	Flags: html.CommonFlags | html.HrefTargetBlank,
 	RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
@@ -84,10 +74,6 @@ func mdToHTML(md string, usingTelegramInstantView bool) string {
 
 	// create HTML renderer with extensions
 	output := string(markdown.Render(doc, renderer))
-
-	if skipLinks {
-		output = stripLinksFromMarkdown(output)
-	}
 
 	// sanitize content
 	output = sanitizeXSS(output)

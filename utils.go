@@ -343,7 +343,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 
 				var content string
 				if event.Kind == 30023 {
-					content = mdToHTML(event.Content, usingTelegramInstantView, false)
+					content = mdToHTML(event.Content, usingTelegramInstantView)
 				} else {
 					content = basicFormatting(event.Content, false, usingTelegramInstantView, false)
 				}
