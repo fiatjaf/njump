@@ -3,7 +3,6 @@ package main
 import (
 	_ "embed"
 	"strings"
-	"unicode"
 	"html/template"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/nbd-wtf/go-nostr/nip52"
@@ -28,12 +27,9 @@ func formatParticipants(participants []nip52.Participant) string {
 	var list = make([]string, 0)
 	for _, p := range participants {
 		nreplace, _ := nip19.EncodePublicKey(p.PubKey)
-		bytes := []byte(p.Role)
-		bytes[0] = byte(unicode.ToUpper(rune(bytes[0])))
-		role := string(bytes)
 		nreplace = replaceNostrURLsWithHTMLTags(nostrNpubNprofileMatcher, "nostr:"+nreplace)
 		if p.Role != "" {
-			nreplace = nreplace + " as " + role
+			nreplace = nreplace + " as " + strings.ToTitle(p.Role)
 		}
 		list = append(list, nreplace)
 	}
