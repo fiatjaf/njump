@@ -59,7 +59,7 @@ RELAY_CONFIG_PATH=
 TRUSTED_PUBKEYS=npub1...,npub1...
 ```
 
-`RELAY_CONFIG_FILE` is path to json file to update relay configuration. You can set relay list like below:
+`RELAY_CONFIG_PATH` is path to json file to update relay configuration. You can set relay list like below:
 
 ```json
 {
