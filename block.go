@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -25,20 +24,15 @@ func agentBlock(next http.Handler) http.Handler {
 
 func cloudflareBlock(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip := net.ParseIP(r.Header.Get("CF-Connecting-IP"))
-		fmt.Println("should blopccccccccccc?", ip)
+		ip := net.ParseIP(actualIP(r))
 		if ip != nil {
-			fmt.Println("  !")
 			for _, ipnet := range cloudflareRanges {
-				fmt.Println("  range", ipnet)
 				if ipnet.Contains(ip) {
-					fmt.Println("    match")
 					// cloudflare is not allowed
 					log.Debug().Stringer("ip", ip).Msg("cloudflare (attacker) ip blocked")
 					http.Redirect(w, r, "https://njump.me/", 302)
 					return
 				}
-				fmt.Println("    no match")
 			}
 		}
 

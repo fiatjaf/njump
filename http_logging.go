@@ -9,7 +9,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 			path += "?" + r.URL.RawQuery
 		}
 		log.Debug().
-			Str("ip", r.Header.Get("X-Forwarded-For")).
+			Str("ip", actualIP(r)).
 			Str("path", path).
 			Str("user-agent", r.Header.Get("User-Agent")).
 			Str("referer", r.Header.Get("Referer")).
