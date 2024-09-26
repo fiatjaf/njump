@@ -144,7 +144,12 @@ func main() {
 	mux.HandleFunc("/{code}", renderEvent)
 	mux.HandleFunc("/{$}", renderHomepage)
 
-	corsHandler := cors.Default().Handler(relay)
+	corsHandler := cors.Default().Handler(
+		http.HandlerFunc(
+			ipblock(relay),
+		),
+	)
+	go updateCloudflareRangesRoutine()
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
 	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: corsHandler}
