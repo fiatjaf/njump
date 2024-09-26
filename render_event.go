@@ -22,6 +22,9 @@ import (
 func renderEvent(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	code := r.PathValue("code")
+	log.Debug().Str("ip", r.Header.Get("X-Forwarded-For")).
+		Str("user-agent", r.Header.Get("User-Agent")).Str("referer", r.Header.Get("Referer")).
+		Str("code", code).Msg("rendering event")
 
 	isEmbed := r.URL.Query().Get("embed") != ""
 

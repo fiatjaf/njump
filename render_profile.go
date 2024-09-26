@@ -10,6 +10,9 @@ import (
 
 func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, code string) {
 	isEmbed := r.URL.Query().Get("embed") != ""
+	log.Debug().Str("ip", r.Header.Get("CF-Connecting-IP")).
+		Str("user-agent", r.Header.Get("User-Agent")).Str("referer", r.Header.Get("Referer")).
+		Str("code", code).Msg("rendering profile")
 
 	isSitemap := false
 	if strings.HasSuffix(code, ".xml") {
