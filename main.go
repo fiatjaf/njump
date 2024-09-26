@@ -148,9 +148,9 @@ func main() {
 	// apply http middlewares
 	for _, middleware := range []func(http.Handler) http.Handler{
 		cors.Default().Handler,
+		loggingMiddleware,
 		agentBlock,
 		cloudflareBlock,
-		loggingMiddleware,
 	} {
 		mainHandler = middleware(mainHandler)
 	}

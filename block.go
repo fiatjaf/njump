@@ -10,14 +10,14 @@ import (
 
 func agentBlock(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		userAgent := r.UserAgent()
-		if strings.Contains(userAgent, "Amazonbot") {
-			// Drop the request by returning a 403 Forbidden response
-			http.Error(w, "Forbidden", http.StatusForbidden)
-			return
+		ua := r.Header.Get("User-Agent")
+		for _, bua := range []string{"Amazonbot", "semrush", "Bytespider", "AhrefsBot"} {
+			if strings.Contains(ua, bua) {
+				log.Debug().Str("ua", ua).Msg("user-agent blocked")
+				http.Error(w, "Forbidden", http.StatusForbidden)
+				return
+			}
 		}
-
-		// Call the next handler in the chain
 		next.ServeHTTP(w, r)
 	})
 }
@@ -30,7 +30,7 @@ func cloudflareBlock(next http.Handler) http.Handler {
 				if ipnet.Contains(ip) {
 					// cloudflare is not allowed
 					log.Debug().Stringer("ip", ip).Msg("cloudflare (attacker) ip blocked")
-					http.Redirect(w, r, "https://njump.me/", 302)
+					http.Error(w, "Forbidden", http.StatusForbidden)
 					return
 				}
 			}
