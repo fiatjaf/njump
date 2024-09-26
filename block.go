@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func agentBlock(next http.Handler) http.Handler {
+func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ua := r.Header.Get("User-Agent")
 		for _, bua := range []string{"Amazonbot", "semrush", "Bytespider", "AhrefsBot"} {
@@ -22,7 +22,7 @@ func agentBlock(next http.Handler) http.Handler {
 	})
 }
 
-func cloudflareBlock(next http.Handler) http.Handler {
+func cloudflareBlock(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ip := net.ParseIP(actualIP(r))
 		if ip != nil {

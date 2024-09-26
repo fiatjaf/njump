@@ -144,15 +144,21 @@ func main() {
 	mux.HandleFunc("/{code}", renderEvent)
 	mux.HandleFunc("/{$}", renderHomepage)
 
-	var mainHandler http.Handler = relay
-	// apply http middlewares
-	for _, middleware := range []func(http.Handler) http.Handler{
-		cors.Default().Handler,
-		loggingMiddleware,
-		agentBlock,
-		cloudflareBlock,
-	} {
-		mainHandler = middleware(mainHandler)
+	corsH := cors.Default()
+	corsM := func(next http.HandlerFunc) http.HandlerFunc {
+		return corsH.Handler(next).ServeHTTP
+	}
+
+	var mainHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
+		cloudflareBlock(
+			agentBlock(
+				loggingMiddleware(
+					corsM(
+						relay.ServeHTTP,
+					),
+				),
+			),
+		)(w, r)
 	}
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)

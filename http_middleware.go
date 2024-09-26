@@ -2,7 +2,7 @@ package main
 
 import "net/http"
 
-func loggingMiddleware(next http.Handler) http.Handler {
+func loggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path
 		if r.URL.RawQuery != "" {
