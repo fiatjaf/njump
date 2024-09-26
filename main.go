@@ -153,8 +153,10 @@ func main() {
 		cloudflareBlock(
 			agentBlock(
 				loggingMiddleware(
-					corsM(
-						relay.ServeHTTP,
+					queueMiddleware(
+						corsM(
+							relay.ServeHTTP,
+						),
 					),
 				),
 			),
