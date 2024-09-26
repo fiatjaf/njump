@@ -150,7 +150,7 @@ func main() {
 	}
 
 	var mainHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-		cloudflareBlock(
+		ipBlock(
 			agentBlock(
 				loggingMiddleware(
 					queueMiddleware(
@@ -170,9 +170,6 @@ func main() {
 			log.Error().Err(err).Msg("")
 		}
 	}()
-
-	// download list of cloudflare ips once a day
-	go updateCloudflareRangesRoutine()
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, os.Interrupt)
