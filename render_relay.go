@@ -10,9 +10,6 @@ import (
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	hostname := r.URL.Path[3:]
-	log.Debug().Str("ip", r.Header.Get("CF-Connecting-IP")).
-		Str("user-agent", r.Header.Get("User-Agent")).Str("referer", r.Header.Get("Referer")).
-		Str("hostname", hostname).Msg("rendering relay")
 
 	if strings.HasPrefix(hostname, "wss:/") || strings.HasPrefix(hostname, "ws:/") {
 		hostname = trimProtocolAndEndingSlash(hostname)

@@ -38,6 +38,21 @@ var (
 	tailwindDebugStuff template.HTML
 )
 
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fullURL := fmt.Sprintf("%s://%s%s", r.Proto, r.Host, r.URL.Path)
+		if r.URL.RawQuery != "" {
+			fullURL += "?" + r.URL.RawQuery
+		}
+		log.Debug().Str("Full URL:", fullURL).Msg("Request URL => ")
+		log.Debug().Str("ip", r.Header.Get("X-Forwarded-For")).
+			Str("user-agent", r.Header.Get("User-Agent")).Str("referer", r.Header.Get("Referer")).Msg("Request details => ")
+
+		// Call the next handler in the chain
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	err := envconfig.Process("", &s)
 	if err != nil {
@@ -144,9 +159,10 @@ func main() {
 	mux.HandleFunc("/{code}", renderEvent)
 	mux.HandleFunc("/{$}", renderHomepage)
 
+
 	corsHandler := cors.Default().Handler(
 		http.HandlerFunc(
-			ipblock(relay),
+			ipblock(loggedMux), // Wrap loggedMux with IP blocking
 		),
 	)
 	go updateCloudflareRangesRoutine()
