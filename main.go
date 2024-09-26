@@ -159,10 +159,12 @@ func main() {
 	mux.HandleFunc("/{code}", renderEvent)
 	mux.HandleFunc("/{$}", renderHomepage)
 
+	loggedMux := loggingMiddleware(mux)
+	agentMux := agentBlock(loggedMux)
 
 	corsHandler := cors.Default().Handler(
 		http.HandlerFunc(
-			ipblock(loggedMux), // Wrap loggedMux with IP blocking
+			ipblock(agentMux),
 		),
 	)
 	go updateCloudflareRangesRoutine()
