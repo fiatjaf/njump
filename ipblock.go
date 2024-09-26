@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-func ipblock(next http.Handler) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func cloudflareBlock(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ip := net.ParseIP(r.Header.Get("CF-Connecting-IP"))
 		if ip != nil {
 			for _, ipnet := range cloudflareRanges {
@@ -23,7 +23,7 @@ func ipblock(next http.Handler) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		next.ServeHTTP(w, r)
-	}
+	})
 }
 
 var cloudflareRanges []*net.IPNet

@@ -159,23 +159,27 @@ func main() {
 	mux.HandleFunc("/{code}", renderEvent)
 	mux.HandleFunc("/{$}", renderHomepage)
 
-	loggedMux := loggingMiddleware(mux)
-	agentMux := agentBlock(loggedMux)
-
-	corsHandler := cors.Default().Handler(
-		http.HandlerFunc(
-			ipblock(agentMux),
-		),
-	)
-	go updateCloudflareRangesRoutine()
+	var mainHandler http.Handler = relay
+	// apply http middlewares
+	for _, middleware := range []func(http.Handler) http.Handler{
+		cors.Default().Handler,
+		agentBlock,
+		cloudflareBlock,
+		loggingMiddleware,
+	} {
+		mainHandler = middleware(mainHandler)
+	}
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
-	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: corsHandler}
+	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: mainHandler}
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Error().Err(err).Msg("")
 		}
 	}()
+
+	// download list of cloudflare ips once a day
+	go updateCloudflareRangesRoutine()
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, os.Interrupt)
