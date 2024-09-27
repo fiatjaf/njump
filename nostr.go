@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fiatjaf/eventstore/badger"
+	"github.com/fiatjaf/eventstore/lmdb"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/nbd-wtf/go-nostr/sdk"
@@ -48,7 +48,7 @@ type CachedEvent struct {
 }
 
 func initSystem() func() {
-	db := &badger.BadgerBackend{
+	db := &lmdb.LMDBBackend{
 		Path: s.EventStorePath,
 	}
 	db.Init()

@@ -22,7 +22,6 @@ import (
 	"time"
 	"unicode"
 
-	_ "github.com/Kagami/go-avif"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"

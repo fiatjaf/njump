@@ -3,12 +3,11 @@ module github.com/fiatjaf/njump
 go 1.23.0
 
 require (
-	github.com/Kagami/go-avif v0.1.0
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/a-h/templ v0.2.771
 	github.com/bytesparadise/libasciidoc v0.8.0
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/fiatjaf/eventstore v0.9.0
+	github.com/fiatjaf/eventstore v0.10.0
 	github.com/fiatjaf/khatru v0.8.1
 	github.com/fogleman/gg v1.3.0
 	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
@@ -17,7 +16,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/emoji v0.0.3
-	github.com/nbd-wtf/go-nostr v0.37.4
+	github.com/nbd-wtf/go-nostr v0.37.5
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
 	github.com/puzpuzpuz/xsync/v3 v3.4.0
@@ -32,6 +31,7 @@ require (
 )
 
 require (
+	github.com/PowerDNS/lmdb-go v1.9.2 // indirect
 	github.com/alecthomas/chroma/v2 v2.3.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
