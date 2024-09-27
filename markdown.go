@@ -54,7 +54,6 @@ var tgivmdrenderer = html.NewRenderer(html.RendererOptions{
 
 func mdToHTML(md string, usingTelegramInstantView bool) string {
 	md = strings.ReplaceAll(md, "\u00A0", " ")
-	md = replaceNostrURLsWithHTMLTags(nostrEveryMatcher, md)
 
 	// create markdown parser with extensions
 	// this parser is stateful so it must be reinitialized every time
@@ -77,6 +76,9 @@ func mdToHTML(md string, usingTelegramInstantView bool) string {
 
 	// sanitize content
 	output = sanitizeXSS(output)
+
+	// nostr urls
+	output = replaceNostrURLsWithHTMLTags(nostrEveryMatcher, output)
 
 	return output
 }
