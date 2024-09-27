@@ -85,8 +85,8 @@ github.com/fasthttp/websocket v1.5.7 h1:0a6o2OfeATvtGgoMKleURhLT6JqWPg7fYfWnH4KH
 github.com/fasthttp/websocket v1.5.7/go.mod h1:bC4fxSono9czeXHQUVKxsC0sNjbm7lPJR04GDFqClfU=
 github.com/felixge/fgtrace v0.1.0 h1:cuMLI5NoBg/9IxIVmJzsxA3Aoz5eIKRca6WE1U2C1zc=
 github.com/felixge/fgtrace v0.1.0/go.mod h1:VYPh/jE5zczuRiQge0AtcpNmcLhV/epE/wpfVYQALlU=
-github.com/fiatjaf/eventstore v0.10.0 h1:uc5H8Si8Qxs1PBPgCtCN646uhBuEzKRVXsK1mvzcDxA=
-github.com/fiatjaf/eventstore v0.10.0/go.mod h1:h5CdLSF7mEQ7/rWpEABTRIrNuFoSwdQDi/nZkW/vVFU=
+github.com/fiatjaf/eventstore v0.10.1 h1:zgXrRhpyjzX0Eub4T6zkMZ60zRnIPJqy/Ipfx5h+yWo=
+github.com/fiatjaf/eventstore v0.10.1/go.mod h1:h5CdLSF7mEQ7/rWpEABTRIrNuFoSwdQDi/nZkW/vVFU=
 github.com/fiatjaf/generic-ristretto v0.0.1 h1:LUJSU87X/QWFsBXTwnH3moFe4N8AjUxT+Rfa0+bo6YM=
 github.com/fiatjaf/generic-ristretto v0.0.1/go.mod h1:cvV6ANHDA/GrfzVrig7N7i6l8CWnkVZvtQ2/wk9DPVE=
 github.com/fiatjaf/khatru v0.8.1 h1:BWAZqwuT0272ZlyzPkuqAA0eGBOs5G3u0Dn1tlWrm6Q=
