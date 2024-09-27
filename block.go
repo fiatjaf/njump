@@ -18,6 +18,7 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 			"Yandex",
 			"meta-externalagent",
 			"DotBot",
+			"ClaudeBot",
 		} {
 			if strings.Contains(ua, bua) {
 				// log.Debug().Str("ua", ua).Msg("user-agent blocked")
@@ -67,7 +68,7 @@ func ipBlock(next http.HandlerFunc) http.HandlerFunc {
 		if ip != nil {
 			for _, ipnet := range ranges {
 				if ipnet.Contains(ip) {
-					log.Debug().Stringer("ip", ip).Msg("cloudflare (attacker) ip blocked")
+					log.Debug().Stringer("ip", ip).Msg("ip blocked")
 					http.Error(w, "Forbidden", http.StatusForbidden)
 					return
 				}
