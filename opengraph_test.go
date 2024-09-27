@@ -25,7 +25,6 @@ type OpengraphFields struct {
 }
 
 func TestMain(m *testing.M) {
-	initCache()
 	code := m.Run()
 	os.Exit(code)
 }

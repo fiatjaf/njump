@@ -158,7 +158,12 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 
 		fetchProfileOnce := sync.Once{}
 
-		for ie := range sys.Pool.SubManyEoseNonUnique(subManyCtx, relays, nostr.Filters{filter}) {
+		for ie := range sys.Pool.SubManyEoseNonUnique(
+			subManyCtx,
+			relays,
+			nostr.Filters{filter},
+			nostr.WithLabel("fetching "+prefix),
+		) {
 			fetchProfileOnce.Do(func() {
 				go sys.FetchProfileMetadata(ctx, ie.PubKey)
 			})
@@ -240,7 +245,7 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 			relays = unique(append(relays, getRandomRelay()))
 		}
 
-		ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter})
+		ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter}, nostr.WithLabel("authorlast"))
 	out:
 		for {
 			select {
@@ -312,13 +317,12 @@ func contactsForPubkey(ctx context.Context, pubkey string) []string {
 		relays = append(relays, pubkeyRelays...)
 		relays = append(relays, sys.MetadataRelays...)
 
-		ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{
-			{
-				Kinds:   []int{3},
-				Authors: []string{pubkey},
-				Limit:   2,
-			},
-		})
+		ch := sys.Pool.SubManyEose(
+			ctx,
+			relays,
+			nostr.Filters{{Kinds: []int{3}, Authors: []string{pubkey}, Limit: 2}},
+			nostr.WithLabel("contacts"),
+		)
 
 		for {
 			select {
