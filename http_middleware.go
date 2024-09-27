@@ -43,7 +43,7 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		willQueue := false
-		for _, prefix := range []string{"/nevent1", "/image", "/naddr1", "/npub1", "/nprofile1", "/note1", "/embed"} {
+		for _, prefix := range []string{"/njump", "/nevent1", "/image", "/naddr1", "/npub1", "/nprofile1", "/note1", "/embed"} {
 			if strings.HasPrefix(r.URL.Path, prefix) {
 				willQueue = true
 				break
@@ -56,11 +56,19 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		qidx := stupidHash(r.URL.Path)
-		curr := concurrentRequests[qidx].Load()
-		isFirst := curr == 0
+		// add 1
+		count := concurrentRequests[qidx].Add(1)
+		isFirst := count == 1
+		if count > 2 {
+			log.Debug().Uint32("count", count).Int("qidx", qidx).Msg("too many concurrent requests")
 
-		// add 1 and lock (or wait for the lock)
-		concurrentRequests[qidx].Add(1)
+			if count > 4 {
+				http.Error(w, "", http.StatusTooManyRequests)
+				return
+			}
+		}
+
+		// lock (or wait for the lock)
 		queue[qidx].Lock()
 
 		if isFirst {

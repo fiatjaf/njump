@@ -22,7 +22,7 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 		} {
 			if strings.Contains(ua, bua) {
 				// log.Debug().Str("ua", ua).Msg("user-agent blocked")
-				http.Error(w, "Forbidden", http.StatusForbidden)
+				http.Error(w, "", http.StatusForbidden)
 				return
 			}
 		}
@@ -69,7 +69,7 @@ func ipBlock(next http.HandlerFunc) http.HandlerFunc {
 			for _, ipnet := range ranges {
 				if ipnet.Contains(ip) {
 					log.Debug().Stringer("ip", ip).Msg("ip blocked")
-					http.Error(w, "Forbidden", http.StatusForbidden)
+					http.Error(w, "", http.StatusForbidden)
 					return
 				}
 			}
