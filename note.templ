@@ -1,28 +1,58 @@
 package main
 
-templ noteTemplate(params NotePageParams) {
+import "html/template"
+
+type NotePageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details          DetailsParams
+	Content          template.HTML
+	Cover            string
+	Subject          string
+	TitleizedContent string
+	Clients          []ClientReference
+}
+
+templ noteInnerBlock(params NotePageParams) {
+	if params.Event.subject != "" {
+		<h1 class="text-2xl" itemprop="headline">{ params.Event.subject }</h1>
+	} else {
+		<h1 class="hidden">
+			{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }
+		</h1>
+	}
+	if params.Cover != "" {
+		<img src={ params.Cover } alt={ params.Alt } class="mt-1"/>
+	}
+	<!-- main content -->
+	<div dir="auto" class="leading-6" itemprop="articleBody">
+		@templ.Raw(params.Content)
+	</div>
+}
+
+templ noteTemplate(params NotePageParams, isEmbed bool) {
 	<!DOCTYPE html>
-	@eventPageTemplate(
-		params.TitleizedContent,
-		params.OpenGraphParams,
-		params.HeadParams,
-		params.Clients,
-		params.Details,
-		params.Event,
-	) {
-		if params.Subject != "" {
-			<h1 class="text-2xl" itemprop="headline">{ params.Subject }</h1>
-		} else {
-			<h1 class="hidden">
-				{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }
-			</h1>
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			params.NeventNaked,
+			isEmbed,
+		) {
+			@noteInnerBlock(params)
 		}
-		if params.Cover != "" {
-			<img src={ params.Cover } alt={ params.Alt } class="mt-1"/>
+	} else {
+		@eventPageTemplate(
+			params.TitleizedContent,
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+			isEmbed,
+		) {
+			@noteInnerBlock(params)
 		}
-		<!-- main content -->
-		<div dir="auto" class="leading-6" itemprop="articleBody">
-			@templ.Raw(params.Content)
-		</div>
 	}
 }

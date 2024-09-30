@@ -1,5 +1,12 @@
 package main
 
+type HomePageParams struct {
+	HeadParams
+
+	Npubs     []string
+	LastNotes []string
+}
+
 templ homepageTemplate(params HomePageParams) {
 	<!DOCTYPE html>
 	<html class="theme--default font-light">

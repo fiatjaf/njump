@@ -48,7 +48,9 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		lastEventAt = time.Unix(int64(lastNotes[0].CreatedAt), 0)
 	}
 	for i, levt := range lastNotes {
-		renderableLastNotes[i] = NewEnhancedEvent(nil, levt, []string{"wss://" + hostname})
+		ee := NewEnhancedEvent(nil, levt)
+		ee.relays = []string{"wss://" + hostname}
+		renderableLastNotes[i] = ee
 	}
 
 	if len(renderableLastNotes) != 0 {

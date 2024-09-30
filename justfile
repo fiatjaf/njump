@@ -1,20 +1,23 @@
 export PATH := "./node_modules/.bin:" + env_var('PATH')
 
 dev tags='':
-    fd 'go|templ|base.css' | entr -r bash -c 'TAILWIND_DEBUG=true SKIP_LANGUAGE_MODEL=true && templ generate && go build -tags={{tags}} -o /tmp/njump && /tmp/njump'
+    fd 'go|templ|base.css' | entr -r bash -c 'templ generate && go build -tags={{tags}} -o /tmp/njump && TAILWIND_DEBUG=true PORT=3001 /tmp/njump'
 
 build: templ tailwind
     go build -o ./njump
 
-deploy: templ tailwind
-    GOOS=linux GOARCH=amd64 go build -ldflags="-X main.compileTimeTs=$(date '+%s')" -o ./njump
-    rsync --progress njump njump:njump/njump-new
+deploy target: templ tailwind
+    CGO_CFLAGS="-I$(pwd)/secp256k1-master/musl/include/" CGO_LDFLAGS="-L$(pwd)/secp256k1-master/musl/lib" GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) go build -tags libsecp256k1 -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" -o ./njump
+    scp njump {{target}}:njump/njump-new
     ssh njump 'systemctl stop njump'
     ssh njump 'mv njump/njump-new njump/njump'
     ssh njump 'systemctl start njump'
 
-debug-build: templ tailwind
-    go build -o /tmp/njump .
+libsecp256k1:
+    wget https://github.com/bitcoin-core/secp256k1/archive/refs/heads/master.zip
+    unzip master.zip
+    rm master.zip
+    cd secp256k1-master && ./autogen.sh && CC=$(musl-cc) ./configure --enable-module-extrakeys --enable-module-schnorrsig --prefix=$(pwd)/musl && make install
 
 templ:
     templ generate

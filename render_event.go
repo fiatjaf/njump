@@ -19,28 +19,11 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-func isValidShortcode(s string) bool {
-	for _, r := range s {
-		if !('a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || '0' <= r && r <= '9' || r == '_') {
-			return false
-		}
-	}
-	return true
-}
-
 func renderEvent(w http.ResponseWriter, r *http.Request) {
-	code := r.URL.Path[1:] // hopefully a nip19 code
+	ctx := r.Context()
+	code := r.PathValue("code")
 
-	// it's the homepage
-	if code == "" {
-		renderHomepage(w, r)
-		return
-	}
-
-	if code == "about" {
-		renderAbout(w, r)
-		return
-	}
+	isEmbed := r.URL.Query().Get("embed") != ""
 
 	if strings.HasPrefix(code, "nostr:") {
 		// remove the "nostr:" prefix
@@ -60,43 +43,30 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		// it may be a NIP-05
 		if nip05.IsValidIdentifier(code) {
-			renderProfile(w, r, code)
+			renderProfile(ctx, r, w, code)
 			return
 		}
 
 		// otherwise error
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
-		return
-	}
-
-	// Check if the embed parameter is set to "yes"
-	embedParam := r.URL.Query().Get("embed")
-	if embedParam == "yes" {
-		renderEmbedded(w, r, code)
+		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
 		return
 	}
 
 	// render npub and nprofile using a separate function
 	if prefix == "npub" || prefix == "nprofile" {
 		// it's a profile
-		renderProfile(w, r, code)
+		renderProfile(ctx, r, w, code)
 		return
 	}
 
 	// get data for this event
-	data, err := grabData(r.Context(), code, false)
+	data, err := grabData(ctx, code)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
-		return
-	}
-
-	// if the result is a kind:0 render this as a profile
-	if data.event.Kind == 0 {
-		renderProfile(w, r, data.event.author.Npub())
+		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
 		return
 	}
 
@@ -209,7 +179,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {
 			// otherwise replace npub/nprofiles with names and trim length
-			description = replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "")[0]
+			description = replaceUserReferencesWithNames(ctx, []string{data.event.Content}, "")[0]
 			if len(description) > 240 {
 				description = description[:240]
 			}
@@ -221,7 +191,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		strings.TrimSpace(
 			strings.Replace(
 				strings.Replace(
-					replaceUserReferencesWithNames(r.Context(), []string{data.event.Content}, "")[0],
+					replaceUserReferencesWithNames(ctx, []string{data.event.Content}, "")[0],
 					"\r\n", " ", -1),
 				"\n", " ", -1,
 			),
@@ -265,14 +235,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if data.event.Kind == 30023 || data.event.Kind == 30024 {
 		// Remove duplicate title inside the body
 		data.content = strings.ReplaceAll(data.content, "# "+data.event.subject, "")
-		data.content = mdToHTML(data.content, data.templateId == TelegramInstantView, false)
+		data.content = mdToHTML(data.content, data.templateId == TelegramInstantView)
 	} else if data.event.Kind == 30818 {
 		data.content = asciidocToHTML(data.content)
 	} else {
 		// first we run basicFormatting, which turns URLs into their appropriate HTML tags
 		data.content = basicFormatting(html.EscapeString(data.content), true, false, false)
 		// then we render quotes as HTML, which will also apply basicFormatting to all the internal quotes
-		data.content = renderQuotesAsHTML(r.Context(), data.content, data.templateId == TelegramInstantView)
+		data.content = renderQuotesAsHTML(ctx, data.content, data.templateId == TelegramInstantView)
 		// we must do this because inside <blockquotes> we must treat <img>s differently when telegram_instant_view
 	}
 
@@ -305,7 +275,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:       data.createdAt,
 		KindDescription: data.kindDescription,
 		KindNIP:         data.kindNIP,
-		EventJSON:       data.event.ToJSONHTML(),
+		EventJSON:       toJSONHTML(data.event.Event),
 		Kind:            data.event.Kind,
 		SeenOn:          data.event.relays,
 		Metadata:        data.event.author,
@@ -345,6 +315,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:    data.createdAt,
 			ParentNevent: data.event.getParentNevent(),
 		})
+
 	case Note:
 		if style == StyleTwitter {
 			// twitter has started sprinkling this over our image, so let's make it invisible
@@ -360,11 +331,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			opengraph.BigImage = opengraph.Image
 		}
 
-		enhancedCode := data.nevent
-		if data.naddr != "" {
-			enhancedCode = data.naddr
-		}
-
 		content := data.content
 		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
 			// custom emojis
@@ -375,7 +341,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		component = noteTemplate(NotePageParams{
+
+		params := NotePageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -384,12 +351,41 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			Clients:          generateClientList(data.event.Kind, enhancedCode),
+			Clients:          generateClientList(data.event.Kind, data.nevent),
 			Details:          detailsData,
 			Content:          template.HTML(content),
+			TitleizedContent: titleizedContent,
+		}
+
+		component = noteTemplate(params, isEmbed)
+
+	case LongForm:
+		if data.cover != "" {
+			opengraph.Image = data.cover
+			opengraph.BigImage = data.cover
+		} else if style == StyleTwitter {
+			// twitter has started sprinkling this over our image, so let's make it invisible
+			opengraph.SingleTitle = string(INVISIBLE_SPACE)
+		}
+
+		params := NotePageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				Oembed:      oembed,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
+			},
+			Clients:          generateClientList(data.event.Kind, data.naddr),
+			Details:          detailsData,
+			Content:          template.HTML(data.content),
 			Cover:            data.cover,
 			TitleizedContent: titleizedContent,
-		})
+		}
+
+		component = noteTemplate(params, isEmbed)
+
 	case FileMetadata:
 		opengraph.Image = data.kind1063Metadata.DisplayImage()
 		params := FileMetadataPageParams{
@@ -410,10 +406,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 		params.Details.Extra = fileMetadataDetails(params)
 
-		component = fileMetadataTemplate(params)
+		component = fileMetadataTemplate(params, isEmbed)
+
 	case LiveEvent:
 		opengraph.Image = data.kind30311Metadata.Image
-		component = liveEventTemplate(LiveEventPageParams{
+		params := LiveEventPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -432,9 +429,12 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 					return s
 				},
 			),
-		})
+		}
+
+		component = liveEventTemplate(params, isEmbed)
+
 	case LiveEventMessage:
-		component = liveEventMessageTemplate(LiveEventMessagePageParams{
+		params := LiveEventMessagePageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -447,7 +447,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Content:          template.HTML(data.content),
 			TitleizedContent: titleizedContent,
 			Clients:          generateClientList(data.event.Kind, data.naddr),
-		})
+		}
+
+		component = liveEventMessageTemplate(params, isEmbed)
+
 	case CalendarEvent:
 		if data.kind31922Or31923Metadata.Image != "" {
 			opengraph.Image = data.kind31922Or31923Metadata.Image
@@ -463,31 +466,29 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		var StartAtDate, StartAtTime string
-		var EndAtDate, EndAtTime string
-		var TimeZone string
+		var startAtDate, startAtTime string
+		var endAtDate, endAtTime string
 
 		location, err := time.LoadLocation(data.kind31922Or31923Metadata.StartTzid)
 		if err != nil {
 			// Set default TimeZone to UTC
 			location = time.UTC
 		}
-		TimeZone = getUTCOffset(location)
 
-		StartAtDate = data.kind31922Or31923Metadata.Start.In(location).Format("02 Jan 2006")
-		EndAtDate = data.kind31922Or31923Metadata.End.In(location).Format("02 Jan 2006")
+		startAtDate = data.kind31922Or31923Metadata.Start.In(location).Format("02 Jan 2006")
+		endAtDate = data.kind31922Or31923Metadata.End.In(location).Format("02 Jan 2006")
 		if data.kind31922Or31923Metadata.CalendarEventKind == 31923 {
-			StartAtTime = data.kind31922Or31923Metadata.Start.In(location).Format("15:04")
-			EndAtTime = data.kind31922Or31923Metadata.End.In(location).Format("15:04")
+			startAtTime = data.kind31922Or31923Metadata.Start.In(location).Format("15:04")
+			endAtTime = data.kind31922Or31923Metadata.End.In(location).Format("15:04")
 		}
 
 		// Reset EndDate/Time if it is non initialized (beginning of the Unix epoch)
 		if data.kind31922Or31923Metadata.End == (time.Time{}) {
-			EndAtDate = ""
-			EndAtTime = ""
+			endAtDate = ""
+			endAtTime = ""
 		}
 
-		component = calendarEventTemplate(CalendarPageParams{
+		params := CalendarPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -495,22 +496,21 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			TimeZone:      TimeZone,
-			StartAtDate:   StartAtDate,
-			StartAtTime:   StartAtTime,
-			EndAtDate:     EndAtDate,
-			EndAtTime:     EndAtTime,
+			TimeZone:      getUTCOffset(location),
+			StartAtDate:   startAtDate,
+			StartAtTime:   startAtTime,
+			EndAtDate:     endAtDate,
+			EndAtTime:     endAtTime,
 			CalendarEvent: *data.kind31922Or31923Metadata,
 			Details:       detailsData,
 			Content:       template.HTML(data.content),
 			Clients:       generateClientList(data.event.Kind, data.naddr),
-		})
+		}
+
+		component = calendarEventTemplate(params, isEmbed)
 
 	case WikiEvent:
-		PublishedAt := data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006")
-		npub, _ := nip19.EncodePublicKey(data.event.PubKey)
-
-		component = wikiEventTemplate(WikiPageParams{
+		params := WikiPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
 			HeadParams: HeadParams{
@@ -518,7 +518,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			PublishedAt: PublishedAt,
+			PublishedAt: data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006"),
 			WikiEvent:   data.Kind30818Metadata,
 			Details:     detailsData,
 			Content:     data.content,
@@ -532,15 +532,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 					return strings.Replace(url, "{authorPubkey}", data.event.PubKey, -1)
 				},
 				func(client ClientReference, url string) string {
-					return strings.Replace(url, "{npub}", npub, -1)
+					return strings.Replace(url, "{npub}", data.event.author.Npub(), -1)
 				},
 			),
-		})
+		}
+
+		component = wikiEventTemplate(params, isEmbed)
 
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
 
-		component = otherTemplate(OtherPageParams{
+		params := OtherPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			HeadParams: HeadParams{
 				IsProfile:   false,
@@ -551,15 +553,18 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:         detailsData,
 			Kind:            data.event.Kind,
 			KindDescription: data.kindDescription,
-		})
+		}
+
+		component = otherTemplate(params)
+
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
 		http.Error(w, "tried to render an unsupported template at render_event.go", 500)
 		return
 	}
 
-	if err := component.Render(r.Context(), w); err != nil {
-		log.Error().Err(err).Msg("error rendering tmpl")
+	if err := component.Render(ctx, w); err != nil {
+		log.Warn().Err(err).Msg("error rendering tmpl")
 	}
 	return
 }

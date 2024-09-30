@@ -12,14 +12,17 @@ For more information about njump's philosophy and its use, read the presentation
 
 | kind    | description                | NIP         |
 | ------- | -------------------------- | ----------- |
-| `0`     | Metadata                   | [1](01.md)  |
-| `1`     | Short Text Note            | [1](01.md)  |
-| `6`     | Repost                     | [18](18.md) |
-| `1063`  | File Metadata              | [94](94.md) |
-| `1311`  | Live Chat Message          | [53](53.md) |
-| `30023` | Long-form Content          | [23](23.md) |
-| `30024` | Draft Long-form Content    | [23](23.md) |
-| `30311` | Live Event                 | [53](53.md) |
+| `0`     | Metadata                   | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
+| `1`     | Short Text Note            | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
+| `6`     | Repost                     | [18](https://github.com/nostr-protocol/nips/blob/master/18.md) |
+| `1063`  | File Metadata              | [94](https://github.com/nostr-protocol/nips/blob/master/94.md) |
+| `1311`  | Live Chat Message          | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
+| `30023` | Long-form Content          | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
+| `30024` | Draft Long-form Content    | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
+| `30311` | Live Event                 | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
+| `30818` | Wiki article               | [54](https://github.com/nostr-protocol/nips/blob/master/54.md) |
+| `31922` | Date-Based Calendar Event  | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
+| `31923` | Time-Based Calendar Event  | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
 
 ## Running
 
@@ -56,7 +59,7 @@ RELAY_CONFIG_PATH=
 TRUSTED_PUBKEYS=npub1...,npub1...
 ```
 
-`RELAY_CONFIG_FILE` is path to json file to update relay configuration. You can set relay list like below:
+`RELAY_CONFIG_PATH` is path to json file to update relay configuration. You can set relay list like below:
 
 ```json
 {

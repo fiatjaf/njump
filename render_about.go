@@ -10,6 +10,6 @@ func renderAbout(w http.ResponseWriter, r *http.Request) {
 		HeadParams: HeadParams{IsAbout: true, IsProfile: false},
 	}).Render(r.Context(), w)
 	if err != nil {
-		log.Error().Err(err).Msg("error rendering tmpl")
+		log.Warn().Err(err).Msg("error rendering tmpl")
 	}
 }

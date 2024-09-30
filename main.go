@@ -11,7 +11,6 @@ import (
 	"os/signal"
 	"strings"
 
-	eventstore_badger "github.com/fiatjaf/eventstore/badger"
 	"github.com/fiatjaf/khatru"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/nbd-wtf/go-nostr"
@@ -26,7 +25,6 @@ type Settings struct {
 	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
 	HintsMemoryDumpPath string   `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
 	TailwindDebug       bool     `envconfig:"TAILWIND_DEBUG"`
-	SkipLanguageModel   bool     `envconfig:"SKIP_LANGUAGE_MODEL"`
 	RelayConfigPath     string   `envconfig:"RELAY_CONFIG_PATH"`
 	TrustedPubKeys      []string `envconfig:"TRUSTED_PUBKEYS"`
 }
@@ -54,6 +52,9 @@ func main() {
 	if len(s.TrustedPubKeys) == 0 {
 		s.TrustedPubKeys = defaultTrustedPubKeys
 	}
+
+	// eventstore and nostr system
+	defer initSystem()()
 
 	if s.RelayConfigPath != "" {
 		configr, err := os.ReadFile(s.RelayConfigPath)
@@ -89,9 +90,9 @@ func main() {
 			"module.exports", "tailwind.config", 1,
 		)
 
-		styleb, err := os.ReadFile("tailwind.css")
+		styleb, err := os.ReadFile("base.css")
 		if err != nil {
-			log.Fatal().Err(err).Msg("failed to load tailwind.css")
+			log.Fatal().Err(err).Msg("failed to load base.css")
 			return
 		}
 		style := string(styleb)
@@ -102,9 +103,8 @@ func main() {
 	// image rendering stuff
 	initializeImageDrawingStuff()
 
-	// eventstore and internal db
-	deinitCache := initCache()
-	defer deinitCache()
+	// internal db
+	defer cache.initializeCache()()
 
 	// initialize routines
 	ctx, cancel := context.WithCancel(context.Background())
@@ -115,8 +115,8 @@ func main() {
 
 	// expose our internal cache as a relay (mostly for debugging purposes)
 	relay := khatru.NewRelay()
-	relay.QueryEvents = append(relay.QueryEvents, db.QueryEvents)
-	relay.DeleteEvent = append(relay.DeleteEvent, db.DeleteEvent)
+	relay.QueryEvents = append(relay.QueryEvents, sys.Store.QueryEvents)
+	relay.DeleteEvent = append(relay.DeleteEvent, sys.Store.DeleteEvent)
 	relay.RejectEvent = append(relay.RejectEvent,
 		func(context.Context, *nostr.Event) (bool, string) {
 			return true, "this relay is not writable"
@@ -126,6 +126,7 @@ func main() {
 	// routes
 	mux := relay.Router()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
+
 	mux.HandleFunc("/relays-archive.xml", renderArchive)
 	mux.HandleFunc("/npubs-archive.xml", renderArchive)
 	mux.HandleFunc("/npubs-sitemaps.xml", renderSitemapIndex)
@@ -138,11 +139,32 @@ func main() {
 	mux.HandleFunc("/e/", redirectFromESlash)
 	mux.HandleFunc("/p/", redirectFromPSlash)
 	mux.HandleFunc("/favicon.ico", redirectToFavicon)
-	mux.HandleFunc("/embed/", renderEmbedjs)
-	mux.HandleFunc("/", renderEvent)
+	mux.HandleFunc("/embed/{code}", renderEmbedjs)
+	mux.HandleFunc("/about", renderAbout)
+	mux.HandleFunc("/{code}", renderEvent)
+	mux.HandleFunc("/{$}", renderHomepage)
+
+	corsH := cors.Default()
+	corsM := func(next http.HandlerFunc) http.HandlerFunc {
+		return corsH.Handler(next).ServeHTTP
+	}
+
+	var mainHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
+		ipBlock(
+			agentBlock(
+				loggingMiddleware(
+					queueMiddleware(
+						corsM(
+							relay.ServeHTTP,
+						),
+					),
+				),
+			),
+		)(w, r)
+	}
 
 	log.Print("listening at http://0.0.0.0:" + s.Port)
-	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: cors.Default().Handler(relay)}
+	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: mainHandler}
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Error().Err(err).Msg("")
@@ -153,21 +175,4 @@ func main() {
 	signal.Notify(sc, os.Interrupt)
 	<-sc
 	server.Close()
-}
-
-func initCache() func() {
-	// initialize disk cache
-	deinit := cache.initialize()
-
-	// initialize eventstore database
-	if badgerBackend, ok := db.(*eventstore_badger.BadgerBackend); ok {
-		// it may be NullStore, in which case we do nothing
-		badgerBackend.Path = s.EventStorePath
-	}
-	db.Init()
-
-	return func() {
-		deinit()
-		db.Close()
-	}
 }

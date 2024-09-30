@@ -1,5 +1,25 @@
 package main
 
+import (
+	"html/template"
+
+	"github.com/nbd-wtf/go-nostr/sdk"
+)
+
+type TelegramInstantViewParams struct {
+	Video        string
+	VideoType    string
+	Image        string
+	Summary      template.HTML
+	Content      template.HTML
+	Description  string
+	Subject      string
+	Metadata     sdk.ProfileMetadata
+	AuthorLong   string
+	CreatedAt    string
+	ParentNevent string
+}
+
 templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
 	<meta charset="UTF-8"/>
 	<!-- check https://nikstar.me/post/instant-view/ for more information on how this was set up -->

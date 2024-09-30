@@ -1,22 +1,47 @@
 package main
 
-templ wikiEventTemplate(params WikiPageParams) {
-	<!DOCTYPE html>
-	@eventPageTemplate(
-		"Wiki - " + params.WikiEvent.Title,
-		params.OpenGraphParams,
-		params.HeadParams,
-		params.Clients,
-		params.Details,
-		params.Event,
-	) {
-		<h1 class="flex text-2xl items-center">
-			<div class="inline-block px-2 mr-2 text-base bg-strongpink text-white rounded-md">Wiki <span class="text-base">＞</span></div> <div class="inline-block">{ params.WikiEvent.Title }</div>
-		</h1>
+type WikiPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+	Details     DetailsParams
+	PublishedAt string
+	Content     string
+	WikiEvent   Kind30818Metadata
+	Clients     []ClientReference
+}
+templ wikiInnerBlock(params WikiPageParams) {
+	<h1 class="flex text-2xl items-center">
+		<div class="inline-block px-2 mr-2 text-base bg-strongpink text-white rounded-md">Wiki <span class="text-base">＞</span></div>
+		<div class="inline-block">{ params.WikiEvent.Title }</div>
+	</h1>
+	<!-- main content -->
+	<div dir="auto" class="leading-5" itemprop="articleBody">
+		@templ.Raw(params.Content)
+	</div>
+}
 
-		<!-- main content -->
-		<div dir="auto" class="leading-5" itemprop="articleBody">
-			@templ.Raw(params.Content)
-		</div>
+templ wikiEventTemplate(params WikiPageParams, isEmbed bool) {
+	<!DOCTYPE html>
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			params.NeventNaked,
+			isEmbed,
+		) {
+			@wikiInnerBlock(params)
+		}
+	} else {
+		@eventPageTemplate(
+			"Wiki - "+params.WikiEvent.Title,
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+			isEmbed,
+		) {
+			@wikiInnerBlock(params)
+		}
 	}
 }

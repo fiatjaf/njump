@@ -1,15 +1,44 @@
 package main
 
-templ liveEventMessageTemplate(params LiveEventMessagePageParams) {
+import "html/template"
+
+type LiveEventMessagePageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details          DetailsParams
+	Content          template.HTML
+	TitleizedContent string
+
+	Clients []ClientReference
+}
+
+templ liveEventMessageInnerBlock(params LiveEventMessagePageParams) {
+	@templ.Raw(params.Content)
+}
+
+templ liveEventMessageTemplate(params LiveEventMessagePageParams, isEmbed bool) {
 	<!DOCTYPE html>
-	@eventPageTemplate(
-		params.TitleizedContent,
-		params.OpenGraphParams,
-		params.HeadParams,
-		params.Clients,
-		params.Details,
-		params.Event,
-	) {
-		@templ.Raw(params.Content)
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			params.NeventNaked,
+			isEmbed,
+		) {
+			@liveEventMessageInnerBlock(params)
+		}
+	} else {
+		@eventPageTemplate(
+			params.TitleizedContent,
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+			isEmbed,
+		) {
+			@liveEventMessageInnerBlock(params)
+		}
 	}
 }

@@ -8,20 +8,15 @@ import (
 	"time"
 
 	"github.com/dgraph-io/badger/v4"
-	"github.com/fiatjaf/eventstore"
-	eventstore_badger "github.com/fiatjaf/eventstore/badger"
 )
 
-var (
-	cache                  = Cache{}
-	db    eventstore.Store = &eventstore_badger.BadgerBackend{}
-)
+var cache = Cache{}
 
 type Cache struct {
 	*badger.DB
 }
 
-func (c *Cache) initialize() func() {
+func (c *Cache) initializeCache() func() {
 	db, err := badger.Open(badger.DefaultOptions(s.DiskCachePath))
 	if err != nil {
 		log.Fatal().Err(err).Str("path", s.DiskCachePath).Msg("failed to open badger")
@@ -40,7 +35,9 @@ func (c *Cache) initialize() func() {
 		}
 	}()
 
-	return func() { db.Close() }
+	return func() {
+		db.Close()
+	}
 }
 
 func (c *Cache) Delete(key string) error {

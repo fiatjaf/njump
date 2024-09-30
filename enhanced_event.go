@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"html"
 	"html/template"
@@ -14,7 +13,7 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	sdk "github.com/nbd-wtf/nostr-sdk"
+	"github.com/nbd-wtf/go-nostr/sdk"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
 )
 
@@ -29,14 +28,14 @@ type EnhancedEvent struct {
 func NewEnhancedEvent(
 	ctx context.Context,
 	event *nostr.Event,
-	relays []string,
 ) EnhancedEvent {
-	ee := EnhancedEvent{
-		Event:  event,
-		relays: relays,
-	}
+	ee := EnhancedEvent{Event: event}
 
 	for _, tag := range event.Tags {
+		if len(tag) < 2 {
+			continue
+		}
+
 		if tag[0] == "subject" || tag[0] == "title" {
 			ee.subject = tag[1]
 		}
@@ -52,6 +51,7 @@ func NewEnhancedEvent(
 		} else {
 			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 			defer cancel()
+
 			ee.author = sys.FetchProfileMetadata(ctx, event.PubKey)
 		}
 	}
@@ -200,47 +200,4 @@ func (ee EnhancedEvent) CreatedAtStr() string {
 
 func (ee EnhancedEvent) ModifiedAtStr() string {
 	return time.Unix(int64(ee.Event.CreatedAt), 0).Format("2006-01-02T15:04:05Z07:00")
-}
-
-func (ee EnhancedEvent) ToJSONHTML() template.HTML {
-	tagsHTML := "["
-	for t, tag := range ee.Tags {
-		tagsHTML += "\n    ["
-		for i, item := range tag {
-			cls := `"text-zinc-500 dark:text-zinc-50"`
-			if i == 0 {
-				cls = `"text-amber-500 dark:text-amber-200"`
-			}
-			itemJSON, _ := json.Marshal(item)
-			tagsHTML += "\n      <span class=" + cls + ">" + html.EscapeString(string(itemJSON))
-			if i < len(tag)-1 {
-				tagsHTML += ","
-			} else {
-				tagsHTML += "\n    "
-			}
-		}
-		tagsHTML += "]"
-		if t < len(ee.Tags)-1 {
-			tagsHTML += ","
-		} else {
-			tagsHTML += "\n  "
-		}
-	}
-	tagsHTML += "]"
-
-	contentJSON, _ := json.Marshal(ee.Content)
-
-	keyCls := "text-purple-700 dark:text-purple-300"
-
-	return template.HTML(fmt.Sprintf(
-		`{
-  <span class="`+keyCls+`">"id":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
-  <span class="`+keyCls+`">"pubkey":</span> <span class="text-zinc-500 dark:text-zinc-50">"%s"</span>,
-  <span class="`+keyCls+`">"created_at":</span> <span class="text-green-600">%d</span>,
-  <span class="`+keyCls+`">"kind":</span> <span class="text-amber-500 dark:text-amber-200">%d</span>,
-  <span class="`+keyCls+`">"tags":</span> %s,
-  <span class="`+keyCls+`">"content":</span> <span class="text-zinc-500 dark:text-zinc-50">%s</span>,
-  <span class="`+keyCls+`">"sig":</span> <span class="text-zinc-500 dark:text-zinc-50 content">"%s"</span>
-}`, ee.ID, ee.PubKey, ee.CreatedAt, ee.Kind, tagsHTML, html.EscapeString(string(contentJSON)), ee.Sig),
-	)
 }

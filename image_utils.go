@@ -22,7 +22,6 @@ import (
 	"time"
 	"unicode"
 
-	_ "github.com/Kagami/go-avif"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/font"
@@ -32,7 +31,6 @@ import (
 	"github.com/go-text/typesetting/shaping"
 	"github.com/nbd-wtf/emoji"
 	"github.com/nfnt/resize"
-	"github.com/pemistahl/lingua-go"
 	"github.com/srwiley/rasterx"
 	"golang.org/x/image/math/fixed"
 	_ "golang.org/x/image/webp"
@@ -71,7 +69,6 @@ var (
 		language.Syriac,
 	}
 
-	detector     lingua.LanguageDetector
 	scriptRanges []ScriptRange
 	fontMap      [nSupportedScripts]font.Face
 	emojiFace    font.Face
@@ -127,21 +124,6 @@ type ScriptRange struct {
 }
 
 func initializeImageDrawingStuff() error {
-	// language detector
-	if !s.SkipLanguageModel {
-		detector = lingua.NewLanguageDetectorBuilder().FromLanguages(
-			lingua.Japanese,
-			lingua.Persian,
-			lingua.Chinese,
-			lingua.Thai,
-			lingua.Hebrew,
-			lingua.Arabic,
-			lingua.Bengali,
-			lingua.Hindi,
-			lingua.Korean,
-		).WithLowAccuracyMode().Build()
-	}
-
 	// script detector material
 	for _, srange := range language.ScriptRanges {
 		for ssi, script := range supportedScripts {
@@ -281,18 +263,7 @@ gotScriptIndex:
 	script = supportedScripts[idx]
 	face = fontMap[idx]
 	direction := directionMap[idx]
-
-	lng := language.Language("en-us")
-	if detector == nil {
-		lng = defaultLanguageMap[idx]
-	} else {
-		lang, ok := detector.DetectLanguageOf(string(paragraph))
-		if ok {
-			lng = language.Language(lang.IsoCode639_1().String())
-		} else {
-			lng = defaultLanguageMap[idx]
-		}
-	}
+	lng := defaultLanguageMap[idx]
 
 	return lng, script, direction, face
 }

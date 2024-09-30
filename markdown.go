@@ -1,8 +1,8 @@
 package main
 
 import (
+	stdhtml "html"
 	"io"
-	"regexp"
 	"strings"
 
 	"github.com/gomarkdown/markdown"
@@ -12,18 +12,20 @@ import (
 )
 
 var mdrenderer = html.NewRenderer(html.RendererOptions{
-	Flags: html.CommonFlags | html.HrefTargetBlank,
+	Flags: html.HrefTargetBlank | html.SkipHTML,
+	RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
+		switch v := node.(type) {
+		case *ast.HTMLSpan:
+			w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
+			return ast.GoToNext, true
+		case *ast.HTMLBlock:
+			w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
+			return ast.GoToNext, true
+		}
+
+		return ast.GoToNext, false
+	},
 })
-
-func stripLinksFromMarkdown(md string) string {
-	// Regular expression to match Markdown links and HTML links
-	linkRegex := regexp.MustCompile(`\[([^\]]*)\]\([^)]*\)|<a[^>]*>(.*?)</a>`)
-
-	// Replace both Markdown and HTML links with just the link text
-	strippedMD := linkRegex.ReplaceAllString(md, "$1$2")
-
-	return strippedMD
-}
 
 var tgivmdrenderer = html.NewRenderer(html.RendererOptions{
 	Flags: html.CommonFlags | html.HrefTargetBlank,
@@ -50,17 +52,18 @@ var tgivmdrenderer = html.NewRenderer(html.RendererOptions{
 	},
 })
 
-func mdToHTML(md string, usingTelegramInstantView bool, skipLinks bool) string {
+func mdToHTML(md string, usingTelegramInstantView bool) string {
 	md = strings.ReplaceAll(md, "\u00A0", " ")
-	md = replaceNostrURLsWithHTMLTags(nostrEveryMatcher, md)
 
 	// create markdown parser with extensions
 	// this parser is stateful so it must be reinitialized every time
 	doc := parser.NewWithExtensions(
-		parser.CommonExtensions |
-			parser.AutoHeadingIDs |
-			parser.NoEmptyLineBeforeBlock |
-			parser.Footnotes,
+		parser.AutoHeadingIDs |
+			parser.NoIntraEmphasis |
+			parser.FencedCode |
+			parser.Autolink |
+			parser.Footnotes |
+			parser.SpaceHeadings,
 	).Parse([]byte(md))
 
 	renderer := mdrenderer
@@ -71,12 +74,11 @@ func mdToHTML(md string, usingTelegramInstantView bool, skipLinks bool) string {
 	// create HTML renderer with extensions
 	output := string(markdown.Render(doc, renderer))
 
-	if skipLinks {
-		output = stripLinksFromMarkdown(output)
-	}
-
 	// sanitize content
 	output = sanitizeXSS(output)
+
+	// nostr urls
+	output = replaceNostrURLsWithHTMLTags(nostrEveryMatcher, output)
 
 	return output
 }

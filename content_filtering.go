@@ -11,7 +11,7 @@ import (
 
 func hasProhibitedWordOrTag(event *nostr.Event) bool {
 	for _, tag := range event.Tags {
-		if len(tag) >= 2 && tag[0] == "t" && slices.Contains(pornTags, tag[1]) {
+		if len(tag) >= 2 && tag[0] == "t" && slices.Contains(pornTags, strings.ToLower(tag[1])) {
 			return true
 		}
 	}
@@ -37,20 +37,27 @@ var pornTags = []string{
 	"fuck",
 	"freeporn",
 	"girls",
+	"lewd",
 	"loli",
 	"milf",
+	"naked",
 	"nude",
+	"nudes",
+	"nudeart",
 	"nudity",
 	"nsfw",
 	"pantsu",
 	"pussy",
 	"porn",
+	"porngif",
 	"porno",
+	"pornstar",
 	"porntube",
 	"pornvideo",
 	"sex",
 	"sexpervertsyndicate",
 	"sexporn",
+	"sexworker",
 	"sexy",
 	"slut",
 	"teen",

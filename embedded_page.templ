@@ -1,6 +1,10 @@
 package main
 
-templ embeddedNoteTemplate(params EmbeddedNoteParams) {
+templ embeddedPageTemplate(
+	event EnhancedEvent,
+	NeventNaked string,
+	isEmbed bool,
+) {
 	<!DOCTYPE html>
 	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
 		<meta charset="UTF-8"/>
@@ -12,28 +16,21 @@ templ embeddedNoteTemplate(params EmbeddedNoteParams) {
 				href="/njump/static/tailwind-bundle.min.css"
 			/>
 		</head>
-		<body class="relative bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black sm:items-center sm:justify-center">
+		<body 
+			class="relative bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black sm:items-center sm:justify-center cursor-pointer"
+			event-data={ templ.JSONString(NeventNaked) }
+		>
 			<style> ::-webkit-scrollbar { display: none; } </style>
 			<div class="mx-auto w-full max-w-screen-2xl justify-between gap-10 overflow-visible px-4 pb-4 pt-4 print:w-full sm:w-11/12 md:w-10/12 lg:w-9/12">
-				<a href={ templ.URL("/" + params.Url) } target="_new" class="no-underline">
-					<div class="w-full break-words">
-						@authorHeaderTemplate(params.Metadata)
-						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
-						<article class="prose-cite:text-sm prose mb-6 leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:mb-2 prose-blockquote:mt-2 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-neutral-200 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-blockquote:pt-0 prose-blockquote:font-light prose-blockquote:not-italic prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-neutral-700 sm:prose-a:text-justify">
-							if params.Subject != "" {
-								<h1 class="text-2xl">{ params.Subject }</h1>
-							}
-							<!-- main content -->
-							<div dir="auto">
-								@templ.Raw(params.Content)
-							</div>
-							<div class="mt-2 w-full text-right text-sm text-stone-400">
-								{ params.CreatedAt }
-							</div>
-						</article>
-						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
-					</div>
-				</a>
+				@authorHeaderTemplate(event.author)
+				<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
+				<article class="prose-cite:text-sm prose mb-6 leading-5 dark:prose-invert prose-headings:font-light prose-p:m-0 prose-p:mb-2 prose-blockquote:mx-0 prose-blockquote:my-8 prose-blockquote:border-l-05rem prose-blockquote:border-solid prose-blockquote:border-l-gray-100 prose-blockquote:py-2 prose-blockquote:pl-4 prose-blockquote:pr-0 prose-ol:m-0 prose-ol:p-0 prose-ol:pl-4 prose-ul:m-0 prose-ul:p-0 prose-ul:pl-4 prose-li:mb-2 dark:prose-blockquote:border-l-zinc-800 sm:prose-a:text-justify [&>*>h1]:mb-2 [&>*>h1]:mt-6 prose-hr:mt-6 prose-hr:mb-6">
+					{ children... }
+				</article>
+				<div class="mt-6 w-full text-right text-sm text-stone-400">
+					{ event.CreatedAtStr() }
+				</div>
+				<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>
 				<div class="text-sm leading-3 text-neutral-400">
 					This note has been published on Nostr and is embedded via Njump,
 					<a href="/" target="_new" class="underline">learn more</a>
@@ -50,6 +47,21 @@ templ embeddedNoteTemplate(params EmbeddedNoteParams) {
 				</defs>
 			</svg>
 			<script>
+
+// Open links in a new tab
+var links = document.getElementsByTagName('a');
+for (var i = 0; i < links.length; i++) {
+		links[i].setAttribute('target', '_blank');
+}
+
+// Open the njump page if the target is not a link
+document.onclick = function(event) {
+	if (event.target.tagName.toLowerCase() !== 'a') {
+		const neventNaked = JSON.parse(document.body.getAttribute('event-data'));
+		window.open("/" + neventNaked, '_blank');
+	}
+};
+
 window.addEventListener('load', function () {
   var contentHeight = document.body.scrollHeight
   window.parent.postMessage({height: contentHeight}, '*')

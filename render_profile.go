@@ -1,13 +1,16 @@
 package main
 
 import (
+	"context"
 	"html"
 	"html/template"
 	"net/http"
 	"strings"
 )
 
-func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
+func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, code string) {
+	isEmbed := r.URL.Query().Get("embed") != ""
+
 	isSitemap := false
 	if strings.HasSuffix(code, ".xml") {
 		code = code[:len(code)-4]
@@ -20,12 +23,25 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		isRSS = true
 	}
 
-	data, err := grabData(r.Context(), code, isSitemap)
-	if err != nil {
+	profile, err := sys.FetchProfileFromInput(ctx, code)
+	if err != nil || profile.Event == nil {
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(r.Context(), w)
+
+		errMsg := "profile metadata not found"
+		if err != nil {
+			errMsg = err.Error()
+		}
+		errorTemplate(ErrorPageParams{Errors: errMsg}).Render(ctx, w)
 		return
+	}
+
+	createdAt := profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
+	modifiedAt := profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
+
+	var lastNotes []EnhancedEvent
+	if !isEmbed {
+		lastNotes = authorLastNotes(ctx, profile.PubKey, isSitemap)
 	}
 
 	if isSitemap {
@@ -34,8 +50,8 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		w.Write([]byte(XML_HEADER))
 		err = SitemapTemplate.Render(w, &SitemapPage{
 			Host:       s.Domain,
-			ModifiedAt: data.modifiedAt,
-			LastNotes:  data.renderableLastNotes,
+			ModifiedAt: modifiedAt,
+			LastNotes:  lastNotes,
 		})
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
@@ -43,32 +59,33 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 		w.Write([]byte(XML_HEADER))
 		err = RSSTemplate.Render(w, &RSSPage{
 			Host:       s.Domain,
-			ModifiedAt: data.modifiedAt,
-			Metadata:   data.event.author,
-			LastNotes:  data.renderableLastNotes,
+			ModifiedAt: modifiedAt,
+			Metadata:   profile,
+			LastNotes:  lastNotes,
 		})
 	} else {
 		w.Header().Add("content-type", "text/html")
 		w.Header().Set("Cache-Control", "max-age=86400")
-		nprofile := data.event.author.Nprofile(r.Context(), sys, 2)
-		err = profileTemplate(ProfilePageParams{
+
+		nprofile := profile.Nprofile(ctx, sys, 2)
+		params := ProfilePageParams{
 			HeadParams: HeadParams{IsProfile: true},
 			Details: DetailsParams{
 				HideDetails:     true,
-				CreatedAt:       data.createdAt,
-				KindDescription: data.kindDescription,
-				KindNIP:         data.kindNIP,
-				EventJSON:       data.event.ToJSONHTML(),
-				Kind:            data.event.Kind,
-				Metadata:        data.event.author,
+				CreatedAt:       createdAt,
+				KindDescription: kindNames[0],
+				KindNIP:         kindNIPs[0],
+				EventJSON:       toJSONHTML(profile.Event),
+				Kind:            0,
+				Metadata:        profile,
 			},
-			Metadata:                   data.event.author,
-			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(data.event.author.Website),
-			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(data.event.author.About), false, false, false)),
+			Metadata:                   profile,
+			NormalizedAuthorWebsiteURL: normalizeWebsiteURL(profile.Website),
+			RenderedAuthorAboutText:    template.HTML(basicFormatting(html.EscapeString(profile.About), false, false, false)),
 			Nprofile:                   nprofile,
-			AuthorRelays:               data.authorRelaysPretty(r.Context()),
-			LastNotes:                  data.renderableLastNotes,
-			Clients: generateClientList(data.event.Kind, nprofile,
+			AuthorRelays:               relaysPretty(ctx, profile.PubKey),
+			LastNotes:                  lastNotes,
+			Clients: generateClientList(0, nprofile,
 				func(c ClientReference, s string) string {
 					if c == nostrudel {
 						s = strings.Replace(s, "/n/", "/u/", 1)
@@ -76,16 +93,22 @@ func renderProfile(w http.ResponseWriter, r *http.Request, code string) {
 					if c == primalWeb {
 						s = strings.Replace(
 							strings.Replace(s, "/e/", "/p/", 1),
-							nprofile, data.event.author.Npub(), 1)
+							nprofile, profile.Npub(), 1)
 					}
 					return s
 				},
 			),
-		}).Render(r.Context(), w)
+		}
+
+		if isEmbed {
+			err = embeddedProfileTemplate(params).Render(ctx, w)
+		} else {
+			err = profileTemplate(params).Render(ctx, w)
+		}
 	}
 
 	if err != nil {
-		log.Error().Err(err).Msg("error rendering tmpl")
+		log.Warn().Err(err).Msg("error rendering tmpl")
 	}
 	return
 }
