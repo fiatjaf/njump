@@ -35,7 +35,7 @@ var (
 	yakihonne   = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/article/{code}", Platform: "web"}
 	habla       = ClientReference{ID: "habla", Name: "Habla", Base: "https://habla.news/a/{code}", Platform: "web"}
 	highlighter = ClientReference{ID: "highlighter", Name: "Highlighter", Base: "https://highlighter.com/a/{code}", Platform: "web"}
-	blogstack   = ClientReference{ID: "blogstack", Name: "Blogstack", Base: "https://blogstack.io/{code}", Platform: "web"}
+	notestack   = ClientReference{ID: "notestack", Name: "Notestack", Base: "https://notestack.com/{code}", Platform: "web"}
 
 	yanaAndroid     = ClientReference{ID: "yana", Name: "Yana", Base: "intent:{code}#Intent;scheme=nostr;package=yana.nostr;end`;", Platform: "android"}
 	springAndroid   = ClientReference{ID: "spring", Name: "Spring", Base: "intent:{code}#Intent;scheme=nostr;package=com.nostr.universe;end`;", Platform: "android"}
@@ -85,7 +85,7 @@ func generateClientList(
 	case 30023, 30024:
 		clients = []ClientReference{
 			native,
-			yakihonne, habla, highlighter, blogstack,
+			yakihonne, habla, highlighter, notestack,
 			damus, nos, nostur,
 			amethyst, springAndroid,
 		}
