@@ -19,6 +19,7 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 			"meta-externalagent",
 			"DotBot",
 			"ClaudeBot",
+			"GPTBot",
 		} {
 			if strings.Contains(ua, bua) {
 				// log.Debug().Str("ua", ua).Msg("user-agent blocked")
