@@ -23,6 +23,18 @@ Disallow: /
 User-agent: dotbot
 Disallow: /
 
+User-agent: bingbot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: Applebot
+Disallow: /
+
 User-agent: *
 Allow: /
 

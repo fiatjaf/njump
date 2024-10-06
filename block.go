@@ -20,6 +20,10 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 			"DotBot",
 			"ClaudeBot",
 			"GPTBot",
+			"bingbot",
+			"MJ12Bot",
+			"PetalBot",
+			"Applebot",
 		} {
 			if strings.Contains(ua, bua) {
 				// log.Debug().Str("ua", ua).Msg("user-agent blocked")
@@ -34,7 +38,7 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 func ipBlock(next http.HandlerFunc) http.HandlerFunc {
 	ranges := make([]*net.IPNet, 0, 18)
 
-	for _, line := range []string{
+	for _, cidr := range []string{
 		// alicloud
 		"47.52.0.0/16",
 		"47.76.0.0/16",
@@ -56,9 +60,9 @@ func ipBlock(next http.HandlerFunc) http.HandlerFunc {
 		"172.64.0.0/13",
 		"131.0.72.0/22",
 	} {
-		_, ipnet, err := net.ParseCIDR(strings.TrimSpace(line))
+		_, ipnet, err := net.ParseCIDR(cidr)
 		if err != nil {
-			log.Error().Str("line", line).Err(err).Msg("failed to parse cloudflare ip range")
+			log.Error().Str("cidr", cidr).Err(err).Msg("failed to parse cloudflare ip range")
 			continue
 		}
 		ranges = append(ranges, ipnet)
