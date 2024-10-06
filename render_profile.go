@@ -25,6 +25,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 	profile, err := sys.FetchProfileFromInput(ctx, code)
 	if err != nil || profile.Event == nil {
+		log.Warn().Err(err).Str("code", code).Msg("event not found on render_profile")
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
 

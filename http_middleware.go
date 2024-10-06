@@ -60,7 +60,8 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		count := concurrentRequests[qidx].Add(1)
 		isFirst := count == 1
 		if count > 2 {
-			log.Debug().Uint32("count", count).Int("qidx", qidx).Msg("too many concurrent requests")
+			log.Debug().Str("path", r.URL.Path).Uint32("count", count).Int("qidx", qidx).Str("ip", actualIP(r)).
+				Msg("too many concurrent requests")
 
 			if count > 4 {
 				http.Error(w, "", http.StatusTooManyRequests)

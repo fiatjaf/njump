@@ -55,8 +55,9 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 
 	data, err := grabData(ctx, code)
 	if err != nil {
-		w.Header().Set("Cache-Control", "max-age=60")
-		http.Error(w, "error fetching event: "+err.Error(), 404)
+		w.Header().Set("Cache-Control", "max-age=180")
+		log.Warn().Err(err).Str("code", code).Msg("event not found on oembed")
+		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
 		return
 	}
 

@@ -42,7 +42,6 @@ func grabData(ctx context.Context, code string) (Data, error) {
 	// code can be a nevent or naddr, in which case we try to fetch the associated event
 	event, relays, err := getEvent(ctx, code)
 	if err != nil {
-		log.Warn().Err(err).Str("code", code).Msg("failed to fetch event for code")
 		return Data{}, fmt.Errorf("error fetching event: %w", err)
 	}
 

@@ -53,7 +53,8 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	data, err := grabData(ctx, code)
 	if err != nil {
-		http.Error(w, "error fetching event: "+err.Error(), 404)
+		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
+		log.Warn().Err(err).Str("code", code).Msg("event not found on render_image")
 		return
 	}
 

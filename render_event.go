@@ -49,6 +49,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		// otherwise error
 		w.Header().Set("Cache-Control", "max-age=60")
+		log.Warn().Err(err).Str("code", code).Msg("invalid code")
 		w.WriteHeader(http.StatusNotFound)
 		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
 		return
@@ -65,6 +66,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	data, err := grabData(ctx, code)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
+		log.Warn().Err(err).Str("code", code).Msg("event not found on render_event")
 		w.WriteHeader(http.StatusNotFound)
 		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
 		return
@@ -84,7 +86,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	hasURL := urlRegex.MatchString(data.event.Content)
 	if hasURL && hasProhibitedWordOrTag(data.event.Event) {
 		log.Warn().Str("event", data.nevent).Msg("detect prohibited porn content")
-		http.Error(w, "event is not allowed", 404)
+		http.Error(w, "event is not allowed", http.StatusNotFound)
 		return
 	}
 

@@ -685,7 +685,7 @@ func drawShapedBlockAt(
 		data := face.GlyphData(g.GlyphID)
 		switch format := data.(type) {
 		case api.GlyphOutline:
-			drawOutline(g, format, f, currentScale, xPos, yPos)
+			drawOutline(format, f, currentScale, xPos, yPos)
 		case nil:
 			continue
 		default:
@@ -829,7 +829,7 @@ func containsMedia(paragraphs []string) bool {
 }
 
 // this draws a font glyph (i.e. a letter) according to instructions and scale and whatever
-func drawOutline(g shaping.Glyph, bitmap api.GlyphOutline, f *rasterx.Filler, scale float32, x, y float32) {
+func drawOutline(bitmap api.GlyphOutline, f *rasterx.Filler, scale float32, x, y float32) {
 	for _, s := range bitmap.Segments {
 		switch s.Op {
 		case api.SegmentOpMoveTo:
