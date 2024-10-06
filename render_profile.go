@@ -35,6 +35,8 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		}
 		errorTemplate(ErrorPageParams{Errors: errMsg}).Render(ctx, w)
 		return
+	} else {
+		internal.scheduleEventExpiration(profile.Event.ID)
 	}
 
 	createdAt := profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")

@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"fiatjaf.com/leafdb"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
@@ -28,9 +29,12 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 	if strings.HasPrefix(r.URL.Path[1:], "npubs-archive") {
 		pathPrefix = ""
 		data = make([]string, 0, 5000)
-		keys := cache.GetPaginatedKeys("pa:", page, 5000)
-		for _, key := range keys {
-			npub, _ := nip19.EncodePublicKey(key[3:])
+		params := leafdb.AnyQuery("pubkey-archive")
+		params.Skip = (page - 1) * 5000
+		params.Limit = 5000
+		for val := range internal.View(params) {
+			pka := val.(*PubKeyArchive)
+			npub, _ := nip19.EncodePublicKey(pka.Pubkey)
 			data = append(data, npub)
 		}
 	} else if strings.HasPrefix(r.URL.Path[1:], "relays-archive") {

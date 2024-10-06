@@ -21,7 +21,6 @@ import (
 
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/nbd-wtf/go-nostr/sdk"
 )
 
 const (
@@ -179,43 +178,6 @@ func getPreviewStyle(r *http.Request) Style {
 	default:
 		return StyleUnknown
 	}
-}
-
-func attachRelaysToEvent(eventId string, relays ...string) []string {
-	key := "rls:" + eventId
-	existingRelays := make([]string, 0, 10)
-	if exists := cache.GetJSON(key, &existingRelays); exists {
-		relays = unique(append(existingRelays, relays...))
-	}
-
-	// cleanup
-	filtered := make([]string, 0, len(relays))
-	for _, relay := range relays {
-		if sdk.IsVirtualRelay(relay) {
-			continue
-		}
-		filtered = append(filtered, relay)
-	}
-
-	cache.SetJSONWithTTL(key, filtered, time.Hour*24*7)
-	return filtered
-}
-
-func getRelaysForEvent(eventId string) []string {
-	key := "rls:" + eventId
-	relays := make([]string, 0, 10)
-	cache.GetJSON(key, &relays)
-	return relays
-}
-
-func scheduleEventExpiration(id string, ts time.Duration) {
-	key := "ttl:" + id
-	nextExpiration := time.Now().Add(ts).Unix()
-	var currentExpiration int64
-	if exists := cache.GetJSON(key, &currentExpiration); exists {
-		return
-	}
-	cache.SetJSON(key, nextExpiration)
 }
 
 func replaceURLsWithTags(input string, imageReplacementTemplate, videoReplacementTemplate string, skipLinks bool) string {

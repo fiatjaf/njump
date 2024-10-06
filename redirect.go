@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"net/http"
 
+	"fiatjaf.com/leafdb"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
@@ -25,13 +26,12 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 
 	// 50% of chance of picking a pubkey
 	if ra := rand.Intn(2); ra == 0 {
-		set := make([]string, 0, 50)
-		for _, pubkey := range cache.GetPaginatedKeys("pa", 1, 50) {
-			set = append(set, pubkey)
-		}
-		if s := len(set); s > 0 {
-			pick := set[rand.Intn(s)]
-			npub, _ := nip19.EncodePublicKey(pick)
+
+		params := leafdb.AnyQuery("pubkey-archive")
+		params.Skip = rand.Intn(50)
+		for val := range internal.View(params) {
+			pka := val.(*PubKeyArchive)
+			npub, _ := nip19.EncodePublicKey(pka.Pubkey)
 			target = "/" + npub
 			return
 		}
@@ -39,10 +39,8 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 
 	// otherwise try to pick an event
 	const RELAY = "wss://nostr.wine"
-	lastEvents := relayLastNotes(r.Context(), RELAY, false)
-	if s := len(lastEvents); s > 0 {
-		pick := lastEvents[rand.Intn(s)]
-		nevent, _ := nip19.EncodeEvent(pick.ID, []string{RELAY}, pick.PubKey)
+	for evt := range relayLastNotes(r.Context(), RELAY, 1) {
+		nevent, _ := nip19.EncodeEvent(evt.ID, []string{RELAY}, evt.PubKey)
 		target = "/" + nevent
 		return
 	}

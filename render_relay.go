@@ -41,16 +41,24 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// last notes
-	lastNotes := relayLastNotes(r.Context(), hostname, isSitemap)
-	renderableLastNotes := make([]EnhancedEvent, len(lastNotes))
-	lastEventAt := time.Now()
-	if len(lastNotes) > 0 {
-		lastEventAt = time.Unix(int64(lastNotes[0].CreatedAt), 0)
+	limit := 50
+	if isSitemap {
+		limit = 500
 	}
-	for i, levt := range lastNotes {
-		ee := NewEnhancedEvent(nil, levt)
+	renderableLastNotes := make([]EnhancedEvent, 0, limit)
+	var lastEventAt *time.Time
+	for evt := range relayLastNotes(r.Context(), hostname, limit) {
+		ee := NewEnhancedEvent(nil, evt)
 		ee.relays = []string{"wss://" + hostname}
-		renderableLastNotes[i] = ee
+		renderableLastNotes = append(renderableLastNotes, ee)
+		if lastEventAt == nil {
+			last := time.Unix(int64(evt.CreatedAt), 0)
+			lastEventAt = &last
+		}
+	}
+	if lastEventAt == nil {
+		now := time.Now()
+		lastEventAt = &now
 	}
 
 	if len(renderableLastNotes) != 0 {

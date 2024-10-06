@@ -3,14 +3,17 @@ package main
 import (
 	"net/http"
 
+	"fiatjaf.com/leafdb"
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
 func renderSitemapIndex(w http.ResponseWriter, r *http.Request) {
 	npubs := make([]string, 0, 5000)
-	keys := cache.GetPaginatedKeys("pa:", 1, 5000)
-	for _, key := range keys {
-		npub, _ := nip19.EncodePublicKey(key[3:])
+	params := leafdb.AnyQuery("pubkey-archive")
+	params.Limit = 5000
+	for val := range internal.View(params) {
+		pka := val.(*PubKeyArchive)
+		npub, _ := nip19.EncodePublicKey(pka.Pubkey)
 		npubs = append(npubs, npub)
 	}
 

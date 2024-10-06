@@ -22,14 +22,14 @@ libsecp256k1:
 templ:
     templ generate
 
+protobuf:
+    protoc --proto_path=. --go_out=. --go_opt=paths=source_relative internal.proto
+
 prettier:
     prettier -w templates/*.html
 
 tailwind:
     tailwind -i base.css -o static/tailwind-bundle.min.css --minify
-
-test:
-    go test -tags=nocache
 
 check-samples:
     #!/usr/bin/env xonsh
