@@ -7,7 +7,7 @@ require (
 	github.com/a-h/templ v0.2.771
 	github.com/bytesparadise/libasciidoc v0.8.0
 	github.com/dgraph-io/badger/v4 v4.2.0
-	github.com/fiatjaf/eventstore v0.10.1
+	github.com/fiatjaf/eventstore v0.11.1
 	github.com/fiatjaf/khatru v0.8.1
 	github.com/fogleman/gg v1.3.0
 	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
@@ -16,7 +16,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/emoji v0.0.3
-	github.com/nbd-wtf/go-nostr v0.38.0
+	github.com/nbd-wtf/go-nostr v0.38.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
 	github.com/puzpuzpuz/xsync/v3 v3.4.0
