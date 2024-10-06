@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"net/http/pprof"
 	"os"
 	"os/signal"
 	"strings"
@@ -21,7 +22,7 @@ import (
 type Settings struct {
 	Port                string   `envconfig:"PORT" default:"2999"`
 	Domain              string   `envconfig:"DOMAIN" default:"njump.me"`
-	DiskCachePath       string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
+	InternalDBPath      string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
 	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
 	HintsMemoryDumpPath string   `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
 	TailwindDebug       bool     `envconfig:"TAILWIND_DEBUG"`
@@ -33,8 +34,10 @@ type Settings struct {
 var static embed.FS
 
 var (
-	s                  Settings
-	log                = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
+	s   Settings
+	log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).
+		With().Timestamp().Logger()
+	internal           *InternalDB
 	tailwindDebugStuff template.HTML
 )
 
@@ -104,7 +107,11 @@ func main() {
 	initializeImageDrawingStuff()
 
 	// internal db
-	defer cache.initializeCache()()
+	internal, err = NewInternalDB(s.InternalDBPath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to start internal db")
+		return
+	}
 
 	// initialize routines
 	ctx, cancel := context.WithCancel(context.Background())
@@ -139,6 +146,11 @@ func main() {
 	mux.HandleFunc("/e/", redirectFromESlash)
 	mux.HandleFunc("/p/", redirectFromPSlash)
 	mux.HandleFunc("/favicon.ico", redirectToFavicon)
+	mux.HandleFunc("/debug/pprof/", pprof.Index)
+	mux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 	mux.HandleFunc("/embed/{code}", renderEmbedjs)
 	mux.HandleFunc("/about", renderAbout)
 	mux.HandleFunc("/{code}", renderEvent)

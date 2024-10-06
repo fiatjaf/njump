@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"iter"
 	"slices"
 	"sync"
 	"time"
@@ -41,11 +42,6 @@ var (
 		"ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49", // Michael Dilger
 	}
 )
-
-type CachedEvent struct {
-	Event  *nostr.Event `json:"e"`
-	Relays []string     `json:"r"`
-}
 
 func initSystem() func() {
 	db := &lmdb.LMDBBackend{
@@ -113,10 +109,10 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 		// unless it's a metadata event
 		// (people complaining about njump keeping their metadata will try to load their metadata all the time)
 		if evt.Kind != 0 {
-			scheduleEventExpiration(evt.ID, time.Hour*24*7)
+			internal.scheduleEventExpiration(evt.ID)
 		}
 
-		return evt, getRelaysForEvent(evt.ID), nil
+		return evt, internal.getRelaysForEvent(evt.ID), nil
 	}
 
 	if author != "" {
@@ -162,7 +158,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 			subManyCtx,
 			relays,
 			nostr.Filters{filter},
-			nostr.WithLabel("fetching "+prefix),
+			nostr.WithLabel("fetching-"+prefix),
 		) {
 			fetchProfileOnce.Do(func() {
 				go sys.FetchProfileMetadata(ctx, ie.PubKey)
@@ -183,7 +179,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 	// save stuff in cache and in internal store
 	sys.StoreRelay.Publish(ctx, *result)
 	// save relays if we got them
-	allRelays := attachRelaysToEvent(result.ID, successRelays...)
+	allRelays := internal.attachRelaysToEvent(result.ID, successRelays...)
 	// put priority relays first so they get used in nevent and nprofile
 	slices.SortFunc(allRelays, func(a, b string) int {
 		vpa, _ := priorityRelays[a]
@@ -191,7 +187,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 		return vpb - vpa
 	})
 	// keep track of what we have to delete later
-	scheduleEventExpiration(result.ID, time.Hour*24*7)
+	internal.scheduleEventExpiration(result.ID)
 
 	return result, allRelays, nil
 }
@@ -228,7 +224,7 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 				lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
 				if store {
 					sys.Store.SaveEvent(ctx, evt)
-					scheduleEventExpiration(evt.ID, time.Hour*24)
+					internal.scheduleEventExpiration(evt.ID)
 				}
 			}
 		}
@@ -254,13 +250,13 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 				}
 
 				ee := NewEnhancedEvent(ctx, ie.Event)
-				ee.relays = unique(append([]string{ie.Relay.URL}, getRelaysForEvent(ie.Event.ID)...))
+				ee.relays = unique(append([]string{ie.Relay.URL}, internal.getRelaysForEvent(ie.Event.ID)...))
 				lastNotes = append(lastNotes, ee)
 
 				if store {
 					sys.Store.SaveEvent(ctx, ie.Event)
-					attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
-					scheduleEventExpiration(ie.Event.ID, time.Hour*24)
+					internal.attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
+					internal.scheduleEventExpiration(ie.Event.ID)
 				}
 			case <-ctx.Done():
 				break out
@@ -273,79 +269,50 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 	return lastNotes
 }
 
-func relayLastNotes(ctx context.Context, relayUrl string, isSitemap bool) []*nostr.Event {
-	key := ""
-	limit := 1000
-	if isSitemap {
-		key = "rlns:" + nostr.NormalizeURL(relayUrl)
-		limit = 5000
-	} else {
-		key = "rln:" + nostr.NormalizeURL(relayUrl)
-	}
-
-	lastNotes := make([]*nostr.Event, 0, limit)
-	if ok := cache.GetJSON(key, &lastNotes); ok {
-		return lastNotes
-	}
-
+func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[*nostr.Event] {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-	defer cancel()
 
-	if relay, err := sys.Pool.EnsureRelay(relayUrl); err == nil {
-		lastNotes, _ = relay.QuerySync(ctx, nostr.Filter{
-			Kinds: []int{1},
-			Limit: limit,
-		})
-	}
+	return func(yield func(*nostr.Event) bool) {
+		defer cancel()
 
-	slices.SortFunc(lastNotes, func(a, b *nostr.Event) int { return int(b.CreatedAt - a.CreatedAt) })
-	if len(lastNotes) > 0 {
-		cache.SetJSONWithTTL(key, lastNotes, time.Hour*24)
-	}
-	return lastNotes
-}
-
-func contactsForPubkey(ctx context.Context, pubkey string) []string {
-	pubkeyContacts := make([]string, 0, 300)
-	relays := make([]string, 0, 12)
-	if ok := cache.GetJSON("cc:"+pubkey, &pubkeyContacts); !ok {
-		log.Debug().Msgf("searching contacts for %s", pubkey)
-		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-
-		pubkeyRelays := sys.FetchOutboxRelays(ctx, pubkey, 3)
-		relays = append(relays, pubkeyRelays...)
-		relays = append(relays, sys.MetadataRelays...)
-
-		ch := sys.Pool.SubManyEose(
-			ctx,
-			relays,
-			nostr.Filters{{Kinds: []int{3}, Authors: []string{pubkey}, Limit: 2}},
-			nostr.WithLabel("contacts"),
-		)
-
-		for {
-			select {
-			case evt, more := <-ch:
-				if !more {
-					goto end
-				}
-				for _, tag := range evt.Tags {
-					if tag[0] == "p" {
-						pubkeyContacts = append(pubkeyContacts, tag[1])
-					}
-				}
-			case <-ctx.Done():
-				goto end
+		for id := range internal.getEventsInRelay(hostname) {
+			res, _ := sys.StoreRelay.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
+			if len(res) == 0 {
+				internal.notCached(id)
+				continue
+			}
+			limit--
+			if !yield(res[0]) {
+				return
+			}
+			if limit == 0 {
+				return
 			}
 		}
 
-	end:
-		cancel()
-		if len(pubkeyContacts) > 0 {
-			cache.SetJSONWithTTL("cc:"+pubkey, pubkeyContacts, time.Hour*6)
+		if limit > 0 {
+			limit = max(limit, 50)
+
+			if relay, err := sys.Pool.EnsureRelay(hostname); err == nil {
+				ch, err := relay.QueryEvents(ctx, nostr.Filter{
+					Kinds: []int{1},
+					Limit: limit,
+				})
+				if err != nil {
+					log.Error().Err(err).Stringer("relay", relay).Msg("failed to fetch relay notes")
+					return
+				}
+
+				for evt := range ch {
+					sys.StoreRelay.Publish(ctx, *evt)
+					internal.attachRelaysToEvent(evt.ID, hostname)
+					if !yield(evt) {
+						return
+					}
+				}
+			}
 		}
 	}
-	return unique(pubkeyContacts)
 }
 
 func relaysPretty(ctx context.Context, pubkey string) []string {

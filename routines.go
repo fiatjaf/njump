@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -11,16 +10,29 @@ import (
 var npubsArchive = make([]string, 0, 5000)
 
 func updateArchives(ctx context.Context) {
-	// do this so we don't run this every time we restart it locally
-
-	time.Sleep(10 * time.Minute)
-
 	for {
-		loadNpubsArchive(ctx)
 		select {
 		case <-ctx.Done():
 			return
-		case <-time.After(24 * time.Hour):
+		case <-time.After(24 * time.Hour * 3):
+			log.Debug().Msg("refreshing the npubs archive")
+
+			for _, pubkey := range s.TrustedPubKeys {
+				ctx, cancel := context.WithTimeout(ctx, time.Second*4)
+				follows := sys.FetchFollowList(ctx, pubkey)
+				fla := &FollowListArchive{
+					Source:  pubkey,
+					Pubkeys: make([]string, 0, 2000),
+				}
+				for _, follow := range follows.Items {
+					fla.Pubkeys = append(fla.Pubkeys, follow.Pubkey)
+				}
+				cancel()
+
+				if err := internal.overwriteFollowListArchive(fla); err != nil {
+					log.Fatal().Err(err).Msg("failed to overwrite archived pubkeys")
+				}
+			}
 		}
 	}
 }
@@ -30,52 +42,21 @@ func deleteOldCachedEvents(ctx context.Context) {
 		select {
 		case <-ctx.Done():
 			return
-		case <-time.After(time.Hour):
+		case <-time.After(time.Hour * 6):
 			log.Debug().Msg("deleting old cached events")
-			now := time.Now().Unix()
-			for _, key := range cache.GetPaginatedKeys("ttl:", 1, 500) {
-				spl := strings.Split(key, ":")
-				if len(spl) != 2 {
-					log.Error().Str("key", key).Msg("broken 'ttl:' key")
-					continue
-				}
-
-				var expires int64
-				if ok := cache.GetJSON(key, &expires); !ok {
-					log.Error().Str("key", key).Msg("failed to get 'ttl:' key")
-					continue
-				}
-
-				if expires < now {
-					// time to delete this
-					id := spl[1]
-					res, _ := sys.StoreRelay.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
-					if len(res) > 0 {
-						log.Debug().Msgf("deleting %s", res[0].ID)
-						if err := sys.Store.DeleteEvent(ctx, res[0]); err != nil {
-							log.Warn().Err(err).Stringer("event", res[0]).Msg("failed to delete")
+			if ids, err := internal.deleteExpiredEvents(nostr.Now()); err != nil {
+				log.Fatal().Err(err).Msg("failed to delete expired events")
+			} else {
+				if ch, err := sys.Store.QueryEvents(ctx, nostr.Filter{IDs: ids}); err != nil {
+					log.Fatal().Err(err).Strs("ids", ids).Msg("fail to delete cached events")
+				} else {
+					for evt := range ch {
+						if err := sys.Store.DeleteEvent(ctx, evt); err != nil {
+							log.Error().Err(err).Stringer("event", evt).Msg("failed to delete this cached event")
 						}
 					}
-					cache.Delete(key)
 				}
 			}
 		}
-	}
-}
-
-func loadNpubsArchive(ctx context.Context) {
-	log.Debug().Msg("refreshing the npubs archive")
-
-	contactsArchive := make([]string, 0, 500)
-	for _, pubkey := range s.TrustedPubKeys {
-		ctx, cancel := context.WithTimeout(ctx, time.Second*4)
-		pubkeyContacts := contactsForPubkey(ctx, pubkey)
-		contactsArchive = append(contactsArchive, pubkeyContacts...)
-		cancel()
-	}
-
-	for _, contact := range unique(contactsArchive) {
-		log.Debug().Msgf("adding contact %s", contact)
-		cache.SetWithTTL("pa:"+contact, nil, time.Hour*24*90)
 	}
 }

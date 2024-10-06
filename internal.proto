@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "github.com/fiatjaf/njump;main";
+
+message CachedEvent {
+  string id = 1;
+  int64 expiry = 2;
+  repeated string relays = 3;
+}
+
+message FollowListArchive {
+  string source = 1;
+  repeated string pubkeys = 2;
+}
+
+message PubKeyArchive {
+  string pubkey = 1;
+}
+
+message EventInRelay {
+  string id = 1;
+}
