@@ -71,10 +71,10 @@ func main() {
 			return
 		}
 		if len(relayConfig.Everything) > 0 {
-			sys.FallbackRelays = relayConfig.Everything
+			sys.FallbackRelays.URLs = relayConfig.Everything
 		}
 		if len(relayConfig.Profiles) > 0 {
-			sys.MetadataRelays = relayConfig.Profiles
+			sys.MetadataRelays.URLs = relayConfig.Profiles
 		}
 	}
 

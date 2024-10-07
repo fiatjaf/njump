@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"html"
 	"html/template"
-	"math/rand"
 	"net/http"
 	"regexp"
 	"slices"
@@ -299,7 +298,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 		defer cancel()
 		wg.Add(1)
 		go func() {
-			event, _, err := getEvent(ctx, nip19)
+			event, _, err := getEvent(ctx, nip19, false)
 			if err == nil {
 				quotedEvent := basicFormatting(submatches[0], false, usingTelegramInstantView, false)
 
@@ -436,14 +435,6 @@ func humanDate(createdAt nostr.Timestamp) string {
 	} else {
 		return ts.UTC().Format("Mon, Jan _2 15:04 UTC")
 	}
-}
-
-func getRandomRelay() string {
-	if serial == 0 {
-		serial = rand.Intn(len(sys.FallbackRelays))
-	}
-	serial = (serial + 1) % len(sys.FallbackRelays)
-	return sys.FallbackRelays[serial]
 }
 
 func maxIndex(slice []int) int {
