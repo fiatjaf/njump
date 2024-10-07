@@ -78,6 +78,7 @@ func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, 
 
 func authorLastNotes(ctx context.Context, pubkey string) []EnhancedEvent {
 	limit := 100
+
 	go sys.FetchProfileMetadata(ctx, pubkey) // fetch this before so the cache is filled for later
 
 	filter := nostr.Filter{
@@ -87,49 +88,56 @@ func authorLastNotes(ctx context.Context, pubkey string) []EnhancedEvent {
 	}
 
 	lastNotes := make([]EnhancedEvent, 0, filter.Limit)
+	latestTimestamp := nostr.Timestamp(0)
 
 	// fetch from local store if available
 	ch, err := sys.Store.QueryEvents(ctx, filter)
 	if err == nil {
-		for evt := range ch {
+		evt, has := <-ch
+		if has {
 			lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
-		}
-	}
-
-	if len(lastNotes) < 5 {
-		// if we didn't get enough notes (or if we didn't even query the local store), wait for the external relays
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-		defer cancel()
-
-		relays := sys.FetchOutboxRelays(ctx, pubkey, 3)
-
-		for len(relays) < 3 {
-			relays = unique(append(relays, sys.FallbackRelays.Next()))
-		}
-
-		ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter}, nostr.WithLabel("authorlast"))
-	out:
-		for {
-			select {
-			case ie, more := <-ch:
-				if !more {
-					break out
-				}
-
-				ee := NewEnhancedEvent(ctx, ie.Event)
-				ee.relays = unique(append([]string{ie.Relay.URL}, internal.getRelaysForEvent(ie.Event.ID)...))
-				lastNotes = append(lastNotes, ee)
-
-				sys.Store.SaveEvent(ctx, ie.Event)
-				internal.attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
-			case <-ctx.Done():
-				break out
+			latestTimestamp = evt.CreatedAt
+			for evt = range ch {
+				lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
 			}
 		}
 	}
 
-	// sort before returning
-	slices.SortFunc(lastNotes, func(a, b EnhancedEvent) int { return int(b.CreatedAt - a.CreatedAt) })
+	if (len(lastNotes) < limit/10) ||
+		(len(lastNotes) < limit/5 && latestTimestamp > nostr.Now()-60*60*24*2) ||
+		(len(lastNotes) < limit/2 && latestTimestamp < nostr.Now()-60*60*24*2) {
+		// if we didn't get enough notes then try to fetch from external relays (but do not wait for it)
+		go func() {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+			defer cancel()
+
+			relays := sys.FetchOutboxRelays(ctx, pubkey, 3)
+			for len(relays) < 3 {
+				relays = appendUnique(relays, sys.FallbackRelays.Next())
+			}
+
+			ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter}, nostr.WithLabel("authorlast"))
+		out:
+			for {
+				select {
+				case ie, more := <-ch:
+					if !more {
+						break out
+					}
+
+					ee := NewEnhancedEvent(ctx, ie.Event)
+					ee.relays = appendUnique([]string{ie.Relay.URL}, internal.getRelaysForEvent(ie.Event.ID)...)
+					lastNotes = append(lastNotes, ee)
+
+					sys.Store.SaveEvent(ctx, ie.Event)
+					internal.attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
+				case <-ctx.Done():
+					break out
+				}
+			}
+		}()
+	}
+
 	return lastNotes
 }
 

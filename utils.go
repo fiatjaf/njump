@@ -386,22 +386,6 @@ func previewNotesFormatting(input string) string {
 	return strings.Join(processedLines, "<br/>")
 }
 
-func unique(strSlice []string) []string {
-	if len(strSlice) == 0 {
-		return strSlice
-	}
-
-	slices.Sort(strSlice)
-	j := 0
-	for i := 1; i < len(strSlice); i++ {
-		if strSlice[j] != strSlice[i] {
-			j++
-			strSlice[j] = strSlice[i]
-		}
-	}
-	return strSlice[:j+1]
-}
-
 func trimProtocolAndEndingSlash(relay string) string {
 	relay = strings.TrimPrefix(relay, "wss://")
 	relay = strings.TrimPrefix(relay, "ws://")
@@ -550,4 +534,14 @@ func isValidShortcode(s string) bool {
 		}
 	}
 	return true
+}
+
+func appendUnique[I comparable](arr []I, item ...I) []I {
+	for _, item := range item {
+		if slices.Contains(arr, item) {
+			return arr
+		}
+		arr = append(arr, item)
+	}
+	return arr
 }
