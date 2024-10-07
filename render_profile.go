@@ -44,7 +44,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 	var lastNotes []EnhancedEvent
 	if !isEmbed {
-		lastNotes = authorLastNotes(ctx, profile.PubKey, isSitemap)
+		lastNotes = authorLastNotes(ctx, profile.PubKey)
 	}
 
 	if isSitemap {

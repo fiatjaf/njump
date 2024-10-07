@@ -104,14 +104,6 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 	// try to fetch in our internal eventstore first
 	if res, _ := sys.StoreRelay.QuerySync(ctx, filter); len(res) != 0 {
 		evt := res[0]
-
-		// keep this event in cache for a while more
-		// unless it's a metadata event
-		// (people complaining about njump keeping their metadata will try to load their metadata all the time)
-		if evt.Kind != 0 {
-			internal.scheduleEventExpiration(evt.ID)
-		}
-
 		return evt, internal.getRelaysForEvent(evt.ID), nil
 	}
 
@@ -186,27 +178,13 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, []string, error) 
 		vpb, _ := priorityRelays[b]
 		return vpb - vpa
 	})
-	// keep track of what we have to delete later
-	internal.scheduleEventExpiration(result.ID)
 
 	return result, allRelays, nil
 }
 
-func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []EnhancedEvent {
-	var limit int
-	var store bool
-	var useLocalStore bool
-
-	if isSitemap {
-		limit = 50000
-		store = false
-		useLocalStore = false
-	} else {
-		limit = 100
-		store = true
-		useLocalStore = true
-		go sys.FetchProfileMetadata(ctx, pubkey) // fetch this before so the cache is filled for later
-	}
+func authorLastNotes(ctx context.Context, pubkey string) []EnhancedEvent {
+	limit := 100
+	go sys.FetchProfileMetadata(ctx, pubkey) // fetch this before so the cache is filled for later
 
 	filter := nostr.Filter{
 		Kinds:   []int{nostr.KindTextNote},
@@ -217,18 +195,13 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 	lastNotes := make([]EnhancedEvent, 0, filter.Limit)
 
 	// fetch from local store if available
-	if useLocalStore {
-		ch, err := sys.Store.QueryEvents(ctx, filter)
-		if err == nil {
-			for evt := range ch {
-				lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
-				if store {
-					sys.Store.SaveEvent(ctx, evt)
-					internal.scheduleEventExpiration(evt.ID)
-				}
-			}
+	ch, err := sys.Store.QueryEvents(ctx, filter)
+	if err == nil {
+		for evt := range ch {
+			lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
 		}
 	}
+
 	if len(lastNotes) < 5 {
 		// if we didn't get enough notes (or if we didn't even query the local store), wait for the external relays
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
@@ -253,11 +226,8 @@ func authorLastNotes(ctx context.Context, pubkey string, isSitemap bool) []Enhan
 				ee.relays = unique(append([]string{ie.Relay.URL}, internal.getRelaysForEvent(ie.Event.ID)...))
 				lastNotes = append(lastNotes, ee)
 
-				if store {
-					sys.Store.SaveEvent(ctx, ie.Event)
-					internal.attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
-					internal.scheduleEventExpiration(ie.Event.ID)
-				}
+				sys.Store.SaveEvent(ctx, ie.Event)
+				internal.attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
 			case <-ctx.Done():
 				break out
 			}
