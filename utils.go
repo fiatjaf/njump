@@ -438,6 +438,10 @@ func getUTCOffset(loc *time.Location) string {
 }
 
 func toJSONHTML(evt *nostr.Event) template.HTML {
+	if evt == nil {
+		return ""
+	}
+
 	tagsHTML := "["
 	for t, tag := range evt.Tags {
 		tagsHTML += "\n    ["

@@ -30,7 +30,15 @@ templ profileTemplate(params ProfilePageParams) {
 	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
 		<meta charset="UTF-8"/>
 		<head>
-			<title>{ params.Metadata.Name } / { params.Metadata.DisplayName } is on Nostr</title>
+			if params.Metadata.Name != "" && params.Metadata.DisplayName != "" {
+				<title>
+					{ params.Metadata.Name }
+					if params.Metadata.Name != "" && params.Metadata.DisplayName != "" {
+						/
+					}
+					{ params.Metadata.DisplayName } is on Nostr
+				</title>
+			}
 			<meta
 				name="description"
 				content={ fmt.Sprintf("%s is %s's public key on Nostr", params.Metadata.Npub(), params.Metadata.ShortName()) }
@@ -93,7 +101,13 @@ templ profileTemplate(params ProfilePageParams) {
 					<div class="w-full flex-1 break-words print:w-full sm:w-1/2">
 						<header class="mb-6 hidden leading-5 sm:flex sm:items-center">
 							<h1 class="sm:max-w-full">
-								<div id="profile_name" class="text-2xl break-words">{ params.Metadata.Name }</div>
+								<div id="profile_name" class="text-2xl break-words">
+									if params.Metadata.Event == nil {
+										<span class="text-stone-200 font-bold">&lt;unnamed&gt;</span>
+									} else {
+										{ params.Metadata.Name }
+									}
+								</div>
 								if params.Metadata.Name != params.Metadata.DisplayName {
 									<div class="text-xl text-stone-400 break-words">
 										{ params.Metadata.DisplayName }
@@ -164,7 +178,9 @@ templ profileTemplate(params ProfilePageParams) {
 								}
 							</div>
 						}
-						@detailsTemplate(params.Details)
+						if params.Metadata.Event != nil {
+							@detailsTemplate(params.Details)
+						}
 						if len(params.LastNotes) != 0 {
 							<aside>
 								<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 sm:-ml-2.5 dark:bg-zinc-700"></div>

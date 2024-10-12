@@ -24,23 +24,21 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	}
 
 	profile, err := sys.FetchProfileFromInput(ctx, code)
-	if err != nil || profile.Event == nil {
+	if err != nil {
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_profile")
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
 
-		errMsg := "profile metadata not found"
-		if err != nil {
-			errMsg = err.Error()
-		}
-		errorTemplate(ErrorPageParams{Errors: errMsg}).Render(ctx, w)
+		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
 		return
-	} else {
+	} else if profile.Event != nil {
 		internal.scheduleEventExpiration(profile.Event.ID)
 	}
 
-	createdAt := profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
-	modifiedAt := profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
+	var createdAt string
+	if profile.Event != nil {
+		createdAt = profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
+	}
 
 	var lastNotes []EnhancedEvent
 	if !isEmbed {
@@ -53,7 +51,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		w.Write([]byte(XML_HEADER))
 		err = SitemapTemplate.Render(w, &SitemapPage{
 			Host:       s.Domain,
-			ModifiedAt: modifiedAt,
+			ModifiedAt: createdAt,
 			LastNotes:  lastNotes,
 		})
 	} else if isRSS {
@@ -62,7 +60,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		w.Write([]byte(XML_HEADER))
 		err = RSSTemplate.Render(w, &RSSPage{
 			Host:       s.Domain,
-			ModifiedAt: modifiedAt,
+			ModifiedAt: createdAt,
 			Metadata:   profile,
 			LastNotes:  lastNotes,
 		})
