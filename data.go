@@ -68,7 +68,7 @@ func grabData(ctx context.Context, code string) (Data, error) {
 	data.neventNaked, _ = nip19.EncodeEvent(event.ID, nil, event.PubKey)
 	data.naddr = ""
 	data.naddrNaked = ""
-	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05")
+	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05 MST")
 
 	if event.Kind >= 30000 && event.Kind < 40000 {
 		if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {

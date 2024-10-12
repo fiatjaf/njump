@@ -202,7 +202,7 @@ func (ee EnhancedEvent) Nevent() string {
 }
 
 func (ee EnhancedEvent) CreatedAtStr() string {
-	return time.Unix(int64(ee.Event.CreatedAt), 0).Format("2006-01-02 15:04:05")
+	return time.Unix(int64(ee.Event.CreatedAt), 0).Format("2006-01-02 15:04:05 MST")
 }
 
 func (ee EnhancedEvent) ModifiedAtStr() string {
