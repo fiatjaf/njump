@@ -37,7 +37,7 @@ var (
 
 func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if len(r.URL.Path) <= 30 {
+		if len(r.URL.Path) <= 30 || strings.HasPrefix(r.URL.Path, "/njump/static") {
 			next.ServeHTTP(w, r)
 			return
 		}
@@ -55,7 +55,7 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		qidx := stupidHash(r.URL.Path)
+		qidx := stupidHash(r.URL.Path) % len(concurrentRequests)
 		// add 1
 		count := concurrentRequests[qidx].Add(1)
 		isFirst := count == 1
@@ -68,11 +68,12 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		queue[qidx].Lock()
 
 		if isFirst {
-			next.ServeHTTP(w, r)
-
 			// we are the first requesting this, so we have the duty to reset it to zero later
-			concurrentRequests[qidx].Store(0)
-			queue[qidx].Unlock()
+			defer concurrentRequests[qidx].Store(0)
+			defer queue[qidx].Unlock()
+			// defer these calls because if there is a panic on ServeHTTP the server will catch it
+
+			next.ServeHTTP(w, r)
 			return
 		}
 
@@ -83,14 +84,14 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			path += "?" + r.URL.RawQuery
 		}
 
+		queue[qidx].Unlock()
+
 		time.Sleep(time.Millisecond * 90)
 		http.Redirect(w, r, path, http.StatusFound)
-
-		queue[qidx].Unlock()
 	}
 }
 
 // stupidHash doesn't care very much about collisions
 func stupidHash(s string) int {
-	return int(s[3]+s[7]+s[18]+s[29]) % 26
+	return int(s[3] + s[7] + s[18] + s[29])
 }
