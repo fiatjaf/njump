@@ -25,7 +25,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 	profile, err := sys.FetchProfileFromInput(ctx, code)
 	if err != nil {
-		log.Warn().Err(err).Str("code", code).Msg("event not found on render_profile")
+		log.Warn().Err(err).Str("code", code).Msg("error fetching profile on render_profile")
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
 
@@ -41,13 +41,19 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	}
 
 	var lastNotes []EnhancedEvent
+	var cacheControl string = "max-age=86400"
 	if !isEmbed {
-		lastNotes = authorLastNotes(ctx, profile.PubKey)
+		var justFetched bool
+		lastNotes, justFetched = authorLastNotes(ctx, profile.PubKey)
+		if justFetched && profile.Event != nil {
+			cacheControl = "only-if-cached"
+		}
 	}
+
+	w.Header().Set("Cache-Control", cacheControl)
 
 	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
-		w.Header().Set("Cache-Control", "max-age=86400")
 		w.Write([]byte(XML_HEADER))
 		err = SitemapTemplate.Render(w, &SitemapPage{
 			Host:       s.Domain,
@@ -56,7 +62,6 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		})
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
-		w.Header().Set("Cache-Control", "max-age=86400")
 		w.Write([]byte(XML_HEADER))
 		err = RSSTemplate.Render(w, &RSSPage{
 			Host:       s.Domain,
@@ -66,7 +71,6 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		})
 	} else {
 		w.Header().Add("content-type", "text/html")
-		w.Header().Set("Cache-Control", "max-age=86400")
 
 		nprofile := profile.Nprofile(ctx, sys, 2)
 		params := ProfilePageParams{

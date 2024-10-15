@@ -76,7 +76,7 @@ func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, 
 	return evt, allRelays, nil
 }
 
-func authorLastNotes(ctx context.Context, pubkey string) []EnhancedEvent {
+func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEvent, justFetched bool) {
 	limit := 100
 
 	go sys.FetchProfileMetadata(ctx, pubkey) // fetch this before so the cache is filled for later
@@ -87,7 +87,7 @@ func authorLastNotes(ctx context.Context, pubkey string) []EnhancedEvent {
 		Limit:   limit,
 	}
 
-	lastNotes := make([]EnhancedEvent, 0, filter.Limit)
+	lastNotes = make([]EnhancedEvent, 0, filter.Limit)
 	latestTimestamp := nostr.Timestamp(0)
 
 	// fetch from local store if available
@@ -107,6 +107,8 @@ func authorLastNotes(ctx context.Context, pubkey string) []EnhancedEvent {
 		(len(lastNotes) < limit/5 && latestTimestamp > nostr.Now()-60*60*24*2) ||
 		(len(lastNotes) < limit/2 && latestTimestamp < nostr.Now()-60*60*24*2) {
 		// if we didn't get enough notes then try to fetch from external relays (but do not wait for it)
+		justFetched = true
+
 		go func() {
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 			defer cancel()
@@ -138,7 +140,7 @@ func authorLastNotes(ctx context.Context, pubkey string) []EnhancedEvent {
 		}()
 	}
 
-	return lastNotes
+	return lastNotes, justFetched
 }
 
 func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[*nostr.Event] {

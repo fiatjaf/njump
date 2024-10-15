@@ -152,8 +152,8 @@ func (internal *InternalDB) overwriteFollowListArchive(fla *FollowListArchive) e
 }
 
 func (internal *InternalDB) attachRelaysToEvent(eventId string, relays ...string) (allRelays []string) {
-	idb, _ := hex.DecodeString(eventId[0:16])
-	if _, err := internal.DB.Upsert("cached-id", idb, TypeCachedEvent, func(t leafdb.DataType, value proto.Message) (proto.Message, error) {
+	idxkey, _ := hex.DecodeString(eventId[0:16])
+	if _, err := internal.DB.Upsert("cached-id", idxkey, TypeCachedEvent, func(t leafdb.DataType, value proto.Message) (proto.Message, error) {
 		var ee *CachedEvent
 		if value == nil {
 			ee = &CachedEvent{
