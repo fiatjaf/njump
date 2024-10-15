@@ -1,5 +1,5 @@
-fiatjaf.com/leafdb v0.0.6 h1:/qRX7uwqWEbtdDQBMAhoXnOrl01HZ1CqMvWjQRXqlGw=
-fiatjaf.com/leafdb v0.0.6/go.mod h1:UAmS4uwhlAzFdNZUUG6vguJfnahqgEa+b7HU/Bi05wk=
+fiatjaf.com/leafdb v0.0.7 h1:yu0D+x/lNMB3OdN4gRzk4/0TPJ8tfljfYLAnNRHKw9w=
+fiatjaf.com/leafdb v0.0.7/go.mod h1:UAmS4uwhlAzFdNZUUG6vguJfnahqgEa+b7HU/Bi05wk=
 github.com/DataDog/gostackparse v0.5.0 h1:jb72P6GFHPHz2W0onsN51cS3FkaMDcjb0QzgxxA4gDk=
 github.com/DataDog/gostackparse v0.5.0/go.mod h1:lTfqcJKqS9KnXQGnyQMCugq3u1FP6UZMfWR0aitKFMM=
 github.com/PowerDNS/lmdb-go v1.9.2 h1:Cmgerh9y3ZKBZGz1irxSShhfmFyRUh+Zdk4cZk7ZJvU=
