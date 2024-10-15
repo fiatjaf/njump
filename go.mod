@@ -1,6 +1,6 @@
 module github.com/fiatjaf/njump
 
-go 1.23.0
+go 1.23.1
 
 require (
 	fiatjaf.com/leafdb v0.0.6
@@ -16,7 +16,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/emoji v0.0.3
-	github.com/nbd-wtf/go-nostr v0.38.2
+	github.com/nbd-wtf/go-nostr v0.38.3
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
 	github.com/puzpuzpuz/xsync/v3 v3.4.0
@@ -77,8 +77,8 @@ require (
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/text v0.18.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/text v0.19.0 // indirect
 	golang.org/x/tools v0.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

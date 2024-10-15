@@ -57,7 +57,7 @@ func initSystem() func() {
 }
 
 func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, []string, error) {
-	evt, relays, err := sys.FetchSpecificEvent(ctx, code, true)
+	evt, relays, err := sys.FetchSpecificEvent(ctx, code, withRelays)
 	if err != nil {
 		return nil, nil, fmt.Errorf("couldn't find this event, did you include accurate relay or author hints in it?")
 	}
