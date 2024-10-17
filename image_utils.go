@@ -29,6 +29,7 @@ import (
 	"github.com/go-text/typesetting/language"
 	"github.com/go-text/typesetting/opentype/api"
 	"github.com/go-text/typesetting/shaping"
+	"github.com/golang/freetype/truetype"
 	"github.com/nbd-wtf/emoji"
 	"github.com/nfnt/resize"
 	"github.com/srwiley/rasterx"
@@ -72,6 +73,7 @@ var (
 	scriptRanges []ScriptRange
 	fontMap      [nSupportedScripts]font.Face
 	emojiFace    font.Face
+	dateFont     *truetype.Font
 
 	defaultLanguageMap = [nSupportedScripts]language.Language{
 		"en-us",
@@ -162,6 +164,9 @@ func initializeImageDrawingStuff() error {
 	fontMap[11] = loadFont("fonts/NotoSansSC.ttf")
 	fontMap[12] = loadFont("fonts/NotoSansKR.ttf")
 	emojiFace = loadFont("fonts/NotoEmoji.ttf")
+
+	fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
+	dateFont, _ = truetype.Parse(fontData)
 
 	// shaper stuff
 	emojiFont = harfbuzz.NewFont(emojiFace)
@@ -268,8 +273,11 @@ gotScriptIndex:
 	return lng, script, direction, face
 }
 
-func fetchImageFromURL(url string) (image.Image, error) {
-	response, err := http.Get(url)
+func fetchImageFromURL(ctx context.Context, url string) (image.Image, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*350)
+	defer cancel()
+	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+	response, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch image from %s: %w", url, err)
 	}
@@ -703,8 +711,8 @@ func drawShapedBlockAt(
 	return charsWritten, int(math.Ceil(float64(x)))
 }
 
-func drawImageAt(img draw.Image, imageUrl string, startY int) int {
-	srcImg, err := fetchImageFromURL(imageUrl)
+func drawImageAt(ctx context.Context, img draw.Image, imageUrl string, startY int) int {
+	srcImg, err := fetchImageFromURL(ctx, imageUrl)
 	if err != nil {
 		return -1
 	}
@@ -740,7 +748,7 @@ func drawVideoAt(img draw.Image, videoUrl string, startY int) int {
 	width := img.Bounds().Dx()
 	resizedFrame := resize.Resize(uint(width), 0, imgData, resize.Lanczos3)
 
-	// Draw the play icon on the center of the frame
+	// draw the play icon on the center of the frame
 	videoFrame := image.NewRGBA(resizedFrame.Bounds())
 	draw.Draw(videoFrame, videoFrame.Bounds(), resizedFrame, image.Point{}, draw.Src)
 	iconFile, _ := static.ReadFile("static/play.png")
@@ -754,16 +762,16 @@ func drawVideoAt(img draw.Image, videoUrl string, startY int) int {
 	destRect := image.Rect(posX, posY, posX+iconWidth, posY+iconHeight)
 	draw.Draw(videoFrame, destRect, stampImg, image.Point{}, draw.Over)
 
-	// Draw the modified video frame onto the main canvas
+	// draw the modified video frame onto the main canvas
 	destRect = image.Rect(0, startY, img.Bounds().Dx(), startY+videoFrame.Bounds().Dy())
 	draw.Draw(img, destRect, videoFrame, image.Point{}, draw.Src)
 
 	return startY + videoFrame.Bounds().Dy()
 }
 
-func drawMediaAt(img draw.Image, mediaUrl string, startY int) int {
+func drawMediaAt(ctx context.Context, img draw.Image, mediaUrl string, startY int) int {
 	if isImageURL(mediaUrl) {
-		return drawImageAt(img, mediaUrl, startY)
+		return drawImageAt(ctx, img, mediaUrl, startY)
 	} else if isVideoURL(mediaUrl) {
 		return drawVideoAt(img, mediaUrl, startY)
 	} else {
@@ -772,17 +780,12 @@ func drawMediaAt(img draw.Image, mediaUrl string, startY int) int {
 }
 
 func isImageURL(input string) bool {
-	trimmedURL := strings.TrimSpace(input)
-	if trimmedURL == "" {
-		return false
-	}
-
-	parsedURL, err := url.Parse(trimmedURL)
+	parsedURL, err := url.Parse(input)
 	if err != nil {
-		return false // Unable to parse URL, consider it non-image URL
+		return false // unable to parse URL, consider it non-image URL
 	}
 
-	// Extract the path (excluding query string and hash fragment)
+	// extract the path (excluding query string and hash fragment)
 	path := parsedURL.Path
 	imageExtensions := []string{".jpg", ".jpeg", ".png", ".gif", ".bmp"}
 	for _, ext := range imageExtensions {
@@ -794,14 +797,9 @@ func isImageURL(input string) bool {
 }
 
 func isVideoURL(input string) bool {
-	trimmedURL := strings.TrimSpace(input)
-	if trimmedURL == "" {
-		return false
-	}
-
-	parsedURL, err := url.Parse(trimmedURL)
+	parsedURL, err := url.Parse(input)
 	if err != nil {
-		return false // Unable to parse URL, consider it non-image URL
+		return false // unable to parse URL, consider it non-video URL
 	}
 
 	// Extract the path (excluding query string and hash fragment)

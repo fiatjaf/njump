@@ -264,20 +264,22 @@ func getNameFromNip19(ctx context.Context, nip19code string) (string, bool) {
 // replaces an npub/nprofile with the name of the author, if possible.
 // meant to be used when plaintext is expected, not formatted HTML.
 func replaceUserReferencesWithNames(ctx context.Context, input []string, prefix string) []string {
-	// Match and replace npup1 or nprofile1
+	// match and replace npup1 or nprofile1
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
 
 	for i, line := range input {
-		input[i] = nostrNpubNprofileMatcher.ReplaceAllStringFunc(line, func(match string) string {
-			submatch := nostrNpubNprofileMatcher.FindStringSubmatch(match)
-			nip19code := submatch[1]
-			name, ok := getNameFromNip19(ctx, nip19code)
-			if ok {
-				return prefix + strings.ReplaceAll(name, " ", string(THIN_SPACE))
-			}
-			return nip19code[0:10] + "…" + nip19code[len(nip19code)-5:]
-		})
+		input[i] = strings.TrimSpace(
+			nostrNpubNprofileMatcher.ReplaceAllStringFunc(line, func(match string) string {
+				submatch := nostrNpubNprofileMatcher.FindStringSubmatch(match)
+				nip19code := submatch[1]
+				name, ok := getNameFromNip19(ctx, nip19code)
+				if ok {
+					return prefix + strings.ReplaceAll(name, " ", string(THIN_SPACE))
+				}
+				return nip19code[0:10] + "…" + nip19code[len(nip19code)-5:]
+			}),
+		)
 	}
 	return input
 }

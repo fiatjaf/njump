@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"embed"
 	"fmt"
 	"image"
@@ -45,13 +46,13 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Trim fake extensions
+	// trim fake extensions
 	extensions := []string{".png", ".jpg", ".jpeg"}
 	for _, ext := range extensions {
 		code = strings.TrimSuffix(code, ext)
 	}
 
-	data, err := grabData(ctx, code)
+	data, err := grabData(ctx, code, false)
 	if err != nil {
 		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_image")
@@ -64,6 +65,9 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	content = strings.Replace(content, "\t", "  ", -1)
 	content = strings.Replace(content, "\r", "", -1)
 	content = shortenURLs(content, true)
+	if len(content) > 650 {
+		content = content[0:650]
+	}
 
 	// this turns the raw event.Content into a series of lines ready to drawn
 	paragraphs := replaceUserReferencesWithNames(ctx,
@@ -73,7 +77,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		string(INVISIBLE_SPACE),
 	)
 
-	img, err := drawImage(paragraphs, getPreviewStyle(r), data.event.author, data.createdAt)
+	img, err := drawImage(ctx, paragraphs, getPreviewStyle(r), data.event.author, data.event.CreatedAt.Time())
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to draw paragraphs as image")
 		http.Error(w, "error writing image!", 500)
@@ -90,10 +94,11 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 }
 
 func drawImage(
+	ctx context.Context,
 	paragraphs []string,
 	style Style,
 	metadata sdk.ProfileMetadata,
-	date string,
+	date time.Time,
 ) (image image.Image, err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -146,13 +151,12 @@ func drawImage(
 		addedSize = int(200.0 / largeness * zoom)
 		textFontSize = int(float64(fontSize + addedSize))
 	}
-	textImg, overflowingText := drawParagraphs(paragraphs, textFontSize, width-paddingLeft*2, height-20-barHeight)
+	textImg, overflowingText := drawParagraphs(ctx,
+		paragraphs, textFontSize, width-paddingLeft*2, height-20-barHeight)
 	img.DrawImage(textImg, paddingLeft, 20)
 
 	// font for writing the date
-	fontData, _ := fonts.ReadFile("fonts/NotoSans.ttf")
-	ttf, _ := truetype.Parse(fontData)
-	img.SetFontFace(truetype.NewFace(ttf, &truetype.Options{
+	img.SetFontFace(truetype.NewFace(dateFont, &truetype.Options{
 		Size:    (6 * barScale),
 		DPI:     260,
 		Hinting: xfont.HintingFull,
@@ -178,7 +182,7 @@ func drawImage(
 	authorTextX := paddingLeft
 	picHeight := barHeight - 20
 	if metadata.Picture != "" {
-		authorImage, err := fetchImageFromURL(metadata.Picture)
+		authorImage, err := fetchImageFromURL(ctx, metadata.Picture)
 		if err == nil {
 			resizedAuthorImage := resize.Resize(uint(barHeight-20), uint(picHeight), roundImage(cropToSquare(authorImage)), resize.Lanczos3)
 			img.DrawImage(resizedAuthorImage, paddingLeft, height-barHeight+10)
@@ -195,7 +199,7 @@ func drawImage(
 	}
 
 	img.SetColor(color.White)
-	textImg, _ = drawParagraphs([]string{metadata.ShortName()}, fontSize, width, barHeight)
+	textImg, _ = drawParagraphs(ctx, []string{metadata.ShortName()}, fontSize, width, barHeight)
 	img.DrawImage(textImg, authorTextX, authorTextY)
 
 	// a gradient to cover too long names
@@ -221,17 +225,15 @@ func drawImage(
 	stampY := height - barHeight + (barHeight-int(stampHeight))/2
 	img.DrawImage(resizedStampImg, stampX, stampY)
 
-	// Draw event date
-	layout := "2006-01-02 15:04:05"
-	parsedTime, _ := time.Parse(layout, date)
-	formattedDate := parsedTime.Format("Jan 02, 2006")
+	// draw event date
+	formattedDate := date.Format("Jan 02, 2006")
 	img.SetColor(color.RGBA{160, 160, 160, 255})
 	img.DrawStringWrapped(formattedDate, float64(width-paddingLeft-int(stampWidth)-250), float64(height-barHeight+(barHeight-int(stampHeight))/2)+3, 0, 0, float64(240), 1.5, gg.AlignRight)
 
 	return img.Image(), nil
 }
 
-func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image.Image, bool) {
+func drawParagraphs(ctx context.Context, paragraphs []string, fontSize int, width, height int) (image.Image, bool) {
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 
 	lineNumber := 1
@@ -239,16 +241,23 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 	for i := 0; i < len(paragraphs); i++ {
 		paragraph := paragraphs[i]
 
-		// Skip empty lines if the next element is an image
-		if paragraph == "" && len(paragraphs) > i+1 && isMediaURL(paragraphs[i+1]) {
-			continue
+		if paragraph == "" {
+			// do not draw lines if the next element is an image
+			if len(paragraphs) > i+1 && isMediaURL(paragraphs[i+1]) {
+				continue
+			} else {
+				// just move us down a little then jump to the next line
+				lineNumber++
+				yPos = yPos + fontSize*12/10
+				continue
+			}
 		}
 
 		if isMediaURL(paragraph) {
 			if i == 0 {
 				yPos = 0
 			}
-			next := drawMediaAt(img, paragraph, yPos)
+			next := drawMediaAt(ctx, img, paragraph, yPos)
 			if next != -1 {
 				yPos = next
 				// this means the media picture was successfully drawn
@@ -269,7 +278,7 @@ func drawParagraphs(paragraphs []string, fontSize int, width, height int) (image
 
 		totalCharsWritten := 0
 		for _, line := range lines {
-			for _, out := range line {
+			for _, out := range line { // this iteration is useless because there is always just one line
 				charsWritten, _ := drawShapedBlockAt(
 					img,
 					fontSize,

@@ -63,7 +63,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// get data for this event
-	data, err := grabData(ctx, code)
+	data, err := grabData(ctx, code, true)
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_event")

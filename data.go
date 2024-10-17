@@ -38,9 +38,9 @@ type Data struct {
 	Kind30818Metadata        Kind30818Metadata
 }
 
-func grabData(ctx context.Context, code string) (Data, error) {
+func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	// code can be a nevent or naddr, in which case we try to fetch the associated event
-	event, relays, err := getEvent(ctx, code, true)
+	event, relays, err := getEvent(ctx, code, withRelays)
 	if err != nil {
 		return Data{}, fmt.Errorf("error fetching event: %w", err)
 	}
