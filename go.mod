@@ -16,7 +16,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/nbd-wtf/emoji v0.0.3
-	github.com/nbd-wtf/go-nostr v0.38.3
+	github.com/nbd-wtf/go-nostr v0.39.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml v1.9.5
 	github.com/puzpuzpuz/xsync/v3 v3.4.0
@@ -68,18 +68,18 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
-	github.com/tidwall/gjson v1.17.3 // indirect
+	github.com/tidwall/gjson v1.18.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
+	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
 	golang.org/x/mod v0.21.0 // indirect
-	golang.org/x/net v0.29.0 // indirect
+	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
-	golang.org/x/tools v0.25.0 // indirect
+	golang.org/x/tools v0.26.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

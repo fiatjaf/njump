@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"net/http/pprof"
 	"os"
 	"os/signal"
 	"strings"
@@ -146,11 +145,6 @@ func main() {
 	mux.HandleFunc("/e/", redirectFromESlash)
 	mux.HandleFunc("/p/", redirectFromPSlash)
 	mux.HandleFunc("/favicon.ico", redirectToFavicon)
-	mux.HandleFunc("/debug/pprof/", pprof.Index)
-	mux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
-	mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
-	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
-	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 	mux.HandleFunc("/embed/{code}", renderEmbedjs)
 	mux.HandleFunc("/about", renderAbout)
 	mux.HandleFunc("/{code}", renderEvent)
