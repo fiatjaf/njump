@@ -35,6 +35,14 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		internal.scheduleEventExpiration(profile.Event.ID)
 	}
 
+	if banned, reason := internal.isBannedPubkey(profile.PubKey); banned {
+		w.Header().Set("Cache-Control", "max-age=60")
+		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{Errors: "pubkey banned"}).Render(ctx, w)
+		return
+	}
+
 	var createdAt string
 	if profile.Event != nil {
 		createdAt = profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")

@@ -42,4 +42,28 @@ func setupRelayManagement(relay *khatru.Relay) {
 		}
 		return nil
 	}
+	relay.ManagementAPI.BanPubKey = func(ctx context.Context, pk, reason string) error {
+		log.Info().Str("pubkey", pk).Str("reason", reason).Msg("banning pubkey")
+		ch, err := sys.Store.QueryEvents(ctx, nostr.Filter{Authors: []string{pk}, Limit: DB_MAX_LIMIT})
+		if err != nil {
+			return err
+		}
+
+		for evt := range ch {
+			sys.Store.DeleteEvent(ctx, evt)
+		}
+
+		if err := internal.banPubkey(pk, reason); err != nil {
+			return err
+		}
+
+		return nil
+	}
+	relay.ManagementAPI.AllowPubKey = func(ctx context.Context, id, reason string) error {
+		log.Info().Str("id", id).Str("reason", reason).Msg("unbanning pubkey")
+		if err := internal.unbanPubkey(id); err != nil {
+			return err
+		}
+		return nil
+	}
 }

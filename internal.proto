@@ -25,3 +25,8 @@ message BannedEvent {
   bytes id = 1;
   string reason = 2;
 }
+
+message BannedPubkey {
+  bytes pk = 1;
+  string reason = 2;
+}

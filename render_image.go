@@ -59,6 +59,20 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if banned, _ := internal.isBannedEvent(data.event.ID); banned {
+		w.Header().Set("Cache-Control", "max-age=60")
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{Errors: "event banned"}).Render(ctx, w)
+		return
+	}
+
+	if banned, _ := internal.isBannedPubkey(data.event.PubKey); banned {
+		w.Header().Set("Cache-Control", "max-age=60")
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{Errors: "pubkey banned"}).Render(ctx, w)
+		return
+	}
+
 	content := data.event.Content
 	content = strings.Replace(content, "\r\n", "\n", -1)
 	content = multiNewlineRe.ReplaceAllString(content, "\n\n")

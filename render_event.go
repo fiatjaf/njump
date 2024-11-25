@@ -72,11 +72,19 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if banned, reason := internal.isBanned(data.event.ID); banned {
+	if banned, reason := internal.isBannedEvent(data.event.ID); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
 		w.WriteHeader(http.StatusNotFound)
 		errorTemplate(ErrorPageParams{Errors: "event banned"}).Render(ctx, w)
+		return
+	}
+
+	if banned, reason := internal.isBannedPubkey(data.event.PubKey); banned {
+		w.Header().Set("Cache-Control", "max-age=60")
+		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{Errors: "pubkey banned"}).Render(ctx, w)
 		return
 	}
 

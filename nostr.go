@@ -19,6 +19,8 @@ type RelayConfig struct {
 	JustIds    []string `json:"justIds"`
 }
 
+const DB_MAX_LIMIT = 500
+
 var (
 	sys    *sdk.System
 	serial int
@@ -43,7 +45,8 @@ var (
 
 func initSystem() func() {
 	db := &lmdb.LMDBBackend{
-		Path: s.EventStorePath,
+		Path:     s.EventStorePath,
+		MaxLimit: DB_MAX_LIMIT,
 	}
 	db.Init()
 

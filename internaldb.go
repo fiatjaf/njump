@@ -20,6 +20,7 @@ const (
 	TypePubKeyArchive     leafdb.DataType = 4
 	TypeEventInRelay      leafdb.DataType = 5
 	TypeBannedEvent       leafdb.DataType = 6
+	TypeBannedPubkey      leafdb.DataType = 7
 )
 
 func NewInternalDB(path string) (*InternalDB, error) {
@@ -40,6 +41,8 @@ func NewInternalDB(path string) (*InternalDB, error) {
 				v = &ID{}
 			case TypeBannedEvent:
 				v = &BannedEvent{}
+			case TypeBannedPubkey:
+				v = &BannedPubkey{}
 			default:
 				return nil, fmt.Errorf("what is this? %v", t)
 			}
@@ -83,6 +86,14 @@ func NewInternalDB(path string) (*InternalDB, error) {
 				Emit: func(t leafdb.DataType, value proto.Message, emit func([]byte)) {
 					ban := value.(*BannedEvent)
 					emit(ban.Id[0:8])
+				},
+			},
+			"banned-pubkey": {
+				Version: 1,
+				Types:   []leafdb.DataType{TypeBannedPubkey},
+				Emit: func(t leafdb.DataType, value proto.Message, emit func([]byte)) {
+					ban := value.(*BannedPubkey)
+					emit(ban.Pk[0:8])
 				},
 			},
 		},
@@ -236,7 +247,7 @@ func (internal *InternalDB) unbanEvent(id string) error {
 	return err
 }
 
-func (internal *InternalDB) isBanned(id string) (bool, string) {
+func (internal *InternalDB) isBannedEvent(id string) (bool, string) {
 	idb, err := hex.DecodeString(id)
 	if err != nil {
 		return false, ""
@@ -244,6 +255,42 @@ func (internal *InternalDB) isBanned(id string) (bool, string) {
 
 	for record := range internal.DB.Query(leafdb.ExactQuery("banned-event", idb[0:8])) {
 		return true, record.(*BannedEvent).Reason
+	}
+
+	return false, ""
+}
+
+func (internal *InternalDB) banPubkey(pk, reason string) error {
+	pkb, err := hex.DecodeString(pk)
+	if err != nil {
+		return err
+	}
+
+	_, err = internal.DB.AddOrReplace("banned-pubkey", TypeBannedPubkey, &BannedPubkey{
+		Pk:     pkb,
+		Reason: reason,
+	})
+
+	return err
+}
+
+func (internal *InternalDB) unbanPubkey(pk string) error {
+	pkb, err := hex.DecodeString(pk)
+	if err != nil {
+		return err
+	}
+	_, err = internal.DB.DeleteQuery(leafdb.ExactQuery("banned-pubkey", pkb[0:8]))
+	return err
+}
+
+func (internal *InternalDB) isBannedPubkey(id string) (bool, string) {
+	idb, err := hex.DecodeString(id)
+	if err != nil {
+		return false, ""
+	}
+
+	for record := range internal.DB.Query(leafdb.ExactQuery("banned-pubkey", idb[0:8])) {
+		return true, record.(*BannedPubkey).Reason
 	}
 
 	return false, ""
