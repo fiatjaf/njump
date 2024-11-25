@@ -40,6 +40,7 @@ var (
 		"3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d", // fiatjaf
 		"97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322", // hodlbod
 		"ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49", // Michael Dilger
+		"30c25d24b998c6b51253253fd66d7ceccc7e47ae3d8c540d2a914bec77e89b1d", // ----
 	}
 )
 
