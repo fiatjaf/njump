@@ -9,9 +9,9 @@ build: templ tailwind
 deploy target: templ tailwind
     CGO_CFLAGS="-I$(pwd)/secp256k1-master/musl/include/" CGO_LDFLAGS="-L$(pwd)/secp256k1-master/musl/lib" GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) go build -tags libsecp256k1 -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" -o ./njump
     scp njump {{target}}:njump/njump-new
-    ssh njump 'systemctl stop njump'
-    ssh njump 'mv njump/njump-new njump/njump'
-    ssh njump 'systemctl start njump'
+    ssh {{target}} 'systemctl stop njump'
+    ssh {{target}} 'mv njump/njump-new njump/njump'
+    ssh {{target}} 'systemctl start njump'
 
 libsecp256k1:
     wget https://github.com/bitcoin-core/secp256k1/archive/refs/heads/master.zip
