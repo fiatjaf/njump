@@ -9,7 +9,7 @@ templ detailsTemplate(details DetailsParams) {
 	if details.Metadata.Npub() != "" {
 		<div class="mb-6 break-all leading-5">
 			<div class="text-sm text-strongpink">Author Public Key</div>
-			<span class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ details.Metadata.Npub() }</span>
+			<a href={ templ.SafeURL("/" + details.Metadata.Npub()) } class="text-neutral-500 dark:text-neutral-300 text-[16px]">{ details.Metadata.Npub() }</a>
 		</div>
 	}
 	if details.Extra != nil {
