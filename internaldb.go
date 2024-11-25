@@ -19,6 +19,7 @@ const (
 	TypeFollowListArchive leafdb.DataType = 3
 	TypePubKeyArchive     leafdb.DataType = 4
 	TypeEventInRelay      leafdb.DataType = 5
+	TypeBannedEvent       leafdb.DataType = 6
 )
 
 func NewInternalDB(path string) (*InternalDB, error) {
@@ -36,7 +37,9 @@ func NewInternalDB(path string) (*InternalDB, error) {
 			case TypePubKeyArchive:
 				v = &PubKeyArchive{}
 			case TypeEventInRelay:
-				v = &EventInRelay{}
+				v = &ID{}
+			case TypeBannedEvent:
+				v = &BannedEvent{}
 			default:
 				return nil, fmt.Errorf("what is this? %v", t)
 			}
@@ -74,6 +77,14 @@ func NewInternalDB(path string) (*InternalDB, error) {
 					emit(pkb)
 				},
 			},
+			"banned-event": {
+				Version: 1,
+				Types:   []leafdb.DataType{TypeBannedEvent},
+				Emit: func(t leafdb.DataType, value proto.Message, emit func([]byte)) {
+					ban := value.(*BannedEvent)
+					emit(ban.Id[0:8])
+				},
+			},
 		},
 		Views: map[string]leafdb.ViewDefinition[proto.Message]{
 			"pubkey-archive": {
@@ -92,7 +103,7 @@ func NewInternalDB(path string) (*InternalDB, error) {
 				Emit: func(t leafdb.DataType, value proto.Message, emit func(idxkey []byte, t leafdb.DataType, value proto.Message)) {
 					ee := value.(*CachedEvent)
 					for _, r := range ee.Relays {
-						emit([]byte(trimProtocolAndEndingSlash(r)), TypeEventInRelay, &EventInRelay{Id: ee.Id})
+						emit([]byte(trimProtocolAndEndingSlash(r)), TypeEventInRelay, &ID{Id: ee.Id})
 					}
 				},
 			},
@@ -194,10 +205,46 @@ func (internal *InternalDB) getRelaysForEvent(eventId string) []string {
 func (internal *InternalDB) getEventsInRelay(hostname string) iter.Seq[string] {
 	return func(yield func(string) bool) {
 		for value := range internal.DB.View(leafdb.ExactQuery("events-in-relay", []byte(hostname))) {
-			evtid := value.(*EventInRelay)
+			evtid := value.(*ID)
 			if !yield(evtid.Id) {
 				break
 			}
 		}
 	}
+}
+
+func (internal *InternalDB) banEvent(id, reason string) error {
+	idb, err := hex.DecodeString(id)
+	if err != nil {
+		return err
+	}
+
+	_, err = internal.DB.AddOrReplace("banned-event", TypeBannedEvent, &BannedEvent{
+		Id:     idb,
+		Reason: reason,
+	})
+
+	return err
+}
+
+func (internal *InternalDB) unbanEvent(id string) error {
+	idb, err := hex.DecodeString(id)
+	if err != nil {
+		return err
+	}
+	_, err = internal.DB.DeleteQuery(leafdb.ExactQuery("banned-event", idb[0:8]))
+	return err
+}
+
+func (internal *InternalDB) isBanned(id string) (bool, string) {
+	idb, err := hex.DecodeString(id)
+	if err != nil {
+		return false, ""
+	}
+
+	for record := range internal.DB.Query(leafdb.ExactQuery("banned-event", idb[0:8])) {
+		return true, record.(*BannedEvent).Reason
+	}
+
+	return false, ""
 }

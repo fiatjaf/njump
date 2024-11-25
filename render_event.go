@@ -72,6 +72,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if banned, reason := internal.isBanned(data.event.ID); banned {
+		w.Header().Set("Cache-Control", "max-age=60")
+		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{Errors: "event banned"}).Render(ctx, w)
+		return
+	}
+
 	// if we originally got a note code or an nevent with no hints
 	// augment the URL to point to an nevent with hints -- redirect
 	if p, ok := decoded.(nostr.EventPointer); (ok && p.Author == "" && len(p.Relays) == 0) || prefix == "note" {

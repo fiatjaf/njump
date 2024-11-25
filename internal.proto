@@ -17,6 +17,11 @@ message PubKeyArchive {
   string pubkey = 1;
 }
 
-message EventInRelay {
+message ID {
   string id = 1;
+}
+
+message BannedEvent {
+  bytes id = 1;
+  string reason = 2;
 }

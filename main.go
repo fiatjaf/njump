@@ -129,6 +129,9 @@ func main() {
 		},
 	)
 
+	// admin
+	setupRelayManagement(relay)
+
 	// routes
 	mux := relay.Router()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
