@@ -21,6 +21,7 @@ import (
 type Settings struct {
 	Port                string   `envconfig:"PORT" default:"2999"`
 	Domain              string   `envconfig:"DOMAIN" default:"njump.me"`
+	ServiceURL          string   `envconfig:"SERVICE_URL"`
 	InternalDBPath      string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
 	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
 	HintsMemoryDumpPath string   `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
@@ -121,6 +122,7 @@ func main() {
 
 	// expose our internal cache as a relay (mostly for debugging purposes)
 	relay := khatru.NewRelay()
+	relay.ServiceURL = "https://" + s.Domain
 	relay.QueryEvents = append(relay.QueryEvents, sys.Store.QueryEvents)
 	relay.DeleteEvent = append(relay.DeleteEvent, sys.Store.DeleteEvent)
 	relay.RejectEvent = append(relay.RejectEvent,
