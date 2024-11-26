@@ -72,22 +72,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if banned, reason := internal.isBannedEvent(data.event.ID); banned {
-		w.Header().Set("Cache-Control", "max-age=60")
-		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
-		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: "event banned"}).Render(ctx, w)
-		return
-	}
-
-	if banned, reason := internal.isBannedPubkey(data.event.PubKey); banned {
-		w.Header().Set("Cache-Control", "max-age=60")
-		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
-		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: "pubkey banned"}).Render(ctx, w)
-		return
-	}
-
 	// if we originally got a note code or an nevent with no hints
 	// augment the URL to point to an nevent with hints -- redirect
 	if p, ok := decoded.(nostr.EventPointer); (ok && p.Author == "" && len(p.Relays) == 0) || prefix == "note" {
@@ -98,9 +82,21 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	// from here onwards we know we're rendering an event
 	//
 
-	// if it's porn we return a 404
+	// banned or unallowed conditions
+	if banned, reason := internal.isBannedEvent(data.event.ID); banned {
+		w.Header().Set("Cache-Control", "max-age=60")
+		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
+		http.Error(w, "event banned", http.StatusNotFound)
+		return
+	}
+	if banned, reason := internal.isBannedPubkey(data.event.PubKey); banned {
+		w.Header().Set("Cache-Control", "max-age=60")
+		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
+		http.Error(w, "pubkey banned", http.StatusNotFound)
+		return
+	}
 	hasURL := urlRegex.MatchString(data.event.Content)
-	if hasURL && hasProhibitedWordOrTag(data.event.Event) {
+	if isMaliciousBridged(data.event.author) || (hasURL && hasProhibitedWordOrTag(data.event.Event)) {
 		log.Warn().Str("event", data.nevent).Msg("detect prohibited porn content")
 		http.Error(w, "event is not allowed", http.StatusNotFound)
 		return

@@ -7,7 +7,12 @@ import (
 	"strings"
 
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/sdk"
 )
+
+func isMaliciousBridged(pm sdk.ProfileMetadata) bool {
+	return strings.Contains(pm.NIP05, "rape.pet") || strings.Contains(pm.NIP05, "rape-pet")
+}
 
 func hasProhibitedWordOrTag(event *nostr.Event) bool {
 	for _, tag := range event.Tags {

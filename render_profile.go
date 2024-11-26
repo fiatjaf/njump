@@ -35,11 +35,15 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		internal.scheduleEventExpiration(profile.Event.ID)
 	}
 
+	// banned or unallowed conditions
 	if banned, reason := internal.isBannedPubkey(profile.PubKey); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
-		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: "pubkey banned"}).Render(ctx, w)
+		http.Error(w, "pubkey banned", http.StatusNotFound)
+		return
+	}
+	if isMaliciousBridged(profile) {
+		http.Error(w, "event is not allowed", http.StatusNotFound)
 		return
 	}
 

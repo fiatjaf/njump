@@ -59,17 +59,20 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// banned or unallowed conditions
 	if banned, _ := internal.isBannedEvent(data.event.ID); banned {
-		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: "event banned"}).Render(ctx, w)
+		http.Error(w, "event banned", http.StatusNotFound)
 		return
 	}
-
 	if banned, _ := internal.isBannedPubkey(data.event.PubKey); banned {
-		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: "pubkey banned"}).Render(ctx, w)
+		http.Error(w, "pubkey banned", http.StatusNotFound)
+		return
+	}
+	hasURL := urlRegex.MatchString(data.event.Content)
+	if isMaliciousBridged(data.event.author) || (hasURL && hasProhibitedWordOrTag(data.event.Event)) {
+		http.Error(w, "event is not allowed", http.StatusNotFound)
 		return
 	}
 
