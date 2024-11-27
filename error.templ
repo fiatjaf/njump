@@ -63,7 +63,9 @@ templ errorTemplate(params ErrorPageParams) {
 						>Go to the homepage</a>
 					</div>
 					if params.Clients != nil {
-						@clientsTemplate(params.Clients)
+						<div class="mt-12">
+							@clientsTemplate(params.Clients)
+						</div>
 					}
 				</div>
 			</div>
