@@ -119,30 +119,30 @@ function getPlatform() {
 function filterAndSort(children) {
   const platform = getPlatform();
 
-  const filteredElements = Array.from(children).filter((element) => {
-    const platformAttr = element.getAttribute('data-platform');
-    return platform === platformAttr || platformAttr === 'web' || platformAttr === 'native' || platformAttr === 'dummy';
-  });
-
-  Array.from(children).forEach((element) => {
-    if (!filteredElements.includes(element)) {
-      element.remove();
+  const parent = children[0].parentNode;
+  const elements = []
+  for (let i = 0; i < children.length; i++) {
+    let element = children[i]
+    switch (element.getAttribute('data-platform')) {
+      case platform:
+      case 'web':
+      case 'native':
+      case 'dummy':
+        elements.push(element)
     }
-  });
+  }
 
-  const sortedElements = filteredElements.sort(
+  elements.sort(
     (a, b) =>
       parseInt(b.getAttribute('count')) - parseInt(a.getAttribute('count'))
   );
 
-  // Assuming you want to re-insert the sorted elements into their parent container
-  const parent = children[0].parentNode;
-  parent.innerHTML = ''; // Clear the parent container
-  sortedElements.forEach((element) => {
-    parent.appendChild(element);
-  });
+  parent.innerHTML = ''
+  for (let i = 0; i < elements.length; i++) {
+    parent.appendChild(elements[i]);
+  };
 
-  return sortedElements;
+  return elements;
 }
 </script>
 }
