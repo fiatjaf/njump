@@ -9,6 +9,9 @@ type ErrorPageParams struct {
 	HeadParams
 	Errors  string
 	Message string
+
+	// for when we can't find an event, but we still want to give the user a chance to open it elsewhere
+	Clients []ClientReference
 }
 
 func (e *ErrorPageParams) MessageHTML() template.HTML {
@@ -59,6 +62,9 @@ templ errorTemplate(params ErrorPageParams) {
 							class="block leading-3 underline decoration-neutral-400 underline-offset-4"
 						>Go to the homepage</a>
 					</div>
+					if params.Clients != nil {
+						@clientsTemplate(params.Clients)
+					}
 				</div>
 			</div>
 			@footerTemplate()

@@ -68,7 +68,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_event")
 		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
+		errorTemplate(ErrorPageParams{Errors: err.Error(), Clients: generateClientList(999999, code)}).Render(ctx, w)
 		return
 	}
 

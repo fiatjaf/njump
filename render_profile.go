@@ -30,7 +30,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
 
-		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
+		errorTemplate(ErrorPageParams{Errors: err.Error(), Clients: generateClientList(999999, code)}).Render(ctx, w)
 		return
 	} else if profile.Event != nil {
 		internal.scheduleEventExpiration(profile.Event.ID)
