@@ -143,7 +143,7 @@ templ profileTemplate(params ProfilePageParams) {
 							<span itemprop="identifier">{ params.Metadata.Npub() }</span>
 						</div>
 						if params.Metadata.NIP05 != "" {
-							<div class="mb-6 leading-5">
+							<div class={ "mb-6", "leading-5", templ.KV("line-through", !params.Metadata.NIP05Valid(ctx)) }>
 								<div class="text-sm text-strongpink">NIP-05 Address</div>
 								<a href={ templ.URL(nip05.IdentifierToURL(params.Metadata.NIP05)) } class="underline-offset-[6px] hover:underline">
 									<span itemprop="alternateName">{ nip05.NormalizeIdentifier(params.Metadata.NIP05) }</span>

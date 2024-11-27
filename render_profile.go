@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, code string) {
@@ -116,6 +117,10 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 				},
 			),
 		}
+
+		// give this global context a timeout because it may used inside the template to validate the nip05 address
+		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+		defer cancel()
 
 		if isEmbed {
 			err = embeddedProfileTemplate(params).Render(ctx, w)
