@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"github.com/nbd-wtf/go-nostr/sdk"
+	"github.com/nbd-wtf/go-nostr/nip05"
 )
 
 type ProfilePageParams struct {
@@ -141,12 +142,14 @@ templ profileTemplate(params ProfilePageParams) {
 							<div class="text-sm text-strongpink">Public Key</div>
 							<span itemprop="identifier">{ params.Metadata.Npub() }</span>
 						</div>
-						<div class="mb-6 leading-5">
-							if params.Metadata.NIP05 != "" {
+						if params.Metadata.NIP05 != "" {
+							<div class="mb-6 leading-5">
 								<div class="text-sm text-strongpink">NIP-05 Address</div>
-								<span itemprop="alternateName">{ params.Metadata.NIP05 }</span>
-							}
-						</div>
+								<a href={ templ.URL(nip05.IdentifierToURL(params.Metadata.NIP05)) } class="underline-offset-[6px] hover:underline">
+									<span itemprop="alternateName">{ nip05.NormalizeIdentifier(params.Metadata.NIP05) }</span>
+								</a>
+							</div>
+						}
 						<div class="mb-6 leading-5">
 							if params.Metadata.LUD16 != "" {
 								<div class="text-sm text-strongpink">NIP-57 Address</div>
