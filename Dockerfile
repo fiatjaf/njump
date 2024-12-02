@@ -16,7 +16,7 @@ RUN npm install tailwindcss
 RUN npx tailwind -i base.css -o tailwind-bundle.min.css --minify
 
 #### Go build stage
-FROM golang:1.23.0-alpine AS gobuilder
+FROM golang:1.23.3-alpine AS gobuilder
 
 # Add package
 RUN apk add --no-cache autoconf automake libtool build-base musl-dev git
