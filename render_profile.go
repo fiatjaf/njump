@@ -43,6 +43,13 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		return
 	}
 
+	if indexOptOut(profile) {
+		w.Header().Set("Cache-Control", "max-age=60")
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{Errors: "user has requested to not be indexed"}).Render(ctx, w)
+		return
+	}
+
 	var createdAt string
 	if profile.Event != nil {
 		createdAt = profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
