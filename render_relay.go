@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -98,12 +97,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 			Proxy:      "https://" + hostname + "/njump/proxy?src=",
 			LastNotes:  renderableLastNotes,
 			ModifiedAt: lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
-			Clients: generateClientList(-1, hostname, func(cr ClientReference, s string) string {
-				if cr == nostterRelay {
-					return strings.Replace(s, hostname, url.PathEscape("wss://"+hostname), 1)
-				}
-				return s
-			}),
+			Clients:    generateClientList(-1, hostname),
 		}).Render(r.Context(), w)
 	}
 }

@@ -22,7 +22,8 @@ var (
 	primalWeb    = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: "web"}
 	nostrudel    = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/#/n/{code}", Platform: "web"}
 	nostter      = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: "web"}
-	nostterRelay = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/{code}", Platform: "web"}
+	nostterRelay = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/wss%3A%2F%2F{code}", Platform: "web"}
+	jumble       = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: "web"}
 	coracle      = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: "web"}
 	coracleRelay = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/{code}", Platform: "web"}
 
@@ -63,7 +64,7 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			nostterRelay, coracleRelay, nostrrrRelay,
+			jumble, nostterRelay, nostrrrRelay, coracleRelay,
 		}
 	case 1, 6:
 		clients = []ClientReference{
