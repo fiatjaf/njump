@@ -14,7 +14,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/microcosm-cc/bluemonday"
 	"github.com/puzpuzpuz/xsync/v3"
 	"mvdan.cc/xurls/v2"
 
@@ -337,16 +336,6 @@ func linkQuotes(input string) string {
 		lastChars := nip19[len(nip19)-4:]
 		return fmt.Sprintf(`<a href="/%s">%s</a>`, nip19, firstChars+"…"+lastChars)
 	})
-}
-
-func sanitizeXSS(html string) string {
-	p := bluemonday.UGCPolicy()
-	p.AllowStyling()
-	p.RequireNoFollowOnLinks(false)
-	p.AllowElements("video", "source")
-	p.AllowAttrs("controls", "width").OnElements("video")
-	p.AllowAttrs("src", "width").OnElements("source")
-	return p.Sanitize(html)
 }
 
 func basicFormatting(input string, skipNostrEventLinks bool, usingTelegramInstantView bool, skipLinks bool) string {

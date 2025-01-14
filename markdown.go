@@ -9,6 +9,7 @@ import (
 	"github.com/gomarkdown/markdown/ast"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
+	"github.com/microcosm-cc/bluemonday"
 )
 
 var mdrenderer = html.NewRenderer(html.RendererOptions{
@@ -81,4 +82,13 @@ func mdToHTML(md string, usingTelegramInstantView bool) string {
 	output = replaceNostrURLsWithHTMLTags(nostrEveryMatcher, output)
 
 	return output
+}
+
+func sanitizeXSS(html string) string {
+	p := bluemonday.UGCPolicy()
+	p.RequireNoFollowOnLinks(false)
+	p.AllowElements("video", "source")
+	p.AllowAttrs("controls", "width").OnElements("video")
+	p.AllowAttrs("src", "width").OnElements("source")
+	return p.Sanitize(html)
 }
