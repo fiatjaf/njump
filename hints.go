@@ -6,13 +6,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr/sdk/hints/memory"
+	"github.com/nbd-wtf/go-nostr/sdk/hints/memoryh"
 )
 
 // save these things to a file so we can reload them later
 func outboxHintsFileLoaderSaver(ctx context.Context) {
 	if file, err := os.Open(s.HintsMemoryDumpPath); err == nil {
-		hdb := memory.NewHintDB()
+		hdb := memoryh.NewHintDB()
 		if err := json.NewDecoder(file).Decode(&hdb); err == nil {
 			sys.Hints = hdb
 		}
@@ -28,7 +28,7 @@ func outboxHintsFileLoaderSaver(ctx context.Context) {
 		case <-time.After(time.Minute * 5):
 		}
 
-		hdb := sys.Hints.(*memory.HintDB)
+		hdb := sys.Hints.(*memoryh.HintDB)
 		file, err := os.Create(tmp)
 		if err != nil {
 			log.Error().Err(err).Str("path", tmp).Msg("failed to create outbox hints file")

@@ -11,6 +11,7 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip31"
 	"github.com/nbd-wtf/go-nostr/nip52"
 	"github.com/nbd-wtf/go-nostr/nip53"
+	"github.com/nbd-wtf/go-nostr/nip92"
 	"github.com/nbd-wtf/go-nostr/nip94"
 	"github.com/nbd-wtf/go-nostr/sdk"
 )
@@ -86,6 +87,9 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	case 30023, 30024:
 		data.templateId = LongForm
 		data.content = event.Content
+	case 20:
+		data.templateId = Note
+		data.content = event.Content
 	case 6:
 		data.templateId = Note
 		if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
@@ -135,14 +139,29 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	image := event.Tags.GetFirst([]string{"image", ""})
 	if event.Kind == 30023 && image != nil {
 		data.cover = (*image)[1]
-	}
-
-	if event.Kind == 1063 {
+	} else if event.Kind == 1063 {
 		if data.kind1063Metadata.IsImage() {
 			data.image = data.kind1063Metadata.URL
 		} else if data.kind1063Metadata.IsVideo() {
 			data.video = data.kind1063Metadata.URL
 			data.videoType = strings.Split(data.kind1063Metadata.M, "/")[1]
+		}
+	} else if event.Kind == 20 {
+		imeta := nip92.ParseTags(event.Tags)
+		if len(imeta) > 0 {
+			data.image = imeta[0].URL
+
+			content := strings.Builder{}
+			content.Grow(110*len(imeta) + len(data.content))
+			for _, entry := range imeta {
+				content.WriteString(entry.URL)
+				content.WriteString(" ")
+			}
+			content.WriteString(data.content)
+			data.content = content.String()
+		}
+		if tag := data.event.Tags.GetFirst([]string{"title", ""}); tag != nil {
+			data.event.subject = (*tag)[1]
 		}
 	} else {
 		urls := urlMatcher.FindAllString(event.Content, -1)

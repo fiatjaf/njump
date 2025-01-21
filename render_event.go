@@ -120,6 +120,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		if style == StyleTwitter {
 			useTextImage = true
 		}
+	} else if data.event.Kind == 20 {
+		useTextImage = false
 	}
 
 	if tgiv := r.URL.Query().Get("tgiv"); tgiv == "true" || (style == StyleTelegram && tgiv != "false") {
@@ -129,7 +131,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			(data.parentLink != "") || // or notes that are replies (so we can navigate to them from telegram)
 			(strings.Contains(data.content, "nostr:")) || // or notes that quote other stuff (idem)
 			// or shorter notes that should be using text-to-image stuff but are not because they have video or images
-			(data.event.Kind == 1 && len(data.event.Content)-len(data.image) > 133 && !useTextImage) {
+			(data.event.Kind == 1 && len(data.event.Content)-len(data.image) > 133 && !useTextImage) ||
+			(data.event.Kind == 20) {
+
 			data.templateId = TelegramInstantView
 			useTextImage = false
 		}

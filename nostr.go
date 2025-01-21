@@ -10,7 +10,6 @@ import (
 	"github.com/fiatjaf/eventstore/lmdb"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/sdk"
-	cache_memory "github.com/nbd-wtf/go-nostr/sdk/cache/memory"
 )
 
 type RelayConfig struct {
@@ -52,8 +51,6 @@ func initSystem() func() {
 	db.Init()
 
 	sys = sdk.NewSystem(
-		sdk.WithMetadataCache(cache_memory.New32[sdk.ProfileMetadata](10000)),
-		sdk.WithRelayListCache(cache_memory.New32[sdk.RelayList](10000)),
 		sdk.WithStore(db),
 	)
 
@@ -61,7 +58,7 @@ func initSystem() func() {
 }
 
 func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, []string, error) {
-	evt, relays, err := sys.FetchSpecificEvent(ctx, code, withRelays)
+	evt, relays, err := sys.FetchSpecificEventFromInput(ctx, code, withRelays)
 	if err != nil {
 		return nil, nil, fmt.Errorf("couldn't find this event, did you include accurate relay or author hints in it?")
 	}
