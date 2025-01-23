@@ -159,6 +159,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if data.event.subject != "" {
 		subscript += " (" + data.event.subject + ")"
 	}
+
 	subscript += " by " + data.event.author.ShortName()
 	if data.event.isReply() {
 		subscript += " (reply)"

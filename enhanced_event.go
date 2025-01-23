@@ -44,16 +44,13 @@ func NewEnhancedEvent(
 		}
 	}
 
-	if ctx != nil {
-		if event.Kind == 0 {
-			spm, _ := sdk.ParseMetadata(event)
-			ee.author = spm
-		} else {
-			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-			defer cancel()
-
-			ee.author = sys.FetchProfileMetadata(ctx, event.PubKey)
-		}
+	if event.Kind == 0 {
+		spm, _ := sdk.ParseMetadata(event)
+		ee.author = spm
+	} else {
+		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+		defer cancel()
+		ee.author = sys.FetchProfileMetadata(ctx, event.PubKey)
 	}
 
 	return ee
