@@ -283,13 +283,13 @@ func (internal *InternalDB) unbanPubkey(pk string) error {
 	return err
 }
 
-func (internal *InternalDB) isBannedPubkey(id string) (bool, string) {
-	idb, err := hex.DecodeString(id)
+func (internal *InternalDB) isBannedPubkey(pk string) (bool, string) {
+	pkb, err := hex.DecodeString(pk)
 	if err != nil {
 		return false, ""
 	}
 
-	for record := range internal.DB.Query(leafdb.ExactQuery("banned-pubkey", idb[0:8])) {
+	for record := range internal.DB.Query(leafdb.ExactQuery("banned-pubkey", pkb[0:8])) {
 		return true, record.(*BannedPubkey).Reason
 	}
 
