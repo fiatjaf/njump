@@ -20,10 +20,8 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 			"DotBot",
 			"ClaudeBot",
 			"GPTBot",
-			"bingbot",
 			"MJ12Bot",
 			"PetalBot",
-			"Applebot",
 		} {
 			if strings.Contains(ua, bua) {
 				// log.Debug().Str("ua", ua).Msg("user-agent blocked")
