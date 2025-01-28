@@ -34,6 +34,8 @@ var (
 	jumbleRelay  = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: platformWeb}
 	coracle      = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
 	coracleRelay = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/{code}", Platform: platformWeb}
+	lumilumi     = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/{code}", Platform: platformWeb}
+	lumilumiRelay = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/relay/wss%3A%2F%2F{code}", Platform: platformWeb}
 
 	zapStream      = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
 	nostrrrRelay   = ClientReference{ID: "nostrrr", Name: "Nostrrr", Base: "https://nostrrr.com/relay/{code}", Platform: platformWeb}
@@ -74,35 +76,35 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			jumbleRelay, nostterRelay, nostrrrRelay, coracleRelay,
+			jumbleRelay, nostterRelay, nostrrrRelay, coracleRelay, lumilumiRelay,
 		}
 	case 1, 6:
 		clients = []ClientReference{
 			native,
 			damus, nostur, freeFromIOS, yakihonneIOS, nos, primalIOS,
 			voyage, yakihonneAndroid, primalAndroid, freeFromAndroid, yanaAndroid,
-			coracle, snort, jumble, nostter, nostrudel, primalWeb,
+			coracle, snort, jumble, nostter, nostrudel, primalWeb, lumilumi,
 		}
 	case 20:
 		clients = []ClientReference{
 			native,
 			olasAndroid,
 			olasIOS,
-			jumble, olasWeb,
+			jumble, olasWeb, lumilumi,
 		}
 	case 0:
 		clients = []ClientReference{
 			native,
 			nos, damus, nostur, primalIOS, freeFromIOS, yakihonneIOS,
 			voyage, yakihonneAndroid, yanaAndroid, freeFromAndroid, primalAndroid,
-			nostrrrProfile, nosta, coracle, snort, nostter, nostrudel, primalWeb,
+			nostrrrProfile, nosta, coracle, snort, nostter, nostrudel, primalWeb, lumilumi,
 		}
 	case 30023, 30024:
 		clients = []ClientReference{
 			native,
 			damus, nos, nostur, yakihonneIOS,
 			yakihonneAndroid, amethyst,
-			highlighter, yakihonne, habla, notestack,
+			highlighter, yakihonne, habla, notestack, lumilumi,
 		}
 	case 1063:
 		clients = []ClientReference{
@@ -132,7 +134,7 @@ func generateClientList(
 			native,
 			yakihonneIOS, nos, damus, nostur, primalIOS, freeFromIOS,
 			voyage, amethyst, yakihonneAndroid, yanaAndroid, freeFromAndroid, voyage,
-			yakihonne, coracle, snort, nostter, nostrudel, primalWeb,
+			yakihonne, coracle, snort, nostter, nostrudel, primalWeb, lumilumi,
 		}
 	}
 
