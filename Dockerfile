@@ -61,7 +61,7 @@ WORKDIR /root
 COPY --from=gobuilder /app/main .
 
 # Copy relay config
-COPY --from=gobuilder /app/relay-config.json.sample .
+COPY --from=gobuilder /app/relay-config.json.sample relay-config.json
 
 # Expose port
 EXPOSE 2999
