@@ -33,7 +33,8 @@ var (
 	jumble       = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/notes/{code}", Platform: platformWeb}
 	jumbleRelay  = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: platformWeb}
 	coracle      = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
-	coracleRelay = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/{code}", Platform: platformWeb}
+	coracleRelay = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
+	relayTools   = ClientReference{ID: "relay.tools", Name: "relay.tools", Base: "https://relay.tools/posts/?relay=wss://{code}"}
 
 	zapStream      = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
 	nostrrrRelay   = ClientReference{ID: "nostrrr", Name: "Nostrrr", Base: "https://nostrrr.com/relay/{code}", Platform: platformWeb}
@@ -74,7 +75,7 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			jumbleRelay, nostterRelay, nostrrrRelay, coracleRelay,
+			jumbleRelay, coracleRelay, relayTools, nostrrrRelay, nostterRelay,
 		}
 	case 1, 6:
 		clients = []ClientReference{
@@ -88,7 +89,7 @@ func generateClientList(
 			native,
 			olasAndroid,
 			olasIOS,
-			jumble, olasWeb,
+			jumble, olasWeb, coracle,
 		}
 	case 0:
 		clients = []ClientReference{
