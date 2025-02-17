@@ -24,6 +24,7 @@ type Settings struct {
 	ServiceURL          string   `envconfig:"SERVICE_URL"`
 	InternalDBPath      string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
 	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
+	KVStorePath         string   `envconfig:"KV_STORE_PATH" default:"/tmp/njump-kv"`
 	HintsMemoryDumpPath string   `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
 	TailwindDebug       bool     `envconfig:"TAILWIND_DEBUG"`
 	RelayConfigPath     string   `envconfig:"RELAY_CONFIG_PATH"`

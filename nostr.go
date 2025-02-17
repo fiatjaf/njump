@@ -10,6 +10,7 @@ import (
 	"github.com/fiatjaf/eventstore/lmdb"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/sdk"
+	lmdb_kv "github.com/nbd-wtf/go-nostr/sdk/kvstore/lmdb"
 )
 
 type RelayConfig struct {
@@ -48,10 +49,18 @@ func initSystem() func() {
 		Path:     s.EventStorePath,
 		MaxLimit: DB_MAX_LIMIT,
 	}
-	db.Init()
+	if err := db.Init(); err != nil {
+		panic(err)
+	}
+
+	kv, err := lmdb_kv.NewStore(s.EventStorePath)
+	if err != nil {
+		panic(err)
+	}
 
 	sys = sdk.NewSystem(
 		sdk.WithStore(db),
+		sdk.WithKVStore(kv),
 	)
 
 	return db.Close
