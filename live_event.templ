@@ -58,7 +58,6 @@ templ liveEventTemplate(params LiveEventPageParams, isEmbed bool) {
 		@embeddedPageTemplate(
 			params.Event,
 			params.NeventNaked,
-			isEmbed,
 		) {
 			@liveEventInnerBlock(params)
 		}
@@ -70,7 +69,6 @@ templ liveEventTemplate(params LiveEventPageParams, isEmbed bool) {
 			params.Clients,
 			params.Details,
 			params.Event,
-			isEmbed,
 		) {
 			@liveEventInnerBlock(params)
 		}

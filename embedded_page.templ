@@ -3,7 +3,6 @@ package main
 templ embeddedPageTemplate(
 	event EnhancedEvent,
 	NeventNaked string,
-	isEmbed bool,
 ) {
 	<!DOCTYPE html>
 	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
@@ -16,7 +15,7 @@ templ embeddedPageTemplate(
 				href="/njump/static/tailwind-bundle.min.css"
 			/>
 		</head>
-		<body 
+		<body
 			class="relative bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black sm:items-center sm:justify-center cursor-pointer"
 			event-data={ templ.JSONString(NeventNaked) }
 		>
