@@ -14,11 +14,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/puzpuzpuz/xsync/v3"
-	"mvdan.cc/xurls/v2"
-
+	me "github.com/huantt/plaintext-extractor/markdown"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/puzpuzpuz/xsync/v3"
+	"mvdan.cc/xurls/v2"
 )
 
 const (
@@ -43,6 +43,8 @@ var (
 	imageExtensionMatcher = regexp.MustCompile(`.*\.(png|jpg|jpeg|gif|webp|avif)((\?|\#).*)?$`)
 	videoExtensionMatcher = regexp.MustCompile(`.*\.(mp4|ogg|webm|mov)((\?|\#).*)?$`)
 	urlRegex              = xurls.Strict()
+
+	markdownExtractor = me.NewExtractor()
 )
 
 var kindNames = map[int]string{

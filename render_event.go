@@ -387,6 +387,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			opengraph.SingleTitle = string(INVISIBLE_SPACE)
 		}
 
+		if text, err := markdownExtractor.PlainText(opengraph.Text); err == nil {
+			opengraph.Text = *text
+		}
+
 		params := NotePageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
