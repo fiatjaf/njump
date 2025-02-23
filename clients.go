@@ -43,7 +43,6 @@ var (
 	yakihonne   = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/{code}", Platform: platformWeb}
 	habla       = ClientReference{ID: "habla", Name: "Habla", Base: "https://habla.news/a/{code}", Platform: platformWeb}
 	highlighter = ClientReference{ID: "highlighter", Name: "Highlighter", Base: "https://highlighter.com/a/{code}", Platform: platformWeb}
-	notestack   = ClientReference{ID: "notestack", Name: "Notestack", Base: "https://notestack.com/{code}", Platform: platformWeb}
 
 	voyage           = ClientReference{ID: "voyage", Name: "Voyage", Base: "intent:{code}#Intent;scheme=nostr;package=com.dluvian.voyage;end`;", Platform: platformAndroid}
 	olasAndroid      = ClientReference{ID: "olas", Name: "Olas", Base: "intent:{code}#Intent;scheme=nostr;package=com.pablof7z.snapstr;end`;", Platform: platformAndroid}
@@ -103,7 +102,7 @@ func generateClientList(
 			native,
 			damus, nos, nostur, yakihonneIOS,
 			yakihonneAndroid, amethyst,
-			highlighter, yakihonne, habla, notestack,
+			highlighter, yakihonne, habla,
 		}
 	case 1063:
 		clients = []ClientReference{
