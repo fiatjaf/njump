@@ -67,7 +67,9 @@ func initSystem() func() {
 }
 
 func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, []string, error) {
-	evt, relays, err := sys.FetchSpecificEventFromInput(ctx, code, withRelays)
+	evt, relays, err := sys.FetchSpecificEventFromInput(ctx, code, sdk.FetchSpecificEventParameters{
+		WithRelays: withRelays,
+	})
 	if err != nil {
 		return nil, nil, fmt.Errorf("couldn't find this event, did you include accurate relay or author hints in it?")
 	}
@@ -128,7 +130,7 @@ func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEv
 				relays = appendUnique(relays, sys.FallbackRelays.Next())
 			}
 
-			ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter}, nostr.WithLabel("authorlast"))
+			ch := sys.Pool.FetchMany(ctx, relays, filter, nostr.WithLabel("authorlast"))
 		out:
 			for {
 				select {
