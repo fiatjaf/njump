@@ -400,7 +400,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:          detailsData,
 			Content:          template.HTML(data.content),
 			Cover:            data.cover,
-			TitleizedContent: titleizedContent,
+			TitleizedContent: data.event.subject, // we store the "title" tag here too
 		}
 
 		component = noteTemplate(params, isEmbed)
