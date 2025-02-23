@@ -8,8 +8,8 @@ github.com/PowerDNS/lmdb-go v1.9.2 h1:Cmgerh9y3ZKBZGz1irxSShhfmFyRUh+Zdk4cZk7ZJv
 github.com/PowerDNS/lmdb-go v1.9.2/go.mod h1:TE0l+EZK8Z1B4dx070ZxkWTlp8RG1mjN0/+FkFRQMtU=
 github.com/PuerkitoBio/goquery v1.10.1 h1:Y8JGYUkXWTGRB6Ars3+j3kN0xg1YqqlwvdTV8WTFQcU=
 github.com/PuerkitoBio/goquery v1.10.1/go.mod h1:IYiHrOMps66ag56LEH7QYDDupKXyo5A8qrjIx3ZtujY=
-github.com/a-h/templ v0.3.819 h1:KDJ5jTFN15FyJnmSmo2gNirIqt7hfvBD2VXVDTySckM=
-github.com/a-h/templ v0.3.819/go.mod h1:iDJKJktpttVKdWoTkRNNLcllRI+BlpopJc+8au3gOUo=
+github.com/a-h/templ v0.3.833 h1:L/KOk/0VvVTBegtE0fp2RJQiBm7/52Zxv5fqlEHiQUU=
+github.com/a-h/templ v0.3.833/go.mod h1:cAu4AiZhtJfBjMY0HASlyzvkrtjnHWPeEsyGK2YYmfk=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=
 github.com/alecthomas/chroma/v2 v2.3.0 h1:83xfxrnjv8eK+Cf8qZDzNo3PPF9IbTWHs7z28GY6D0U=
 github.com/alecthomas/chroma/v2 v2.3.0/go.mod h1:mZxeWZlxP2Dy+/8cBob2PYd8O2DwNAzave5AY7A2eQw=
