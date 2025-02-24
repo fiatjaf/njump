@@ -29,6 +29,7 @@ type Settings struct {
 	TailwindDebug       bool     `envconfig:"TAILWIND_DEBUG"`
 	RelayConfigPath     string   `envconfig:"RELAY_CONFIG_PATH"`
 	TrustedPubKeys      []string `envconfig:"TRUSTED_PUBKEYS"`
+	MediaAlertAPIKey    string   `envconfig:"MEDIA_ALERT_API_KEY"`
 }
 
 //go:embed static/*

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"slices"
@@ -22,6 +23,44 @@ func hasProhibitedWordOrTag(event *nostr.Event) bool {
 	}
 
 	return pornWordsRe.MatchString(event.Content)
+}
+
+// hasExplicitMedia checks if the event contains explicit media content
+// by examining image/video URLs in the content and checking them against the media alert API
+func hasExplicitMedia(ctx context.Context, event *nostr.Event) bool {
+	// extract image and video URLs from content
+	var mediaURLs []string
+
+	// find image URLs
+	imgMatches := imageExtensionMatcher.FindAllStringSubmatch(event.Content, -1)
+	for _, match := range imgMatches {
+		if len(match) > 0 {
+			mediaURLs = append(mediaURLs, match[0])
+		}
+	}
+
+	// find video URLs
+	vidMatches := videoExtensionMatcher.FindAllStringSubmatch(event.Content, -1)
+	for _, match := range vidMatches {
+		if len(match) > 0 {
+			mediaURLs = append(mediaURLs, match[0])
+		}
+	}
+
+	// check each URL for explicit content
+	for _, mediaURL := range mediaURLs {
+		isExplicit, err := isExplicitContent(ctx, mediaURL)
+		if err != nil {
+			log.Warn().Err(err).Str("url", mediaURL).Msg("failed to check media content")
+			continue
+		}
+
+		if isExplicit {
+			return true
+		}
+	}
+
+	return false
 }
 
 // list copied from https://jsr.io/@gleasonator/policy/0.2.0/data/porntags.json
