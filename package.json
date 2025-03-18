@@ -1,13 +1,11 @@
 {
-  "devDependencies": {
-    "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.6",
-    "tailwindcss": "^3.4.1"
-  },
   "scripts": {
     "postinstall": "tailwind -i tailwind.css -o static/tailwind-bundle.min.css --minify"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.10"
+    "@tailwindcss/typography": "^0.5.10",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.6",
+    "tailwindcss": "^3.4.1"
   }
 }

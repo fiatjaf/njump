@@ -7,10 +7,10 @@ import (
 	"slices"
 	"time"
 
-	"github.com/fiatjaf/eventstore/lmdb"
+	"github.com/fiatjaf/eventstore/badger"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/sdk"
-	lmdb_kv "github.com/nbd-wtf/go-nostr/sdk/kvstore/lmdb"
+	badger_kv "github.com/nbd-wtf/go-nostr/sdk/kvstore/badger"
 )
 
 type RelayConfig struct {
@@ -45,7 +45,7 @@ var (
 )
 
 func initSystem() func() {
-	db := &lmdb.LMDBBackend{
+	db := &badger.BadgerBackend{
 		Path:     s.EventStorePath,
 		MaxLimit: DB_MAX_LIMIT,
 	}
@@ -53,7 +53,7 @@ func initSystem() func() {
 		panic(err)
 	}
 
-	kv, err := lmdb_kv.NewStore(s.EventStorePath)
+	kv, err := badger_kv.NewStore(s.KVStorePath)
 	if err != nil {
 		panic(err)
 	}
