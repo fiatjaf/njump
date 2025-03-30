@@ -72,9 +72,9 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05 MST")
 
 	if event.Kind >= 30000 && event.Kind < 40000 {
-		if d := event.Tags.GetFirst([]string{"d", ""}); d != nil {
-			data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), relaysForNip19)
-			data.naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, d.Value(), nil)
+		if dTag := event.Tags.Find("d"); dTag != nil {
+			data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, dTag[1], relaysForNip19)
+			data.naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, dTag[1], nil)
 		}
 	}
 
@@ -92,8 +92,8 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 		data.content = event.Content
 	case 6:
 		data.templateId = Note
-		if reposted := event.Tags.GetFirst([]string{"e", ""}); reposted != nil {
-			originalNevent, _ := nip19.EncodeEvent((*reposted)[1], []string{}, "")
+		if reposted := event.Tags.Find("e"); reposted != nil {
+			originalNevent, _ := nip19.EncodeEvent(reposted[1], []string{}, "")
 			data.content = "Repost of nostr:" + originalNevent
 		}
 	case 1063:
@@ -116,11 +116,14 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 		data.content = event.Content
 	case 30818:
 		data.templateId = WikiEvent
-		data.Kind30818Metadata.Handle = event.Tags.GetFirst([]string{"d"}).Value()
-		data.Kind30818Metadata.Title = event.Tags.GetFirst([]string{"title"}).Value()
+		data.Kind30818Metadata.Handle = event.Tags.GetD()
+		data.Kind30818Metadata.Title = data.Kind30818Metadata.Handle
+		if titleTag := event.Tags.Find("title"); titleTag != nil {
+			data.Kind30818Metadata.Title = titleTag[1]
+		}
 		data.Kind30818Metadata.Summary = func() string {
-			if tag := event.Tags.GetFirst([]string{"summary"}); tag != nil {
-				value := tag.Value()
+			if tag := event.Tags.Find("summary"); tag != nil {
+				value := tag[1]
 				return value
 			}
 			return ""
@@ -136,9 +139,9 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	}
 	data.kindNIP = kindNIPs[event.Kind]
 
-	image := event.Tags.GetFirst([]string{"image", ""})
+	image := event.Tags.Find("image")
 	if event.Kind == 30023 && image != nil {
-		data.cover = (*image)[1]
+		data.cover = image[1]
 	} else if event.Kind == 1063 {
 		if data.kind1063Metadata.IsImage() {
 			data.image = data.kind1063Metadata.URL
@@ -160,8 +163,8 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			content.WriteString(data.content)
 			data.content = content.String()
 		}
-		if tag := data.event.Tags.GetFirst([]string{"title", ""}); tag != nil {
-			data.event.subject = (*tag)[1]
+		if tag := data.event.Tags.Find("title"); tag != nil {
+			data.event.subject = tag[1]
 		}
 	} else {
 		urls := urlMatcher.FindAllString(event.Content, -1)
