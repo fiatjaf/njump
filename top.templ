@@ -95,18 +95,18 @@ templ topTemplate(params HeadParams) {
 		<!-- Menu items -->
 		<div class="flex flex-col items-center space-y-8 text-xl text-neutral-800 dark:text-neutral-50 font-semibold">
 			if !(params.IsHome) {
-				<a href="/" class="hover:text-strongpink">Why Nostr?</a>
+				<a href="/" class="text-2xl hover:text-strongpink">Why Nostr?</a>
 			}
 			if params.IsHome {
-				<a href="#getstarted" class="hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Get started</a>
-				<a href="#resources" class="hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Apps & Resources</a>
-				<a href="#development" class="hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Join the development</a>
+				<a href="#getstarted" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Get started</a>
+				<a href="#resources" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Apps & Resources</a>
+				<a href="#development" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Join the development</a>
 			}
 			if !(params.IsAbout) {
-				<a href="/about" class="hover:text-strongpink">What is Njump?</a>
+				<a href="/about" class="text-2xl hover:text-strongpink">What is Njump?</a>
 			}
 
-			<a href="https://nstart.me" class="text-strongpink">Join Nostr</a>
+			<a href="https://nstart.me" class="text-2xl text-strongpink">Join Nostr</a>
 		</div>
 
 		<!-- Theme toggle -->
