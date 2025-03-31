@@ -3,12 +3,10 @@ package main
 templ topTemplate(params HeadParams) {
 	<header class="print:block flex flex-row text-base sm:p-4 sm:pb-6">
 		<div class="hidden sm:block sm:w-[14%]"></div>
-
 		<!-- Mobile header -->
 		<div class="fixed top-0 left-0 right-0 flex justify-between items-center w-full sm:hidden z-40 p-4 bg-white dark:bg-neutral-900">
 			<!-- Join Nostr Button (Mobile - Left) -->
 			<a href="https://nstart.me" class="px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">Join Nostr</a>
-
 			<!-- Hamburger menu utton -->
 			<button
 				id="mobile-menu-button"
@@ -20,10 +18,8 @@ templ topTemplate(params HeadParams) {
 				<span class="block w-6 h-0.5 bg-gray-800 dark:bg-gray-200"></span>
 			</button>
 		</div>
-
 		<!-- Mobile header spacer - Prevents content from hiding under fixed header -->
 		<div class="h-16 w-full sm:hidden"></div>
-
 		<!-- Desktop header -->
 		<div class="hidden sm:block sm:w-[72%] sm:text-right">
 			<div class="hidden">
@@ -43,7 +39,6 @@ templ topTemplate(params HeadParams) {
 			}
 			<a href="https://nstart.me" class="leading-9 mr-4 px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">Join Nostr</a>
 		</div>
-
 		<div class="hidden sm:block sm:w-[14%]">
 			<div
 				class="print:hidden; relative float-right h-4 w-4 cursor-pointer rounded-full text-gray-100 dark:text-gray-700 sm:fixed sm:right-4 sm:top-4 sm:float-none"
@@ -79,7 +74,6 @@ templ topTemplate(params HeadParams) {
 			</div>
 		</div>
 	</header>
-
 	<!-- Mobile menu overlay -->
 	<div id="mobile-menu-overlay" class="hidden fixed inset-0 bg-neutral-50 dark:bg-neutral-800 z-50 flex flex-col items-center justify-center">
 		<!-- Close Button -->
@@ -88,27 +82,25 @@ templ topTemplate(params HeadParams) {
 			_="on click toggle .hidden on #mobile-menu-overlay"
 		>
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12" />
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12"></path>
 			</svg>
 		</button>
-
 		<!-- Menu items -->
 		<div class="flex flex-col items-center space-y-8 text-xl text-neutral-800 dark:text-neutral-50 font-semibold">
-			if !(params.IsHome) {
-				<a href="/" class="text-2xl hover:text-strongpink">Why Nostr?</a>
-			}
 			if params.IsHome {
+				<a href="#" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Why Nostr?</a>
 				<a href="#getstarted" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Get started</a>
 				<a href="#resources" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Apps & Resources</a>
 				<a href="#development" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Join the development</a>
 			}
+			if (!(params.IsAbout) && !(params.IsHome)) || params.IsAbout {
+				<a href="/" class="text-2xl hover:text-strongpink">Why Nostr?</a>
+			}
 			if !(params.IsAbout) {
 				<a href="/about" class="text-2xl hover:text-strongpink">What is Njump?</a>
 			}
-
 			<a href="https://nstart.me" class="text-2xl text-strongpink">Join Nostr</a>
 		</div>
-
 		<!-- Theme toggle -->
 		<div class="absolute bottom-16 flex justify-center items-center space-x-3 text-neutral-400 dark:text-neutral-500 font-semibold">
 			<div
@@ -144,7 +136,6 @@ templ topTemplate(params HeadParams) {
 			</div>
 		</div>
 	</div>
-
 	<script type="text/hyperscript">
   on beforeprint from window tell <html /> remove .theme--dark add .theme--default
   on afterprint from window tell <html /> add .theme--dark remove .theme--default
