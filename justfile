@@ -7,7 +7,7 @@ build: templ tailwind
     go build -o ./njump
 
 deploy target: templ tailwind
-    GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) go build -tags='libsecp256k1' -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" -o ./njump
+    CGO_ENABLED=1 GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) go build -tags='libsecp256k1' -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" -o ./njump
     scp njump {{target}}:njump/njump-new
     ssh {{target}} 'systemctl stop njump'
     ssh {{target}} 'mv njump/njump-new njump/njump'
