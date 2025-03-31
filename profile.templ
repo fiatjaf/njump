@@ -28,7 +28,7 @@ type ProfilePageParams struct {
 
 templ profileTemplate(params ProfilePageParams) {
 	<!DOCTYPE html>
-	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
+	<html class="theme--default font-light print:text-base">
 		<meta charset="UTF-8"/>
 		<head>
 			if params.Metadata.Name != "" && params.Metadata.DisplayName != "" {
