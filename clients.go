@@ -110,6 +110,12 @@ func generateClientList(
 			amethyst,
 			snort, coracle, nostrudel,
 		}
+	case 9802:
+		clients = []ClientReference{
+			highlighter,
+			coracle,
+			nostrudel,
+		}
 	case 30311:
 		clients = []ClientReference{
 			native,

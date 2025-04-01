@@ -564,6 +564,25 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 		component = wikiEventTemplate(params, isEmbed)
 
+	case Highlight:
+		content := data.content
+
+		params := HighlightPageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
+			},
+			Content:        template.HTML(content),
+			HighlightEvent: data.Kind9802Metadata,
+			Details:        detailsData,
+			Clients:        generateClientList(data.event.Kind, data.nevent),
+		}
+
+		component = highlightTemplate(params, isEmbed)
+
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event
 

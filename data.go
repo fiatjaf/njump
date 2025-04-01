@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"html"
 	"html/template"
+	"strconv"
 	"strings"
 	"time"
 
@@ -37,6 +39,7 @@ type Data struct {
 	kind30311Metadata        *Kind30311Metadata
 	kind31922Or31923Metadata *Kind31922Or31923Metadata
 	Kind30818Metadata        Kind30818Metadata
+	Kind9802Metadata         Kind9802Metadata
 }
 
 func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
@@ -129,6 +132,58 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			return ""
 		}()
 		data.content = event.Content
+	case 9802:
+		data.templateId = Highlight
+		data.content = event.Content
+		if author := event.Tags.Find("p"); author != nil {
+			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+			defer cancel()
+			data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, author[1])
+		}
+		if sourceEvent := event.Tags.Find("e"); sourceEvent != nil {
+			data.Kind9802Metadata.SourceEvent = sourceEvent[1]
+			data.Kind9802Metadata.SourceName = "#" + shortenString(sourceEvent[1], 8, 4)
+		} else if sourceEvent := event.Tags.Find("a"); sourceEvent != nil {
+			spl := strings.Split(sourceEvent[1], ":")
+			kind, _ := strconv.Atoi(spl[0])
+			var relayHints []string
+			if len(sourceEvent) > 2 {
+				relayHints = []string{sourceEvent[2]}
+			}
+			naddr, _ := nip19.EncodeEntity(spl[1], kind, spl[2], relayHints)
+			data.Kind9802Metadata.SourceEvent = naddr
+
+			sourceEvent, _, _ := getEvent(ctx, naddr, withRelays)
+			if title := sourceEvent.Tags.Find("title"); title != nil {
+				data.Kind9802Metadata.SourceName = title[1]
+			} else {
+				data.Kind9802Metadata.SourceName = "#" + shortenString(naddr, 8, 4)
+			}
+		} else if sourceUrl := event.Tags.Find("r"); sourceUrl != nil {
+			data.Kind9802Metadata.SourceURL = sourceUrl[1]
+			data.Kind9802Metadata.SourceName = sourceUrl[1]
+		}
+		if context := event.Tags.Find("context"); context != nil {
+			data.Kind9802Metadata.Context = context[1]
+
+			escapedContext := html.EscapeString(context[1])
+			escapedCitation := html.EscapeString(data.content)
+
+			// Some clients mistakenly put the highlight in the context
+			if escapedContext != escapedCitation {
+				// Replace the citation with the marked version
+				data.Kind9802Metadata.MarkedContext = strings.Replace(
+					escapedContext,
+					escapedCitation,
+					fmt.Sprintf("<span class=\"bg-amber-100 dark:bg-amber-700\">%s</span>", escapedCitation),
+					-1, // Replace all occurrences
+				)
+			}
+		}
+		if comment := event.Tags.Find("comment"); comment != nil {
+			data.Kind9802Metadata.Comment = basicFormatting(comment[1], false, false, false)
+		}
+
 	default:
 		data.templateId = Other
 	}
