@@ -152,16 +152,17 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			}
 			naddr, _ := nip19.EncodeEntity(spl[1], kind, spl[2], relayHints)
 			data.Kind9802Metadata.SourceEvent = naddr
-
-			sourceEvent, _, _ := getEvent(ctx, naddr, withRelays)
-			if title := sourceEvent.Tags.Find("title"); title != nil {
-				data.Kind9802Metadata.SourceName = title[1]
-			} else {
-				data.Kind9802Metadata.SourceName = "#" + shortenString(naddr, 8, 4)
-			}
 		} else if sourceUrl := event.Tags.Find("r"); sourceUrl != nil {
 			data.Kind9802Metadata.SourceURL = sourceUrl[1]
 			data.Kind9802Metadata.SourceName = sourceUrl[1]
+		}
+		if data.Kind9802Metadata.SourceEvent != "" {
+			sourceEvent, _, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent, withRelays)
+			if title := sourceEvent.Tags.Find("title"); title != nil {
+				data.Kind9802Metadata.SourceName = title[1]
+			} else {
+				data.Kind9802Metadata.SourceName = "#" + shortenString(data.Kind9802Metadata.SourceEvent, 8, 4)
+			}
 		}
 		if context := event.Tags.Find("context"); context != nil {
 			data.Kind9802Metadata.Context = context[1]
