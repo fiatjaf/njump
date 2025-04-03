@@ -37,7 +37,7 @@ templ highlightInnerBlock(params HighlightPageParams) {
 				}
 				<cite class="ml-2">
 					if params.HighlightEvent.SourceURL != "" {
-						<a href={ templ.SafeURL(params.HighlightEvent.SourceURL) }>{ params.HighlightEvent.SourceName }</a>
+						<a href={ templ.SafeURL(params.HighlightEvent.SourceURL + "#:~:text=" + string(params.Content)) }>{ params.HighlightEvent.SourceName }</a>
 					}
 					if params.HighlightEvent.SourceEvent != "" {
 						<a href={ templ.SafeURL("/" + params.HighlightEvent.SourceEvent) }>{ params.HighlightEvent.SourceName }</a>
