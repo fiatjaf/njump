@@ -135,11 +135,6 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	case 9802:
 		data.templateId = Highlight
 		data.content = event.Content
-		if author := event.Tags.Find("p"); author != nil {
-			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-			defer cancel()
-			data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, author[1])
-		}
 		if sourceEvent := event.Tags.Find("e"); sourceEvent != nil {
 			data.Kind9802Metadata.SourceEvent = sourceEvent[1]
 			data.Kind9802Metadata.SourceName = "#" + shortenString(sourceEvent[1], 8, 4)
@@ -157,12 +152,22 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			data.Kind9802Metadata.SourceName = sourceUrl[1]
 		}
 		if data.Kind9802Metadata.SourceEvent != "" {
+			// Retrieve the title
 			sourceEvent, _, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent, withRelays)
 			if title := sourceEvent.Tags.Find("title"); title != nil {
 				data.Kind9802Metadata.SourceName = title[1]
 			} else {
-				data.Kind9802Metadata.SourceName = "#" + shortenString(data.Kind9802Metadata.SourceEvent, 8, 4)
+				data.Kind9802Metadata.SourceName = "Note dated " + sourceEvent.CreatedAt.Time().Format("January 1, 2006 15:04")
 			}
+			// Retrieve the author using the event, ignore the `p` tag in the highlight event
+			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+			defer cancel()
+			data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, sourceEvent.PubKey)
+		}
+		if author := event.Tags.Find("p"); author != nil {
+			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+			defer cancel()
+			data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, author[1])
 		}
 		if context := event.Tags.Find("context"); context != nil {
 			data.Kind9802Metadata.Context = context[1]

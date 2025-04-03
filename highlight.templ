@@ -27,12 +27,15 @@ templ highlightInnerBlock(params HighlightPageParams) {
 			} else {
 				@templ.Raw(params.Content)
 			}
-			<footer class="text-base mt-4">
-				—
+			<footer class="flex text-base mt-4">
+				<span>—</span>
 				if params.HighlightEvent.Author.Name != "" {
-					{ params.HighlightEvent.Author.Name + "," }
+					<a href={ "https://njump.me/" + templ.SafeURL(params.HighlightEvent.Author.Npub()) } class="flex ml-2">
+						<img src={ params.HighlightEvent.Author.Picture } class="h-6 m-0 mr-1 rounded-full"/>
+						{ params.HighlightEvent.Author.Name }
+					</a>,
 				}
-				<cite>
+				<cite class="ml-2">
 					if params.HighlightEvent.SourceURL != "" {
 						<a href={ templ.SafeURL(params.HighlightEvent.SourceURL) }>{ params.HighlightEvent.SourceName }</a>
 					}
