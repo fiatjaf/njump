@@ -241,13 +241,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// content massaging
-	for index, value := range data.event.Tags {
-		placeholderTag := "#[" + fmt.Sprintf("%d", index) + "]"
+	for i, tag := range data.event.Tags {
+		if len(tag) < 2 {
+			continue
+		}
+
+		placeholderTag := "#[" + fmt.Sprintf("%d", i) + "]"
 		nreplace := ""
-		if value[0] == "p" {
-			nreplace, _ = nip19.EncodePublicKey(value[1])
-		} else if value[0] == "e" {
-			nreplace, _ = nip19.EncodeEvent(value[1], []string{}, "")
+		if tag[0] == "p" {
+			nreplace, _ = nip19.EncodePublicKey(tag[1])
+		} else if tag[0] == "e" {
+			nreplace, _ = nip19.EncodeEvent(tag[1], []string{}, "")
 		} else {
 			continue
 		}
@@ -353,7 +357,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		content := data.content
-		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
+		for tag := range data.event.Tags.FindAll("emoji") {
 			// custom emojis
 			if len(tag) >= 3 && isValidShortcode(tag[1]) {
 				u, err := url.Parse(tag[2])
