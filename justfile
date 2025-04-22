@@ -7,21 +7,11 @@ build: templ tailwind
     go build -o ./njump
 
 deploy target: templ tailwind
-    if [ "$(uname)" = "Darwin" ]; then \
-    CGO_ENABLED=1 GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) go build -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" -o ./njump; \
-    else \
-        CGO_CFLAGS="-I$(pwd)/secp256k1-master/musl/include/" CGO_LDFLAGS="-L$(pwd)/secp256k1-master/musl/lib" GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) go build -tags libsecp256k1 -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" -o ./njump; \
-    fi
+    CGO_ENABLED=1 GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) go build -tags='libsecp256k1' -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" -o ./njump
     scp njump {{target}}:njump/njump-new
     ssh {{target}} 'systemctl stop njump'
     ssh {{target}} 'mv njump/njump-new njump/njump'
     ssh {{target}} 'systemctl start njump'
-
-libsecp256k1:
-    wget https://github.com/bitcoin-core/secp256k1/archive/refs/heads/master.zip
-    unzip master.zip
-    rm master.zip
-    cd secp256k1-master && ./autogen.sh && CC=$(musl-cc) ./configure --enable-module-extrakeys --enable-module-schnorrsig --prefix=$(pwd)/musl && make install
 
 templ:
     templ generate

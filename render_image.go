@@ -71,7 +71,9 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	hasURL := urlRegex.MatchString(data.event.Content)
-	if isMaliciousBridged(data.event.author) || (hasURL && hasProhibitedWordOrTag(data.event.Event)) {
+	if isMaliciousBridged(data.event.author) ||
+		(hasURL && hasProhibitedWordOrTag(data.event.Event)) ||
+		(hasURL && hasExplicitMedia(ctx, data.event.Event)) {
 		http.Error(w, "event is not allowed", http.StatusNotFound)
 		return
 	}

@@ -28,7 +28,7 @@ type ProfilePageParams struct {
 
 templ profileTemplate(params ProfilePageParams) {
 	<!DOCTYPE html>
-	<html class="theme--default text-lg font-light print:text-base sm:text-xl">
+	<html class="theme--default font-light print:text-base">
 		<meta charset="UTF-8"/>
 		<head>
 			if params.Metadata.Name != "" && params.Metadata.DisplayName != "" {
@@ -150,12 +150,6 @@ templ profileTemplate(params ProfilePageParams) {
 								</a>
 							</div>
 						}
-						<div class="mb-6 leading-5">
-							if params.Metadata.LUD16 != "" {
-								<div class="text-sm text-strongpink">NIP-57 Address</div>
-								{ params.Metadata.LUD16 }
-							}
-						</div>
 						<div class="mb-6 leading-5">
 							<div class="text-sm text-strongpink">Profile Code</div>
 							{ params.Nprofile }

@@ -44,7 +44,11 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		return
 	}
 	if isMaliciousBridged(profile) {
-		http.Error(w, "event is not allowed", http.StatusNotFound)
+		http.Error(w, "profile is malicious", http.StatusNotFound)
+		return
+	}
+	if is, _ := isExplicitContent(ctx, profile.Picture); is {
+		http.Error(w, "profile is not allowed", http.StatusNotFound)
 		return
 	}
 

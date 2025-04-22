@@ -64,7 +64,8 @@ func mdToHTML(md string, usingTelegramInstantView bool) string {
 			parser.FencedCode |
 			parser.Autolink |
 			parser.Footnotes |
-			parser.SpaceHeadings,
+			parser.SpaceHeadings |
+			parser.Tables,
 	).Parse([]byte(md))
 
 	renderer := mdrenderer

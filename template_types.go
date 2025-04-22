@@ -35,3 +35,13 @@ type Kind30818Metadata struct {
 	Summary     string
 	PublishedAt time.Time
 }
+
+type Kind9802Metadata struct {
+	Author        sdk.ProfileMetadata
+	SourceEvent   string
+	SourceURL     string
+	SourceName    string
+	Context       string
+	MarkedContext string
+	Comment       string
+}

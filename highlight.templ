@@ -1,0 +1,72 @@
+package main
+
+import "html/template"
+
+type HighlightPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details        DetailsParams
+	Content        template.HTML
+	HighlightEvent Kind9802Metadata
+	Clients        []ClientReference
+}
+
+templ highlightInnerBlock(params HighlightPageParams) {
+	<h1 class="text-2xl" itemprop="headline">Highlight</h1>
+	<div itemprop="articleBody">
+		if params.HighlightEvent.Comment != "" {
+			<div dir="auto" class="leading-6">
+				@templ.Raw(params.HighlightEvent.Comment)
+			</div>
+		}
+		<blockquote dir="auto" class="text-xl leading-7">
+			if params.HighlightEvent.MarkedContext != "" {
+				@templ.Raw(params.HighlightEvent.MarkedContext)
+			} else {
+				@templ.Raw(params.Content)
+			}
+			<footer class="flex text-base mt-4">
+				<span>—</span>
+				if params.HighlightEvent.Author.Name != "" {
+					<a href={ "https://njump.me/" + templ.SafeURL(params.HighlightEvent.Author.Npub()) } class="flex ml-2">
+						<img src={ params.HighlightEvent.Author.Picture } class="h-6 m-0 mr-1 rounded-full"/>
+						{ params.HighlightEvent.Author.Name }
+					</a>,
+				}
+				<cite class="ml-2">
+					if params.HighlightEvent.SourceURL != "" {
+						<a href={ templ.SafeURL(params.HighlightEvent.SourceURL + "#:~:text=" + string(params.Content)) }>{ params.HighlightEvent.SourceName }</a>
+					}
+					if params.HighlightEvent.SourceEvent != "" {
+						<a href={ templ.SafeURL("/" + params.HighlightEvent.SourceEvent) }>{ params.HighlightEvent.SourceName }</a>
+					}
+				</cite>
+			</footer>
+		</blockquote>
+	</div>
+}
+
+templ highlightTemplate(params HighlightPageParams, isEmbed bool) {
+	<!DOCTYPE html>
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			params.NeventNaked,
+		) {
+			@highlightInnerBlock(params)
+		}
+	} else {
+		@eventPageTemplate(
+			"Highlight",
+			params.OpenGraphParams,
+			params.HeadParams,
+			params.Clients,
+			params.Details,
+			params.Event,
+		) {
+			@highlightInnerBlock(params)
+		}
+	}
+}

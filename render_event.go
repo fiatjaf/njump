@@ -96,8 +96,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	hasURL := urlRegex.MatchString(data.event.Content)
-	if isMaliciousBridged(data.event.author) || (hasURL && hasProhibitedWordOrTag(data.event.Event)) {
-		log.Warn().Str("event", data.nevent).Msg("detect prohibited porn content")
+	if isMaliciousBridged(data.event.author) ||
+		(hasURL && hasProhibitedWordOrTag(data.event.Event)) ||
+		(hasURL && hasExplicitMedia(ctx, data.event.Event)) {
+		log.Warn().Str("event", data.nevent).Msg("detect prohibited content")
 		http.Error(w, "event is not allowed", http.StatusNotFound)
 		return
 	}
@@ -120,6 +122,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		if style == StyleTwitter {
 			useTextImage = true
 		}
+	} else if data.event.Kind == 20 {
+		useTextImage = false
 	}
 
 	if tgiv := r.URL.Query().Get("tgiv"); tgiv == "true" || (style == StyleTelegram && tgiv != "false") {
@@ -129,7 +133,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			(data.parentLink != "") || // or notes that are replies (so we can navigate to them from telegram)
 			(strings.Contains(data.content, "nostr:")) || // or notes that quote other stuff (idem)
 			// or shorter notes that should be using text-to-image stuff but are not because they have video or images
-			(data.event.Kind == 1 && len(data.event.Content)-len(data.image) > 133 && !useTextImage) {
+			(data.event.Kind == 1 && len(data.event.Content)-len(data.image) > 133 && !useTextImage) ||
+			(data.event.Kind == 20) {
+
 			data.templateId = TelegramInstantView
 			useTextImage = false
 		}
@@ -155,6 +161,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if data.event.subject != "" {
 		subscript += " (" + data.event.subject + ")"
 	}
+
 	subscript += " by " + data.event.author.ShortName()
 	if data.event.isReply() {
 		subscript += " (reply)"
@@ -234,13 +241,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// content massaging
-	for index, value := range data.event.Tags {
-		placeholderTag := "#[" + fmt.Sprintf("%d", index) + "]"
+	for i, tag := range data.event.Tags {
+		if len(tag) < 2 {
+			continue
+		}
+
+		placeholderTag := "#[" + fmt.Sprintf("%d", i) + "]"
 		nreplace := ""
-		if value[0] == "p" {
-			nreplace, _ = nip19.EncodePublicKey(value[1])
-		} else if value[0] == "e" {
-			nreplace, _ = nip19.EncodeEvent(value[1], []string{}, "")
+		if tag[0] == "p" {
+			nreplace, _ = nip19.EncodePublicKey(tag[1])
+		} else if tag[0] == "e" {
+			nreplace, _ = nip19.EncodeEvent(tag[1], []string{}, "")
 		} else {
 			continue
 		}
@@ -346,7 +357,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		content := data.content
-		for _, tag := range data.event.Tags.GetAll([]string{"emoji"}) {
+		for tag := range data.event.Tags.FindAll("emoji") {
 			// custom emojis
 			if len(tag) >= 3 && isValidShortcode(tag[1]) {
 				u, err := url.Parse(tag[2])
@@ -382,6 +393,10 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			opengraph.SingleTitle = string(INVISIBLE_SPACE)
 		}
 
+		if text, err := markdownExtractor.PlainText(opengraph.Text); err == nil {
+			opengraph.Text = *text
+		}
+
 		params := NotePageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
@@ -395,7 +410,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:          detailsData,
 			Content:          template.HTML(data.content),
 			Cover:            data.cover,
-			TitleizedContent: titleizedContent,
+			TitleizedContent: data.event.subject, // we store the "title" tag here too
 		}
 
 		component = noteTemplate(params, isEmbed)
@@ -552,6 +567,25 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		component = wikiEventTemplate(params, isEmbed)
+
+	case Highlight:
+		content := data.content
+
+		params := HighlightPageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
+			},
+			Content:        template.HTML(content),
+			HighlightEvent: data.Kind9802Metadata,
+			Details:        detailsData,
+			Clients:        generateClientList(data.event.Kind, data.nevent),
+		}
+
+		component = highlightTemplate(params, isEmbed)
 
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event

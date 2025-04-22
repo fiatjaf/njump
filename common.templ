@@ -53,8 +53,8 @@ templ authorHeaderTemplate(metadata sdk.ProfileMetadata) {
 			<div class="block print:text-base grow">
 				<div class="leading-4 sm:text-2xl">
 					<span itemprop="name">{ metadata.Name }</span>
-					if metadata.Name != metadata.DisplayName {
-						<span class="text-stone-400 sm:text-xl" itemprop="alternateName">/ { metadata.DisplayName } </span>
+					if metadata.DisplayName != "" && metadata.Name != metadata.DisplayName {
+						<span class="text-stone-400 sm:text-xl">/ <span itemprop="alternateName">{ metadata.DisplayName } </span></span>
 					}
 				</div>
 				<div class="text-sm leading-4 text-stone-400 sm:text-base">

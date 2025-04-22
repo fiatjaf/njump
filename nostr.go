@@ -7,10 +7,10 @@ import (
 	"slices"
 	"time"
 
-	"github.com/fiatjaf/eventstore/lmdb"
+	"github.com/fiatjaf/eventstore/badger"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/sdk"
-	cache_memory "github.com/nbd-wtf/go-nostr/sdk/cache/memory"
+	badger_kv "github.com/nbd-wtf/go-nostr/sdk/kvstore/badger"
 )
 
 type RelayConfig struct {
@@ -45,23 +45,31 @@ var (
 )
 
 func initSystem() func() {
-	db := &lmdb.LMDBBackend{
+	db := &badger.BadgerBackend{
 		Path:     s.EventStorePath,
 		MaxLimit: DB_MAX_LIMIT,
 	}
-	db.Init()
+	if err := db.Init(); err != nil {
+		panic(err)
+	}
+
+	kv, err := badger_kv.NewStore(s.KVStorePath)
+	if err != nil {
+		panic(err)
+	}
 
 	sys = sdk.NewSystem(
-		sdk.WithMetadataCache(cache_memory.New32[sdk.ProfileMetadata](10000)),
-		sdk.WithRelayListCache(cache_memory.New32[sdk.RelayList](10000)),
 		sdk.WithStore(db),
+		sdk.WithKVStore(kv),
 	)
 
 	return db.Close
 }
 
 func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, []string, error) {
-	evt, relays, err := sys.FetchSpecificEvent(ctx, code, withRelays)
+	evt, relays, err := sys.FetchSpecificEventFromInput(ctx, code, sdk.FetchSpecificEventParameters{
+		WithRelays: withRelays,
+	})
 	if err != nil {
 		return nil, nil, fmt.Errorf("couldn't find this event, did you include accurate relay or author hints in it?")
 	}
@@ -122,7 +130,7 @@ func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEv
 				relays = appendUnique(relays, sys.FallbackRelays.Next())
 			}
 
-			ch := sys.Pool.SubManyEose(ctx, relays, nostr.Filters{filter}, nostr.WithLabel("authorlast"))
+			ch := sys.Pool.FetchMany(ctx, relays, filter, nostr.WithLabel("authorlast"))
 		out:
 			for {
 				select {

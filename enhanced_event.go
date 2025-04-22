@@ -44,16 +44,13 @@ func NewEnhancedEvent(
 		}
 	}
 
-	if ctx != nil {
-		if event.Kind == 0 {
-			spm, _ := sdk.ParseMetadata(event)
-			ee.author = spm
-		} else {
-			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-			defer cancel()
-
-			ee.author = sys.FetchProfileMetadata(ctx, event.PubKey)
-		}
+	if event.Kind == 0 {
+		spm, _ := sdk.ParseMetadata(event)
+		ee.author = spm
+	} else {
+		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+		defer cancel()
+		ee.author = sys.FetchProfileMetadata(ctx, event.PubKey)
 	}
 
 	return ee
@@ -70,44 +67,17 @@ func (ee EnhancedEvent) getParentNevent() string {
 	parentNevent := ""
 	switch ee.Kind {
 	case 1, 1063:
-		replyTag := nip10.GetImmediateReply(ee.Tags)
-		if replyTag != nil {
-			var relays []string
-			if (len(*replyTag) > 2) && ((*replyTag)[2] != "") {
-				relays = []string{(*replyTag)[2]}
-			}
-			if (*replyTag)[0] == "a" { // reply to a ndaddr event
-				spl := strings.Split((*replyTag)[1], ":")
-				if len(spl) != 3 {
-					return ""
-				}
-				author := spl[1]
-				kind, _ := strconv.Atoi(spl[0])
-				identifier := spl[2]
-
-				var relays []string
-				if (len(*replyTag) > 2) && ((*replyTag)[2] != "") {
-					relays = []string{(*replyTag)[2]}
-				}
-
-				parentNevent, _ = nip19.EncodeEntity(
-					author,
-					kind,
-					identifier,
-					relays,
-				)
-			} else {
-				eventId := (*replyTag)[1]
-				parentNevent, _ = nip19.EncodeEvent(eventId, relays, "")
-			}
+		parent := nip10.GetImmediateParent(ee.Tags)
+		if parent != nil {
+			parentNevent = nip19.EncodePointer(parent)
 		}
 	case 1311:
-		if atag := ee.Tags.GetFirst([]string{"a", ""}); atag != nil {
-			parts := strings.Split((*atag)[1], ":")
+		if atag := ee.Tags.Find("a"); atag != nil {
+			parts := strings.Split(atag[1], ":")
 			kind, _ := strconv.Atoi(parts[0])
 			var relays []string
-			if (len(*atag) > 2) && ((*atag)[2] != "") {
-				relays = []string{(*atag)[2]}
+			if (len(atag) > 2) && (atag[2] != "") {
+				relays = []string{atag[2]}
 			}
 			parentNevent, _ = nip19.EncodeEntity(parts[1], kind, parts[2], relays)
 		}
@@ -117,7 +87,7 @@ func (ee EnhancedEvent) getParentNevent() string {
 }
 
 func (ee EnhancedEvent) isReply() bool {
-	return nip10.GetImmediateReply(ee.Event.Tags) != nil
+	return nip10.GetImmediateParent(ee.Event.Tags) != nil
 }
 
 func (ee EnhancedEvent) Preview() template.HTML {

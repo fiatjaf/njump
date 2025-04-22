@@ -14,11 +14,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/puzpuzpuz/xsync/v3"
-	"mvdan.cc/xurls/v2"
-
+	me "github.com/huantt/plaintext-extractor/markdown"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/puzpuzpuz/xsync/v3"
+	"mvdan.cc/xurls/v2"
 )
 
 const (
@@ -43,6 +43,8 @@ var (
 	imageExtensionMatcher = regexp.MustCompile(`.*\.(png|jpg|jpeg|gif|webp|avif)((\?|\#).*)?$`)
 	videoExtensionMatcher = regexp.MustCompile(`.*\.(mp4|ogg|webm|mov)((\?|\#).*)?$`)
 	urlRegex              = xurls.Strict()
+
+	markdownExtractor = me.NewExtractor()
 )
 
 var kindNames = map[int]string{
@@ -65,6 +67,7 @@ var kindNames = map[int]string{
 	1984:  "Reporting",
 	9734:  "Zap Request",
 	9735:  "Zap",
+	9802:  "Highlight",
 	10000: "Mute List",
 	10001: "Pin List",
 	10002: "Relay List Metadata",
@@ -105,6 +108,7 @@ var kindNIPs = map[int]string{
 	1984:  "56",
 	9734:  "57",
 	9735:  "57",
+	9802:  "84",
 	10000: "51",
 	10001: "51",
 	10002: "65",
@@ -250,6 +254,12 @@ func shortenNostrURLs(input string) string {
 			return "#" + firstChars + "…" + lastChars
 		}
 	})
+}
+
+func shortenString(input string, before int, after int) string {
+	firstChars := input[:before]
+	lastChars := input[len(input)-after:]
+	return firstChars + "…" + lastChars
 }
 
 func getNameFromNip19(ctx context.Context, nip19code string) (string, bool) {

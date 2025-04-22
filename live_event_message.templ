@@ -24,7 +24,6 @@ templ liveEventMessageTemplate(params LiveEventMessagePageParams, isEmbed bool) 
 		@embeddedPageTemplate(
 			params.Event,
 			params.NeventNaked,
-			isEmbed,
 		) {
 			@liveEventMessageInnerBlock(params)
 		}
@@ -36,7 +35,6 @@ templ liveEventMessageTemplate(params LiveEventMessagePageParams, isEmbed bool) 
 			params.Clients,
 			params.Details,
 			params.Event,
-			isEmbed,
 		) {
 			@liveEventMessageInnerBlock(params)
 		}
