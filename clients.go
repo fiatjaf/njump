@@ -35,6 +35,7 @@ var (
 	coracle      = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
 	coracleRelay = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
 	relayTools   = ClientReference{ID: "relay.tools", Name: "relay.tools", Base: "https://relay.tools/posts/?relay=wss://{code}"}
+  iris         = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
 
 	zapStream      = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
 	nostrrrRelay   = ClientReference{ID: "nostrrr", Name: "Nostrrr", Base: "https://nostrrr.com/relay/{code}", Platform: platformWeb}
@@ -80,7 +81,7 @@ func generateClientList(
 			native,
 			damus, nostur, freeFromIOS, yakihonneIOS, nos, primalIOS,
 			voyage, yakihonneAndroid, primalAndroid, freeFromAndroid, yanaAndroid,
-			coracle, snort, jumble, nostter, nostrudel, primalWeb,
+			coracle, snort, jumble, nostter, nostrudel, primalWeb, iris
 		}
 	case 20:
 		clients = []ClientReference{
@@ -136,7 +137,7 @@ func generateClientList(
 			native,
 			yakihonneIOS, nos, damus, nostur, primalIOS, freeFromIOS,
 			voyage, amethyst, yakihonneAndroid, yanaAndroid, freeFromAndroid, voyage,
-			yakihonne, coracle, snort, nostter, nostrudel, primalWeb,
+			yakihonne, coracle, snort, nostter, nostrudel, primalWeb, iris,
 		}
 	}
 
