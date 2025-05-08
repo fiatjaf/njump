@@ -67,7 +67,8 @@ type RSSPage struct {
 	Info          nip11.RelayInformationDocument
 
 	// for the profile and relay RSSs
-	LastNotes []EnhancedEvent
+	LastNotes        []EnhancedEvent
+	DaysSummaryNotes [][]EnhancedEvent
 
 	// for the archive RSS
 	PathPrefix string
