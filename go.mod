@@ -5,7 +5,7 @@ go 1.24.1
 require (
 	fiatjaf.com/leafdb v0.0.7
 	github.com/PuerkitoBio/goquery v1.10.1
-	github.com/a-h/templ v0.3.833
+	github.com/a-h/templ v0.3.865
 	github.com/bytesparadise/libasciidoc v0.8.0
 	github.com/dgraph-io/ristretto v1.0.0
 	github.com/fiatjaf/eventstore v0.16.4
@@ -88,11 +88,11 @@ require (
 	golang.org/x/arch v0.15.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sync v0.12.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
-	golang.org/x/tools v0.31.0 // indirect
+	golang.org/x/net v0.39.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/tools v0.32.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
