@@ -1,6 +1,6 @@
 module github.com/fiatjaf/njump
 
-go 1.24.1
+go 1.24.2
 
 require (
 	fiatjaf.com/leafdb v0.0.7

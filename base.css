@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 @layer utilities {
-  html, body {
+  html,
+  body {
     font-size: 18px;
   }
   .imgclip {
@@ -15,7 +16,7 @@
       rgba(0, 0, 0, 0) 100%
     );
   }
-  
+
   @media print {
     @page {
       margin: 2cm 3cm;
@@ -26,9 +27,15 @@
   }
 
   @keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 
   /* Apply the animation to the cursor */
@@ -37,7 +44,7 @@
     color: rgb(222, 222, 222);
   }
 
-  .wikilinks{
+  .wikilinks {
     @apply text-neutral-500;
     @apply dark:text-neutral-500;
   }
@@ -46,5 +53,4 @@
     @apply text-neutral-500;
     @apply dark:text-neutral-500;
   }
-
 }

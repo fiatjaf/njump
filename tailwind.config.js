@@ -35,8 +35,8 @@ module.exports = {
             '--tw-prose-invert-links': theme('colors.neutral[50]'),
             maxWidth: '100%',
             a: {
-              'font-weight': 300,
-            },
+              'font-weight': 300
+            }
           }
         }
       })
