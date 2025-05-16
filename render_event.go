@@ -75,7 +75,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	// if we originally got a note code or an nevent with no hints
 	// augment the URL to point to an nevent with hints -- redirect
 	if p, ok := decoded.(nostr.EventPointer); (ok && p.Author == "" && len(p.Relays) == 0) || prefix == "note" {
-		http.Redirect(w, r, "/"+data.nevent, http.StatusFound)
+		url := "/" + data.nevent
+		if r.URL.RawQuery != "" {
+			url += "?" + r.URL.RawQuery
+		}
+		http.Redirect(w, r, url, http.StatusFound)
 		return
 	}
 
