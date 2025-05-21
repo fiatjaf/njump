@@ -543,6 +543,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		component = calendarEventTemplate(params, isEmbed)
 
 	case WikiEvent:
+		opengraph.Superscript = data.Kind30818Metadata.Title
+		if strings.ToLower(data.Kind30818Metadata.Title) == data.Kind30818Metadata.Handle {
+			opengraph.Subscript = "by " + data.event.author.ShortName()
+		} else {
+			opengraph.Subscript = fmt.Sprintf("\"%s\" by %s", data.Kind30818Metadata.Handle, data.event.author.ShortName())
+		}
+
 		params := WikiPageParams{
 			BaseEventPageParams: baseEventPageParams,
 			OpenGraphParams:     opengraph,
@@ -573,7 +580,15 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		component = wikiEventTemplate(params, isEmbed)
 
 	case Highlight:
-		content := data.content
+		if data.Kind9802Metadata.Comment == "" {
+			opengraph.Superscript = data.Kind9802Metadata.SourceURL
+			opengraph.Subscript = "Highlight by " + data.event.author.ShortName()
+			opengraph.Text = "> " + opengraph.Text
+		} else {
+			opengraph.Superscript = data.Kind9802Metadata.SourceURL
+			opengraph.Subscript = "Annotation by " + data.event.author.ShortName()
+			opengraph.Text = data.Kind9802Metadata.Comment + "\n> " + opengraph.Text
+		}
 
 		params := HighlightPageParams{
 			BaseEventPageParams: baseEventPageParams,
@@ -583,7 +598,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			Content:        template.HTML(content),
+			Content:        template.HTML(data.content),
 			HighlightEvent: data.Kind9802Metadata,
 			Details:        detailsData,
 			Clients:        generateClientList(data.event.Kind, data.nevent),
