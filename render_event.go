@@ -317,7 +317,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		VideoType:    data.videoType,
 		ProxiedImage: "https://" + host + "/njump/proxy?src=" + data.image,
 
-		Superscript: data.event.authorLong(),
+		Superscript: data.event.authorLong() + " on Nostr",
 		Subscript:   subscript,
 		Text:        strings.TrimSpace(description),
 	}
@@ -543,7 +543,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		component = calendarEventTemplate(params, isEmbed)
 
 	case WikiEvent:
-		opengraph.Superscript = data.Kind30818Metadata.Title
+		opengraph.Superscript = "wiki entry: " + data.Kind30818Metadata.Title
 		if strings.ToLower(data.Kind30818Metadata.Title) == data.Kind30818Metadata.Handle {
 			opengraph.Subscript = "by " + data.event.author.ShortName()
 		} else {

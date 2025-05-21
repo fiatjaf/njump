@@ -33,14 +33,13 @@ func parseWikilinks(asciidoc string) string {
 }
 
 func asciidocToHTML(asciidoc string) string {
-	//Parsing wikilinks
+	// Parsing wikilinks
 	asciidoc = parseWikilinks(asciidoc)
 	// Rendering
 	input := strings.NewReader(asciidoc)
-	var output = &strings.Builder{}
+	output := &strings.Builder{}
 	config := configuration.NewConfiguration(
 		[]configuration.Setting{
-			configuration.WithFilename("test.adoc"),
 			configuration.WithBackEnd("html5"),
 		}...,
 	)
