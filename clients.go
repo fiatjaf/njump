@@ -27,7 +27,7 @@ var (
 	snort        = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: platformWeb}
 	olasWeb      = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
 	primalWeb    = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: platformWeb}
-	nostrudel    = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/#/n/{code}", Platform: platformWeb}
+	nostrudel    = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
 	nostter      = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: platformWeb}
 	nostterRelay = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
 	jumble       = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/notes/{code}", Platform: platformWeb}
