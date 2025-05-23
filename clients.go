@@ -88,7 +88,7 @@ func generateClientList(
 			native,
 			olasAndroid,
 			olasIOS,
-			jumble, olasWeb, coracle,lumilumi
+			jumble, olasWeb, coracle, lumilumi
 		}
 	case 0:
 		clients = []ClientReference{
@@ -102,13 +102,13 @@ func generateClientList(
 			native,
 			damus, nos, nostur, yakihonneIOS,
 			yakihonneAndroid, amethyst,
-			yakihonne, habla,,lumilumi
+			yakihonne, habla, lumilumi
 		}
 	case 1063:
 		clients = []ClientReference{
 			native,
 			amethyst,
-			snort, coracle, nostrudel,,lumilumi
+			snort, coracle, nostrudel, lumilumi
 		}
 	case 9802:
 		clients = []ClientReference{
