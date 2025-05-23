@@ -19,7 +19,9 @@ RUN npx tailwind -i base.css -o tailwind-bundle.min.css --minify
 FROM golang:1.24.2-alpine AS gobuilder
 
 # Add package
-RUN apk add --no-cache autoconf automake libtool build-base musl-dev git
+RUN apk add --no-cache autoconf automake libtool build-base musl-dev gcc git
+
+
 
 # Add necessary go files and download modules
 WORKDIR /app
@@ -34,10 +36,11 @@ RUN go get github.com/a-h/templ/runtime && \
     go run -mod=mod github.com/a-h/templ/cmd/templ generate
 
 # Build njump
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 CC=$(which musl-gcc) \
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 CC=gcc \
     go build -tags='libsecp256k1' \
     -ldflags="-s -w -linkmode external -extldflags '-static' -X main.compileTimeTs=$(date '+%s')" \
     -o main .
+
 
 # Build go binary
 FROM alpine:latest

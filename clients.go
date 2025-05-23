@@ -23,21 +23,21 @@ const (
 var (
 	native = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
 
-	nosta        = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
-	snort        = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: platformWeb}
-	olasWeb      = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
-	primalWeb    = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: platformWeb}
+	nosta         = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
+	snort         = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: platformWeb}
+	olasWeb       = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
+	primalWeb     = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: platformWeb}
 	lumilumi      = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/{code}", Platform: platformWeb}
 	lumilumiRelay = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/relay/wss%3A%2F%2F{code}", Platform: platformWeb}
-	nostrudel    = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
-	nostter      = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: platformWeb}
-	nostterRelay = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
-	jumble       = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/notes/{code}", Platform: platformWeb}
-	jumbleRelay  = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: platformWeb}
-	coracle      = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
-	coracleRelay = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
-	relayTools   = ClientReference{ID: "relay.tools", Name: "relay.tools", Base: "https://relay.tools/posts/?relay=wss://{code}"}
-	iris         = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
+	nostrudel     = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
+	nostter       = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: platformWeb}
+	nostterRelay  = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
+	jumble        = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/notes/{code}", Platform: platformWeb}
+	jumbleRelay   = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: platformWeb}
+	coracle       = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
+	coracleRelay  = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
+	relayTools    = ClientReference{ID: "relay.tools", Name: "relay.tools", Base: "https://relay.tools/posts/?relay=wss://{code}"}
+	iris          = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
 
 	zapStream = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
 
@@ -74,46 +74,46 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			jumbleRelay, coracleRelay, relayTools, nostterRelay, lumilumiRelay
+			jumbleRelay, coracleRelay, relayTools, nostterRelay, lumilumiRelay,
 		}
 	case 1, 6:
 		clients = []ClientReference{
 			native,
 			damus, nostur, freeFromIOS, yakihonneIOS, nos, primalIOS,
 			voyage, yakihonneAndroid, primalAndroid, freeFromAndroid, yanaAndroid,
-			coracle, snort, jumble, nostter, nostrudel, primalWeb, iris, lumilumi
+			coracle, snort, jumble, nostter, nostrudel, primalWeb, iris, lumilumi,
 		}
 	case 20:
 		clients = []ClientReference{
 			native,
 			olasAndroid,
 			olasIOS,
-			jumble, olasWeb, coracle, lumilumi
+			jumble, olasWeb, coracle, lumilumi,
 		}
 	case 0:
 		clients = []ClientReference{
 			native,
 			nos, damus, nostur, primalIOS, freeFromIOS, yakihonneIOS,
 			voyage, yakihonneAndroid, yanaAndroid, freeFromAndroid, primalAndroid,
-			nosta, coracle, snort, nostter, nostrudel, primalWeb, iris, lumilumi
+			nosta, coracle, snort, nostter, nostrudel, primalWeb, iris, lumilumi,
 		}
 	case 30023, 30024:
 		clients = []ClientReference{
 			native,
 			damus, nos, nostur, yakihonneIOS,
 			yakihonneAndroid, amethyst,
-			yakihonne, habla, lumilumi
+			yakihonne, habla, lumilumi,
 		}
 	case 1063:
 		clients = []ClientReference{
 			native,
 			amethyst,
-			snort, coracle, nostrudel, lumilumi
+			snort, coracle, nostrudel, lumilumi,
 		}
 	case 9802:
 		clients = []ClientReference{
 			coracle,
-			nostrudel, lumilumi
+			nostrudel, lumilumi,
 		}
 	case 30311:
 		clients = []ClientReference{
@@ -137,7 +137,7 @@ func generateClientList(
 			native,
 			yakihonneIOS, nos, damus, nostur, primalIOS, freeFromIOS,
 			voyage, amethyst, yakihonneAndroid, yanaAndroid, freeFromAndroid, voyage,
-			yakihonne, coracle, snort, nostter, nostrudel, primalWeb, iris, lumilumi
+			yakihonne, coracle, snort, nostter, nostrudel, primalWeb, iris, lumilumi,
 		}
 	}
 
