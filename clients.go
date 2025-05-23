@@ -113,7 +113,7 @@ func generateClientList(
 	case 9802:
 		clients = []ClientReference{
 			coracle,
-			nostrudel,,lumilumi
+			nostrudel, lumilumi
 		}
 	case 30311:
 		clients = []ClientReference{
