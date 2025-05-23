@@ -119,7 +119,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	useTextImage := false
 
-	if data.event.Kind == 1 || data.event.Kind == 30023 {
+	if data.event.Kind == 1 || data.event.Kind == 11 || data.event.Kind == 1111 || data.event.Kind == 30023 {
 		if data.image == "" && data.video == "" && len(data.event.Content) > 133 {
 			useTextImage = true
 		}
@@ -133,11 +133,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if tgiv := r.URL.Query().Get("tgiv"); tgiv == "true" || (style == StyleTelegram && tgiv != "false") {
 		// do telegram instant preview (only works on telegram mobile apps, not desktop)
 		if data.event.Kind == 30023 || // do it for longform articles
-			(data.event.Kind == 1 && len(data.event.Content) > 650) || // or very long notes
+			((data.event.Kind == 1 || data.event.Kind == 11 || data.event.Kind == 1111) && len(data.event.Content) > 650) || // or very long notes/group messages
 			(data.parentLink != "") || // or notes that are replies (so we can navigate to them from telegram)
 			(strings.Contains(data.content, "nostr:")) || // or notes that quote other stuff (idem)
 			// or shorter notes that should be using text-to-image stuff but are not because they have video or images
-			(data.event.Kind == 1 && len(data.event.Content)-len(data.image) > 133 && !useTextImage) ||
+			((data.event.Kind == 1 || data.event.Kind == 11 || data.event.Kind == 1111) && len(data.event.Content)-len(data.image) > 133 && !useTextImage) ||
 			(data.event.Kind == 20) {
 
 			data.templateId = TelegramInstantView

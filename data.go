@@ -84,7 +84,7 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	data.alt = nip31.GetAlt(*event)
 
 	switch event.Kind {
-	case 1, 7:
+	case 1, 7, 11, 1111:
 		data.templateId = Note
 		data.content = event.Content
 	case 30023, 30024:
