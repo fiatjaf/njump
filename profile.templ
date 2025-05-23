@@ -22,7 +22,6 @@ type ProfilePageParams struct {
 	Nevent                     string
 	Nprofile                   string
 	Proxy                      string
-	Title                      string
 	Clients                    []ClientReference
 }
 
@@ -44,7 +43,7 @@ templ profileTemplate(params ProfilePageParams) {
 				name="description"
 				content={ fmt.Sprintf("%s is %s's public key on Nostr", params.Metadata.Npub(), params.Metadata.ShortName()) }
 			/>
-			<meta property="og:title" content={ params.Title }/>
+			<meta property="og:title" content={ params.Metadata.ShortName() }/>
 			<meta property="og:site_name" content={ params.Metadata.Npub() }/>
 			if params.Metadata.Picture != "" {
 				<meta property="og:image" content={ params.Metadata.Picture }/>
