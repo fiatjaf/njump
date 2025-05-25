@@ -1,5 +1,10 @@
 package main
 
+import (
+	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/go-nostr/nip73"
+)
+
 templ eventPageTemplate(
 	title string,
 	og OpenGraphParams,
@@ -29,11 +34,22 @@ templ eventPageTemplate(
 							{ event.CreatedAtStr() }
 						</div>
 						<div class="w-full text-right text-sm text-stone-400">
-							if nevent := event.getParentNevent(); nevent != "" {
-								in reply to
-								<span class="text-strongpink">
-									@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:"+nevent))
-								</span>
+							if parent := event.getParent(); parent != nil {
+								if external, ok := parent.(nip73.ExternalPointer); ok {
+									a comment at
+									<span class="text-strongpink">
+										<span itemprop="mentions" itemscope itemtype="https://schema.org/Article">
+											<a itemprop="url" href={ templ.URL(external.Thing) } target="_blank" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">
+												{ external.Thing }
+											</a>
+										</span>
+									</span>
+								} else {
+									in reply to
+									<span class="text-strongpink">
+										@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:"+nip19.EncodePointer(parent)))
+									</span>
+								}
 							}
 						</div>
 						<div class="-ml-4 mb-6 h-1.5 w-1/3 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"></div>

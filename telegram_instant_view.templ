@@ -3,21 +3,24 @@ package main
 import (
 	"html/template"
 
+	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/sdk"
+	"github.com/nbd-wtf/go-nostr/nip73"
+	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
 type TelegramInstantViewParams struct {
-	Video        string
-	VideoType    string
-	Image        string
-	Summary      template.HTML
-	Content      template.HTML
-	Description  string
-	Subject      string
-	Metadata     sdk.ProfileMetadata
-	AuthorLong   string
-	CreatedAt    string
-	ParentNevent string
+	Video       string
+	VideoType   string
+	Image       string
+	Summary     template.HTML
+	Content     template.HTML
+	Description string
+	Subject     string
+	Metadata    sdk.ProfileMetadata
+	AuthorLong  string
+	CreatedAt   string
+	Parent      nostr.Pointer
 }
 
 templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
@@ -53,17 +56,25 @@ templ telegramInstantViewTemplate(params TelegramInstantViewParams) {
 				<a href={ templ.URL("/" + params.Metadata.Npub()) }>
 					{ params.Metadata.ShortName() }
 				</a>
-				if params.ParentNevent == "" {
+				if params.Parent == nil {
 					on Nostr:
 				} else {
 					on Nostr (reply):
 				}
 			}
 		</h1>
-		if params.ParentNevent != "" {
+		if params.Parent != nil {
 			<aside>
 				in reply to{ " " }
-				@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:"+params.ParentNevent))
+				if external, ok := params.Parent.(nip73.ExternalPointer); ok {
+					<span itemprop="mentions" itemscope itemtype="https://schema.org/Article">
+						<a itemprop="url" href={ templ.URL(external.Thing) } target="_blank" class="bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1">
+							{ external.Thing }
+						</a>
+					</span>
+				} else {
+					@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:"+nip19.EncodePointer(params.Parent)))
+				}
 			</aside>
 		}
 		<!---->

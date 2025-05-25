@@ -13,6 +13,8 @@ import (
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip10"
 	"github.com/nbd-wtf/go-nostr/nip19"
+	"github.com/nbd-wtf/go-nostr/nip22"
+	"github.com/nbd-wtf/go-nostr/nip73"
 	"github.com/nbd-wtf/go-nostr/sdk"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
 )
@@ -63,14 +65,12 @@ func (ee EnhancedEvent) authorLong() string {
 	return ee.author.Npub()
 }
 
-func (ee EnhancedEvent) getParentNevent() string {
-	parentNevent := ""
+func (ee EnhancedEvent) getParent() nostr.Pointer {
 	switch ee.Kind {
 	case 1, 1063:
-		parent := nip10.GetImmediateParent(ee.Tags)
-		if parent != nil {
-			parentNevent = nip19.EncodePointer(parent)
-		}
+		return nip10.GetImmediateParent(ee.Tags)
+	case 1111:
+		return nip22.GetImmediateParent(ee.Tags)
 	case 1311:
 		if atag := ee.Tags.Find("a"); atag != nil {
 			parts := strings.Split(atag[1], ":")
@@ -79,15 +79,21 @@ func (ee EnhancedEvent) getParentNevent() string {
 			if (len(atag) > 2) && (atag[2] != "") {
 				relays = []string{atag[2]}
 			}
-			parentNevent, _ = nip19.EncodeEntity(parts[1], kind, parts[2], relays)
+			return nostr.EntityPointer{
+				PublicKey:  parts[1],
+				Kind:       kind,
+				Identifier: parts[2],
+				Relays:     relays,
+			}
 		}
 	}
 
-	return parentNevent
+	return nil
 }
 
 func (ee EnhancedEvent) isReply() bool {
-	return nip10.GetImmediateParent(ee.Event.Tags) != nil
+	return nip22.GetImmediateParent(ee.Tags) != nil ||
+		nip10.GetImmediateParent(ee.Event.Tags) != nil
 }
 
 func (ee EnhancedEvent) Preview() template.HTML {
@@ -139,9 +145,14 @@ func (ee EnhancedEvent) RssContent() string {
 	content := ee.Event.Content
 	content = basicFormatting(html.EscapeString(content), true, false, false)
 	content = renderQuotesAsHTML(context.Background(), content, false)
-	if nevent := ee.getParentNevent(); nevent != "" {
-		neventShort := nevent[:8] + "…" + nevent[len(nevent)-4:]
-		content = "In reply to <a href='/" + nevent + "'>" + neventShort + "</a><br/>_________________________<br/><br/>" + content
+	if parent := ee.getParent(); parent != nil {
+		if external, ok := parent.(nip73.ExternalPointer); ok {
+			content = "In reply to <a target='_blank' href='" + external.Thing + "'>" + external.Thing + "</a><br/>_________________________<br/><br/>" + content
+		} else {
+			code := nip19.EncodePointer(parent)
+			codeShort := code[:8] + "…" + code[len(code)-4:]
+			content = "In reply to <a href='/" + code + "'>" + codeShort + "</a><br/>_________________________<br/><br/>" + content
+		}
 	}
 	return content
 }

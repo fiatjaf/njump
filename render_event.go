@@ -332,17 +332,17 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	switch data.templateId {
 	case TelegramInstantView:
 		component = telegramInstantViewTemplate(TelegramInstantViewParams{
-			Video:        data.video,
-			VideoType:    data.videoType,
-			Image:        data.image,
-			Summary:      template.HTML(data.event.summary),
-			Content:      template.HTML(data.content),
-			Description:  description,
-			Subject:      data.event.subject,
-			Metadata:     data.event.author,
-			AuthorLong:   data.event.authorLong(),
-			CreatedAt:    data.createdAt,
-			ParentNevent: data.event.getParentNevent(),
+			Video:       data.video,
+			VideoType:   data.videoType,
+			Image:       data.image,
+			Summary:     template.HTML(data.event.summary),
+			Content:     template.HTML(data.content),
+			Description: description,
+			Subject:     data.event.subject,
+			Metadata:    data.event.author,
+			AuthorLong:  data.event.authorLong(),
+			CreatedAt:   data.createdAt,
+			Parent:      data.event.getParent(),
 		})
 
 	case Note:
