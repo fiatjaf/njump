@@ -117,7 +117,7 @@ new Typewriter(tw, {
 					<div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
 							<h3 class="text-2xl mb-4 text-strongpink">Affirm Your Data with Signatures</h3>
-							<p>In Nostr, users sign their posts with their cryptographic keys. This cryptographic signature ensures the authenticity of your data. You can prove what you did (and did not) create. Each client validates these signatures, ensuring data integrity. User-selected relays store and send data. These relays communicate directly with other users, with no stops between.</p>
+							<p>In Nostr, users sign their posts with their cryptographic keys. Most clients handle this process automatically. These cryptographic signatures ensure the authenticity of your data. You can prove what you did (and did not) create. User-selected relays store and send this data. These relays communicate directly with other users, with no stops between. Each client then validates these signatures, ensuring the data's integrity.</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home02.png"/>
@@ -127,7 +127,7 @@ new Typewriter(tw, {
 					<div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
 							<h3 class="text-2xl mb-4 text-strongpink">Connect Directly with Your Audience</h3>
-							<p>In Nostr, you maintain your audience. Whichever client you use, your contact list will be there. It is published to the relays of your choice, as is that of other users. Everyone chooses their preferred relays but also connect directly to the relays of anyone they follow to stay connected. Additionally relays can act as filters against spam or harassment, and as discovery vehicles for good content, aggregators of curated content and providers of custom feeds.</p>
+							<p>In Nostr, you maintain your audience and feed. Whichever client you use, your contact list will be there. It is published to the relays of your choice, as is that of other users. Everyone chooses their preferred publication relays, and clients connect to those to find new posts. Additionally, relays can act as filters against spam or harassment, and as discovery vehicles for good content, aggregators of curated content, or providers of custom feeds.</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home03.png"/>
@@ -137,7 +137,7 @@ new Typewriter(tw, {
 					<div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
 							<h3 class="text-2xl mb-4 text-strongpink">You are Free to Speak</h3>
-							<p>You can publish anything you want as long as relays are willing to accept it. If no relay will accept what you have to say, you can easily run your own. Relays can operate under any policies their operators may choose, including the ban of specific users or content. When you begin publishing to different relays, your followers' client should be capable of finding you there, so that they can continue receiving your updates.</p>
+							<p>You can publish anything you want as long as relays are willing to accept it. Relays can operate under any policies their operators may choose, including bans, content removal, and community guidelines. They may choose to host only certain users or specific types of content. If no relay will accept what you have to say, you can easily run your own. When you begin publishing to different relays, clients should be capable of finding you there, based on attached relay hints. Your contacts will then continue to receive your updates.</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home04.png"/>
@@ -147,7 +147,7 @@ new Typewriter(tw, {
 					<div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
 							<h3 class="text-2xl mb-4 text-strongpink">You are Free to Remain Anonymous</h3>
-							<p>Nostr supports user anonymity. Users can choose to be anonymous or use pseudonyms without compromising their ability to participate. Nostr is also available on TOR to prevent tracking. Nostr does not have the capacity to provide user data to governments, safeguarding users' freedom of expression from prohibitions or restrictions.</p>
+							<p>Nostr supports user anonymity. Users can choose to be anonymous or use pseudonyms without compromising their ability to participate. Nostr is also available on TOR to prevent tracking. As a protocol, Nostr does not have the capacity to provide user data to any entity, governmental or otherwise. This helps to safeguard  all users' freedom of expression from prohibitions or restrictions. Any individual relay or client could be subject to these requests, but available data would be limited to that of a user's public key. If that user has taken appropriate steps to protect their identity, there would be little information to share.</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home05.png"/>
@@ -175,7 +175,7 @@ new Typewriter(tw, {
 						<div class="sm:flex sm:flex-row sm:flex-wrap sm:w-4/5">
 							<div class="sm:basis-1/2 sm:pr-20 mb-8">
 								<h3 class="text-2xl mb-1 text-strongpink">Create an Account</h3>
-								<p>With Nostr, there is no central provider who owns your account. In fact, your account is powered by cryptography, and you could create one (or more!) yourself by hand, with no limitation. The easiest way, though, is to use our <a href="https://nstart.me" class="underline">new online wizard</a> to generate you new account in seconds. Then, you can use it across all of Nostr!</p>
+								<p>With Nostr, there is no central provider who owns your account. In fact, your account is powered by cryptography, and you could create one (or more!) yourself by hand, with no limitation. The easiest way, though, is to use our <a href="https://nstart.me" class="underline">new online wizard</a> to generate your new account in seconds. Then, you can use it across all of Nostr!</p>
 							</div>
 							<div class="sm:basis-1/2 sm:pr-20 mb-8">
 								<h3 class="text-2xl mb-1 text-strongpink">Secure your Key</h3>
@@ -183,7 +183,7 @@ new Typewriter(tw, {
 							</div>
 							<div class="sm:basis-1/2 sm:pr-20 mb-8 sm:mb-0">
 								<h3 class="text-2xl mb-1 text-strongpink">Pick an App</h3>
-								<p>Nostr developers have already built several applications to cover many different uses. The easiest way to start using Nostr is to download a <a href="#social" class="underline">social client</a> and get involved. Learn with and through the community by engaging in conversation. Need help? Use the #asknostr hashtag!</p>
+								<p>Nostr developers have already built several applications for a wide variety of uses. The simplest way to start using Nostr is to download a <a href="#social" class="underline">social client</a> and get involved. Learn with and through the community by engaging in conversation. Need help? Use the #asknostr hashtag!</p>
 							</div>
 							<div class="sm:basis-1/2 sm:pr-20 mb-8 sm:mb-0">
 								<h3 class="text-2xl mb-1 text-strongpink">Explore Nostr</h3>
