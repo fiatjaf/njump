@@ -2,10 +2,10 @@ package main
 
 import (
 	_ "embed"
-	"strings"
-	"html/template"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/nbd-wtf/go-nostr/nip52"
+	"html/template"
+	"strings"
 )
 
 type CalendarPageParams struct {
@@ -21,6 +21,10 @@ type CalendarPageParams struct {
 	Content       template.HTML
 	CalendarEvent Kind31922Or31923Metadata
 	Clients       []ClientReference
+}
+
+type Kind31922Or31923Metadata struct {
+	nip52.CalendarEvent
 }
 
 func formatParticipants(participants []nip52.Participant) string {

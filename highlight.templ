@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/nbd-wtf/go-nostr/sdk"
 	"html/template"
 	"strings"
 )
@@ -14,6 +15,16 @@ type HighlightPageParams struct {
 	Content        template.HTML
 	HighlightEvent Kind9802Metadata
 	Clients        []ClientReference
+}
+
+type Kind9802Metadata struct {
+	Author        sdk.ProfileMetadata
+	SourceEvent   string
+	SourceURL     string
+	SourceName    string
+	Context       string
+	MarkedContext string
+	Comment       string
 }
 
 templ highlightInnerBlock(params HighlightPageParams) {
@@ -39,15 +50,15 @@ templ highlightInnerBlock(params HighlightPageParams) {
 					</a>,
 				}
 				<cite class="ml-2">
+					{{ anchor := "" }}
+					if strings.HasSuffix(params.HighlightEvent.SourceURL, ".pdf") {
+						{{ anchor = "#:~:text=" + string(params.Content) }}
+					}
 					if params.HighlightEvent.SourceURL != "" {
-						{{ anchor := "" }}
-						if strings.HasSuffix(params.HighlightEvent.SourceURL, ".pdf") {
-							{{ anchor = "#:~:text=" + string(params.Content) }}
-						}
 						<a href={ templ.SafeURL(params.HighlightEvent.SourceURL + anchor) }>{ params.HighlightEvent.SourceName }</a>
 					}
 					if params.HighlightEvent.SourceEvent != "" {
-						<a href={ templ.SafeURL("/" + params.HighlightEvent.SourceEvent) }>{ params.HighlightEvent.SourceName }</a>
+						<a href={ templ.SafeURL("/" + params.HighlightEvent.SourceEvent + anchor) }>{ params.HighlightEvent.SourceName }</a>
 					}
 				</cite>
 			</footer>

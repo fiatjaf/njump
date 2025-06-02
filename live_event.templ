@@ -1,6 +1,10 @@
 package main
 
-import "html/template"
+import (
+	"github.com/nbd-wtf/go-nostr/nip53"
+	"github.com/nbd-wtf/go-nostr/sdk"
+	"html/template"
+)
 
 type LiveEventPageParams struct {
 	BaseEventPageParams
@@ -12,6 +16,18 @@ type LiveEventPageParams struct {
 
 	LiveEvent Kind30311Metadata
 	Clients   []ClientReference
+}
+
+type Kind30311Metadata struct {
+	nip53.LiveEvent
+	Host *sdk.ProfileMetadata
+}
+
+func (le Kind30311Metadata) title() string {
+	if le.Host != nil {
+		return le.Title + " by " + le.Host.Name
+	}
+	return le.Title
 }
 
 templ liveEventInnerBlock(params LiveEventPageParams) {

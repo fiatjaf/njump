@@ -1,6 +1,9 @@
 package main
 
-import "html/template"
+import (
+	"github.com/nbd-wtf/go-nostr/nip94"
+	"html/template"
+)
 
 type FileMetadataPageParams struct {
 	BaseEventPageParams
@@ -15,6 +18,10 @@ type FileMetadataPageParams struct {
 	IsVideo      bool
 
 	Clients []ClientReference
+}
+
+type Kind1063Metadata struct {
+	nip94.FileMetadata
 }
 
 templ fileMetadataInnerBlock(params FileMetadataPageParams) {

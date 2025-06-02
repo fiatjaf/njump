@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 type WikiPageParams struct {
 	BaseEventPageParams
 	OpenGraphParams
@@ -9,6 +11,13 @@ type WikiPageParams struct {
 	Content     string
 	WikiEvent   Kind30818Metadata
 	Clients     []ClientReference
+}
+
+type Kind30818Metadata struct {
+	Handle      string
+	Title       string
+	Summary     string
+	PublishedAt time.Time
 }
 
 templ wikiInnerBlock(params WikiPageParams) {

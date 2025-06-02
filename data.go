@@ -151,6 +151,7 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			data.Kind9802Metadata.SourceURL = sourceUrl[1]
 			data.Kind9802Metadata.SourceName = sourceUrl[1]
 		}
+
 		if data.Kind9802Metadata.SourceEvent != "" {
 			// Retrieve the title
 			sourceEvent, _, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent, withRelays)
