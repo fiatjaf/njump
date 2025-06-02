@@ -51,7 +51,7 @@ templ highlightInnerBlock(params HighlightPageParams) {
 				}
 				<cite class="ml-2">
 					{{ anchor := "" }}
-					if strings.HasSuffix(params.HighlightEvent.SourceURL, ".pdf") {
+					if !strings.HasSuffix(params.HighlightEvent.SourceURL, ".pdf") {
 						{{ anchor = "#:~:text=" + string(params.Content) }}
 					}
 					if params.HighlightEvent.SourceURL != "" {
