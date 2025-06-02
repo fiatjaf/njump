@@ -38,6 +38,7 @@ var (
 	iris          = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
 	lumilumi      = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/{code}", Platform: platformWeb}
 	lumilumiRelay = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/relay/wss%3A%2F%2F{code}", Platform: platformWeb}
+	chachiRelay   = ClientReference{ID: "chachi", Name: "chachi", Base: "https://chachi.chat/relay/wss%3A%2F%2F{code}/feed"}
 
 	zapStream = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
 
@@ -75,7 +76,7 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			jumbleRelay, lumilumiRelay, coracleRelay, relayTools, nostterRelay,
+			jumbleRelay, chachiRelay, lumilumiRelay, coracleRelay, relayTools, nostterRelay,
 		}
 	case 1, 6:
 		clients = []ClientReference{
@@ -103,7 +104,7 @@ func generateClientList(
 			native,
 			damus, nos, nostur, yakihonneIOS,
 			yakihonneAndroid, amethyst,
-			lumilumi, habla, pareto, yakihonne,
+			yakihonne, lumilumi, coracle, pareto, habla,
 		}
 	case 1063:
 		clients = []ClientReference{
@@ -122,7 +123,7 @@ func generateClientList(
 			native,
 			amethyst,
 			nostur,
-			zapStream, lumilumi, nostrudel, coracle,
+			zapStream, lumilumi, nostrudel,
 		}
 	case 30818:
 		clients = []ClientReference{
