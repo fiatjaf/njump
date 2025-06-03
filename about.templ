@@ -24,14 +24,14 @@ templ aboutTemplate(params AboutParams) {
 							<a class="underline" href="https://github.com/nostr-protocol/nostr">
 								Nostr
 							</a>
-							gateway that allows you to browse profiles, notes and relays; it is
-							an easy way to preview a resource and then open it with your
-							preferred client. The typical use of <i>njump</i> is to share a
-							resource outside the Nostr world, where the
-							<code>nostr:</code> schema is not (yet) working.
+							gateway that allows you to browse profiles, notes and relays. It is
+							an easy way to preview a resource and open it with your
+							preferred client. The typical use of <i>njump</i> is to share
+							content outside the Nostr world, where the
+							<code>nostr:</code> schema is not yet recognized.
 						</p>
 						<p class="my-3 leading-5">
-							<i>njump</i> currently lives under { s.Domain }, you can reach it
+							<i>njump</i> currently lives under { s.Domain }, you can reach it by
 							appending a Nostr
 							<a
 								class="underline"
@@ -69,7 +69,7 @@ templ aboutTemplate(params AboutParams) {
 							.
 						</p>
 						<h2 class="text-xl text-strongpink">
-							Try it now, jump to some Nostr content
+							Try it now! Jump to some Nostr content:
 						</h2>
 						<div
 							class="my-3 mb-8 rounded-lg bg-zinc-100 p-4 pb-3 dark:bg-neutral-900 sm:p-6 sm:pb-4"
@@ -109,53 +109,53 @@ templ aboutTemplate(params AboutParams) {
 							There are several reasons to choose <i>njump</i> when sharing Nostr
 							content outside of Nostr:
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Clean, fast and solid</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">Clean, Fast, and Solid</h2>
 						<p class="my-3 leading-5">
-							Pages by <i>njump</i> are extremely lightweight and fast to load
-							because there isn't any client side javascript involved; they are
+							<i>njump</i> pages are extremely lightweight and fast to load.
+							There is no client side javascript involved. They are
 							minimalistic with the right attention to typography, focusing on the
 							content without unnecessary details. Furthermore they are cached, so
-							when sharing a page you can expect the other part will load it
-							without any glitch in a fraction of second: the perfect tool to
+							when sharing a page you can expect it to load fast and without
+							friction. It's the perfect tool to
 							onboard new users!
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Good preview</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">Beautiful Previews</h2>
 						<p class="my-3 leading-5">
 							<i>njump</i> renders everything on the server-side, so it is able to
-							generate useful rich previews that work on Telegram, Discord,
-							Twitter and other places.
+							generate useful, rich previews that work on Telegram, Discord,
+							Twitter, and other places.
 						</p>
 						<p class="my-3 leading-5">
 							When opening the URL directly in a browser, visitors will find
-							referenced content like images, video and links to referenced Nostr
+							referenced content like images, videoes, and links to Nostr
 							events displayed in a simple but effective way. It shows the note
-							parent, allowing the visitor to follow it up and it has custom CSS for
+							parent, allowing the visitor to follow it up. It even has custom CSS for
 							printing or exporting to PDF.
 						</p>
 						<h2 class="mt-7 text-2xl text-strongpink">Cooperative (jump-out)</h2>
 						<p class="my-3 leading-5">
-							<i>njump</i> is not interested capturing users at all, on the
-							contrary it invites them to "jump" to the Nostr resource by picking
-							from a list of web clients or with a <code>nostr:</code> prefix for native
-							clients. It even remembers the most used one for each visitor and
-							puts it on the top for fast clicking or tap.
+							<i>njump</i> has no interest capturing users. On the
+							contrary, it invites them to "jump" to any Nostr resource by picking
+							from a list of web clients or, with a <code>nostr:</code> prefix, for native
+							clients. It even remembers the most used client for each visitor and
+							puts it on the top for fast, easy access.
 						</p>
 						<p class="my-3 leading-5">
 							<a class="underline" href="https://github.com/nostr-protocol/nips/blob/master/89.md">NIP-89</a>
 							support coming!
 						</p>
 						<h2 class="mt-7 text-2xl text-strongpink">
-							Search friendly (jump-in)
+							Search-Friendly (jump-in)
 						</h2>
 						<p class="my-3 leading-5">
-							This is crucial: <i>njump</i> pages are static so search engines can
-							index them, this means that <i>njump</i> can help others to discover
+							<i>njump</i> pages are static so that search engines can
+							index them. This means that <i>njump</i> can help others to discover
 							great content on Nostr, jump in and join us! <i>njump</i> is the
-							only nostr resource that has this explicit goal. If you care that a
-							good note can be found online, use <i>njump</i> to share it; this way
-							you also help Nostr flourish.
+							only Nostr resource with this explicit goal. If you care that a
+							good note can be found online, use <i>njump</i> to share it. This will help
+							Nostr to flourish and make it more accessible to everyone.
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Share NIP-05 profiles</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">Share NIP-05 Profiles</h2>
 						<p class="my-3 leading-5">
 							Share your own profile with a pretty
 							<a
@@ -177,24 +177,24 @@ templ aboutTemplate(params AboutParams) {
 							.
 						</p>
 						<p class="my-3 leading-5">
-							A profile shows your basic metadata info, assigned "outbox" relays
+							A profile shows your basic metadata info, assigned "outbox" relays,
 							and your latest notes.
 						</p>
 						<h2 class="mt-7 text-2xl text-strongpink">
-							Share on Twitter and Telegram
+							Share on Twitter, Telegram, and More
 						</h2>
 						<p class="my-3 leading-5">
-							Quickly and effortlessly share Nostr notes on Twitter
-							and Telegram, and many other "social platforms": just drop
+							Quickly and effortlessly share Nostr notes on Twitter,
+						        Telegram, and many other "social platforms": just drop
 							a link, and njump will render the note text using the preview image
 							as a canvas, to maximize the sharing experience and utility.
 							<br/>
-							On Telegram we have also the Instant View to access long content
+							On Telegram, we have also the Instant View to access long content
 							in-app!
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Relays view</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">Relay Views</h2>
 						<p class="my-3 leading-5">
-							View the most recent content posted to a relay using
+							View the most recent content posted to a relay by using
 							<span class="rounded bg-lavender px-1 dark:bg-garnet">
 								{ s.Domain }/r/&lt;relay-host&gt;
 							</span>
@@ -204,19 +204,19 @@ templ aboutTemplate(params AboutParams) {
 							</a>
 						</p>
 						<p class="my-3 leading-5">
-							Some basic information (
+							Some basic relay information (
 							<a
 								href="https://github.com/nostr-protocol/nips/blob/master/11.md"
 							>
 								NIP-11
 							</a>
 							) is available. We hope operators will start to make these descriptors more
-							personal and informative so users can have a way to evaluate whether or not
+							personal and informative, so users can have a way to evaluate whether or not
 							to join a relay.
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Website widgets</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">Website Widgets</h2>
 						<div class="my-3 leading-5">
-							You can embed notes, long form contents and profiles in a web page
+							You can embed notes, long form contents, and profiles in a web page
 							with a simple script:
 							<br/>
 							<span class="rounded bg-lavender px-1 dark:bg-garnet">
@@ -232,13 +232,13 @@ templ aboutTemplate(params AboutParams) {
 								</div>
 							</div>
 						</div>
-						<h2 class="mt-7 text-2xl text-strongpink">Inspector tool</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">Inspector Tool</h2>
 						<p class="my-3 leading-5">
 							You know, we are all programmers, including our moms, so for every
 							<i>njump</i> page, you can toggle the "Show more details" switch to
 							inspect the full event JSON. Without installing other tools (like
-							<a class="underline" href="https://github.com/fiatjaf/nak">nak</a>)
-							this is probably the fastest way to access that.
+							<a class="underline" href="https://github.com/fiatjaf/nak">nak</a>),
+							this is probably the fastest way to access that infomation.
 						</p>
 					</div>
 				</div>
