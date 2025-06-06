@@ -39,6 +39,13 @@ func WithLanguage(ctx context.Context, lang string) context.Context {
 	return context.WithValue(ctx, languageKey{}, lang)
 }
 
+// LanguageFromContext extracts the stored language from ctx.
+// If no language was set it returns an empty string.
+func LanguageFromContext(ctx context.Context) string {
+	lang, _ := ctx.Value(languageKey{}).(string)
+	return lang
+}
+
 // Translate returns the localized string for id using the language stored in ctx.
 // If translation is missing, it falls back to English and finally to the id itself.
 func Translate(ctx context.Context, id string, data map[string]any) string {

@@ -5,9 +5,9 @@ type AboutParams struct {
 }
 
 templ aboutTemplate(params AboutParams) {
-	<!DOCTYPE html>
-	<html class="theme--default font-light">
-		<meta charset="UTF-8"/>
+        <!DOCTYPE html>
+        <html class="theme--default font-light" lang={ params.HeadParams.Lang }>
+                <meta charset="UTF-8"/>
 		<head>
 			<title>njump - the nostr static gateway</title>
 			<meta name="description" content=""/>

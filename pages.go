@@ -63,6 +63,7 @@ type HeadParams struct {
 	IsHome      bool
 	IsAbout     bool
 	IsProfile   bool
+	Lang        string
 	NaddrNaked  string
 	NeventNaked string
 	Oembed      string
