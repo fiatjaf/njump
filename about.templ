@@ -9,7 +9,7 @@ templ aboutTemplate(params AboutParams) {
         <html class="theme--default font-light" lang={ params.HeadParams.Lang }>
                 <meta charset="UTF-8"/>
 		<head>
-			<title>njump - the nostr static gateway</title>
+                        <title>{ t(ctx, "about.title") }</title>
 			<meta name="description" content=""/>
 			@headCommonTemplate(params.HeadParams)
 		</head>

@@ -2,6 +2,7 @@ package i18n
 
 import (
 	"context"
+	"encoding/json"
 	"io/fs"
 	"path/filepath"
 
@@ -19,6 +20,7 @@ var bundle *i18n.Bundle
 func init() {
 	bundle = i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 	// load translation files from locales directory
 	filepath.WalkDir("locales", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -27,7 +29,7 @@ func init() {
 		if d.IsDir() {
 			return nil
 		}
-		if filepath.Ext(path) == ".toml" {
+		if ext := filepath.Ext(path); ext == ".toml" || ext == ".json" {
 			bundle.LoadMessageFile(path)
 		}
 		return nil
