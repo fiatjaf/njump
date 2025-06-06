@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/fiatjaf/njump/i18n"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -12,11 +13,11 @@ func proxy(w http.ResponseWriter, r *http.Request) {
 	src := r.URL.Query().Get("src")
 	urlParsed, err := url.Parse(src)
 	if err != nil {
-		http.Error(w, "Invalid URL", http.StatusBadRequest)
+		http.Error(w, i18n.Translate(r.Context(), "proxy.invalid_url", nil), http.StatusBadRequest)
 		return
 	}
 	if urlParsed.Scheme != "http" && urlParsed.Scheme != "https" {
-		http.Error(w, "The URL scheme is neither HTTP nor HTTPS", http.StatusBadRequest)
+		http.Error(w, i18n.Translate(r.Context(), "proxy.bad_scheme", nil), http.StatusBadRequest)
 		return
 	}
 

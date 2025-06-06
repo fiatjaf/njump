@@ -91,13 +91,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if banned, reason := internal.isBannedEvent(data.event.ID); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
-		http.Error(w, "event banned", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.event_banned", nil), http.StatusNotFound)
 		return
 	}
 	if banned, reason := internal.isBannedPubkey(data.event.PubKey); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
-		http.Error(w, "pubkey banned", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.pubkey_banned", nil), http.StatusNotFound)
 		return
 	}
 	hasURL := urlRegex.MatchString(data.event.Content)
@@ -105,7 +105,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		(hasURL && hasProhibitedWordOrTag(data.event.Event)) ||
 		(hasURL && hasExplicitMedia(ctx, data.event.Event)) {
 		log.Warn().Str("event", data.nevent).Msg("detect prohibited content")
-		http.Error(w, "event is not allowed", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.event_not_allowed", nil), http.StatusNotFound)
 		return
 	}
 
@@ -157,19 +157,19 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		subscript = fmt.Sprintf("%s: %s", kindNames[data.event.Kind], tValue)
+		subscript = i18n.Translate(ctx, "event.subscript.kind_tag", map[string]any{"kind": kindNames[data.event.Kind], "value": tValue})
 	} else if kindName, ok := kindNames[data.event.Kind]; ok {
 		subscript = kindName
 	} else {
-		subscript = fmt.Sprintf("kind:%d event", data.event.Kind)
+		subscript = i18n.Translate(ctx, "event.subscript.kind_event", map[string]any{"num": data.event.Kind})
 	}
 	if data.event.subject != "" {
 		subscript += " (" + data.event.subject + ")"
 	}
 
-	subscript += " by " + data.event.author.ShortName()
+	subscript += " " + i18n.Translate(ctx, "event.subscript.by_author", map[string]any{"author": data.event.author.ShortName()})
 	if data.event.isReply() {
-		subscript += " (reply)"
+		subscript += " " + i18n.Translate(ctx, "event.subscript.reply", nil)
 	}
 
 	seenOnRelays := ""
@@ -178,7 +178,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		for i, r := range data.event.relays {
 			relays[i] = trimProtocolAndEndingSlash(r)
 		}
-		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(relays, ", "))
+		seenOnRelays = i18n.Translate(ctx, "event.seen_on", map[string]any{"relays": strings.Join(relays, ", ")})
 	}
 
 	textImageURL := ""
@@ -187,7 +187,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		textImageURL = fmt.Sprintf("https://%s/njump/image/%s?%s", host, code, r.URL.RawQuery)
 		if data.event.subject != "" {
 			if seenOnRelays != "" {
-				description = fmt.Sprintf("%s -- %s", data.event.subject, seenOnRelays)
+				description = i18n.Translate(ctx, "event.description.subject_relays", map[string]any{"subject": data.event.subject, "relays": seenOnRelays})
 			} else {
 				description = data.event.subject
 			}
@@ -552,9 +552,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	case WikiEvent:
 		opengraph.Superscript = "wiki entry: " + data.Kind30818Metadata.Title
 		if strings.ToLower(data.Kind30818Metadata.Title) == data.Kind30818Metadata.Handle {
-			opengraph.Subscript = "by " + data.event.author.ShortName()
+			opengraph.Subscript = i18n.Translate(ctx, "event.subscript.by_author", map[string]any{"author": data.event.author.ShortName()})
 		} else {
-			opengraph.Subscript = fmt.Sprintf("\"%s\" by %s", data.Kind30818Metadata.Handle, data.event.author.ShortName())
+			opengraph.Subscript = i18n.Translate(ctx, "og.subscript.quote_by", map[string]any{"title": data.Kind30818Metadata.Handle, "author": data.event.author.ShortName()})
 		}
 
 		params := WikiPageParams{
@@ -590,11 +590,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	case Highlight:
 		if data.Kind9802Metadata.Comment == "" {
 			opengraph.Superscript = data.Kind9802Metadata.SourceURL
-			opengraph.Subscript = "Highlight by " + data.event.author.ShortName()
+			opengraph.Subscript = i18n.Translate(ctx, "og.subscript.highlight_by", map[string]any{"author": data.event.author.ShortName()})
 			opengraph.Text = "> " + opengraph.Text
 		} else {
 			opengraph.Superscript = data.Kind9802Metadata.SourceURL
-			opengraph.Subscript = "Annotation by " + data.event.author.ShortName()
+			opengraph.Subscript = i18n.Translate(ctx, "og.subscript.annotation_by", map[string]any{"author": data.event.author.ShortName()})
 			opengraph.Text = data.Kind9802Metadata.Comment + "\n> " + opengraph.Text
 		}
 
@@ -636,7 +636,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
-		http.Error(w, "tried to render an unsupported template at render_event.go", 500)
+		http.Error(w, i18n.Translate(ctx, "error.unsupported_template", nil), 500)
 		return
 	}
 
