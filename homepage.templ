@@ -12,7 +12,7 @@ templ homepageTemplate(params HomePageParams) {
         <html class="theme--default font-light" lang={ params.HeadParams.Lang }>
                 <meta charset="UTF-8"/>
 		<head>
-			<title>njump - Jump on Board on Nostr, Start Now!</title>
+                       <title>{ t(ctx, "homepage.title") }</title>
 			<meta name="description" content=""/>
 			@headCommonTemplate(params.HeadParams)
 			<script src="https://cdn.jsdelivr.net/npm/typewriter-effect@2.21.0/dist/core.min.js"></script>

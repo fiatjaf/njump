@@ -6,7 +6,7 @@ templ topTemplate(params HeadParams) {
 		<!-- Mobile header -->
 		<div class="fixed top-0 left-0 right-0 flex justify-between items-center w-full sm:hidden z-40 p-4 bg-white dark:bg-neutral-900">
 			<!-- Join Nostr Button (Mobile - Left) -->
-			<a href="https://nstart.me" class="px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">Join Nostr</a>
+                        <a href="https://nstart.me" class="px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "top.join") }</a>
 			<!-- Hamburger menu utton -->
 			<button
 				id="mobile-menu-button"
@@ -27,17 +27,17 @@ templ topTemplate(params HeadParams) {
 				<a href="/relays-archive/">Nostr relays archive</a>
 			</div>
 			if !(params.IsHome) {
-				<a href="/" class="mr-4">Why <span class="text-strongpink">Nostr</span>?</a>
+                                <a href="/" class="mr-4">{ t(ctx, "top.why") }</a>
 			}
 			if params.IsHome {
-				<a href="#getstarted" class="mr-4 hover:text-strongpink">Get started</a>
-				<a href="#resources" class="mr-4 hover:text-strongpink">Apps & Resources</a>
-				<a href="#development" class="mr-4 hover:text-strongpink">Join the development</a>
+                                <a href="#getstarted" class="mr-4 hover:text-strongpink">{ t(ctx, "top.get_started") }</a>
+                                <a href="#resources" class="mr-4 hover:text-strongpink">{ t(ctx, "top.resources") }</a>
+                                <a href="#development" class="mr-4 hover:text-strongpink">{ t(ctx, "top.development") }</a>
 			}
 			if !(params.IsAbout) {
-				<a href="/about" class="mr-4">What is <span class="text-strongpink">Njump</span>?</a>
+                                <a href="/about" class="mr-4">{ t(ctx, "top.about") }</a>
 			}
-			<a href="https://nstart.me" class="leading-9 mr-4 px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">Join Nostr</a>
+                        <a href="https://nstart.me" class="leading-9 mr-4 px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "top.join") }</a>
 		</div>
 		<div class="hidden sm:block sm:w-[14%]">
 			<div
@@ -88,18 +88,18 @@ templ topTemplate(params HeadParams) {
 		<!-- Menu items -->
 		<div class="flex flex-col items-center space-y-8 text-xl text-neutral-800 dark:text-neutral-50 font-semibold">
 			if params.IsHome {
-				<a href="#" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Why Nostr?</a>
-				<a href="#getstarted" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Get started</a>
-				<a href="#resources" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Apps & Resources</a>
-				<a href="#development" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Join the development</a>
+                                <a href="#" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "top.why") }</a>
+                                <a href="#getstarted" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "top.get_started") }</a>
+                                <a href="#resources" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "top.resources") }</a>
+                                <a href="#development" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "top.development") }</a>
 			}
 			if (!(params.IsAbout) && !(params.IsHome)) || params.IsAbout {
-				<a href="/" class="text-2xl hover:text-strongpink">Why Nostr?</a>
+                                <a href="/" class="text-2xl hover:text-strongpink">{ t(ctx, "top.why") }</a>
 			}
 			if !(params.IsAbout) {
-				<a href="/about" class="text-2xl hover:text-strongpink">What is Njump?</a>
+                                <a href="/about" class="text-2xl hover:text-strongpink">{ t(ctx, "top.about") }</a>
 			}
-			<a href="https://nstart.me" class="text-2xl text-strongpink">Join Nostr</a>
+                        <a href="https://nstart.me" class="text-2xl text-strongpink">{ t(ctx, "top.join") }</a>
 		</div>
 		<!-- Theme toggle -->
 		<div class="absolute bottom-16 flex justify-center items-center space-x-3 text-neutral-400 dark:text-neutral-500 font-semibold">
