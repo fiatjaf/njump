@@ -5,6 +5,8 @@ import (
 	"html"
 	"html/template"
 	"net/http"
+
+	"github.com/fiatjaf/njump/i18n"
 	"strings"
 	"time"
 )
@@ -91,7 +93,10 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 		nprofile := profile.Nprofile(ctx, sys, 2)
 		params := ProfilePageParams{
-			HeadParams: HeadParams{IsProfile: true},
+			HeadParams: HeadParams{
+				IsProfile: true,
+				Lang:      i18n.LanguageFromContext(ctx),
+			},
 			Details: DetailsParams{
 				HideDetails:     true,
 				CreatedAt:       createdAt,

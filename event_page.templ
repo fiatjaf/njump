@@ -13,8 +13,8 @@ templ eventPageTemplate(
 	details DetailsParams,
 	event EnhancedEvent,
 ) {
-	<html class="theme--default font-light print:text-base">
-		<meta charset="UTF-8"/>
+        <html class="theme--default font-light print:text-base" lang={ head.Lang }>
+                <meta charset="UTF-8"/>
 		<head>
 			<title>{ title }</title>
 			@openGraphTemplate(og)

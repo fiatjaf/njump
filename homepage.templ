@@ -8,9 +8,9 @@ type HomePageParams struct {
 }
 
 templ homepageTemplate(params HomePageParams) {
-	<!DOCTYPE html>
-	<html class="theme--default font-light">
-		<meta charset="UTF-8"/>
+        <!DOCTYPE html>
+        <html class="theme--default font-light" lang={ params.HeadParams.Lang }>
+                <meta charset="UTF-8"/>
 		<head>
 			<title>njump - Jump on Board on Nostr, Start Now!</title>
 			<meta name="description" content=""/>

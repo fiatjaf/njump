@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fiatjaf/njump/i18n"
 	"github.com/nbd-wtf/go-nostr/nip11"
 )
 
@@ -91,7 +92,10 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		relayTemplate(RelayPageParams{
-			HeadParams: HeadParams{IsProfile: false},
+			HeadParams: HeadParams{
+				IsProfile: false,
+				Lang:      i18n.LanguageFromContext(r.Context()),
+			},
 			Info:       info,
 			Hostname:   hostname,
 			Proxy:      "https://" + hostname + "/njump/proxy?src=",

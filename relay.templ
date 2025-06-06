@@ -14,9 +14,9 @@ type RelayPageParams struct {
 }
 
 templ relayTemplate(params RelayPageParams) {
-	<!DOCTYPE html>
-	<html class="theme--default font-light print:text-base">
-		<meta charset="UTF-8"/>
+        <!DOCTYPE html>
+        <html class="theme--default font-light print:text-base" lang={ params.HeadParams.Lang }>
+                <meta charset="UTF-8"/>
 		<head>
 			<title>Nostr Relay { params.Hostname } - { params.Info.Name }</title>
 			<meta property="og:title" content={ params.Hostname + " - Nostr Relay" }/>

@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/a-h/templ"
+	"github.com/fiatjaf/njump/i18n"
 	"github.com/nbd-wtf/go-nostr"
 	"github.com/nbd-wtf/go-nostr/nip05"
 	"github.com/nbd-wtf/go-nostr/nip19"
@@ -379,6 +380,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				Oembed:      oembed,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 			Clients:          generateClientList(data.event.Kind, data.nevent),
 			Details:          detailsData,
@@ -409,6 +411,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				Oembed:      oembed,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 			Clients:          generateClientList(data.event.Kind, data.naddr),
 			Details:          detailsData,
@@ -428,6 +431,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 
 			Details: detailsData,
@@ -450,6 +454,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 
 			Details:   detailsData,
@@ -474,6 +479,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 
 			Details:          detailsData,
@@ -528,6 +534,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 			TimeZone:      getUTCOffset(location),
 			StartAtDate:   startAtDate,
@@ -557,6 +564,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 			PublishedAt: data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006"),
 			WikiEvent:   data.Kind30818Metadata,
@@ -597,6 +605,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 			Content:        template.HTML(data.content),
 			HighlightEvent: data.Kind9802Metadata,
@@ -615,6 +624,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
 			},
 
 			Details:         detailsData,

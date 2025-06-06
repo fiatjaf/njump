@@ -1,9 +1,9 @@
 package main
 
 templ embeddedProfileTemplate(params ProfilePageParams) {
-	<!DOCTYPE html>
-	<html class="theme--default font-light print:text-base">
-		<meta charset="UTF-8"/>
+        <!DOCTYPE html>
+        <html class="theme--default font-light print:text-base" lang={ params.HeadParams.Lang }>
+                <meta charset="UTF-8"/>
 		<head>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link
