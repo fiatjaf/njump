@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fiatjaf/njump/i18n"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
@@ -42,7 +43,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	code := r.URL.Path[1+len("njump/image/"):]
 	if code == "" {
-		fmt.Fprintf(w, "call /njump/image/<nip19 code>")
+		fmt.Fprintf(w, i18n.Translate(ctx, "image.missing_code", nil))
 		return
 	}
 
@@ -54,7 +55,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	data, err := grabData(ctx, code, false)
 	if err != nil {
-		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.fetch_event", map[string]any{"err": err.Error()}), http.StatusNotFound)
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_image")
 		return
 	}
@@ -62,19 +63,19 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	// banned or unallowed conditions
 	if banned, _ := internal.isBannedEvent(data.event.ID); banned {
 		w.WriteHeader(http.StatusNotFound)
-		http.Error(w, "event banned", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.event_banned", nil), http.StatusNotFound)
 		return
 	}
 	if banned, _ := internal.isBannedPubkey(data.event.PubKey); banned {
 		w.WriteHeader(http.StatusNotFound)
-		http.Error(w, "pubkey banned", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.pubkey_banned", nil), http.StatusNotFound)
 		return
 	}
 	hasURL := urlRegex.MatchString(data.event.Content)
 	if isMaliciousBridged(data.event.author) ||
 		(hasURL && hasProhibitedWordOrTag(data.event.Event)) ||
 		(hasURL && hasExplicitMedia(ctx, data.event.Event)) {
-		http.Error(w, "event is not allowed", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.event_not_allowed", nil), http.StatusNotFound)
 		return
 	}
 
@@ -99,7 +100,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	img, err := drawImage(ctx, paragraphs, getPreviewStyle(r), data.event.author, data.event.CreatedAt.Time())
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to draw paragraphs as image")
-		http.Error(w, "error writing image!", 500)
+		http.Error(w, i18n.Translate(ctx, "error.write_image", nil), 500)
 		return
 	}
 

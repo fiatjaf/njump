@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/fiatjaf/njump/i18n"
 	"net/http"
 	"net/url"
 	"strings"
@@ -41,13 +42,13 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 
 	targetURL, err := url.Parse(r.URL.Query().Get("url"))
 	if err != nil {
-		http.Error(w, "invalid url: "+err.Error(), 400)
+		http.Error(w, i18n.Translate(ctx, "error.invalid_url", map[string]any{"err": err.Error()}), 400)
 		return
 	}
 	code := strings.Split(targetURL.Path, "/")[1]
 
 	if !strings.HasPrefix(code, "nevent1") {
-		http.Error(w, "oembed is only supported for nevent1 codes, not '"+code+"'", 400)
+		http.Error(w, i18n.Translate(ctx, "error.oembed_nevent_only", map[string]any{"code": code}), 400)
 		return
 	}
 
@@ -57,7 +58,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Header().Set("Cache-Control", "max-age=180")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on oembed")
-		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.fetch_event", map[string]any{"err": err.Error()}), http.StatusNotFound)
 		return
 	}
 
@@ -65,7 +66,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 		Version:      "1.0",
 		ProviderName: "njump",
 		ProviderURL:  "https://" + host,
-		Title:        data.event.author.Name + " wrote",
+		Title:        i18n.Translate(ctx, "oembed.title", map[string]any{"name": data.event.author.Name}),
 		AuthorName:   data.event.authorLong(),
 		AuthorURL:    fmt.Sprintf("https://%s/%s", host, data.event.Npub()),
 	}

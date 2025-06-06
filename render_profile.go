@@ -42,15 +42,15 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	if banned, reason := internal.isBannedPubkey(profile.PubKey); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
-		http.Error(w, "pubkey banned", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.pubkey_banned", nil), http.StatusNotFound)
 		return
 	}
 	if isMaliciousBridged(profile) {
-		http.Error(w, "profile is malicious", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.profile_malicious", nil), http.StatusNotFound)
 		return
 	}
 	if is, _ := isExplicitContent(ctx, profile.Picture); is {
-		http.Error(w, "profile is not allowed", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.profile_not_allowed", nil), http.StatusNotFound)
 		return
 	}
 

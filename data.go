@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fiatjaf/njump/i18n"
 	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/nbd-wtf/go-nostr/nip31"
 	"github.com/nbd-wtf/go-nostr/nip52"
@@ -158,7 +159,7 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			if title := sourceEvent.Tags.Find("title"); title != nil {
 				data.Kind9802Metadata.SourceName = title[1]
 			} else {
-				data.Kind9802Metadata.SourceName = "Note dated " + sourceEvent.CreatedAt.Time().Format("January 1, 2006 15:04")
+				data.Kind9802Metadata.SourceName = i18n.Translate(ctx, "event.source_note_dated", map[string]any{"date": sourceEvent.CreatedAt.Time().Format("January 1, 2006 15:04")})
 			}
 			// Retrieve the author using the event, ignore the `p` tag in the highlight event
 			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
@@ -197,7 +198,7 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 
 	data.kindDescription = kindNames[event.Kind]
 	if data.kindDescription == "" {
-		data.kindDescription = fmt.Sprintf("Kind %d", event.Kind)
+		data.kindDescription = i18n.Translate(ctx, "event.kind_number", map[string]any{"num": event.Kind})
 	}
 	data.kindNIP = kindNIPs[event.Kind]
 
