@@ -3,6 +3,7 @@ package i18n
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io/fs"
 	"path/filepath"
 
@@ -52,9 +53,15 @@ func LanguageFromContext(ctx context.Context) string {
 // If translation is missing, it falls back to English and finally to the id itself.
 func Translate(ctx context.Context, id string, data map[string]any) string {
 	lang, _ := ctx.Value(languageKey{}).(string)
-	localizer := i18n.NewLocalizer(bundle, lang)
+	// always include English so that it is used as a fallback
+	localizer := i18n.NewLocalizer(bundle, lang, "en")
 	msg, err := localizer.Localize(&i18n.LocalizeConfig{MessageID: id, TemplateData: data})
 	if err != nil {
+		var nfe *i18n.MessageNotFoundErr
+		if errors.As(err, &nfe) {
+			// fall back to the message retrieved from the default language
+			return msg
+		}
 		return id
 	}
 	return msg
