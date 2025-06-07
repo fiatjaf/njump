@@ -75,3 +75,31 @@ TRUSTED_PUBKEYS=npub1...,npub1...
 See `relay-config.json.sample` for example.
 
 For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump`.
+
+## Translations
+
+Translation files are in `locales/` and managed with [go-i18n](https://github.com/nicksnyder/go-i18n). A helper script is provided at `scripts/update_translations.sh`.
+
+### Updating locale files
+
+1. Install the command line tool:
+
+```bash
+go install github.com/nicksnyder/go-i18n/v2/goi18n@latest
+```
+
+2. Extract and merge strings:
+
+```bash
+./scripts/update_translations.sh
+```
+
+### Contributing translations
+
+European language translations are welcome! To contribute:
+
+1. Copy `locales/en.json` to `locales/<lang>.json` (e.g. `fr.json`, `de.json`).
+2. Replace the English text with your translation.
+3. Run the script above to update catalogs.
+4. Commit the new file and open a pull request.
+
