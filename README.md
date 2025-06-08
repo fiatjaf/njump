@@ -103,3 +103,8 @@ European language translations are welcome! To contribute:
 3. Run the script above to update catalogs.
 4. Commit the new file and open a pull request.
 
+### Localization
+
+Translation files are stored in the `locales` directory. To add support for another language, copy `en.json` to `<lang>.json` (or `.toml`) and replace each English string with its translation. The middleware automatically selects the language from the `lang` query parameter or the `Accept-Language` header.
+
+When a translation is missing for the selected language, njump falls back to the English text.
