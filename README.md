@@ -75,3 +75,9 @@ TRUSTED_PUBKEYS=npub1...,npub1...
 See `relay-config.json.sample` for example.
 
 For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump`.
+
+### Localization
+
+Translation files are stored in the `locales` directory. To add support for another language, copy `en.json` to `<lang>.json` (or `.toml`) and replace each English string with its translation. The middleware automatically selects the language from the `lang` query parameter or the `Accept-Language` header.
+
+When a translation is missing for the selected language, njump falls back to the English text.
