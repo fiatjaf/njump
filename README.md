@@ -1,5 +1,7 @@
 # njump
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/fiatjaf/njump)
+
 njump is a HTTP Nostr static gateway that allows you to browse profiles, notes and relays; it is an easy way to preview a resource and then open it with your preferred client. The typical use of njump is to share a resource outside the Nostr world, where the Nostr: schema is not (yet) working.
 
 njump has some special features to effectively share notes on platforms that offer links preview, like Twitter and Telegram.
