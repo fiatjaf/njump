@@ -41,7 +41,7 @@ templ topTemplate(params HeadParams) {
 		</div>
 		<div class="hidden sm:block sm:w-[14%]">
 			<div
-				class="print:hidden; relative float-right h-4 w-4 cursor-pointer rounded-full text-gray-100 dark:text-gray-700 sm:fixed sm:right-4 sm:top-4 sm:float-none"
+				class="print:hidden; relative float-right h-4 w-4 cursor-pointer rounded-full text-gray-300 dark:text-gray-500 sm:fixed sm:right-4 sm:top-4 sm:float-none"
 				_="on click tell <html /> toggle between .theme--dark and .theme--default then get your @class then get it[0].split('--')[1].split(' ')[0] then set localStorage.theme to it
 				on load tell <html /> get localStorage.theme then if it is 'dark' add .theme--dark then remove .theme--default else if it is not 'default' then get window.matchMedia('(prefers-color-scheme: dark)').matches then if it is true add .theme--dark then remove .theme--default end"
 			>
