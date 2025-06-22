@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -9,19 +10,41 @@ import (
 
 func languageMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		lang := r.URL.Query().Get("lang")
-		if lang == "" {
-			al := r.Header.Get("Accept-Language")
-			if al != "" {
-				p := strings.Split(al, ",")[0]
-				p = strings.SplitN(p, ";", 2)[0]
-				lang = strings.TrimSpace(p)
+		var (
+			raw    string
+			source string
+			lang   string
+		)
+		if v := r.URL.Query().Get("lang"); v != "" {
+			raw = v
+			source = "query"
+			http.SetCookie(w, &http.Cookie{Name: "lang", Value: raw, Path: "/", MaxAge: 365 * 24 * 60 * 60})
+		} else if c, err := r.Cookie("lang"); err == nil && c.Value != "" {
+			raw = c.Value
+			source = "cookie"
+		}
+		if raw == "" {
+			if al := r.Header.Get("Accept-Language"); al != "" {
+				raw = strings.SplitN(strings.Split(al, ",")[0], ";", 2)[0]
+				source = "header"
 			}
 		}
-		if lang == "" {
-			lang = "en"
+		if raw == "" {
+			raw = s.DefaultLanguage
+			source = "default"
 		}
+		lang = strings.ToLower(raw)
+		if i := strings.Index(lang, "-"); i != -1 {
+			lang = lang[:i]
+		}
+		log.Debug().
+			Str("source", source).
+			Str("raw", raw).
+			Str("lang", lang).
+			Str("Accept-Language", r.Header.Get("Accept-Language")).
+			Msg("resolved language for request")
 		ctx := i18n.WithLanguage(r.Context(), lang)
+		ctx = context.WithValue(ctx, "requestPath", r.URL.Path)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }

@@ -18,58 +18,18 @@ templ aboutTemplate(params AboutParams) {
 			<div class="mx-auto sm:mt-8 block px-4 sm:flex sm:items-center sm:justify-center sm:px-0">
 				<div class="w-full max-w-screen-2xl justify-between gap-10 overflow-visible print:w-full sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12">
 					<div>
-						<h2 class="text-2xl text-strongpink">What is njump?</h2>
+						<h2 class="text-2xl text-strongpink">{ t(ctx, "about.what.title") }</h2>
 						<p class="my-3 leading-5">
-							<i>njump</i> is a HTTP
-							<a class="underline" href="https://github.com/nostr-protocol/nostr">
-								Nostr
-							</a>
-							gateway that allows you to browse profiles, notes and relays. It is
-							an easy way to preview a resource and open it with your
-							preferred client. The typical use of <i>njump</i> is to share
-							content outside the Nostr world, where the
-							<code>nostr:</code> schema is not yet recognized.
+							@templ.Raw(t(ctx, "about.what.description"))
 						</p>
 						<p class="my-3 leading-5">
-							<i>njump</i> currently lives under { s.Domain }, you can reach it by
-							appending a Nostr
-							<a
-								class="underline"
-								href="https://github.com/nostr-protocol/nips/blob/master/19.md"
-							>
-								NIP-19
-							</a>
-							entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>,
-							etc) after the domain:
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ s.Domain }/&lt;nip-19-entity&gt;
-							</span>.
+							@templ.Raw(tWithData(ctx, "about.usage.description", map[string]any{"Domain": s.Domain}))
 						</p>
 						<p class="my-3 leading-5">
-							For example, here's
-							<a
-								class="underline"
-								href="/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9"
-							>
-								a user profile
-							</a>,
-							<a
-								class="underline"
-								href="/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2"
-							>
-								a note
-							</a>
-							and a
-							<a
-								class="underline"
-								href="/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv"
-							>
-								long blog post
-							</a>
-							.
+							@templ.Raw(t(ctx, "about.examples.description"))
 						</p>
 						<h2 class="text-xl text-strongpink">
-							Try it now! Jump to some Nostr content:
+							{ t(ctx, "about.try.title") }
 						</h2>
 						<div
 							class="my-3 mb-8 rounded-lg bg-zinc-100 p-4 pb-3 dark:bg-neutral-900 sm:p-6 sm:pb-4"
@@ -83,146 +43,81 @@ templ aboutTemplate(params AboutParams) {
 									<div class="mb-1.5 text-xl sm:mb-0">{ s.Domain }/</div>
 									<input
 										name="code"
-										placeholder="paste a npub / nprofile / nevent / ..."
+										placeholder={ t(ctx, "about.try.placeholder") }
 										autofocus
 										class="ml-0 w-full basis-full rounded-lg border-0 bg-white p-2 text-base text-gray-700 placeholder:text-gray-300 focus:outline-0 dark:bg-zinc-900 dark:text-neutral-50 dark:placeholder:text-gray-400 sm:ml-1 sm:basis-11/12 sm:rounded-s-lg"
 									/>
 									<button
 										class="ml-0 w-full basis-full rounded-lg border-0 bg-strongpink p-2 text-base uppercase text-white sm:-ml-4 sm:basis-2/12 sm:rounded-s-lg"
 									>
-										View
+										{ t(ctx, "about.try.button") }
 									</button>
 								</div>
 							</form>
 							<div class="mt-3 text-center text-sm sm:mt-1 sm:text-left">
-								or pick
+								{ t(ctx, "about.try.or") }
 								<a
 									class="underline"
 									href="/random"
 									_="on click halt the event then fetch /random with method:'POST' then tell <input[name='code'] /> set @value to result"
 								>
-									some random content
+									{ t(ctx, "about.try.random") }
 								</a>
 							</div>
 						</div>
 						<p class="my-3 leading-5">
-							There are several reasons to choose <i>njump</i> when sharing Nostr
-							content outside of Nostr:
+							{ t(ctx, "about.reasons.intro") }
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Clean, Fast, and Solid</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">{ t(ctx, "about.reasons.clean.title") }</h2>
 						<p class="my-3 leading-5">
-							<i>njump</i> pages are extremely lightweight and fast to load.
-							There is no client side javascript involved. They are
-							minimalistic with the right attention to typography, focusing on the
-							content without unnecessary details. Furthermore they are cached, so
-							when sharing a page you can expect it to load fast and without
-							friction. It's the perfect tool to
-							onboard new users!
+							{ t(ctx, "about.reasons.clean.desc") }
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Beautiful Previews</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">{ t(ctx, "about.reasons.previews.title") }</h2>
 						<p class="my-3 leading-5">
-							<i>njump</i> renders everything on the server-side, so it is able to
-							generate useful, rich previews that work on Telegram, Discord,
-							Twitter, and other places.
+							{ t(ctx, "about.reasons.previews.desc") }
 						</p>
 						<p class="my-3 leading-5">
-							When opening the URL directly in a browser, visitors will find
-							referenced content like images, videoes, and links to Nostr
-							events displayed in a simple but effective way. It shows the note
-							parent, allowing the visitor to follow it up. It even has custom CSS for
-							printing or exporting to PDF.
+							{ t(ctx, "about.reasons.browser.title") }
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Cooperative (jump-out)</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">{ t(ctx, "about.reasons.cooperative.title") }</h2>
 						<p class="my-3 leading-5">
-							<i>njump</i> has no interest capturing users. On the
-							contrary, it invites them to "jump" to any Nostr resource by picking
-							from a list of web clients or, with a <code>nostr:</code> prefix, for native
-							clients. It even remembers the most used client for each visitor and
-							puts it on the top for fast, easy access.
+							{ t(ctx, "about.reasons.cooperative.desc") }
 						</p>
 						<p class="my-3 leading-5">
 							<a class="underline" href="https://github.com/nostr-protocol/nips/blob/master/89.md">NIP-89</a>
-							support coming!
+							{ t(ctx, "about.reasons.nip89.title") }
 						</p>
 						<h2 class="mt-7 text-2xl text-strongpink">
-							Search-Friendly (jump-in)
+							{ t(ctx, "about.reasons.seo.title") }
 						</h2>
 						<p class="my-3 leading-5">
-							<i>njump</i> pages are static so that search engines can
-							index them. This means that <i>njump</i> can help others to discover
-							great content on Nostr, jump in and join us! <i>njump</i> is the
-							only Nostr resource with this explicit goal. If you care that a
-							good note can be found online, use <i>njump</i> to share it. This will help
-							Nostr to flourish and make it more accessible to everyone.
+							{ t(ctx, "about.reasons.seo.desc") }
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Share NIP-05 Profiles</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">{ t(ctx, "about.nip05.title") }</h2>
 						<p class="my-3 leading-5">
-							Share your own profile with a pretty
-							<a
-								class="underline"
-								href="https://github.com/nostr-protocol/nips/blob/master/05.md"
-							>
-								NIP-05
-							</a>
-							inspired permalink:
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ s.Domain }/&lt;nip-05&gt;
-							</span>
-							, for example:
-							<a class="underline" href="/nvk.org">https://{ s.Domain }/nvk.org</a>
-							or
-							<a class="underline" href="/mike@mikedilger.com">
-								https://{ s.Domain }/mike@mikedilger.com
-							</a>
-							.
+							@templ.Raw(tWithData(ctx, "about.nip05_description", map[string]any{"Domain": s.Domain}))
 						</p>
 						<p class="my-3 leading-5">
-							A profile shows your basic metadata info, assigned "outbox" relays,
-							and your latest notes.
+							{ t(ctx, "about.profile.shows") }
 						</p>
 						<h2 class="mt-7 text-2xl text-strongpink">
-							Share on Twitter, Telegram, and More
+							{ t(ctx, "about.social.title") }
 						</h2>
 						<p class="my-3 leading-5">
-							Quickly and effortlessly share Nostr notes on Twitter,
-						        Telegram, and many other "social platforms": just drop
-							a link, and njump will render the note text using the preview image
-							as a canvas, to maximize the sharing experience and utility.
-							<br/>
-							On Telegram, we have also the Instant View to access long content
-							in-app!
+							{ t(ctx, "about.social.desc") }
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Relay Views</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">{ t(ctx, "about.relay_views") }</h2>
 						<p class="my-3 leading-5">
-							View the most recent content posted to a relay by using
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								{ s.Domain }/r/&lt;relay-host&gt;
-							</span>
-							, for example:
-							<a class="underline" href="/r/nostr.wine">
-								https://{ s.Domain }/r/nostr.wine
-							</a>
+							@templ.Raw(tWithData(ctx, "about.relay_description", map[string]any{"Domain": s.Domain}))
 						</p>
 						<p class="my-3 leading-5">
-							Some basic relay information (
-							<a
-								href="https://github.com/nostr-protocol/nips/blob/master/11.md"
-							>
-								NIP-11
-							</a>
-							) is available. We hope operators will start to make these descriptors more
-							personal and informative, so users can have a way to evaluate whether or not
-							to join a relay.
+							@templ.Raw(t(ctx, "about.relay_info"))
 						</p>
-						<h2 class="mt-7 text-2xl text-strongpink">Website Widgets</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">{ t(ctx, "about.website_widgets") }</h2>
 						<div class="my-3 leading-5">
-							You can embed notes, long form contents, and profiles in a web page
-							with a simple script:
-							<br/>
-							<span class="rounded bg-lavender px-1 dark:bg-garnet">
-								&lt;script src="https://{ s.Domain }/embed/&lt;nip-19-entity&gt;"
-								/&gt;
-							</span>
+							@templ.Raw(tWithData(ctx, "about.widgets_full_description", map[string]any{"Domain": s.Domain}))
+						</div>
+						<div class="my-3 leading-5">
 							<div class="mt-4 gap-8 sm:flex">
 								<div class="mb-4 flex-auto sm:mb-0">
 									<script src="/embed/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9"></script>
@@ -232,13 +127,9 @@ templ aboutTemplate(params AboutParams) {
 								</div>
 							</div>
 						</div>
-						<h2 class="mt-7 text-2xl text-strongpink">Inspector Tool</h2>
+						<h2 class="mt-7 text-2xl text-strongpink">{ t(ctx, "about.inspector_tool") }</h2>
 						<p class="my-3 leading-5">
-							You know, we are all programmers, including our moms, so for every
-							<i>njump</i> page, you can toggle the "Show more details" switch to
-							inspect the full event JSON. Without installing other tools (like
-							<a class="underline" href="https://github.com/fiatjaf/nak">nak</a>),
-							this is probably the fastest way to access that infomation.
+							@templ.Raw(t(ctx, "about.inspector_description"))
 						</p>
 					</div>
 				</div>

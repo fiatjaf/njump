@@ -21,6 +21,7 @@ import (
 type Settings struct {
 	Port                string   `envconfig:"PORT" default:"2999"`
 	Domain              string   `envconfig:"DOMAIN" default:"njump.me"`
+	DefaultLanguage     string   `envconfig:"DEFAULT_LANGUAGE" default:"en"`
 	ServiceURL          string   `envconfig:"SERVICE_URL"`
 	InternalDBPath      string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
 	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`

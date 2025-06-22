@@ -5,7 +5,7 @@ go 1.24.2
 require (
 	fiatjaf.com/leafdb v0.0.7
 	github.com/PuerkitoBio/goquery v1.10.1
-	github.com/a-h/templ v0.3.865
+	github.com/a-h/templ v0.3.898
 	github.com/bytesparadise/libasciidoc v0.8.0
 	github.com/dgraph-io/ristretto v1.0.0
 	github.com/fiatjaf/eventstore v0.16.4
