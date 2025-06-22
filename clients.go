@@ -30,7 +30,7 @@ var (
 	nostrudel     = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
 	nostter       = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: platformWeb}
 	nostterRelay  = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
-	jumble        = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/notes/{code}", Platform: platformWeb}
+	jumble        = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/{code}", Platform: platformWeb}
 	jumbleRelay   = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: platformWeb}
 	coracle       = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
 	coracleRelay  = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
