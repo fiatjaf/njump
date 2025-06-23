@@ -54,6 +54,9 @@ COPY --from=gobuilder /app/main .
 # Copy relay config
 COPY --from=gobuilder /app/relay-config.json.sample relay-config.json
 
+# Copy locale files for i18n
+COPY --from=gobuilder /app/locales/ ./locales/
+
 # Expose port
 EXPOSE 2999
 
