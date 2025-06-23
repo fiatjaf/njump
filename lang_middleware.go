@@ -3,10 +3,13 @@ package main
 import (
 	"context"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/fiatjaf/njump/i18n"
 )
+
+var langRegex = regexp.MustCompile("^[a-z]{2}$")
 
 func languageMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +39,9 @@ func languageMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		lang = strings.ToLower(raw)
 		if i := strings.Index(lang, "-"); i != -1 {
 			lang = lang[:i]
+		}
+		if !langRegex.MatchString(lang) {
+			lang = s.DefaultLanguage
 		}
 		log.Debug().
 			Str("source", source).
