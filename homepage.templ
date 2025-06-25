@@ -5,6 +5,7 @@ type HomePageParams struct {
 
 	Npubs     []string
 	LastNotes []string
+	Domain    string
 }
 
 templ homepageTemplate(params HomePageParams) {
@@ -16,8 +17,8 @@ templ homepageTemplate(params HomePageParams) {
 			<meta name="description" content=""/>
 			@headCommonTemplate(params.HeadParams)
 			<script src="https://cdn.jsdelivr.net/npm/typewriter-effect@2.21.0/dist/core.min.js"></script>
-			<script defer data-domain="nostr.eu" src="https://analytics.cypherpunk.cloud/js/script.outbound-links.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+			<script defer data-domain={ params.Domain } src="https://analytics.cypherpunk.cloud/js/script.outbound-links.js"></script>
+			<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 
 		</head>
 		<body
@@ -177,11 +178,11 @@ templ homepageTemplate(params HomePageParams) {
 						</div>
 						<div class="sm:basis-1/3 text-center bg-neutral-200/50 dark:bg-neutral-700/60 rounded-md p-8">
 							<h2 class="text-2xl text-strongpink">{ t(ctx, "home.resources.streaming") }</h2>
+							<a href="https://honey.hivetalk.org/" class="group bg-slate-200" target="_blank">
+								<h3 class="text-xl mt-4 group-hover:text-strongpink">HiveTalk</h3>
+							</a>
 							<a href="https://zap.stream" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Zap.stream</h3>
-							</a>
-							<a href="https://liveparty.app" class="group bg-slate-200" target="_blank">
-								<h3 class="text-xl mt-4 group-hover:text-strongpink">Live Party</h3>
 							</a>
 							<a href="https://nostrnests.com" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Nests</h3>
