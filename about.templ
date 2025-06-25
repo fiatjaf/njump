@@ -6,7 +6,7 @@ type AboutParams struct {
 
 templ aboutTemplate(params AboutParams) {
         <!DOCTYPE html>
-        <html class="theme--default font-light" lang={ params.HeadParams.Lang }>
+        <html class="theme--default font-light" lang={ params.HeadParams.Lang } if isRTL(ctx) { dir="rtl" }>
                 <meta charset="UTF-8"/>
 		<head>
                         <title>{ t(ctx, "about.title") }</title>

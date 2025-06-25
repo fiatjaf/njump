@@ -13,7 +13,7 @@ templ eventPageTemplate(
 	details DetailsParams,
 	event EnhancedEvent,
 ) {
-        <html class="theme--default font-light print:text-base" lang={ head.Lang }>
+        <html class="theme--default font-light print:text-base" lang={ head.Lang } if isRTL(ctx) { dir="rtl" }>
                 <meta charset="UTF-8"/>
 		<head>
 			<title>{ title }</title>
