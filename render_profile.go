@@ -96,6 +96,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 			HeadParams: HeadParams{
 				IsProfile: true,
 				Lang:      i18n.LanguageFromContext(ctx),
+				Domain:    s.Domain,
 			},
 			Details: DetailsParams{
 				HideDetails:     true,

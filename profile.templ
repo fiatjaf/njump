@@ -53,7 +53,7 @@ templ profileTemplate(params ProfilePageParams) {
 				<meta property="og:description" content={ params.Metadata.About }/>
 			}
 			<meta name="twitter:card" content="summary"/>
-			<link rel="canonical" href={ "https://njump.me/" + params.Metadata.Npub() }/>
+			<link rel="canonical" href={ "https://" + params.Domain + "/" + params.Metadata.Npub() }/>
 			<link
 				rel="sitemap"
 				type="application/xml"

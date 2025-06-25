@@ -95,6 +95,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 			HeadParams: HeadParams{
 				IsProfile: false,
 				Lang:      i18n.LanguageFromContext(r.Context()),
+				Domain:    s.Domain,
 			},
 			Info:       info,
 			Hostname:   hostname,

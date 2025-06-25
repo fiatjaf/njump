@@ -67,6 +67,7 @@ type HeadParams struct {
 	NaddrNaked  string
 	NeventNaked string
 	Oembed      string
+	Domain      string
 }
 
 type BaseEventPageParams struct {
