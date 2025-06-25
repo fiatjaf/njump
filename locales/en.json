@@ -141,7 +141,7 @@
   },
   {
     "id": "home.getting_started.create.desc",
-    "other": "With Nostr, there is no central provider who owns your account. In fact, your account is powered by cryptography, and you could create one (or more!) yourself by hand, with no limitation. The easiest way, though, is to use our <a href=\"https://nstart.me\" class=\"underline\">new online wizard</a> to generate your new account in seconds. Then, you can use it across all of Nostr!"
+    "other": "With Nostr, there is no central provider who owns your account. In fact, your account is powered by cryptography, and you could create one (or more!) yourself by hand, with no limitation. The easiest way, though, is to use our <a href=\"https://start.nostr.net\" class=\"underline\">new online wizard</a> to generate your new account in seconds. Then, you can use it across all of Nostr!"
   },
   {
     "id": "home.getting_started.secure.title",
@@ -205,7 +205,7 @@
   },
   {
     "id": "home.resources.disclaimer",
-    "other": "This is only a quick selection of the 100+ applications that have already been built on Nostr, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">discover them all</a>!"
+    "other": "This is only a quick selection of the 100+ applications that have already been built on Nostr, <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">discover them all</a>!"
   },
   {
     "id": "home.development.title",

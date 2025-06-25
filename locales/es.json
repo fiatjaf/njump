@@ -141,7 +141,7 @@
   },
   {
     "id": "home.getting_started.create.desc",
-    "other": "Con Nostr, no hay un proveedor central que sea dueño de tu cuenta. De hecho, tu cuenta está impulsada por criptografía, y podrías crear una (¡o más!) tú mismo a mano, sin limitación. Sin embargo, la forma más fácil es usar nuestro <a href=\"https://nstart.me\" class=\"underline\">nuevo asistente en línea</a> para generar tu nueva cuenta en segundos. ¡Luego, puedes usarla en todo Nostr!"
+    "other": "Con Nostr, no hay un proveedor central que sea dueño de tu cuenta. De hecho, tu cuenta está impulsada por criptografía, y podrías crear una (¡o más!) tú mismo a mano, sin limitación. Sin embargo, la forma más fácil es usar nuestro <a href=\"https://start.nostr.net\" class=\"underline\">nuevo asistente en línea</a> para generar tu nueva cuenta en segundos. ¡Luego, puedes usarla en todo Nostr!"
   },
   {
     "id": "home.getting_started.secure.title",
@@ -205,7 +205,7 @@
   },
   {
     "id": "home.resources.disclaimer",
-    "other": "Esta es solo una selección rápida de las más de 100 aplicaciones que ya se han construido en Nostr, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">¡descúbrelas todas!</a>"
+    "other": "Esta es solo una selección rápida de las más de 100 aplicaciones que ya se han construido en Nostr, <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">¡descúbrelas todas!</a>"
   },
   {
     "id": "home.development.title",

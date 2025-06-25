@@ -141,7 +141,7 @@
   },
   {
     "id": "home.getting_started.create.desc",
-    "other": "Mit Nostr gibt es keinen zentralen Anbieter, der dein Konto besitzt. Tatsächlich wird dein Konto durch Kryptographie betrieben, und du könntest eines (oder mehrere!) selbst von Hand erstellen, ohne Begrenzung. Der einfachste Weg ist jedoch, unseren <a href=\"https://nstart.me\" class=\"underline\">neuen Online-Assistenten</a> zu verwenden, um dein neues Konto in Sekunden zu generieren. Dann kannst du es in ganz Nostr verwenden!"
+    "other": "Mit Nostr gibt es keinen zentralen Anbieter, der dein Konto besitzt. Tatsächlich wird dein Konto durch Kryptographie betrieben, und du könntest eines (oder mehrere!) selbst von Hand erstellen, ohne Begrenzung. Der einfachste Weg ist jedoch, unseren <a href=\"https://start.nostr.net\" class=\"underline\">neuen Online-Assistenten</a> zu verwenden, um dein neues Konto in Sekunden zu generieren. Dann kannst du es in ganz Nostr verwenden!"
   },
   {
     "id": "home.getting_started.secure.title",
@@ -205,7 +205,7 @@
   },
   {
     "id": "home.resources.disclaimer",
-    "other": "Das ist nur eine schnelle Auswahl der 100+ Anwendungen, die bereits auf Nostr gebaut wurden, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">entdecke sie alle</a>!"
+    "other": "Das ist nur eine schnelle Auswahl der 100+ Anwendungen, die bereits auf Nostr gebaut wurden, <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">entdecke sie alle</a>!"
   },
   {
     "id": "home.development.title",

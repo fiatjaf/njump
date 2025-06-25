@@ -17,6 +17,10 @@ templ topTemplate(params HeadParams) {
                        {"es", "Español"},
                        {"fr", "Français"},
                        {"it", "Italiano"},
+                       {"pt", "Português"},
+                       {"nl", "Nederlands"},
+                       {"hu", "Magyar"},
+                       {"cz", "Čeština"},
                        {"ar", "العربية"},
                    } {
                        if params.Lang == opt.Code {
@@ -40,6 +44,10 @@ templ topTemplate(params HeadParams) {
                        {"es", "Español"},
                        {"fr", "Français"},
                        {"it", "Italiano"},
+                       {"pt", "Português"},
+                       {"nl", "Nederlands"},
+                       {"hu", "Magyar"},
+                       {"cz", "Čeština"},
                        {"ar", "العربية"},
                    } {
                        <a 
@@ -55,7 +63,7 @@ templ topTemplate(params HeadParams) {
 		<!-- Mobile header -->
 		<div class="fixed top-0 left-0 right-0 flex justify-between items-center w-full sm:hidden z-40 p-4 bg-white dark:bg-neutral-900">
 			<!-- Join Nostr Button (Mobile - Left) -->
-                        <a href="https://nstart.me" class="px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "nav.join") }</a>
+                        <a href="https://start.nostr.net" class="px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "nav.join") }</a>
 			<!-- Hamburger menu utton -->
 			<button
 				id="mobile-menu-button"
@@ -86,7 +94,7 @@ templ topTemplate(params HeadParams) {
 			if !(params.IsAbout) {
                                 <a href="/about" class="mr-4">{ t(ctx, "nav.about") }</a>
 			}
-                        <a href="https://nstart.me" class="leading-9 mr-4 px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "nav.join") }</a>
+                        <a href="https://start.nostr.net" class="leading-9 mr-4 px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "nav.join") }</a>
 		</div>
 		<div class="hidden sm:block sm:w-[14%]">
 			<div
@@ -148,7 +156,7 @@ templ topTemplate(params HeadParams) {
 			if !(params.IsAbout) {
                                 <a href="/about" class="text-2xl hover:text-strongpink">{ t(ctx, "nav.about") }</a>
 			}
-                        <a href="https://nstart.me" class="text-2xl text-strongpink">{ t(ctx, "nav.join") }</a>
+                        <a href="https://start.nostr.net" class="text-2xl text-strongpink">{ t(ctx, "nav.join") }</a>
 		</div>
 		<!-- Language selector (Mobile) -->
 		<div class="absolute bottom-24 flex justify-center items-center text-xl text-neutral-800 dark:text-neutral-200 font-semibold">
@@ -165,6 +173,10 @@ templ topTemplate(params HeadParams) {
 						{"es", "Español"},
 						{"fr", "Français"},
 						{"it", "Italiano"},
+						{"pt", "Português"},
+						{"nl", "Nederlands"},
+						{"hu", "Magyar"},
+						{"cz", "Čeština"},
 						{"ar", "العربية"},
 					} {
 						if params.Lang == opt.Code {
@@ -188,6 +200,10 @@ templ topTemplate(params HeadParams) {
 						{"es", "Español"},
 						{"fr", "Français"},
 						{"it", "Italiano"},
+						{"pt", "Português"},
+						{"nl", "Nederlands"},
+						{"hu", "Magyar"},
+						{"cz", "Čeština"},
 						{"ar", "العربية"},
 					} {
 						<a 

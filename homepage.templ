@@ -6,7 +6,7 @@ type HomePageParams struct {
 	Npubs     []string
 	LastNotes []string
 	Domain    string
-}
+}	
 
 templ homepageTemplate(params HomePageParams) {
         <!DOCTYPE html>
@@ -126,7 +126,7 @@ templ homepageTemplate(params HomePageParams) {
 				</div>
 				<!-- Join Nostr -->
 				<div class="mt-14 text-2xl font-semibold self-center">{ t(ctx, "home.cta.question") }</div>
-				<a href="https://nstart.me" class="mt-4 self-center px-8 py-1 text-2xl bg-strongpink text-neutral-50 rounded-md ">{ t(ctx, "home.cta.button") }</a>
+				<a href="https://start.nostr.net" class="mt-4 self-center px-8 py-1 text-2xl bg-strongpink text-neutral-50 rounded-md ">{ t(ctx, "home.cta.button") }</a>
 				<!-- Get started -->
 				<div id="getstarted" class="relative px-4 sm:px-0 sm:flex mt-20 py-14 sm:py-28 justify-center bg-gradient-to-br from-slate-600 to-slate-900 text-neutral-50 dark:from-slate-700 dark:to-slate-950">
 					<div class="w-full max-w-screen-2xl sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12">

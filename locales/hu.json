@@ -1,0 +1,522 @@
+[
+  {
+    "id": "site.title",
+    "other": "njump - egy webes átjáró a Nostr-hoz"
+  },
+  {
+    "id": "nav.about",
+    "other": "Rólunk"
+  },
+  {
+    "id": "nav.why",
+    "other": "Miért a Nostr?"
+  },
+  {
+    "id": "nav.get_started",
+    "other": "Első lépések"
+  },
+  {
+    "id": "nav.resources",
+    "other": "Források"
+  },
+  {
+    "id": "nav.development",
+    "other": "Fejlesztés"
+  },
+  {
+    "id": "nav.join",
+    "other": "Csatlakozz a Nostr-hoz"
+  },
+  {
+    "id": "home.title",
+    "other": "Nostr - egy egyszerű protokoll"
+  },
+  {
+    "id": "home.hero.protocol",
+    "other": "PROTOKOLL"
+  },
+  {
+    "id": "home.intro.today.title",
+    "other": "A mai internet"
+  },
+  {
+    "id": "home.intro.today.subtitle",
+    "other": "Az internet az ötletek és információk nyílt cseréjének víziójával indult..."
+  },
+  {
+    "id": "home.intro.today.description",
+    "other": "Az internet az ötletek és információk nyílt cseréjének víziójával indult, amely a szólás, a véleménynyilvánítás és az egyesülés szabadságának értékeit hivatott előmozdítani mindenki számára. Idővel ez a vízió arra redukálódott, hogy mi hozhat hasznot a nagyvállalatoknak. Ma a web csak egy maroknyi hatalmas szerver, amelyet néhány vállalat birtokol, de milliárdok használnak."
+  },
+  {
+    "id": "home.intro.problems",
+    "other": "Személyazonosságunk tulajdonjogát harmadik felek kezébe adtuk. Alkotásaink jogait átadtuk azoknak, akik hasznot akarnak húzni belőlük. Érdeklődésünket olyan algoritmusoknak adtuk át, amelyeket a figyelmünk maximalizálására írtak. Ezzel aránytalan hatalmat adtunk ezeknek a vállalatoknak, kormányoknak és más ellenőrző szerveknek, hogy eldöntsék, mit látunk, olvasunk és mondunk. Itt az ideje, hogy kitörjünk a korlátaikból, és olyan internetet hozzunk létre, amely lehetővé teszi, hogy bárki, bárhol alkosson, beszéljen és szocializálódjon, ahogyan csak akar, ahogyan azt eredetileg tervezték."
+  },
+  {
+    "id": "home.intro.tomorrow.title",
+    "other": "Nostr a holnapért"
+  },
+  {
+    "id": "home.intro.tomorrow.subtitle",
+    "other": "A Nostr, a \"Notes and Other Stuff Transmitted by Relays\" (Jegyzetek és egyéb dolgok, amelyeket reléken keresztül továbbítanak) rövidítése..."
+  },
+  {
+    "id": "home.intro.tomorrow.description",
+    "other": "A Nostr, a \"Notes and Other Stuff Transmitted by Relays\" (Jegyzetek és egyéb dolgok, amelyeket reléken keresztül továbbítanak) rövidítése, forradalmasítja a közösségi hálózatokat és az online kommunikációt azáltal, hogy megszünteti a központosított szerverektől való függést. Ügyfél-relé modellt alkalmaz, ahol a felhasználók ügyfeleket futtatnak, és bárki futtathat reléket. Az információkat (és azok tárolását) egyének, szenvedélyes önkéntesek, vállalatok és nonprofit szervezetek hálózatában osztják el."
+  },
+  {
+    "id": "home.intro.protocol.description",
+    "other": "A Nostr protokoll kriptográfiai kulcsokkal és aláírásokkal biztosítja a hamisításbiztos kommunikációt. Azáltal, hogy lehetővé teszi a felhasználóknak, hogy útvonalakat hozzanak létre a jegyzetek relékre való közzétételéhez, és ösztönzi az üzemeltetőket egyedi, független relék telepítésére és karbantartására, a Nostr számos hiányosságot orvosol a jelenlegi weben. Az interoperábilis alkalmazásoktól az egyedi és mindenütt jelenlévő identitásokig a Nostr olyan kreatív, együttműködő innovációk előtt nyitja meg az ajtót, amilyeneket a világ még nem látott."
+  },
+  {
+    "id": "home.main.title",
+    "other": "A szabadság megerősítése a Nostr segítségével"
+  },
+  {
+    "id": "home.main.subtitle",
+    "other": "Biztonságos, felhasználó-központú protokoll és közösségi hálózat"
+  },
+  {
+    "id": "home.features.identity.title",
+    "other": "Ön birtokolja a személyazonosságát"
+  },
+  {
+    "id": "home.features.identity.desc",
+    "other": "A Nostr egy nyilvános kulcsú rendszert használ, ahol az Ön személyazonossága egy egyedi kriptográfiai kulcshoz van kötve. Teljes ellenőrzése van a személyazonossága felett, anélkül, hogy bármilyen központi hatóságtól függene. A Nostr protokoll szükségtelenné teszi a Know Your Customer (KYC) folyamatokat. Nincs szükség e-mailre, személyi igazolványra, ujjlenyomatra vagy írisz-szkennelésre! A magánélete teljesen az Ön kezében van."
+  },
+  {
+    "id": "home.features.data.title",
+    "other": "Hitelesítse adatait aláírásokkal"
+  },
+  {
+    "id": "home.features.data.desc",
+    "other": "A Nostr-ban a felhasználók a kriptográfiai kulcsaikkal írják alá a bejegyzéseiket. A legtöbb kliens automatikusan kezeli ezt a folyamatot. Ezek a kriptográfiai aláírások biztosítják az adatok hitelességét. Bizonyítani tudja, mit hozott létre (és mit nem). A felhasználó által választott relék tárolják és továbbítják ezeket az adatokat. Ezek a relék közvetlenül kommunikálnak a többi felhasználóval, anélkül, hogy megállnának a kettő között. Ezután minden kliens ellenőrzi ezeket az aláírásokat, biztosítva az adatok integritását."
+  },
+  {
+    "id": "home.features.audience.title",
+    "other": "Kapcsolódjon közvetlenül a közönségéhez"
+  },
+  {
+    "id": "home.features.audience.desc",
+    "other": "A Nostr-ban Ön tartja fenn a közönségét és a hírfolyamát. Bármelyik klienst is használja, a névjegyzéke ott lesz. Az Ön által választott reléken teszik közzé, csakúgy, mint mások listáit. Mindenki kiválasztja a preferált közzétételi reléit, és a kliensek csatlakoznak hozzájuk, hogy új bejegyzéseket találjanak. Ezenkívül a relék spamszűrőként vagy zaklatásgátlóként, valamint jó tartalmak felfedezésére szolgáló eszközként, kurált tartalmak aggregátoraként vagy egyéni hírfolyamok szolgáltatójaként is működhetnek."
+  },
+  {
+    "id": "home.features.speech.title",
+    "other": "Önnek szólásszabadsága van"
+  },
+  {
+    "id": "home.features.speech.desc",
+    "other": "Bármit közzétehet, amit csak akar, amíg a relék hajlandóak azt elfogadni. A relék bármilyen szabályzat szerint működhetnek, amelyet az üzemeltetőik választanak, beleértve a tiltásokat, a tartalomeltávolítást és a közösségi szabályokat. Dönthetnek úgy, hogy csak bizonyos felhasználókat vagy bizonyos típusú tartalmakat fogadnak. Ha egyetlen relé sem fogadja el azt, amit mondani szeretne, könnyedén futtathat egy sajátot. Amikor elkezd különböző reléken publikálni, a klienseknek képesnek kell lenniük megtalálni Önt a csatolt relé-tippek alapján. A kapcsolatai továbbra is megkapják a frissítéseit."
+  },
+  {
+    "id": "home.features.anonymous.title",
+    "other": "Joga van az anonimitáshoz"
+  },
+  {
+    "id": "home.features.anonymous.desc",
+    "other": "A Nostr támogatja a felhasználói anonimitást. A felhasználók választhatják az anonimitást vagy álnevek használatát anélkül, hogy ez veszélyeztetné a részvételi képességüket. A Nostr a TOR hálózaton is elérhető a követés megelőzése érdekében. Protokollként a Nostr-nak nincs kapacitása felhasználói adatokat szolgáltatni semmilyen szervezetnek, kormányzati vagy egyéb. Ez segít megvédeni minden felhasználó szólásszabadságát a tiltásokkal vagy korlátozásokkal szemben. Bármelyik egyedi relé vagy kliens lehet ilyen kérések tárgya, de a rendelkezésre álló adatok a felhasználó nyilvános kulcsára korlátozódnának. Ha ez a felhasználó megtette a megfelelő lépéseket a személyazonossága védelme érdekében, kevés információ állna rendelkezésre."
+  },
+  {
+    "id": "home.features.develop.title",
+    "other": "Szabadon fejleszthet"
+  },
+  {
+    "id": "home.features.develop.desc",
+    "other": "A Nostr támogatja a fejlesztést és a testreszabást. Bárki szabadon fejleszthet a protokollon, hozzájárulva a hálózat növekedéséhez és evolúciójához. Minden Nostr-ra épülő kliens, relé, eszköz és alkalmazás profitálhat minden múltbeli és jövőbeli fejlesztésből. Az alkotóknak szabadságuk van fizetési módokat bevezetni az alkalmazásaikhoz és funkcióikhoz, ami soha nem látott potenciális bevételi forrást biztosít."
+  },
+  {
+    "id": "home.cta.question",
+    "other": "Mire vársz?"
+  },
+  {
+    "id": "home.cta.button",
+    "other": "Csatlakozz a Nostr-hoz"
+  },
+  {
+    "id": "home.getting_started.title",
+    "other": "Kezdje el a Nostr használatát"
+  },
+  {
+    "id": "home.getting_started.create.title",
+    "other": "Hozzon létre egy fiókot"
+  },
+  {
+    "id": "home.getting_started.create.desc",
+    "other": "A Nostr-ral nincs központi szolgáltató, aki birtokolná a fiókját. A fiókja valójában kriptográfián alapul, és Ön maga hozhatja létre (vagy akár többet is!) manuálisan, korlátozások nélkül. A legegyszerűbb módja azonban az, ha az <a href=\"https://nstart.me\" class=\"underline\">új online útmutatónkat</a> használja egy új fiók létrehozásához másodpercek alatt. Ezután a Nostr egészén használhatja!"
+  },
+  {
+    "id": "home.getting_started.secure.title",
+    "other": "Biztosítsa a kulcsát"
+  },
+  {
+    "id": "home.getting_started.secure.desc",
+    "other": "A fiók egy kulcspár. A privát kulcs (nsec) az Ön digitális identitása. Ha elveszik vagy kompromittálódik, nincs mód a hozzáférés helyreállítására vagy a hitelesítő adatok megváltoztatására. A privát kulcsát biztonságban kell tartania. Használjon jelszókezelőt, készítsen papíralapú biztonsági másolatot, és CSAK megbízható alkalmazásokban használja. Soha ne adja meg az nsec-jét webhelyeken. Telepítsen egy <a href=\"#signers\" class=\"underline\">aláíró kiterjesztést</a>, hogy biztonságosan használhassa a kulcsát a weben."
+  },
+  {
+    "id": "home.getting_started.app.title",
+    "other": "Válasszon egy alkalmazást"
+  },
+  {
+    "id": "home.getting_started.app.desc",
+    "other": "A Nostr fejlesztők már számos alkalmazást készítettek a legkülönfélébb felhasználási esetekhez. A Nostr használatának legegyszerűbb módja, ha letölt egy <a href=\"#social\" class=\"underline\">közösségi klienst</a> és belevág. Tanuljon a közösséggel és a közösségen keresztül a beszélgetésbe való bekapcsolódással. Segítségre van szüksége? Használja az #asknostr hashtaget!"
+  },
+  {
+    "id": "home.getting_started.explore.title",
+    "other": "Fedezze fel a Nostr-t"
+  },
+  {
+    "id": "home.getting_started.explore.desc",
+    "other": "Miután megismerkedett az alapfogalmakkal, beállíthatja a preferált kulcskezelő eszközét, és felfedezhet más közösségi klienseket és <a href=\"#readwrite\" class=\"underline\">Nostr-alkalmazásokat</a>. Már rendelkezik a digitális identitásával, és az mindenhol működik. Egyszerűen jelentkezzen be a Nostr aláíró alkalmazásával, aláíró kiterjesztésével vagy nsec-jével. Ha a privát kulcsát használja, győződjön meg róla, hogy az alkalmazás megbízható forrásból származik!"
+  },
+  {
+    "id": "home.getting_started.client_alt",
+    "other": "Nostr kliens"
+  },
+  {
+    "id": "home.resources.title",
+    "other": "Nostr források"
+  },
+  {
+    "id": "home.resources.subtitle",
+    "other": "Fedezze fel, mi mindent tehet a Nostr-ral"
+  },
+  {
+    "id": "home.resources.multimedia",
+    "other": "Multimédia"
+  },
+  {
+    "id": "home.resources.streaming",
+    "other": "Élő közvetítés"
+  },
+  {
+    "id": "home.resources.publishing",
+    "other": "Olvasás és írás"
+  },
+  {
+    "id": "home.resources.communities",
+    "other": "Közösségek"
+  },
+  {
+    "id": "home.resources.tools",
+    "other": "Egyéb dolgok"
+  },
+  {
+    "id": "home.resources.security",
+    "other": "Kulcsbiztonság"
+  },
+  {
+    "id": "home.resources.disclaimer",
+    "other": "Ez csak egy gyors válogatás a már a Nostr-ra épített több mint 100 alkalmazásból, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">fedezze fel mindet</a>!"
+  },
+  {
+    "id": "home.development.title",
+    "other": "Fejlesszen a Nostr-on"
+  },
+  {
+    "id": "home.development.origins.title",
+    "other": "Ahol minden elkezdődött"
+  },
+  {
+    "id": "home.development.origins.desc",
+    "other": "A Nostr \"kiáltványt\" 2019-ben tették közzé. Lassan, de biztosan egy közösség gyűlt össze az ötlet köré, és kiterjesztette azt, gyors, rugalmas és megbízható protokollá alakítva, amelyet sok valódi ember használ naponta."
+  },
+  {
+    "id": "home.development.nips.title",
+    "other": "Fedezze fel a NIP-eket"
+  },
+  {
+    "id": "home.development.nips.desc",
+    "other": "A NIP-ek a \"Nostr Implementation Possibilities\" (Nostr megvalósítási lehetőségek) rövidítései. Útmutatóként szolgálnak ahhoz, hogy mit lehet megvalósítani a Nostr-relé és -kliens kompatibilis szoftverekkel. Tanulmányozza őket, hogy optimális hálózati kompatibilitással fejlessze ki az új Nostr-alkalmazását."
+  },
+  {
+    "id": "home.development.design.title",
+    "other": "Tervezési útmutató"
+  },
+  {
+    "id": "home.development.design.desc",
+    "other": "A Nostrdesign.org a hivatalos forrás arra, hogy felfedezze, hogyan fejlesztheti legjobban a Nostr-alkalmazásának felületét. Fedezzen fel egy új paradigmát, optimalizálja a felhasználói felületét, és találjon tippeket a felhasználói élmény javítására, mindezt egy helyen."
+  },
+  {
+    "id": "home.development.read_more",
+    "other": "Tovább olvasom >>"
+  },
+  {
+    "id": "home.typewriter.not_crypto",
+    "other": "NEM KRIPTÓ"
+  },
+  {
+    "id": "home.typewriter.simple",
+    "other": "EGYSZERŰ"
+  },
+  {
+    "id": "home.typewriter.not_blockchain",
+    "other": "NEM BLOCKCHAIN"
+  },
+  {
+    "id": "home.typewriter.universal_identity",
+    "other": "UNIVERZÁLIS IDENTITÁS"
+  },
+  {
+    "id": "home.typewriter.not_company",
+    "other": "NEM VÁLLALAT"
+  },
+  {
+    "id": "home.typewriter.free_expression",
+    "other": "SZABAD VÉLEMÉNYNYILVÁNÍTÁS"
+  },
+  {
+    "id": "home.typewriter.free_association",
+    "other": "SZABAD EGYESÜLÉS"
+  },
+  {
+    "id": "home.typewriter.for_friends",
+    "other": "BARÁTOKNAK ÉS ELLENSÉGEKNEK"
+  },
+  {
+    "id": "home.typewriter.for_everyone",
+    "other": "MINDENKINEK"
+  },
+  {
+    "id": "home.typewriter.for_broadcasting",
+    "other": "MŰSORSZÓRÁSRA"
+  },
+  {
+    "id": "home.typewriter.for_groups",
+    "other": "ZÁRT CSOPORTOKNAK"
+  },
+  {
+    "id": "home.typewriter.for_opinions",
+    "other": "MINDEN VÉLEMÉNYNEK"
+  },
+  {
+    "id": "home.typewriter.like_internet",
+    "other": "MINT MAGA AZ INTERNET"
+  },
+  {
+    "id": "home.typewriter.flexible",
+    "other": "RUGALMAS"
+  },
+  {
+    "id": "home.typewriter.scalable",
+    "other": "SKÁLÁZHATÓ"
+  },
+  {
+    "id": "home.typewriter.public_square",
+    "other": "VALÓDI KÖZTÉR"
+  },
+  {
+    "id": "home.typewriter.client_relay",
+    "other": "ÜGYFÉL-RELÉ"
+  },
+  {
+    "id": "home.typewriter.not_p2p",
+    "other": "NEM P2P"
+  },
+  {
+    "id": "home.typewriter.old_web",
+    "other": "A RÉGI WEB"
+  },
+  {
+    "id": "home.typewriter.decentralized",
+    "other": "IGAZÁN DECENTRALIZÁLT"
+  },
+  {
+    "id": "home.typewriter.communities",
+    "other": "HELYESEN KIALAKÍTOTT KÖZÖSSÉGEK"
+  },
+  {
+    "id": "home.typewriter.open_alternative",
+    "other": "NYÍLT ALTERNATÍVA"
+  },
+  {
+    "id": "home.typewriter.wikis",
+    "other": "KÖZÖSSÉGI WIKIK"
+  },
+  {
+    "id": "home.typewriter.git",
+    "other": "GIT EGYÜTTMŰKÖDÉS"
+  },
+  {
+    "id": "home.typewriter.articles",
+    "other": "HOSSZÚ CIKKEK"
+  },
+  {
+    "id": "home.typewriter.microblogging",
+    "other": "MIKROBLOGGOLÁS"
+  },
+  {
+    "id": "home.typewriter.livestreaming",
+    "other": "ÉLŐ KÖZVETÍTÉS"
+  },
+  {
+    "id": "home.typewriter.forums",
+    "other": "FÓRUMOK"
+  },
+  {
+    "id": "home.typewriter.annotating",
+    "other": "WEBES JEGYZETELÉS"
+  },
+  {
+    "id": "home.typewriter.commenting",
+    "other": "BÁRMIHEZ HOZZÁSZÓLÁS"
+  },
+  {
+    "id": "home.typewriter.social_web",
+    "other": "A HOLNAP KÖZÖSSÉGI WEBJE"
+  },
+  {
+    "id": "home.typewriter.for_you",
+    "other": "NEKED, MA"
+  },
+  {
+    "id": "home.typewriter.dots",
+    "other": "......."
+  },
+  {
+    "id": "about.title",
+    "other": "Az njump-ról"
+  },
+  {
+    "id": "about.what.title",
+    "other": "Mi az njump?"
+  },
+  {
+    "id": "about.what.description",
+    "other": "Az <i>njump</i> egy HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">Nostr</a> átjáró, amely lehetővé teszi profilok, jegyzetek és relék böngészését. Ez egy egyszerű módja a forrás megtekintésének és a preferált kliensben való megnyitásának. Az <i>njump</i> tipikus felhasználása a tartalom megosztása a Nostr világán kívül, ahol a <code>nostr:</code> sémát még nem ismerik fel."
+  },
+  {
+    "id": "about.usage.title",
+    "other": "Hogyan kell használni"
+  },
+  {
+    "id": "about.usage.description",
+    "other": "Az <i>njump</i> jelenleg a(z) {{.Domain}} címen fut, a Nostr entitás <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a> (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, stb.) hozzáadásával érheti el a domain mögé: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-19-entity&gt;</span>."
+  },
+  {
+    "id": "about.examples.title",
+    "other": "Példák"
+  },
+  {
+    "id": "about.examples.description",
+    "other": "Például, itt van egy <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">felhasználói profil</a>, egy <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">jegyzet</a> és egy <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">hosszú blogbejegyzés</a>."
+  },
+  {
+    "id": "about.try.title",
+    "other": "Próbálja ki most! Ugrás egy Nostr tartalomra:"
+  },
+  {
+    "id": "about.try.placeholder",
+    "other": "illesszen be npub / nprofile / nevent / ..."
+  },
+  {
+    "id": "about.try.button",
+    "other": "Megtekintés"
+  },
+  {
+    "id": "about.try.or",
+    "other": "vagy válasszon"
+  },
+  {
+    "id": "about.try.random",
+    "other": "egy véletlenszerű tartalmat"
+  },
+  {
+    "id": "about.reasons.intro",
+    "other": "Számos oka van annak, hogy miért válassza az njump-ot a Nostr tartalom megosztásakor a Nostr-on kívül:"
+  },
+  {
+    "id": "about.reasons.clean.title",
+    "other": "Tiszta, gyors és megbízható"
+  },
+  {
+    "id": "about.reasons.clean.desc",
+    "other": "Az njump oldalak rendkívül könnyűek és gyorsan betöltődnek. Nincs kliensoldali javascript. Minimalisták, megfelelő figyelmet fordítva a tipográfiára, a tartalomra összpontosítva, felesleges részletek nélkül. Ráadásul gyorsítótárazva vannak, így ha megoszt egy oldalt, számíthat arra, hogy gyorsan és zökkenőmentesen töltődik be. Tökéletes eszköz az új felhasználók bevonásához!"
+  },
+  {
+    "id": "about.reasons.previews.title",
+    "other": "Gyönyörű előnézetek"
+  },
+  {
+    "id": "about.reasons.previews.desc",
+    "other": "Az njump mindent a szerveroldalon renderel, így képes hasznos, gazdag előnézeteket generálni, amelyek működnek a Telegramon, a Discordon, a Twitteren és más helyeken."
+  },
+  {
+    "id": "about.reasons.browser.title",
+    "other": "Nagyszerű böngészőélmény"
+  },
+  {
+    "id": "about.reasons.browser.desc",
+    "other": "Amikor egy URL-t közvetlenül a böngészőben nyitnak meg, a látogatók a hivatkozott tartalmakat, például képeket, videókat és a Nostr eseményekre mutató hivatkozásokat egyszerű, de hatékony módon jelenítik meg. Megjeleníti a szülő jegyzetet, lehetővé téve a látogató számára, hogy kövesse azt. Még saját CSS-je is van a nyomtatáshoz vagy a PDF-be exportáláshoz."
+  },
+  {
+    "id": "about.reasons.cooperative.title",
+    "other": "Együttműködő (jump-out)"
+  },
+  {
+    "id": "about.reasons.cooperative.desc",
+    "other": "Az njump nem érdekelt a felhasználók megszerzésében. Éppen ellenkezőleg, arra invitálja őket, hogy \"ugorjanak\" bármely Nostr erőforrásra a webes kliensek listájából választva, vagy a nostr: előtaggal a natív kliensekhez. Még meg is jegyzi az egyes látogatók által leggyakrabban használt klienst, és az első helyre teszi a gyors és egyszerű hozzáférés érdekében."
+  },
+  {
+    "id": "about.reasons.nip89.title",
+    "other": "NIP-89 támogatás"
+  },
+  {
+    "id": "about.reasons.nip89.desc",
+    "other": "hamarosan támogatva!"
+  },
+  {
+    "id": "about.reasons.seo.title",
+    "other": "Keresőbarát (jump-in)"
+  },
+  {
+    "id": "about.reasons.seo.desc",
+    "other": "Az njump oldalak statikusak, így a keresőmotorok indexelhetik őket. Ez azt jelenti, hogy az njump segíthet másoknak felfedezni a nagyszerű tartalmakat a Nostr-on, csatlakozni és csatlakozni hozzánk! Az njump az egyetlen Nostr erőforrás, amelynek ez a kifejezett célja. Ha fontos Önnek, hogy egy jó jegyzetet online megtaláljanak, használja az njump-ot a megosztásához. Ez segít a Nostr virágzásában és mindenki számára elérhetővé tételében."
+  },
+  {
+    "id": "about.nip05.title",
+    "other": "Ossza meg a NIP-05 profilokat"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "Ossza meg saját profilját egy szép, a <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a> által inspirált permalinkkel: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>, például: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> vagy <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile.shows",
+    "other": "A profil megjeleníti az alapvető metaadat-információit, a hozzárendelt \"outbox\" reléket és a legújabb jegyzeteit."
+  },
+  {
+    "id": "about.social.title",
+    "other": "Ossza meg a Twitteren, a Telegramon és másutt"
+  },
+  {
+    "id": "about.social.desc",
+    "other": "Gyorsan és könnyedén ossza meg a Nostr jegyzeteket a Twitteren, a Telegramon és sok más \"közösségi platformon\": csak illessze be a linket, és az njump a jegyzet szövegét egy előnézeti képpel mint vászonnal rendereli, hogy maximalizálja a megosztási élményt és a hasznosságot. A Telegramon van Instant View-nk is, amellyel a hosszú tartalmakat közvetlenül az alkalmazáson belül érheti el!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "Relé nézetek"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "Tekintse meg a relén közzétett legújabb tartalmat a <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span> segítségével, például: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "Néhány alapvető információ a reléről (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) elérhető. Reméljük, hogy az üzemeltetők személyesebbé és informatívabbá teszik ezeket a leírásokat, hogy a felhasználók eldönthessék, csatlakozzanak-e a reléhez vagy sem."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "Webhely widgetek"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "Beágyazhat jegyzeteket, hosszú tartalmakat és profilokat egy webhelyre egy egyszerű szkript segítségével:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;nip-19-entity&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "Ellenőrző eszköz"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "Tudja, mindannyian programozók vagyunk, beleértve az anyukáinkat is, így minden <i>njump</i> oldalon átkapcsolhatja a \"További részletek megjelenítése\" kapcsolót, és megvizsgálhatja az esemény teljes JSON-ját. További eszközök (például <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>) telepítése nélkül valószínűleg ez a leggyorsabb módja ennek az információnak a megszerzésének."
+  }
+]
