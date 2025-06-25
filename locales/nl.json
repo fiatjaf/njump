@@ -1,0 +1,1394 @@
+[
+  {
+    "id": "about.title",
+    "other": "Over njump"
+  },
+  {
+    "id": "about.what_is_njump",
+    "other": "Wat is njump?"
+  },
+  {
+    "id": "about.description",
+    "other": "<i>njump</i> is een HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">Nostr</a> gateway waarmee je profielen, notities en relays kunt bekijken. Het is een gemakkelijke manier om een ​​bron te bekijken en te openen met je favoriete cliënt. Het typische gebruik van <i>njump</i> is om inhoud te delen buiten de Nostr-wereld, waar het <code>nostr:</code> schema nog niet wordt herkend."
+  },
+  {
+    "id": "about.usage_instructions",
+    "other": "<i>njump</i> is momenteel te vinden onder {{.Domain}}, je kunt het bereiken door een Nostr <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a>-entiteit (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, enz.) achter het domein te plaatsen: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-19-entity&gt;</span>."
+  },
+  {
+    "id": "about.examples",
+    "other": "Hier is bijvoorbeeld <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">een gebruikersprofiel</a>, <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">een notitie</a> en een <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">lange blogpost</a>."
+  },
+  {
+    "id": "about.try_now",
+    "other": "Probeer het nu! Spring naar Nostr inhoud:"
+  },
+  {
+    "id": "about.placeholder_input",
+    "other": "plak een npub / nprofile / nevent / ..."
+  },
+  {
+    "id": "about.view_button",
+    "other": "Bekijken"
+  },
+  {
+    "id": "about.or_pick",
+    "other": "of kies"
+  },
+  {
+    "id": "about.random_content",
+    "other": "willekeurige inhoud"
+  },
+  {
+    "id": "about.reasons_intro",
+    "other": "Er zijn verschillende redenen om voor njump te kiezen bij het delen van Nostr-inhoud buiten Nostr:"
+  },
+  {
+    "id": "about.clean_fast_solid",
+    "other": "Schoon, Snel en Solide"
+  },
+  {
+    "id": "about.clean_description",
+    "other": "njump-pagina's zijn extreem licht en snel te laden. Er is geen client-side javascript bij betrokken. Ze zijn minimalistisch met de juiste aandacht voor typografie, waarbij de focus ligt op de inhoud zonder onnodige details. Bovendien worden ze in de cache opgeslagen, dus bij het delen van een pagina kun je verwachten dat deze snel en zonder wrijving laadt. Het is het perfecte hulpmiddel om nieuwe gebruikers te introduceren!"
+  },
+  {
+    "id": "about.beautiful_previews",
+    "other": "Mooie Voorbeelden"
+  },
+  {
+    "id": "about.previews_description",
+    "other": "njump rendert alles aan de serverzijde, waardoor het nuttige, rijke voorbeelden kan genereren die werken op Telegram, Discord, Twitter en andere plaatsen."
+  },
+  {
+    "id": "about.browser_experience",
+    "other": "Bij het direct openen van de URL in een browser vinden bezoekers gerefereerde inhoud zoals afbeeldingen, video's en links naar Nostr-gebeurtenissen op een eenvoudige maar effectieve manier weergegeven. Het toont de ouder van de notitie, waardoor de bezoeker deze kan opvolgen. Het heeft zelfs aangepaste CSS voor afdrukken of exporteren naar PDF."
+  },
+  {
+    "id": "about.cooperative",
+    "other": "Coöperatief (uitspringen)"
+  },
+  {
+    "id": "about.cooperative_description",
+    "other": "njump heeft geen interesse om gebruikers vast te houden. Integendeel, het nodigt hen uit om naar elke Nostr-bron te \"springen\" door te kiezen uit een lijst van webclients of, met een nostr:-prefix, voor native clients. Het onthoudt zelfs de meest gebruikte client voor elke bezoeker en plaatst deze bovenaan voor snelle, gemakkelijke toegang."
+  },
+  {
+    "id": "about.nip89_support",
+    "other": "ondersteuning komt eraan!"
+  },
+  {
+    "id": "about.search_friendly",
+    "other": "Zoekvriendelijk (inspringen)"
+  },
+  {
+    "id": "about.search_description",
+    "other": "njump-pagina's zijn statisch zodat zoekmachines ze kunnen indexeren. Dit betekent dat njump anderen kan helpen geweldige inhoud op Nostr te ontdekken, spring erin en sluit je bij ons aan! njump is de enige Nostr-bron met dit expliciete doel. Als je wilt dat een goede notitie online kan worden gevonden, gebruik dan njump om deze te delen. Dit zal Nostr helpen bloeien en toegankelijker maken voor iedereen."
+  },
+  {
+    "id": "about.share_nip05",
+    "other": "Deel NIP-05 Profielen"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "Deel je eigen profiel met een mooie <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a>-geïnspireerde permalink: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>, bijvoorbeeld: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> of <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile_shows",
+    "other": "Een profiel toont je basis metadata-info, toegewezen \"outbox\"-relais en je nieuwste notities."
+  },
+  {
+    "id": "about.share_social",
+    "other": "Delen op Twitter, Telegram en meer"
+  },
+  {
+    "id": "about.social_description",
+    "other": "Deel Nostr-notities snel en moeiteloos op Twitter, Telegram en vele andere \"sociale platforms\": plaats gewoon een link, en njump rendert de notitietekst met de voorbeeldafbeelding als canvas, om de deelervaring en bruikbaarheid te maximaliseren. Op Telegram hebben we ook de Instant View om lange inhoud in-app te bekijken!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "Relayweergaven"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "Bekijk de meest recente inhoud die naar een relay is gepost door gebruik te maken van <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span>, bijvoorbeeld: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "Enkele basis relay-informatie (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) is beschikbaar. We hopen dat operators deze beschrijvingen persoonlijker en informatiever zullen maken, zodat gebruikers een manier hebben om te beoordelen of ze lid willen worden van een relay."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "Website Widgets"
+  },
+  {
+    "id": "about.widgets_description",
+    "other": "Je kunt notities, lange inhoud en profielen insluiten in een webpagina met een eenvoudig script:"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "Je kunt notities, lange inhoud en profielen insluiten in een webpagina met een eenvoudig script:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;nip-19-entity&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "Inspectietool"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "Je weet wel, we zijn allemaal programmeurs, inclusief onze moeders, dus voor elke <i>njump</i>-pagina kun je de schakelaar \"Meer details tonen\" omzetten om de volledige gebeurtenis-JSON te inspecteren. Zonder andere tools (zoals <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>) te installeren, is dit waarschijnlijk de snelste manier om die informatie te openen."
+  },
+  {
+    "id": "homepage.title",
+    "other": "Nostr - Een Eenvoudig Protocol"
+  },
+  {
+    "id": "top.join",
+    "other": "Word lid van Nostr"
+  },
+  {
+    "id": "top.why",
+    "other": "Waarom"
+  },
+  {
+    "id": "top.get_started",
+    "other": "Beginnen"
+  },
+  {
+    "id": "top.resources",
+    "other": "Bronnen"
+  },
+  {
+    "id": "top.development",
+    "other": "Ontwikkeling"
+  },
+  {
+    "id": "top.about",
+    "other": "Over"
+  },
+  {
+    "id": "homepage.internet_today",
+    "other": "Internet voor Vandaag"
+  },
+  {
+    "id": "homepage.internet_vision",
+    "other": "Het internet begon met een visie voor een open uitwisseling van ideeën en informatie, bedoeld om de waarden van vrije meningsuiting, expressie en vereniging voor iedereen hoog te houden. Na verloop van tijd is die visie gereduceerd tot het oogpunt van wat winst kon opleveren voor grote bedrijven. Tegenwoordig is het web niets anders dan een handvol enorme servers die eigendom zijn van een paar bedrijven, maar gebruikt worden door miljarden mensen."
+  },
+  {
+    "id": "homepage.current_problems",
+    "other": "We hebben het eigendom van onze identiteiten in handen van derden gelegd. We hebben rechten op onze creaties verleend aan degenen die ervan willen profiteren. We hebben onze interesses overgedragen aan algoritmen die zijn geschreven om onze aandacht te maximaliseren. Daardoor hebben we een onevenredige hoeveelheid macht gegeven aan deze bedrijven, overheden en andere controlerende entiteiten om te beslissen wat we zien, lezen en zeggen. Het is tijd om ons te bevrijden van hun barrières en het internet te creëren dat iedereen, overal in staat stelt om te creëren, te spreken en te socialiseren zoals ze willen, zoals bedoeld was."
+  },
+  {
+    "id": "homepage.nostr_tomorrow",
+    "other": "Nostr voor Morgen"
+  },
+  {
+    "id": "homepage.nostr_intro",
+    "other": "Nostr, een acroniem voor \"Notes and Other Stuff Transmitted by Relays\", revolutioneert sociale netwerken en online communicatie door de afhankelijkheid van gecentraliseerde servers te elimineren. Het maakt gebruik van een client-relay model, waarbij gebruikers clients uitvoeren, en iedereen relays kan beheren. Informatie (en de opslag ervan) wordt verspreid over een netwerk van individuen, gepassioneerde vrijwilligers, bedrijven en non-profitorganisaties."
+  },
+  {
+    "id": "homepage.nostr_protocol",
+    "other": "Het Nostr-protocol garandeert fraudebestendige communicatie door middel van cryptografische sleutels en handtekeningen. Door gebruikers in staat te stellen paden te creëren voor het publiceren van notities naar relays en het stimuleren van de implementatie en het onderhoud van unieke, onafhankelijke relays door operators, pakt Nostr veel tekortkomingen van het huidige web aan. Van interoperabele applicaties tot unieke en alomtegenwoordige identiteiten, Nostr opent deuren naar creatieve, samenwerkingsgerichte innovatie zoals de wereld nog nooit eerder heeft gezien."
+  },
+  {
+    "id": "homepage.empowering_freedom",
+    "other": "Vrijheid versterken met Nostr"
+  },
+  {
+    "id": "homepage.secure_protocol",
+    "other": "Een veilig, gebruikersgericht protocol en sociaal netwerk"
+  },
+  {
+    "id": "homepage.own_identity",
+    "other": "Jij bent eigenaar van je identiteit"
+  },
+  {
+    "id": "homepage.own_identity_desc",
+    "other": "Nostr maakt gebruik van een publieke sleutelsysteem, waarbij je identiteit gekoppeld is aan een unieke cryptografische sleutel. Je hebt volledige controle over je identiteit zonder afhankelijk te zijn van een centrale autoriteit. Het Nostr-protocol elimineert de noodzaak van Know Your Customer (KYC) processen. Geen e-mail, ID, vingerafdruk of oogscans vereist! Je privacy is volledig van jou."
+  },
+  {
+    "id": "homepage.affirm_data",
+    "other": "Bevestig je Gegevens met Handtekeningen"
+  },
+  {
+    "id": "homepage.affirm_data_desc",
+    "other": "In Nostr ondertekenen gebruikers hun berichten met hun cryptografische sleutels. De meeste cliënten behandelen dit proces automatisch. Deze cryptografische handtekeningen garanderen de authenticiteit van je gegevens. Je kunt bewijzen wat je wel (en niet) hebt gemaakt. Door de gebruiker geselecteerde relays slaan deze gegevens op en verzenden ze. Deze relays communiceren rechtstreeks met andere gebruikers, zonder tussenstops. Elke cliënt valideert vervolgens deze handtekeningen, waardoor de integriteit van de gegevens wordt gewaarborgd."
+  },
+  {
+    "id": "homepage.connect_audience",
+    "other": "Maak rechtstreeks verbinding met uw publiek"
+  },
+  {
+    "id": "homepage.connect_audience_desc",
+    "other": "In Nostr behoud je je publiek en feed. Welke client je ook gebruikt, je contactenlijst zal er zijn. Deze wordt gepubliceerd naar de relays van jouw keuze, net als die van andere gebruikers. Iedereen kiest zijn voorkeurs publicatie relays, en clients verbinden zich daarmee om nieuwe berichten te vinden. Bovendien kunnen relays fungeren als filters tegen spam of intimidatie, en als ontdekkingsmiddelen voor goede inhoud, aggregators van gecureerde inhoud, of providers van aangepaste feeds."
+  },
+  {
+    "id": "homepage.free_to_speak",
+    "other": "Je bent vrij om te spreken"
+  },
+  {
+    "id": "homepage.free_to_speak_desc",
+    "other": "Je kunt alles publiceren wat je wilt, zolang relays bereid zijn het te accepteren. Relays kunnen opereren onder elk beleid dat hun operators mogen kiezen, inclusief verboden, verwijdering van inhoud en communityrichtlijnen. Ze kunnen ervoor kiezen om alleen bepaalde gebruikers of specifieke soorten inhoud te hosten. Als geen enkel relay accepteert wat je te zeggen hebt, kun je eenvoudig je eigen relay draaien. Wanneer je begint met publiceren naar verschillende relays, zouden clients je daar moeten kunnen vinden, op basis van bijgevoegde relay hints. Je contacten zullen dan je updates blijven ontvangen."
+  },
+  {
+    "id": "homepage.free_anonymous",
+    "other": "U bent vrij om anoniem te blijven"
+  },
+  {
+    "id": "homepage.free_anonymous_desc",
+    "other": "Nostr ondersteunt gebruikersanonimiteit. Gebruikers kunnen ervoor kiezen om anoniem te zijn of pseudoniemen te gebruiken zonder hun deelname te compromitteren. Nostr is ook beschikbaar op TOR om tracking te voorkomen. Als protocol heeft Nostr niet de capaciteit om gebruikersgegevens aan welke entiteit dan ook, overheid of anderszins, te verstrekken. Dit helpt de vrijheid van meningsuiting van alle gebruikers te beschermen tegen verboden of beperkingen. Elk individueel relais of client kan onderhevig zijn aan deze verzoeken, maar de beschikbare gegevens zouden beperkt zijn tot die van de publieke sleutel van een gebruiker. Als die gebruiker passende stappen heeft ondernomen om hun identiteit te beschermen, zou er weinig informatie te delen zijn."
+  },
+  {
+    "id": "homepage.free_develop",
+    "other": "U bent vrij om te ontwikkelen"
+  },
+  {
+    "id": "homepage.free_develop_desc",
+    "other": "Nostr moedigt ontwikkeling en aanpassing aan. Iedereen is vrij om aan het protocol te ontwikkelen en zo bij te dragen aan de groei en evolutie van het netwerk. Alle Nostr-clients, relays, tools en apps die worden gebouwd, kunnen profiteren van elke eerdere en toekomstige ontwikkeling. Ontwikkelaars hebben de vrijheid om betaalmethoden voor hun applicaties en functies in te stellen, wat een potentiële bron van inkomsten biedt zoals nooit tevoren."
+  },
+  {
+    "id": "homepage.what_waiting",
+    "other": "Waar wacht je nog op?"
+  },
+  {
+    "id": "homepage.join_nostr",
+    "other": "Word lid van Nostr"
+  },
+  {
+    "id": "homepage.get_started",
+    "other": "Beginnen met Nostr"
+  },
+  {
+    "id": "homepage.create_account",
+    "other": "Maak een account aan"
+  },
+  {
+    "id": "homepage.create_account_desc",
+    "other": "Met Nostr is er geen centrale provider die eigenaar is van je account. Sterker nog, je account wordt aangedreven door cryptografie, en je zou er zelf een (of meer!) handmatig kunnen aanmaken, zonder beperking. De gemakkelijkste manier is echter om onze <a href=\"https://nstart.me\" class=\"underline\">nieuwe online wizard</a> te gebruiken om je nieuwe account binnen enkele seconden te genereren. Daarna kun je het in heel Nostr gebruiken!"
+  },
+  {
+    "id": "homepage.secure_key",
+    "other": "Beveilig uw sleutel"
+  },
+  {
+    "id": "homepage.secure_key_desc",
+    "other": "Een account is een sleutelpaar. De privésleutel (nsec) is uw digitale identiteit. Als deze verloren of blootgesteld raakt, is er geen manier om de toegang te herstellen of inloggegevens te wijzigen. U moet uw privésleutel veilig en beveiligd bewaren. Gebruik een wachtwoordbeheerder, maak een back-up op papier en gebruik deze ALLEEN in vertrouwde apps. Voer uw nsec nooit in op een website. Installeer een <a href=\"#signers\" class=\"underline\">signer-extensie</a> om uw sleutel veilig op het web te gebruiken."
+  },
+  {
+    "id": "homepage.pick_app",
+    "other": "Kies een App"
+  },
+  {
+    "id": "homepage.pick_app_desc",
+    "other": "Nostr-ontwikkelaars hebben al verschillende applicaties gebouwd voor een breed scala aan toepassingen. De eenvoudigste manier om Nostr te gaan gebruiken, is door een <a href=\"#social\" class=\"underline\">sociale client</a> te downloaden en deel te nemen. Leer met en via de community door deel te nemen aan gesprekken. Hulp nodig? Gebruik de hashtag #asknostr!"
+  },
+  {
+    "id": "homepage.explore_nostr",
+    "other": "Ontdek Nostr"
+  },
+  {
+    "id": "homepage.explore_nostr_desc",
+    "other": "Nadat je bekend bent met de basisconcepten, kun je je favoriete sleutelbeheertool instellen om andere sociale clients en <a href=\"#readwrite\" class=\"underline\">Nostr-applicaties</a> te verkennen. Je hebt al je digitale identiteit en deze werkt overal. Log eenvoudig in met je Nostr signer-app, signing-extensie of nsec. Als je je privésleutel gebruikt, zorg er dan voor dat de app afkomstig is van een vertrouwde bron!"
+  },
+  {
+    "id": "homepage.nostr_resources",
+    "other": "Nostr Bronnen"
+  },
+  {
+    "id": "homepage.discover_what",
+    "other": "Ontdek wat u met Nostr kunt doen"
+  },
+  {
+    "id": "homepage.multimedia",
+    "other": "Multimedia"
+  },
+  {
+    "id": "homepage.live_stream",
+    "other": "Livestream"
+  },
+  {
+    "id": "homepage.read_write",
+    "other": "Lezen en Schrijven"
+  },
+  {
+    "id": "homepage.communities",
+    "other": "Gemeenschappen"
+  },
+  {
+    "id": "homepage.other_stuff",
+    "other": "Overige zaken"
+  },
+  {
+    "id": "homepage.key_security",
+    "other": "Sleutelbeveiliging"
+  },
+  {
+    "id": "homepage.apps_selection",
+    "other": "Dit is slechts een snelle selectie van de meer dan 100 applicaties die al op Nostr zijn gebouwd, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">ontdek ze allemaal</a>!"
+  },
+  {
+    "id": "homepage.develop_nostr",
+    "other": "Ontwikkelen op Nostr"
+  },
+  {
+    "id": "homepage.where_started",
+    "other": "Waar het allemaal begon"
+  },
+  {
+    "id": "homepage.where_started_desc",
+    "other": "Het Nostr \"manifest\" werd gepubliceerd in 2019. Langzaam maar zeker verzamelde een gemeenschap zich rond het idee en breidde het uit, waardoor het een snel, flexibel en betrouwbaar protocol werd dat dagelijks door veel echte mensen wordt gebruikt."
+  },
+  {
+    "id": "homepage.read_more",
+    "other": "Lees meer >>"
+  },
+  {
+    "id": "homepage.discover_nips",
+    "other": "Ontdek de NIPs"
+  },
+  {
+    "id": "homepage.discover_nips_desc",
+    "other": "NIPs staan voor \"Nostr Implementation Possibilities\". Ze dienen als leidraad voor wat kan worden geïmplementeerd door Nostr-compatibele relay- en clientsoftware. Bestudeer deze om je nieuwe Nostr-applicatie met optimale netwerkcompatibiliteit te ontwikkelen."
+  },
+  {
+    "id": "homepage.design_guide",
+    "other": "De Ontwerpgids"
+  },
+  {
+    "id": "homepage.design_guide_desc",
+    "other": "Nostrdesign.org is de officiële bron om te ontdekken hoe je de interface van je Nostr-applicatie het beste kunt ontwikkelen. Verken nieuwe paradigma's, optimaliseer je UI en vind tips over hoe je de gebruikerservaring kunt verbeteren, allemaal op één plek."
+  },
+  {
+    "id": "homepage.nostr_client_alt",
+    "other": "Nostr Cliënt"
+  },
+  {
+    "id": "homepage.a_protocol",
+    "other": "EEN PROTOCOL"
+  },
+  {
+    "id": "homepage.not_crypto",
+    "other": "GEEN CRYPTOCURRENCY"
+  },
+  {
+    "id": "homepage.simple",
+    "other": "EENVOUDIG"
+  },
+  {
+    "id": "homepage.not_blockchain",
+    "other": "GEEN BLOCKCHAIN"
+  },
+  {
+    "id": "homepage.universal_identity",
+    "other": "EEN UNIVERSELE IDENTITEIT"
+  },
+  {
+    "id": "homepage.not_company",
+    "other": "GEEN BEDRIJF"
+  },
+  {
+    "id": "homepage.free_expression",
+    "other": "VRIJE MENINGSUITING"
+  },
+  {
+    "id": "homepage.free_association",
+    "other": "VRIJE VERENIGING"
+  },
+  {
+    "id": "homepage.for_friends_enemies",
+    "other": "VOOR VRIENDEN EN VIJANDEN"
+  },
+  {
+    "id": "homepage.for_everyone",
+    "other": "VOOR IEDEREEN"
+  },
+  {
+    "id": "homepage.for_broadcasting",
+    "other": "VOOR UITZENDING"
+  },
+  {
+    "id": "homepage.for_closed_groups",
+    "other": "VOOR GESLOTEN GROEPEN"
+  },
+  {
+    "id": "homepage.for_all_opinions",
+    "other": "VOOR ALLE MENINGEN"
+  },
+  {
+    "id": "homepage.like_internet",
+    "other": "ZOALS HET INTERNET ZELF"
+  },
+  {
+    "id": "homepage.flexible",
+    "other": "FLEXIBEL"
+  },
+  {
+    "id": "homepage.scalable",
+    "other": "SCHAALBAAR"
+  },
+  {
+    "id": "homepage.real_public_square",
+    "other": "EEN ECHTE OPENBARE PLEK"
+  },
+  {
+    "id": "homepage.client_relay",
+    "other": "CLIENT-RELAY"
+  },
+  {
+    "id": "homepage.not_p2p",
+    "other": "GEEN P2P"
+  },
+  {
+    "id": "homepage.old_web",
+    "other": "HET OUDE WEB"
+  },
+  {
+    "id": "homepage.truly_decentralized",
+    "other": "ECHT GEDECENTRALISEERD"
+  },
+  {
+    "id": "homepage.communities_done_right",
+    "other": "GEMEENSCHAPPEN GOED GEDAAN"
+  },
+  {
+    "id": "homepage.open_alternative",
+    "other": "HET OPEN ALTERNATIEF"
+  },
+  {
+    "id": "homepage.social_wikis",
+    "other": "SOCIALE WIKIS"
+  },
+  {
+    "id": "homepage.git_collaboration",
+    "other": "GIT SAMENWERKING"
+  },
+  {
+    "id": "homepage.long_form_articles",
+    "other": "LANGERE ARTIKELEN"
+  },
+  {
+    "id": "homepage.microblogging",
+    "other": "MICROBLOGGING"
+  },
+  {
+    "id": "homepage.livestreaming",
+    "other": "LIVESTREAMING"
+  },
+  {
+    "id": "homepage.forums",
+    "other": "FORUMS"
+  },
+  {
+    "id": "homepage.annotating_web",
+    "other": "DE WEB ANNOTEREN"
+  },
+  {
+    "id": "homepage.commenting_anything",
+    "other": "OVERAL COMMENTAAR OP GEVEN"
+  },
+  {
+    "id": "homepage.social_web_tomorrow",
+    "other": "HET SOCIALE WEB VAN MORGEN"
+  },
+  {
+    "id": "homepage.for_you_today",
+    "other": "VOOR JOU, VANDAAG"
+  },
+  {
+    "id": "homepage.dots",
+    "other": "......."
+  },
+  {
+    "id": "0xchat",
+    "other": "0xchat"
+  },
+  {
+    "id": "<a class=\"border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink\" itemprop=\"url\" href={ templ.URL(\"https://\" + params.Hostname) } target=\"_blank\" _=\"on mouseenter set my innerText to my.innerText.replace('wss://', 'https://') on mouseleave set my innerText to my.innerText.replace('https://', 'wss://')\" >{ \"wss://\" + params.Hostname }</a>",
+    "other": "<a class=\"border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink\" itemprop=\"url\" href={ templ.URL(\"https://\" + params.Hostname) } target=\"_blank\" _=\"on mouseenter set my innerText to my.innerText.replace('wss://', 'https://') on mouseleave set my innerText to my.innerText.replace('https://', 'wss://')\" >{ \"wss://\" + params.Hostname }</a>"
+  },
+  {
+    "id": "<a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/89.md\">NIP-89</a> support coming!",
+    "other": "<a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/89.md\">NIP-89</a> ondersteuning komt eraan!"
+  },
+  {
+    "id": "<a itemprop=\"sameAs\" class=\"border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink\" href={ templ.URL(params.NormalizedAuthorWebsiteURL) } >{ params.Metadata.Website }</a>",
+    "other": "<a itemprop=\"sameAs\" class=\"border-b-2 border-b-gray-300 pb-0.5 hover:text-strongpink\" href={ templ.URL(params.NormalizedAuthorWebsiteURL) } >{ params.Metadata.Website }</a>"
+  },
+  {
+    "id": "<div class=\"inline-block px-2 mr-2 text-base bg-strongpink text-white rounded-md\">Wiki <span class=\"text-base\">＞</span></div> <div class=\"inline-block\">{ params.WikiEvent.Title }</div>",
+    "other": "<div class=\"inline-block px-2 mr-2 text-base bg-strongpink text-white rounded-md\">Wiki <span class=\"text-base\">＞</span></div> <div class=\"inline-block\">{ params.WikiEvent.Title }</div>"
+  },
+  {
+    "id": "<div class=\"text-[3.5em] sm:text-[4em] leading-[1em] text-neutral-300\"> NOSTR <span class=\"text-neutral-400\">IS</span> </div> <div class=\"text-[2.5em] h-20 sm:h-auto sm:text-[5em] leading-[1em] break-words\" id=\"tw\">A PROTOCOL</div> <script> var tw = document.getElementById('tw') new Typewriter(tw, { strings: [ '', 'A PROTOCOL', 'NOT A CRYPTOCURRENCY', 'SIMPLE', 'NOT A BLOCKCHAIN', 'A UNIVERSAL IDENTITY', 'NOT A COMPANY', 'FREE EXPRESSION', 'FREE ASSOCIATION', 'FOR FRIENDS AND ENEMIES', 'FOR EVERYONE', 'FOR BROADCASTING', 'FOR CLOSED GROUPS', 'FOR ALL OPINIONS', 'LIKE THE INTERNET ITSELF', 'FLEXIBLE', 'SCALABLE', 'A REAL PUBLIC SQUARE', 'CLIENT-RELAY', 'NOT P2P', 'THE OLD WEB', 'TRULY DECENTRALIZED', 'COMMUNITIES DONE RIGHT', 'THE OPEN ALTERNATIVE', 'SOCIAL WIKIS', 'GIT COLLABORATION', 'LONG-FORM ARTICLES', 'MICROBLOGGING', 'LIVESTREAMING', 'FORUMS', 'ANNOTATING THE WEB', 'COMMENTING ON ANYTHING', 'THE SOCIAL WEB OF TOMORROW', 'FOR YOU, TODAY', '.......' ], autoStart: true, loop: true, cursorClassName: 'typewriter-cursor', pauseFor: 3000 }) </script>",
+    "other": "<div class=\"text-[3.5em] sm:text-[4em] leading-[1em] text-neutral-300\"> NOSTR <span class=\"text-neutral-400\">IS</span> </div> <div class=\"text-[2.5em] h-20 sm:h-auto sm:text-[5em] leading-[1em] break-words\" id=\"tw\">EEN PROTOCOL</div> <script> var tw = document.getElementById('tw') new Typewriter(tw, { strings: [ '', 'EEN PROTOCOL', 'GEEN CRYPTOCURRENCY', 'EENVOUDIG', 'GEEN BLOCKCHAIN', 'EEN UNIVERSELE IDENTITEIT', 'GEEN BEDRIJF', 'VRIJE MENINGSUITING', 'VRIJE VERENIGING', 'VOOR VRIENDEN EN VIJANDEN', 'VOOR IEDEREEN', 'VOOR UITZENDING', 'VOOR GESLOTEN GROEPEN', 'VOOR ALLE MENINGEN', 'ZOALS HET INTERNET ZELF', 'FLEXIBEL', 'SCHAALBAAR', 'EEN ECHTE OPENBARE PLEK', 'CLIENT-RELAY', 'GEEN P2P', 'HET OUDE WEB', 'ECHT GEDECENTRALISEERD', 'GEMEENSCHAPPEN GOED GEDAAN', 'HET OPEN ALTERNATIEF', 'SOCIALE WIKIS', 'GIT SAMENWERKING', 'LANGERE ARTIKELEN', 'MICROBLOGGING', 'LIVESTREAMING', 'FORUMS', 'DE WEB ANNOTEREN', 'OVERAL COMMENTAAR OP GEVEN', 'HET SOCIALE WEB VAN MORGEN', 'VOOR JOU, VANDAAG', '.......' ], autoStart: true, loop: true, cursorClassName: 'typewriter-cursor', pauseFor: 3000 }) </script>"
+  },
+  {
+    "id": "<div id=\"profile_name\" class=\"text-2xl break-words\"> if params.Metadata.Event == nil { <span class=\"text-stone-200 font-bold\">&lt;unnamed&gt;</span> } else { { params.Metadata.Name } } </div> if params.Metadata.Name != params.Metadata.DisplayName { <div class=\"text-xl text-stone-400 break-words\"> { params.Metadata.DisplayName } </div> }",
+    "other": "<div id=\"profile_name\" class=\"text-2xl break-words\"> if params.Metadata.Event == nil { <span class=\"text-stone-200 font-bold\">&lt;onbenoemd&gt;</span> } else { { params.Metadata.Name } } </div> if params.Metadata.Name != params.Metadata.DisplayName { <div class=\"text-xl text-stone-400 break-words\"> { params.Metadata.DisplayName } </div> }"
+  },
+  {
+    "id": "<div id=\"relay_name\" class=\"text-2xl\">{ params.Info.Name }</div>",
+    "other": "<div id=\"relay_name\" class=\"text-2xl\">{ params.Info.Name }</div>"
+  },
+  {
+    "id": "<i>njump</i> currently lives under { s.Domain }, you can reach it by appending a Nostr <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\" > NIP-19 </a> entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, etc) after the domain: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\"> { s.Domain }/&lt;nip-19-entity&gt; </span>.",
+    "other": "<i>njump</i> is momenteel te vinden onder { s.Domain }, je kunt het bereiken door een Nostr <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\" > NIP-19 </a>-entiteit (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, enz.) achter het domein te plaatsen: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\"> { s.Domain }/&lt;nip-19-entity&gt; </span>."
+  },
+  {
+    "id": "<i>njump</i> has no interest capturing users. On the contrary, it invites them to \"jump\" to any Nostr resource by picking from a list of web clients or, with a <code>nostr:</code> prefix, for native clients. It even remembers the most used client for each visitor and puts it on the top for fast, easy access.",
+    "other": "<i>njump</i> heeft geen interesse in het vangen van gebruikers. Integendeel, het nodigt hen uit om naar elke Nostr-bron te \"springen\" door te kiezen uit een lijst van webclients of, met een <code>nostr:</code> prefix, voor native clients. Het onthoudt zelfs de meest gebruikte client voor elke bezoeker en plaatst deze bovenaan voor snelle, gemakkelijke toegang."
+  },
+  {
+    "id": "<i>njump</i> is a HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\"> Nostr </a> gateway that allows you to browse profiles, notes and relays. It is an easy way to preview a resource and open it with your preferred client. The typical use of <i>njump</i> is to share content outside the Nostr world, where the <code>nostr:</code> schema is not yet recognized.",
+    "other": "<i>njump</i> is een HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\"> Nostr </a> gateway waarmee je profielen, notities en relays kunt bekijken. Het is een gemakkelijke manier om een ​​bron te bekijken en te openen met je favoriete cliënt. Het typische gebruik van <i>njump</i> is om inhoud te delen buiten de Nostr-wereld, waar het <code>nostr:</code> schema nog niet wordt herkend."
+  },
+  {
+    "id": "<i>njump</i> pages are extremely lightweight and fast to load. There is no client side javascript involved. They are minimalistic with the right attention to typography, focusing on the content without unnecessary details. Furthermore they are cached, so when sharing a page you can expect it to load fast and without friction. It's the perfect tool to onboard new users!",
+    "other": "njump-pagina's zijn extreem licht en snel te laden. Er is geen client-side javascript bij betrokken. Ze zijn minimalistisch met de juiste aandacht voor typografie, waarbij de focus ligt op de inhoud zonder onnodige details. Bovendien worden ze in de cache opgeslagen, dus bij het delen van een pagina kun je verwachten dat deze snel en zonder wrijving laadt. Het is het perfecte hulpmiddel om nieuwe gebruikers te introduceren!"
+  },
+  {
+    "id": "<i>njump</i> pages are static so that search engines can index them. This means that <i>njump</i> can help others to discover great content on Nostr, jump in and join us! <i>njump</i> is the only Nostr resource with this explicit goal. If you care that a good note can be found online, use <i>njump</i> to share it. This will help Nostr to flourish and make it more accessible to everyone.",
+    "other": "njump-pagina's zijn statisch zodat zoekmachines ze kunnen indexeren. Dit betekent dat njump anderen kan helpen geweldige inhoud op Nostr te ontdekken, spring erin en sluit je bij ons aan! njump is de enige Nostr-bron met dit expliciete doel. Als je wilt dat een goede notitie online kan worden gevonden, gebruik dan njump om deze te delen. Dit zal Nostr helpen bloeien en toegankelijker maken voor iedereen."
+  },
+  {
+    "id": "<i>njump</i> renders everything on the server-side, so it is able to generate useful, rich previews that work on Telegram, Discord, Twitter, and other places.",
+    "other": "njump rendert alles aan de serverzijde, waardoor het nuttige, rijke voorbeelden kan genereren die werken op Telegram, Discord, Twitter en andere plaatsen."
+  },
+  {
+    "id": "<img class=\"block h-auto w-full\" src={ params.Info.Icon }/>",
+    "other": "<img class=\"block h-auto w-full\" src={ params.Info.Icon }/>"
+  },
+  {
+    "id": "<img class=\"block h-auto w-full\" src={ params.Metadata.Picture } itemprop=\"image\"/>",
+    "other": "<img class=\"block h-auto w-full\" src={ params.Metadata.Picture } itemprop=\"image\"/>"
+  },
+  {
+    "id": "<img class=\"dark:hidden\" src=\"/njump/static/home/home01.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home01-dark.png\"/>",
+    "other": "<img class=\"dark:hidden\" src=\"/njump/static/home/home01.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home01-dark.png\"/>"
+  },
+  {
+    "id": "<img class=\"dark:hidden\" src=\"/njump/static/home/home02.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home02-dark.png\"/>",
+    "other": "<img class=\"dark:hidden\" src=\"/njump/static/home/home02.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home02-dark.png\"/>"
+  },
+  {
+    "id": "<img class=\"dark:hidden\" src=\"/njump/static/home/home03.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home03-dark.png\"/>",
+    "other": "<img class=\"dark:hidden\" src=\"/njump/static/home/home03.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home03-dark.png\"/>"
+  },
+  {
+    "id": "<img class=\"dark:hidden\" src=\"/njump/static/home/home04.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home04-dark.png\"/>",
+    "other": "<img class=\"dark:hidden\" src=\"/njump/static/home/home04.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home04-dark.png\"/>"
+  },
+  {
+    "id": "<img class=\"dark:hidden\" src=\"/njump/static/home/home05.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home05-dark.png\"/>",
+    "other": "<img class=\"dark:hidden\" src=\"/njump/static/home/home05.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home05-dark.png\"/>"
+  },
+  {
+    "id": "<img class=\"dark:hidden\" src=\"/njump/static/home/home06.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home06-dark.png\"/>",
+    "other": "<img class=\"dark:hidden\" src=\"/njump/static/home/home06.png\"/> <img class=\"hidden dark:inline\" src=\"/njump/static/home/home06-dark.png\"/>"
+  },
+  {
+    "id": "<img itemprop=\"image\" class=\"block h-auto w-full\" src={ metadata.Picture }/>",
+    "other": "<img itemprop=\"image\" class=\"block h-auto w-full\" src={ metadata.Picture }/>"
+  },
+  {
+    "id": "<img src=\"/njump/static/home/client.png\" class=\"sm:h-full sm:object-cover\" alt=\"Nostr Client\"/>",
+    "other": "<img src=\"/njump/static/home/client.png\" class=\"sm:h-full sm:object-cover\" alt=\"Nostr Cliënt\"/>"
+  },
+  {
+    "id": "<span class=\"hidden\" itemprop=\"name identifier\">{ relay }</span> <a itemprop=\"url\" href={ templ.URL(\"/r/\" + relay) } class=\"mr-1 mt-2 inline-block max-w-full rounded-lg border border-slate-300 px-2 py-0.5 hover:border hover:border-solid hover:border-strongpink hover:bg-strongpink hover:text-white\" > { relay } </a>",
+    "other": "<span class=\"hidden\" itemprop=\"name identifier\">{ relay }</span> <a itemprop=\"url\" href={ templ.URL(\"/r/\" + relay) } class=\"mr-1 mt-2 inline-block max-w-full rounded-lg border border-slate-300 px-2 py-0.5 hover:border hover:border-solid hover:border-strongpink hover:bg-strongpink hover:text-white\" > { relay } </a>"
+  },
+  {
+    "id": "<span class=\"mr-2\">{ params.LiveEvent.Title }</span> switch params.LiveEvent.Status { case \"ended\": <span class=\"whitespace-nowrap rounded bg-neutral-400 px-4 py-1 align-text-top text-base text-white dark:bg-neutral-700\">Ended</span> case \"live\": <span class=\"whitespace-nowrap rounded bg-strongpink px-4 py-1 align-text-top text-base text-white\">Live now!</span> }",
+    "other": "<span class=\"mr-2\">{ params.LiveEvent.Title }</span> switch params.LiveEvent.Status { case \"ended\": <span class=\"whitespace-nowrap rounded bg-neutral-400 px-4 py-1 align-text-top text-base text-white dark:bg-neutral-700\">Beëindigd</span> case \"live\": <span class=\"whitespace-nowrap rounded bg-strongpink px-4 py-1 align-text-top text-base text-white\">Nu live!</span> }"
+  },
+  {
+    "id": "@clientsTemplate(params.Clients)",
+    "other": "@clientsTemplate(params.Clients)"
+  },
+  {
+    "id": "@templ.Raw(details.EventJSON)",
+    "other": "@templ.Raw(details.EventJSON)"
+  },
+  {
+    "id": "@templ.Raw(params.Content)",
+    "other": "@templ.Raw(params.Content)"
+  },
+  {
+    "id": "@templ.Raw(params.RenderedAuthorAboutText)",
+    "other": "@templ.Raw(params.RenderedAuthorAboutText)"
+  },
+  {
+    "id": "A PROTOCOL",
+    "other": "EEN PROTOCOL"
+  },
+  {
+    "id": "A profile shows your basic metadata info, assigned \"outbox\" relays, and your latest notes.",
+    "other": "Een profiel toont je basis metadata-info, toegewezen \"outbox\"-relais en je nieuwste notities."
+  },
+  {
+    "id": "A secure, user-centric protocol and social network",
+    "other": "Een veilig, gebruikersgericht protocol en sociaal netwerk"
+  },
+  {
+    "id": "Affirm Your Data with Signatures",
+    "other": "Bevestig je Gegevens met Handtekeningen"
+  },
+  {
+    "id": "After you are familiar with the basic concepts, you can set up your preferred key management tool to explore other social clients and <a href=\"#readwrite\" class=\"underline\">Nostr applications</a>. You already have your digital identity and it works everywhere. Simply login in using your Nostr signer app, signing extension, or nsec. If using your private key, be sure the app is from a trusted source!",
+    "other": "Nadat je bekend bent met de basisconcepten, kun je je favoriete sleutelbeheertool instellen om andere sociale clients en <a href=\"#readwrite\" class=\"underline\">Nostr-applicaties</a> te verkennen. Je hebt al je digitale identiteit en deze werkt overal. Log eenvoudig in met je Nostr signer-app, signing-extensie of nsec. Als je je privésleutel gebruikt, zorg er dan voor dat de app afkomstig is van een vertrouwde bron!"
+  },
+  {
+    "id": "Amber",
+    "other": "Amber"
+  },
+  {
+    "id": "Amethyst",
+    "other": "Amethyst"
+  },
+  {
+    "id": "An account is a key-pair. The private key (nsec) is your digital identity. If it is lost or exposed, there is no means to recover access or change credentials. You need to keep your private key safe and secure. Use a password manager, make a backup on paper, and use it ONLY in trusted apps. Never enter your nsec in a website. Install a <a href=\"#signers\" class=\"underline\">signer extension</a> to use your key safely on the web.",
+    "other": "Een account is een sleutelpaar. De privésleutel (nsec) is uw digitale identiteit. Als deze verloren of blootgesteld raakt, is er geen manier om de toegang te herstellen of inloggegevens te wijzigen. U moet uw privésleutel veilig en beveiligd bewaren. Gebruik een wachtwoordbeheerder, maak een back-up op papier en gebruik deze ALLEEN in vertrouwde apps. Voer uw nsec nooit in op een website. Installeer een <a href=\"#signers\" class=\"underline\">signer-extensie</a> om uw sleutel veilig op het web te gebruiken."
+  },
+  {
+    "id": "Are you lost? <a href=\"/\" class=\"block leading-3 underline decoration-neutral-400 underline-offset-4\" >Go to the homepage</a>",
+    "other": "Ben je verdwaald? <a href=\"/\" class=\"block leading-3 underline decoration-neutral-400 underline-offset-4\" >Ga naar de homepage</a>"
+  },
+  {
+    "id": "Beautiful Previews",
+    "other": "Mooie Voorbeelden"
+  },
+  {
+    "id": "Chachi",
+    "other": "Chachi"
+  },
+  {
+    "id": "Clean, Fast, and Solid",
+    "other": "Schoon, Snel en Solide"
+  },
+  {
+    "id": "Communities",
+    "other": "Gemeenschappen"
+  },
+  {
+    "id": "Connect Directly with Your Audience",
+    "other": "Maak rechtstreeks verbinding met uw publiek"
+  },
+  {
+    "id": "Cooperative (jump-out)",
+    "other": "Coöperatief (uitspringen)"
+  },
+  {
+    "id": "Create an Account",
+    "other": "Maak een account aan"
+  },
+  {
+    "id": "Develop on Nostr",
+    "other": "Ontwikkelen op Nostr"
+  },
+  {
+    "id": "Discover some of what you can do with Nostr",
+    "other": "Ontdek wat u met Nostr kunt doen"
+  },
+  {
+    "id": "Discover the NIPs",
+    "other": "Ontdek de NIPs"
+  },
+  {
+    "id": "Emojito",
+    "other": "Emojito"
+  },
+  {
+    "id": "Explore Nostr",
+    "other": "Ontdek Nostr"
+  },
+  {
+    "id": "Feeder",
+    "other": "Feeder"
+  },
+  {
+    "id": "Flotilla",
+    "other": "Flotilla"
+  },
+  {
+    "id": "For example, here's <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\" > a user profile </a>, <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\" > a note </a> and a <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\" > long blog post </a> .",
+    "other": "Hier is bijvoorbeeld <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">een gebruikersprofiel</a>, <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">een notitie</a> en een <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">lange blogpost</a>."
+  },
+  {
+    "id": "From { params.StartAtTime } to { params.EndAtTime } ({ params.TimeZone })",
+    "other": "Van { params.StartAtTime } tot { params.EndAtTime } ({ params.TimeZone })"
+  },
+  {
+    "id": "Get Started with Nostr",
+    "other": "Beginnen met Nostr"
+  },
+  {
+    "id": "Habla",
+    "other": "Habla"
+  },
+  {
+    "id": "Highlight",
+    "other": "Markeren"
+  },
+  {
+    "id": "In Nostr, users sign their posts with their cryptographic keys. Most clients handle this process automatically. These cryptographic signatures ensure the authenticity of your data. You can prove what you did (and did not) create. User-selected relays store and send this data. These relays communicate directly with other users, with no stops between. Each client then validates these signatures, ensuring the data's integrity.",
+    "other": "In Nostr ondertekenen gebruikers hun berichten met hun cryptografische sleutels. De meeste clients behandelen dit proces automatisch. Deze cryptografische handtekeningen garanderen de authenticiteit van uw gegevens. U kunt bewijzen wat u wel (en niet) heeft gemaakt. Door de gebruiker geselecteerde relays slaan deze gegevens op en verzenden ze. Deze relays communiceren rechtstreeks met andere gebruikers, zonder tussenstops. Elke client valideert vervolgens deze handtekeningen, waardoor de integriteit van de gegevens wordt gewaarborgd."
+  },
+  {
+    "id": "In Nostr, you maintain your audience and feed. Whichever client you use, your contact list will be there. It is published to the relays of your choice, as is that of other users. Everyone chooses their preferred publication relays, and clients connect to those to find new posts. Additionally, relays can act as filters against spam or harassment, and as discovery vehicles for good content, aggregators of curated content, or providers of custom feeds.",
+    "other": "In Nostr behoud je je publiek en feed. Welke client je ook gebruikt, je contactenlijst zal er zijn. Deze wordt gepubliceerd naar de relays van jouw keuze, net als die van andere gebruikers. Iedereen kiest zijn voorkeurs publicatie relays, en clients verbinden zich daarmee om nieuwe berichten te vinden. Bovendien kunnen relays fungeren als filters tegen spam of intimidatie, en als ontdekkingsmiddelen voor goede inhoud, aggregators van gecureerde inhoud, of providers van aangepaste feeds."
+  },
+  {
+    "id": "Inspector Tool",
+    "other": "Inspectietool"
+  },
+  {
+    "id": "Internet for Today",
+    "other": "Internet voor Vandaag"
+  },
+  {
+    "id": "Key Security",
+    "other": "Sleutelbeveiliging"
+  },
+  {
+    "id": "Lantern",
+    "other": "Lantern"
+  },
+  {
+    "id": "Last Notes",
+    "other": "Laatste Notities"
+  },
+  {
+    "id": "Live Party",
+    "other": "Live Party"
+  },
+  {
+    "id": "Live Stream",
+    "other": "Livestream"
+  },
+  {
+    "id": "Multimedia",
+    "other": "Multimedia"
+  },
+  {
+    "id": "Nests",
+    "other": "Nests"
+  },
+  {
+    "id": "Nostr developers have already built several applications for a wide variety of uses. The simplest way to start using Nostr is to download a <a href=\"#social\" class=\"underline\">social client</a> and get involved. Learn with and through the community by engaging in conversation. Need help? Use the #asknostr hashtag!",
+    "other": "Nostr-ontwikkelaars hebben al verschillende applicaties gebouwd voor een breed scala aan toepassingen. De eenvoudigste manier om Nostr te gaan gebruiken, is door een <a href=\"#social\" class=\"underline\">sociale client</a> te downloaden en deel te nemen. Leer met en via de community door deel te nemen aan gesprekken. Hulp nodig? Gebruik de hashtag #asknostr!"
+  },
+  {
+    "id": "Nostr encourages development and customization. Anyone is free to develop on the protocol, contributing to the growth and evolution of the network. All Nostr clients, relays, tools, and apps that are built can benefit from every past and future development. Builders have the freedom to establish payment methods for their applications and features, providing a potential source of revenue like never before.",
+    "other": "Nostr moedigt ontwikkeling en aanpassing aan. Iedereen is vrij om aan het protocol te ontwikkelen en zo bij te dragen aan de groei en evolutie van het netwerk. Alle Nostr-clients, relays, tools en apps die worden gebouwd, kunnen profiteren van elke eerdere en toekomstige ontwikkeling. Ontwikkelaars hebben de vrijheid om betaalmethoden voor hun applicaties en functies in te stellen, wat een potentiële bron van inkomsten biedt zoals nooit tevoren."
+  },
+  {
+    "id": "Nostr for Tomorrow",
+    "other": "Nostr voor Morgen"
+  },
+  {
+    "id": "Nostr supports user anonymity. Users can choose to be anonymous or use pseudonyms without compromising their ability to participate. Nostr is also available on TOR to prevent tracking. As a protocol, Nostr does not have the capacity to provide user data to any entity, governmental or otherwise. This helps to safeguard all users' freedom of expression from prohibitions or restrictions. Any individual relay or client could be subject to these requests, but available data would be limited to that of a user's public key. If that user has taken appropriate steps to protect their identity, there would be little information to share.",
+    "other": "Nostr ondersteunt gebruikersanonimiteit. Gebruikers kunnen ervoor kiezen om anoniem te zijn of pseudoniemen te gebruiken zonder hun deelname te compromitteren. Nostr is ook beschikbaar op TOR om tracking te voorkomen. Als protocol heeft Nostr niet de capaciteit om gebruikersgegevens aan welke entiteit dan ook, overheid of anderszins, te verstrekken. Dit helpt de vrijheid van meningsuiting van alle gebruikers te beschermen tegen verboden of beperkingen. Elk individueel relais of client kan onderhevig zijn aan deze verzoeken, maar de beschikbare gegevens zouden beperkt zijn tot die van de publieke sleutel van een gebruiker. Als die gebruiker passende stappen heeft ondernomen om hun identiteit te beschermen, zou er weinig informatie te delen zijn."
+  },
+  {
+    "id": "Nostr uses a public key system, where your identity is tied to a unique cryptographic key. You have full control over your identity without relying on any central authority. Nostr's protocol eliminates the need for Know Your Customer (KYC) processes. No email, ID, thumbprint, or eyeball scans required! Your privacy is entirely yours to keep.",
+    "other": "Nostr maakt gebruik van een publieke sleutelsysteem, waarbij je identiteit gekoppeld is aan een unieke cryptografische sleutel. Je hebt volledige controle over je identiteit zonder afhankelijk te zijn van een centrale autoriteit. Het Nostr-protocol elimineert de noodzaak van Know Your Customer (KYC) processen. Geen e-mail, ID, vingerafdruk of oogscans vereist! Je privacy is volledig van jou."
+  },
+  {
+    "id": "Nostur",
+    "other": "Nostur"
+  },
+  {
+    "id": "Obstrlish",
+    "other": "Obstrlish"
+  },
+  {
+    "id": "Other Stuff",
+    "other": "Overige zaken"
+  },
+  {
+    "id": "Pick an App",
+    "other": "Kies een App"
+  },
+  {
+    "id": "Quickly and effortlessly share Nostr notes on Twitter, Telegram, and many other \"social platforms\": just drop a link, and njump will render the note text using the preview image as a canvas, to maximize the sharing experience and utility. <br/> On Telegram, we have also the Instant View to access long content in-app!",
+    "other": "Deel Nostr-notities snel en moeiteloos op Twitter, Telegram en vele andere \"sociale platforms\": plaats gewoon een link, en njump rendert de notitietekst met de voorbeeldafbeelding als canvas, om de deelervaring en bruikbaarheid te maximaliseren. Op Telegram hebben we ook de Instant View om lange inhoud in-app te bekijken!"
+  },
+  {
+    "id": "Read & Write",
+    "other": "Lezen en Schrijven"
+  },
+  {
+    "id": "Relay Views",
+    "other": "Relayweergaven"
+  },
+  {
+    "id": "Search-Friendly (jump-in)",
+    "other": "Zoekvriendelijk (inspringen)"
+  },
+  {
+    "id": "Secure your Key",
+    "other": "Beveilig uw sleutel"
+  },
+  {
+    "id": "Share NIP-05 Profiles",
+    "other": "Deel NIP-05 Profielen"
+  },
+  {
+    "id": "Share on Twitter, Telegram, and More",
+    "other": "Delen op Twitter, Telegram en meer"
+  },
+  {
+    "id": "Share your own profile with a pretty <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\" > NIP-05 </a> inspired permalink: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\"> { s.Domain }/&lt;nip-05&gt; </span> , for example: <a class=\"underline\" href=\"/nvk.org\">https://{ s.Domain }/nvk.org</a> or <a class=\"underline\" href=\"/mike@mikedilger.com\"> https://{ s.Domain }/mike@mikedilger.com </a> .",
+    "other": "Deel je eigen profiel met een mooie <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a>-geïnspireerde permalink: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\"> { s.Domain }/&lt;nip-05&gt; </span> , bijvoorbeeld: <a class=\"underline\" href=\"/nvk.org\">https://{ s.Domain }/nvk.org</a> of <a class=\"underline\" href=\"/mike@mikedilger.com\"> https://{ s.Domain }/mike@mikedilger.com </a>."
+  },
+  {
+    "id": "Some basic relay information ( <a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\" > NIP-11 </a> ) is available. We hope operators will start to make these descriptors more personal and informative, so users can have a way to evaluate whether or not to join a relay.",
+    "other": "Enkele basis relay-informatie (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) is beschikbaar. We hopen dat operators deze beschrijvingen persoonlijker en informatiever zullen maken, zodat gebruikers een manier hebben om te beoordelen of ze lid willen worden van een relay."
+  },
+  {
+    "id": "The Design Guide",
+    "other": "De Ontwerpgids"
+  },
+  {
+    "id": "The Nostr protocol ensures tamperproof communication through cryptographic keys and signatures. By enabling users to establish pathways for publishing notes to relays and incentivizing the deployment and maintenance of unique, independent relays by operators, Nostr addresses many shortcomings of the current web. From interoperable applications to unique and ubiquitous identities, Nostr opens doors to creative, collabrotive innovation like the world has never seen before.",
+    "other": "Het Nostr-protocol garandeert fraudebestendige communicatie door middel van cryptografische sleutels en handtekeningen. Door gebruikers in staat te stellen paden te creëren voor het publiceren van notities naar relays en het stimuleren van de implementatie en het onderhoud van unieke, onafhankelijke relays door operators, pakt Nostr veel tekortkomingen van het huidige web aan. Van interoperabele applicaties tot unieke en alomtegenwoordige identiteiten, Nostr opent deuren naar creatieve, samenwerkingsgerichte innovatie zoals de wereld nog nooit eerder heeft gezien."
+  },
+  {
+    "id": "There are several reasons to choose <i>njump</i> when sharing Nostr content outside of Nostr:",
+    "other": "Er zijn verschillende redenen om voor <i>njump</i> te kiezen bij het delen van Nostr-inhoud buiten Nostr:"
+  },
+  {
+    "id": "This is only a quick selection of the 100+ applications that have already been built on Nostr, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">discover them all</a>!",
+    "other": "Dit is slechts een snelle selectie van de meer dan 100 applicaties die al op Nostr zijn gebouwd, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">ontdek ze allemaal</a>!"
+  },
+  {
+    "id": "This note has been published on Nostr and is embedded via Njump, <a href=\"/\" target=\"_new\" class=\"underline\">learn more</a>",
+    "other": "Deze notitie is gepubliceerd op Nostr en is ingesloten via Njump, <a href=\"/\" target=\"_new\" class=\"underline\">leer meer</a>"
+  },
+  {
+    "id": "Try it now! Jump to some Nostr content:",
+    "other": "Probeer het nu! Spring naar Nostr inhoud:"
+  },
+  {
+    "id": "View the most recent content posted to a relay by using <span class=\"rounded bg-lavender px-1 dark:bg-garnet\"> { s.Domain }/r/&lt;relay-host&gt; </span> , for example: <a class=\"underline\" href=\"/r/nostr.wine\"> https://{ s.Domain }/r/nostr.wine </a>",
+    "other": "Bekijk de meest recente inhoud die naar een relay is gepost door gebruik te maken van <span class=\"rounded bg-lavender px-1 dark:bg-garnet\"> { s.Domain }/r/&lt;relay-host&gt; </span> , bijvoorbeeld: <a class=\"underline\" href=\"/r/nostr.wine\"> https://{ s.Domain }/r/nostr.wine </a>"
+  },
+  {
+    "id": "Website Widgets",
+    "other": "Website Widgets"
+  },
+  {
+    "id": "We’ve placed ownership of our identities into the hands of 3rd parties. We’ve granted rights to our creations to those seeking to profit from them. We’ve handed over our interests to algorithms written to maximize our attention. In doing so, we have given a disproportionate amount of power to these companies, governments, and other controlling entities to decide what we see, read, and say. It’s time to break free from their barriers and create the internet that enables anyone, anywhere to create, to speak and to socialize as they wish, as was intended.",
+    "other": "We hebben het eigendom van onze identiteiten in handen van derden gelegd. We hebben rechten op onze creaties verleend aan degenen die ervan willen profiteren. We hebben onze interesses overgedragen aan algoritmen die zijn geschreven om onze aandacht te maximaliseren. Daardoor hebben we een onevenredige hoeveelheid macht gegeven aan deze bedrijven, overheden en andere controlerende entiteiten om te beslissen wat we zien, lezen en zeggen. Het is tijd om ons te bevrijden van hun barrières en het internet te creëren dat iedereen, overal in staat stelt om te creëren, te spreken en te socialiseren zoals ze willen, zoals bedoeld was."
+  },
+  {
+    "id": "What is njump?",
+    "other": "Wat is njump?"
+  },
+  {
+    "id": "When opening the URL directly in a browser, visitors will find referenced content like images, videoes, and links to Nostr events displayed in a simple but effective way. It shows the note parent, allowing the visitor to follow it up. It even has custom CSS for printing or exporting to PDF.",
+    "other": "Bij het direct openen van de URL in een een browser vinden bezoekers gerefereerde inhoud zoals afbeeldingen, video's en links naar Nostr-gebeurtenissen op een eenvoudige maar effectieve manier weergegeven. Het toont de ouder van de notitie, waardoor de bezoeker deze kan opvolgen. Het heeft zelfs aangepaste CSS voor afdrukken of exporteren naar PDF."
+  },
+  {
+    "id": "Where It All Started",
+    "other": "Waar het allemaal begon"
+  },
+  {
+    "id": "Wiki <span class=\"text-base\">＞</span>",
+    "other": "Wiki <span class=\"text-base\">＞</span>"
+  },
+  {
+    "id": "With Nostr, there is no central provider who owns your account. In fact, your account is powered by cryptography, and you could create one (or more!) yourself by hand, with no limitation. The easiest way, though, is to use our <a href=\"https://nstart.me\" class=\"underline\">new online wizard</a> to generate your new account in seconds. Then, you can use it across all of Nostr!",
+    "other": "Met Nostr is er geen centrale provider die eigenaar is van je account. Sterker nog, je account wordt aangedreven door cryptografie, en je zou er zelf een (of meer!) handmatig kunnen aanmaken, zonder beperking. De gemakkelijkste manier is echter om onze <a href=\"https://nstart.me\" class=\"underline\">nieuwe online wizard</a> te gebruiken om je nieuwe account binnen enkele seconden te genereren. Daarna kun je het in heel Nostr gebruiken!"
+  },
+  {
+    "id": "Yakihonne",
+    "other": "Yakihonne"
+  },
+  {
+    "id": "You Own Your Identity",
+    "other": "Jij bent eigenaar van je identiteit"
+  },
+  {
+    "id": "You are Free to Develop",
+    "other": "U bent vrij om te ontwikkelen"
+  },
+  {
+    "id": "You are Free to Remain Anonymous",
+    "other": "U bent vrij om anoniem te blijven"
+  },
+  {
+    "id": "You are Free to Speak",
+    "other": "Je bent vrij om te spreken"
+  },
+  {
+    "id": "You can publish anything you want as long as relays are willing to accept it. Relays can operate under any policies their operators may choose, including bans, content removal, and community guidelines. They may choose to host only certain users or specific types of content. If no relay will accept what you have to say, you can easily run your own. When you begin publishing to different relays, clients should be capable of finding you there, based on attached relay hints. Your contacts will then continue to receive your updates.",
+    "other": "Je kunt alles publiceren wat je wilt, zolang relays bereid zijn het te accepteren. Relays kunnen opereren onder elk beleid dat hun operators mogen kiezen, inclusief verboden, verwijdering van inhoud en communityrichtlijnen. Ze kunnen ervoor kiezen om alleen bepaalde gebruikers of specifieke soorten inhoud te hosten. Als geen enkel relay accepteert wat je te zeggen hebt, kun je eenvoudig je eigen relay draaien. Wanneer je begint met publiceren naar verschillende relays, zouden clients je daar moeten kunnen vinden, op basis van bijgevoegde relay hints. Je contacten zullen dan je updates blijven ontvangen."
+  },
+  {
+    "id": "You know, we are all programmers, including our moms, so for every <i>njump</i> page, you can toggle the \"Show more details\" switch to inspect the full event JSON. Without installing other tools (like <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>), this is probably the fastest way to access that infomation.",
+    "other": "Je weet wel, we zijn allemaal programmeurs, inclusief onze moeders, dus voor elke <i>njump</i>-pagina kun je de schakelaar \"Meer details tonen\" omzetten om de volledige gebeurtenis-JSON te inspecteren. Zonder andere tools (zoals <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>) te installeren, is dit waarschijnlijk de snelste manier om die informatie te openen."
+  },
+  {
+    "id": "Zap.stream",
+    "other": "Zap.stream"
+  },
+  {
+    "id": "Zapstore",
+    "other": "Zapstore"
+  },
+  {
+    "id": "about.h21",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Wat is njump?</h2>"
+  },
+  {
+    "id": "about.h210",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">Website Widgets</h2>"
+  },
+  {
+    "id": "about.h211",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">Inspectietool</h2>"
+  },
+  {
+    "id": "about.h22",
+    "other": "<h2 class=\"text-xl text-strongpink\">\n\t\t\t\t\t\t\tProbeer het nu! Spring naar Nostr inhoud:\n\t\t\t\t\t\t</h2>"
+  },
+  {
+    "id": "about.h23",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">Schoon, Snel en Solide</h2>"
+  },
+  {
+    "id": "about.h24",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">Mooie Voorbeelden</h2>"
+  },
+  {
+    "id": "about.h25",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">Coöperatief (uitspringen)</h2>"
+  },
+  {
+    "id": "about.h26",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">\n\t\t\t\t\t\t\tZoekvriendelijk (inspringen)\n\t\t\t\t\t\t</h2>"
+  },
+  {
+    "id": "about.h27",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">Deel NIP-05 Profielen</h2>"
+  },
+  {
+    "id": "about.h28",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">\n\t\t\t\t\t\t\tDelen op Twitter, Telegram en meer\n\t\t\t\t\t\t</h2>"
+  },
+  {
+    "id": "about.h29",
+    "other": "<h2 class=\"mt-7 text-2xl text-strongpink\">Relayweergaven</h2>"
+  },
+  {
+    "id": "about.paragraph1",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\t<i>njump</i> is een HTTP\n\t\t\t\t\t\t\t<a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">\n\t\t\t\t\t\t\t\tNostr\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\tgateway waarmee je profielen, notities en relays kunt bekijken. Het is\n\t\t\t\t\t\t\teen gemakkelijke manier om een ​​bron te bekijken en te openen met je\n\t\t\t\t\t\t\tfavoriete cliënt. Het typische gebruik van <i>njump</i> is om inhoud te delen\n\t\t\t\t\t\t\tbuiten de Nostr-wereld, waar het\n\t\t\t\t\t\t\t<code>nostr:</code> schema nog niet wordt herkend.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph10",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tnjump-pagina's zijn statisch zodat zoekmachines ze kunnen\n\t\t\t\t\t\t\tindexeren. Dit betekent dat <i>njump</i> anderen kan helpen geweldige inhoud op\n\t\t\t\t\t\t\tNostr te ontdekken, spring erin en sluit je bij ons aan! <i>njump</i> is de\n\t\t\t\t\t\t\tenige Nostr-bron met dit expliciete doel. Als je wilt dat een\n\t\t\t\t\t\t\tgoede notitie online kan worden gevonden, gebruik dan <i>njump</i> om deze te delen. Dit zal\n\t\t\t\t\t\t\tNostr helpen bloeien en toegankelijker maken voor iedereen.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph11",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tDeel je eigen profiel met een mooie\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\tclass=\"underline\"\n\t\t\t\t\t\t\t\thref=\"https://github.com/nostr-protocol/nips/blob/master/05.md\"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\tNIP-05\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t-geïnspireerde permalink:\n\t\t\t\t\t\t\t<span class=\"rounded bg-lavender px-1 dark:bg-garnet\">\n\t\t\t\t\t\t\t\t{ s.Domain }/&lt;nip-05&gt;\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t, bijvoorbeeld:\n\t\t\t\t\t\t\t<a class=\"underline\" href=\"/nvk.org\">https://{ s.Domain }/nvk.org</a>\n\t\t\t\t\t\t\tof\n\t\t\t\t\t\t\t<a class=\"underline\" href=\"/mike@mikedilger.com\">\n\t\t\t\t\t\t\t\thttps://{ s.Domain }/mike@mikedilger.com\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph12",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tEen profiel toont je basis metadata-info, toegewezen \"outbox\"-relais,\n\t\t\t\t\t\t\ten je nieuwste notities.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph13",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tDeel Nostr-notities snel en moeiteloos op Twitter,\n\t\t\t\t\t\t        Telegram, en vele andere \"sociale platforms\": plaats gewoon\n\t\t\t\t\t\t\teen link, en njump rendert de notitietekst met de voorbeeldafbeelding\n\t\t\t\t\t\t\tals canvas, om de deelervaring en bruikbaarheid te maximaliseren.\n\t\t\t\t\t\t\t<br/>\n\t\t\t\t\t\t\tOp Telegram hebben we ook de Instant View om lange inhoud\n\t\t\t\t\t\t\tin-app te bekijken!\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph14",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tBekijk de meest recente inhoud die naar een relay is gepost door gebruik te maken van\n\t\t\t\t\t\t\t<span class=\"rounded bg-lavender px-1 dark:bg-garnet\">\n\t\t\t\t\t\t\t\t{ s.Domain }/r/&lt;relay-host&gt;\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t, bijvoorbeeld:\n\t\t\t\t\t\t\t<a class=\"underline\" href=\"/r/nostr.wine\">\n\t\t\t\t\t\t\t\thttps://{ s.Domain }/r/nostr.wine\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph15",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tEnkele basis relay-informatie (\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\thref=\"https://github.com/nostr-protocol/nips/blob/master/11.md\"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\tNIP-11\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t) is beschikbaar. We hopen dat operators deze beschrijvingen persoonlijker en informatiever zullen maken, zodat gebruikers een manier hebben om te beoordelen of ze lid willen worden van een relay.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph16",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tJe weet wel, we zijn allemaal programmeurs, inclusief onze moeders, dus voor elke\n\t\t\t\t\t\t\tpagina <i>njump</i>, kun je de schakelaar \"Meer details tonen\" omzetten om\n\t\t\t\t\t\t\tde volledige gebeurtenis-JSON te inspecteren. Zonder andere tools (zoals\n\t\t\t\t\t\t\t<a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>) te installeren,\n\t\t\t\t\t\t\tis dit waarschijnlijk de snelste manier om die informatie te openen.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph2",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\t<i>njump</i> is momenteel te vinden onder { s.Domain }, je kunt het bereiken door\n\t\t\t\t\t\t\teen Nostr\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\tclass=\"underline\"\n\t\t\t\t\t\t\t\thref=\"https://github.com/nostr-protocol/nips/blob/master/19.md\"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\tNIP-19\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\tentiteit (<code>npub</code>, <code>nevent</code>, <code>naddr</code>,\n\t\t\t\t\t\t\tenz.) achter het domein te plaatsen:\n\t\t\t\t\t\t\t<span class=\"rounded bg-lavender px-1 dark:bg-garnet\">\n\t\t\t\t\t\t\t\t{ s.Domain }/&lt;nip-19-entity&gt;\n\t\t\t\t\t\t\t</span>.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph3",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tHier is bijvoorbeeld\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\tclass=\"underline\"\n\t\t\t\t\t\t\t\thref=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\teen gebruikersprofiel\n\t\t\t\t\t\t\t</a>,\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\tclass=\"underline\"\n\t\t\t\t\t\t\t\thref=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\teen notitie\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\ten een\n\t\t\t\t\t\t\t<a\n\t\t\t\t\t\t\t\tclass=\"underline\"\n\t\t\t\t\t\t\t\thref=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\"\n\t\t\t\t\t\t\t>\n\t\t\t\t\t\t\t\tlange blogpost\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph4",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tEr zijn verschillende redenen om voor <i>njump</i> te kiezen bij het delen van Nostr\n\t\t\t\t\t\t\t-inhoud buiten Nostr:\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph5",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tnjump-pagina's zijn extreem licht en snel te laden.\n\t\t\t\t\t\t\tEr is geen client-side javascript bij betrokken. Ze zijn\n\t\t\t\t\t\t\tminimalistisch met de juiste aandacht voor typografie, waarbij de focus ligt op de\n\t\t\t\t\t\t\tinhoud zonder onnodige details. Bovendien worden ze in de cache opgeslagen, dus\n\t\t\t\t\t\t\tbij het delen van een pagina kun je verwachten dat deze snel en zonder\n\t\t\t\t\t\t\twrijving laadt. Het is het perfecte hulpmiddel om\n\t\t\t\t\t\t\tnieuwe gebruikers te introduceren!\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph6",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tnjump rendert alles aan de serverzijde, waardoor het nuttige,\n\t\t\t\t\t\t\trijke voorbeelden kan genereren die werken op Telegram, Discord,\n\t\t\t\t\t\t\tTwitter en andere plaatsen.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph7",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\tBij het direct openen van de URL in een een browser vinden bezoekers\n\t\t\t\t\t\t\tgerefereerde inhoud zoals afbeeldingen, video's en links naar Nostr\n\t\t\t\t\t\t\t-gebeurtenissen op een eenvoudige maar effectieve manier weergegeven. Het toont de ouder van de\n\t\t\t\t\t\t\tnotitie, waardoor de bezoeker deze kan opvolgen. Het heeft zelfs aangepaste CSS voor\n\t\t\t\t\t\t\tafdrukken of exporteren naar PDF.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph8",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\t<i>njump</i> heeft geen interesse in het vangen van gebruikers. Integendeel,\n\t\t\t\t\t\t\thet nodigt hen uit om naar elke Nostr-bron te \"springen\" door te kiezen\n\t\t\t\t\t\t\tuit een lijst van webclients of, met een <code>nostr:</code> prefix, voor native\n\t\t\t\t\t\t\tclients. Het onthoudt zelfs de meest gebruikte client voor elke bezoeker en\n\t\t\t\t\t\t\tplaatst deze bovenaan voor snelle, gemakkelijke toegang.\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "about.paragraph9",
+    "other": "<p class=\"my-3 leading-5\">\n\t\t\t\t\t\t\t<a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/89.md\">NIP-89</a>\n\t\t\t\t\t\t\tondersteuning komt eraan!\n\t\t\t\t\t\t</p>"
+  },
+  {
+    "id": "calendar_event.h11",
+    "other": "<h1 class=\"text-2xl\">\n\t\t{ params.CalendarEvent.Title }\n\t</h1>"
+  },
+  {
+    "id": "for _, opt := range []struct{Code, Label string}{ {\"en\", \"English\"}, {\"de\", \"Deutsch\"}, {\"es\", \"Español\"}, {\"fr\", \"Français\"}, {\"it\", \"Italiano\"}, } { <a href=\"?lang={opt.Code}\" class=\"mr-2 text-sm whitespace-nowrap {if params.Lang == opt.Code}font-semibold{/if}\">{opt.Label}</a> }",
+    "other": "for _, opt := range []struct{Code, Label string}{ {\"en\", \"Engels\"}, {\"de\", \"Duits\"}, {\"es\", \"Spaans\"}, {\"fr\", \"Frans\"}, {\"it\", \"Italiaans\"}, {\"nl\", \"Nederlands\"}, } { <a href=\"?lang={opt.Code}\" class=\"mr-2 text-sm whitespace-nowrap {if params.Lang == opt.Code}font-semibold{/if}\">{opt.Label}</a> }"
+  },
+  {
+    "id": "for _, opt := range []struct{Code, Label string}{ {\"en\", \"English\"}, {\"de\", \"Deutsch\"}, {\"es\", \"Español\"}, {\"fr\", \"Français\"}, {\"it\", \"Italiano\"}, } { <a href=\"?lang={opt.Code}\" class=\"px-2 hover:text-strongpink {if params.Lang == opt.Code}font-semibold{/if}\">{opt.Label}</a> }",
+    "other": "for _, opt := range []struct{Code, Label string}{ {\"en\", \"Engels\"}, {\"de\", \"Duits\"}, {\"es\", \"Spaans\"}, {\"fr\", \"Frans\"}, {\"it\", \"Italiaans\"}, {\"nl\", \"Nederlands\"}, } { <a href=\"?lang={opt.Code}\" class=\"px-2 hover:text-strongpink {if params.Lang == opt.Code}font-semibold{/if}\">{opt.Label}</a> }"
+  },
+  {
+    "id": "for _, v := range params.CalendarEvent.Hashtags { <span class=\"mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white\"> { v } </span> }",
+    "other": "for _, v := range params.CalendarEvent.Hashtags { <span class=\"mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white\"> { v } </span> }"
+  },
+  {
+    "id": "for _, v := range params.LiveEvent.Hashtags { <span class=\"mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white\"> { v } </span> }",
+    "other": "for _, v := range params.LiveEvent.Hashtags { <span class=\"mr-2 whitespace-nowrap rounded bg-neutral-200 px-2 dark:bg-neutral-700 dark:text-white\"> { v } </span> }"
+  },
+  {
+    "id": "highlight.h11",
+    "other": "<h1 class=\"text-2xl\" itemprop=\"headline\">Markeren</h1>"
+  },
+  {
+    "id": "homepage.h11",
+    "other": "<h1 class=\"font-bold\">\n\t\t\t\t\t\t\t<div class=\"text-[3.5em] sm:text-[4em] leading-[1em] text-neutral-300\">\n\t\t\t\t\t\t\t\tNOSTR <span class=\"text-neutral-400\">IS</span>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"text-[2.5em] h-20 sm:h-auto sm:text-[5em] leading-[1em] break-words\" id=\"tw\">A PROTOCOL</div>\n\t\t\t\t\t\t\t<script>\nvar tw = document.getElementById('tw')\nnew Typewriter(tw, {\n  strings: [\n    '',\n    'A PROTOCOL',\n    'NOT A CRYPTOCURRENCY',\n    'SIMPLE',\n    'NOT A BLOCKCHAIN',\n    'A UNIVERSAL IDENTITY',\n    'NOT A COMPANY',\n    'FREE EXPRESSION',\n    'FREE ASSOCIATION',\n    'FOR FRIENDS AND ENEMIES',\n    'FOR EVERYONE',\n    'FOR BROADCASTING',\n    'FOR CLOSED GROUPS',\n    'FOR ALL OPINIONS',\n    'LIKE THE INTERNET ITSELF',\n    'FLEXIBLE',\n    'SCALABLE',\n    'A REAL PUBLIC SQUARE',\n    'CLIENT-RELAY',\n    'NOT P2P',\n    'THE OLD WEB',\n    'TRULY DECENTRALIZED',\n    'COMMUNITIES DONE RIGHT',\n    'THE OPEN ALTERNATIVE',\n    'SOCIAL WIKIS',\n    'GIT COLLABORATION',\n    'LONG-FORM ARTICLES',\n    'MICROBLOGGING',\n    'LIVESTREAMING',\n    'FORUMS',\n    'ANNOTATING THE WEB',\n    'COMMENTING ON ANYTHING',\n    'THE SOCIAL WEB OF TOMORROW',\n    'FOR YOU, TODAY',\n    '.......'\n  ],\n  autoStart: true,\n  loop: true,\n  cursorClassName: 'typewriter-cursor',\n  pauseFor: 3000\n})\n</script>\n\t\t\t\t\t\t</h1>"
+  },
+  {
+    "id": "homepage.h210",
+    "other": "<h2 class=\"text-4xl mb-10 sm:mb-12\">Beginnen met Nostr</h2>"
+  },
+  {
+    "id": "homepage.h215",
+    "other": "<h2 id=\"social\" class=\"text-2xl text-strongpink\">Multimedia</h2>"
+  },
+  {
+    "id": "homepage.h219",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Livestream</h2>"
+  },
+  {
+    "id": "homepage.h22",
+    "other": "<h2 class=\"text-4xl text-strongpink\">Internet voor Vandaag</h2>"
+  },
+  {
+    "id": "homepage.h223",
+    "other": "<h2 id=\"readwrite\" class=\"text-2xl text-strongpink\">Lezen en Schrijven</h2>"
+  },
+  {
+    "id": "homepage.h227",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Gemeenschappen</h2>"
+  },
+  {
+    "id": "homepage.h23",
+    "other": "<h2 class=\"text-4xl text-strongpink\">Nostr voor Morgen</h2>"
+  },
+  {
+    "id": "homepage.h231",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Overige zaken</h2>"
+  },
+  {
+    "id": "homepage.h235",
+    "other": "<h2 id=\"signers\" class=\"text-2xl text-strongpink\">Sleutelbeveiliging</h2>"
+  },
+  {
+    "id": "homepage.h239",
+    "other": "<h2 class=\"text-4xl mb-10 sm:mb-12 sm:text-center\">Ontwikkelen op Nostr</h2>"
+  },
+  {
+    "id": "homepage.h240",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Waar het allemaal begon</h2>"
+  },
+  {
+    "id": "homepage.h241",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Ontdek de NIPs</h2>"
+  },
+  {
+    "id": "homepage.h242",
+    "other": "<h2 class=\"text-2xl text-strongpink\">De Ontwerpgids</h2>"
+  },
+  {
+    "id": "homepage.h311",
+    "other": "<h3 class=\"text-2xl mb-1 text-strongpink\">Maak een account aan</h3>"
+  },
+  {
+    "id": "homepage.h312",
+    "other": "<h3 class=\"text-2xl mb-1 text-strongpink\">Beveilig uw sleutel</h3>"
+  },
+  {
+    "id": "homepage.h313",
+    "other": "<h3 class=\"text-2xl mb-1 text-strongpink\">Kies een App</h3>"
+  },
+  {
+    "id": "homepage.h314",
+    "other": "<h3 class=\"text-2xl mb-1 text-strongpink\">Ontdek Nostr</h3>"
+  },
+  {
+    "id": "homepage.h316",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Nostur</h3>"
+  },
+  {
+    "id": "homepage.h317",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Amethyst</h3>"
+  },
+  {
+    "id": "homepage.h318",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Yakihonne</h3>"
+  },
+  {
+    "id": "homepage.h320",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Zap.stream</h3>"
+  },
+  {
+    "id": "homepage.h321",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Live Party</h3>"
+  },
+  {
+    "id": "homepage.h322",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Nests</h3>"
+  },
+  {
+    "id": "homepage.h324",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Habla</h3>"
+  },
+  {
+    "id": "homepage.h325",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Obstrlish</h3>"
+  },
+  {
+    "id": "homepage.h326",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Feeder</h3>"
+  },
+  {
+    "id": "homepage.h328",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Chachi</h3>"
+  },
+  {
+    "id": "homepage.h329",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Flotilla</h3>"
+  },
+  {
+    "id": "homepage.h330",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">0xchat</h3>"
+  },
+  {
+    "id": "homepage.h332",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Zapstore</h3>"
+  },
+  {
+    "id": "homepage.h333",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Emojito</h3>"
+  },
+  {
+    "id": "homepage.h334",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Lantern</h3>"
+  },
+  {
+    "id": "homepage.h336",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">nos2x</h3>"
+  },
+  {
+    "id": "homepage.h337",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">Amber</h3>"
+  },
+  {
+    "id": "homepage.h338",
+    "other": "<h3 class=\"text-xl mt-4 group-hover:text-strongpink\">nsec.app</h3>"
+  },
+  {
+    "id": "homepage.h34",
+    "other": "<h3 class=\"text-2xl mb-4 text-strongpink\">Jij bent eigenaar van je identiteit</h3>"
+  },
+  {
+    "id": "homepage.h35",
+    "other": "<h3 class=\"text-2xl mb-4 text-strongpink\">Bevestig je Gegevens met Handtekeningen</h3>"
+  },
+  {
+    "id": "homepage.h36",
+    "other": "<h3 class=\"text-2xl mb-4 text-strongpink\">Maak rechtstreeks verbinding met uw publiek</h3>"
+  },
+  {
+    "id": "homepage.h37",
+    "other": "<h3 class=\"text-2xl mb-4 text-strongpink\">Je bent vrij om te spreken</h3>"
+  },
+  {
+    "id": "homepage.h38",
+    "other": "<h3 class=\"text-2xl mb-4 text-strongpink\">U bent vrij om anoniem te blijven</h3>"
+  },
+  {
+    "id": "homepage.h39",
+    "other": "<h3 class=\"text-2xl mb-4 text-strongpink\">U bent vrij om te ontwikkelen</h3>"
+  },
+  {
+    "id": "homepage.paragraph1",
+    "other": "<p>Nostr maakt gebruik van een publieke sleutelsysteem, waarbij je identiteit gekoppeld is aan een unieke cryptografische sleutel. Je hebt volledige controle over je identiteit zonder afhankelijk te zijn van een centrale autoriteit. Het Nostr-protocol elimineert de noodzaak van Know Your Customer (KYC) processen. Geen e-mail, ID, vingerafdruk of oogscans vereist! Je privacy is volledig van jou.</p>"
+  },
+  {
+    "id": "homepage.paragraph10",
+    "other": "<p>Nadat je bekend bent met de basisconcepten, kun je je favoriete sleutelbeheertool instellen om andere sociale clients en <a href=\"#readwrite\" class=\"underline\">Nostr-applicaties</a> te verkennen. Je hebt al je digitale identiteit en deze werkt overal. Log eenvoudig in met je Nostr signer-app, signing-extensie of nsec. Als je je privésleutel gebruikt, zorg er dan voor dat de app afkomstig is van een vertrouwde bron!</p>"
+  },
+  {
+    "id": "homepage.paragraph2",
+    "other": "<p>In Nostr ondertekenen gebruikers hun berichten met hun cryptografische sleutels. De meeste cliënten behandelen dit proces automatisch. Deze cryptografische handtekeningen garanderen de authenticiteit van je gegevens. Je kunt bewijzen wat je wel (en niet) hebt gemaakt. Door de gebruiker geselecteerde relays slaan deze gegevens op en verzenden ze. Deze relays communiceren rechtstreeks met andere gebruikers, zonder tussenstops. Elke cliënt valideert vervolgens deze handtekeningen, waardoor de integriteit van de gegevens wordt gewaarborgd.</p>"
+  },
+  {
+    "id": "homepage.paragraph3",
+    "other": "<p>In Nostr behoud je je publiek en feed. Welke client je ook gebruikt, je contactenlijst zal er zijn. Deze wordt gepubliceerd naar de relays van jouw keuze, net als die van andere gebruikers. Iedereen kiest zijn voorkeurs publicatie relays, en clients verbinden zich daarmee om nieuwe berichten te vinden. Bovendien kunnen relays fungeren als filters tegen spam of intimidatie, en als ontdekkingsmiddelen voor goede inhoud, aggregators van gecureerde inhoud, of providers van aangepaste feeds.</p>"
+  },
+  {
+    "id": "homepage.paragraph4",
+    "other": "<p>Je kunt alles publiceren wat je wilt, zolang relays bereid zijn het te accepteren. Relays kunnen opereren onder elk beleid dat hun operators mogen kiezen, inclusief verboden, verwijdering van inhoud en communityrichtlijnen. Ze kunnen ervoor kiezen om alleen bepaalde gebruikers of specifieke soorten inhoud te hosten. Als geen enkel relay accepteert wat je te zeggen hebt, kun je eenvoudig je eigen relay draaien. Wanneer je begint met publiceren naar verschillende relays, zouden clients je daar moeten kunnen vinden, op basis van bijgevoegde relay hints. Je contacten zullen dan je updates blijven ontvangen.</p>"
+  },
+  {
+    "id": "homepage.paragraph5",
+    "other": "<p>Nostr ondersteunt gebruikersanonimiteit. Gebruikers kunnen ervoor kiezen om anoniem te zijn of pseudoniemen te gebruiken zonder hun deelname te compromitteren. Nostr is ook beschikbaar op TOR om tracking te voorkomen. Als protocol heeft Nostr niet de capaciteit om gebruikersgegevens aan welke entiteit dan ook, overheid of anderszins, te verstrekken. Dit helpt de vrijheid van meningsuiting van alle gebruikers te beschermen tegen verboden of beperkingen. Elk individueel relais of client kan onderhevig zijn aan deze verzoeken, maar de beschikbare gegevens zouden beperkt zijn tot die van de publieke sleutel van een gebruiker. Als die gebruiker passende stappen heeft ondernomen om hun identiteit te beschermen, zou er weinig informatie te delen zijn.</p>"
+  },
+  {
+    "id": "homepage.paragraph6",
+    "other": "<p>Nostr moedigt ontwikkeling en aanpassing aan. Iedereen is vrij om aan het protocol te ontwikkelen en zo bij te dragen aan de groei en evolutie van het netwerk. Alle Nostr-clients, relays, tools en apps die worden gebouwd, kunnen profiteren van elke eerdere en toekomstige ontwikkeling. Ontwikkelaars hebben de vrijheid om betaalmethoden voor hun applicaties en functies in te stellen, wat een potentiële bron van inkomsten biedt zoals nooit tevoren.</p>"
+  },
+  {
+    "id": "homepage.paragraph7",
+    "other": "<p>Met Nostr is er geen centrale provider die eigenaar is van je account. Sterker nog, je account wordt aangedreven door cryptografie, en je zou er zelf een (of meer!) handmatig kunnen aanmaken, zonder beperking. De gemakkelijkste manier is echter om onze <a href=\"https://nstart.me\" class=\"underline\">nieuwe online wizard</a> te gebruiken om je nieuwe account binnen enkele seconden te genereren. Daarna kun je het in heel Nostr gebruiken!</p>"
+  },
+  {
+    "id": "homepage.paragraph8",
+    "other": "<p>Een account is een sleutelpaar. De privésleutel (nsec) is uw digitale identiteit. Als deze verloren of blootgesteld raakt, is er geen manier om de toegang te herstellen of inloggegevens te wijzigen. U moet uw privésleutel veilig en beveiligd bewaren. Gebruik een wachtwoordbeheerder, maak een back-up op papier en gebruik deze ALLEEN in vertrouwde apps. Voer uw nsec nooit in op een website. Installeer een <a href=\"#signers\" class=\"underline\">signer-extensie</a> om uw sleutel veilig op het web te gebruiken.</p>"
+  },
+  {
+    "id": "homepage.paragraph9",
+    "other": "<p>Nostr-ontwikkelaars hebben al verschillende applicaties gebouwd voor een breed scala aan toepassingen. De eenvoudigste manier om Nostr te gaan gebruiken, is door een <a href=\"#social\" class=\"underline\">sociale client</a> te downloaden en deel te nemen. Leer met en via de community door deel te nemen aan gesprekken. Hulp nodig? Gebruik de hashtag #asknostr!</p>"
+  },
+  {
+    "id": "if params.LiveEvent.Host != nil { Streaming hosted by <a href={ templ.URL(\"/\" + params.LiveEvent.Host.Npub()) }> { params.LiveEvent.Host.Name } </a> }",
+    "other": "if params.LiveEvent.Host != nil { Streaming gehost door <a href={ templ.URL(\"/\" + params.LiveEvent.Host.Npub()) }> { params.LiveEvent.Host.Name } </a> }"
+  },
+  {
+    "id": "if params.Subject != \"\" { { params.Subject } } else { <a href={ templ.URL(\"/\" + params.Metadata.Npub()) }> { params.Metadata.ShortName() } </a> if params.Parent == nil { on Nostr: } else { on Nostr (reply): } }",
+    "other": "if params.Subject != \"\" { { params.Subject } } else { <a href={ templ.URL(\"/\" + params.Metadata.Npub()) }> { params.Metadata.ShortName() } </a> if params.Parent == nil { op Nostr: } else { op Nostr (antwoord): } }"
+  },
+  {
+    "id": "if parent := event.getParent(); parent != nil { if external, ok := parent.(nip73.ExternalPointer); ok { a comment at <span class=\"text-strongpink\"> <span itemprop=\"mentions\" itemscope itemtype=\"https://schema.org/Article\"> <a itemprop=\"url\" href={ templ.URL(external.Thing) } target=\"_blank\" class=\"bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1\"> { external.Thing } </a> </span> </span> } else { in reply to <span class=\"text-strongpink\"> {{ println(\"PARENT: \", parent == nil) }} @templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, \"nostr:\"+nip19.EncodePointer(parent))) </span> } }",
+    "other": "if parent := event.getParent(); parent != nil { if external, ok := parent.(nip73.ExternalPointer); ok { een opmerking bij <span class=\"text-strongpink\"> <span itemprop=\"mentions\" itemscope itemtype=\"https://schema.org/Article\"> <a itemprop=\"url\" href={ templ.URL(external.Thing) } target=\"_blank\" class=\"bg-lavender dark:prose:text-neutral-50 dark:text-neutral-50 dark:bg-garnet px-1\"> { external.Thing } </a> </span> </span> } else { in antwoord op <span class=\"text-strongpink\"> {{ println(\"PARENT: \", parent == nil) }} @templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, \"nostr:\"+nip19.EncodePointer(parent))) </span> } }"
+  },
+  {
+    "id": "live_event.h11",
+    "other": "<h1 class=\"text-2xl\">\n\t\t<span class=\"mr-2\">{ params.LiveEvent.Title }</span>\n\t\tswitch params.LiveEvent.Status {\n\t\t\tcase \"ended\":\n\t\t\t\t<span class=\"whitespace-nowrap rounded bg-neutral-400 px-4 py-1 align-text-top text-base text-white dark:bg-neutral-700\">Beëindigd</span>\n\t\t\tcase \"live\":\n\t\t\t\t<span class=\"whitespace-nowrap rounded bg-strongpink px-4 py-1 align-text-top text-base text-white\">Nu live!</span>\n\t\t}\n\t</h1>"
+  },
+  {
+    "id": "my offsetHeight add .gradient end on click halt the event then set the window's location to @loc\" loc={ \"/\" + ee.Nevent() } dir=\"auto\" itemprop=\"articleBody\" > @templ.Raw(ee.Preview())",
+    "other": "my offsetHeight add .gradient end on click halt the event then set the window's location to @loc\" loc={ \"/\" + ee.Nevent() } dir=\"auto\" itemprop=\"articleBody\" > @templ.Raw(ee.Preview())"
+  },
+  {
+    "id": "nos2x",
+    "other": "nos2x"
+  },
+  {
+    "id": "note.h11",
+    "other": "<h1 class=\"text-2xl\" itemprop=\"headline\">{ params.Event.subject }</h1>"
+  },
+  {
+    "id": "note.h12",
+    "other": "<h1 class=\"hidden\">\n\t\t\t{ params.Event.author.ShortName() } op Nostr: { params.TitleizedContent }\n\t\t</h1>"
+  },
+  {
+    "id": "nsec.app",
+    "other": "nsec.app"
+  },
+  {
+    "id": "profile.h11",
+    "other": "<h1 class=\"sm:max-w-full\">\n\t\t\t\t\t\t\t\t<div id=\"profile_name\" class=\"text-2xl break-words\">\n\t\t\t\t\t\t\t\t\tif params.Metadata.Event == nil {\n\t\t\t\t\t\t\t\t\t\t<span class=\"text-stone-200 font-bold\">&lt;onbenoemd&gt;</span>\n\t\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t\t{ params.Metadata.Name }\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\tif params.Metadata.Name != params.Metadata.DisplayName {\n\t\t\t\t\t\t\t\t\t<div class=\"text-xl text-stone-400 break-words\">\n\t\t\t\t\t\t\t\t\t\t{ params.Metadata.DisplayName }\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t</h1>"
+  },
+  {
+    "id": "profile.h22",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Laatste Notities</h2>"
+  },
+  {
+    "id": "relay.h11",
+    "other": "<h1>\n\t\t\t\t\t\t\t\t<div id=\"relay_name\" class=\"text-2xl\">{ params.Info.Name }</div>\n\t\t\t\t\t\t\t</h1>"
+  },
+  {
+    "id": "relay.h22",
+    "other": "<h2 class=\"text-2xl text-strongpink\">Laatste Notities</h2>"
+  },
+  {
+    "id": "telegram_instant_view.h11",
+    "other": "<h1>\n\t\t\tif params.Subject != \"\" {\n\t\t\t\t{ params.Subject }\n\t\t\t} else {\n\t\t\t\t<a href={ templ.URL(\"/\" + params.Metadata.Npub()) }>\n\t\t\t\t\t{ params.Metadata.ShortName() }\n\t\t\t\t</a>\n\t\t\t\tif params.Parent == nil {\n\t\t\t\t\top Nostr:\n\t\t\t\t} else {\n\t\t\t\t\top Nostr (antwoord):\n\t\t\t\t}\n\t\t\t}\n\t\t</h1>"
+  },
+  {
+    "id": "wiki_event.h11",
+    "other": "<h1 class=\"flex text-2xl items-center\">\n\t\t<div class=\"inline-block px-2 mr-2 text-base bg-strongpink text-white rounded-md\">Wiki <span class=\"text-base\">＞</span></div>\n\t\t<div class=\"inline-block\">{ params.WikiEvent.Title }</div>\n\t</h1>"
+  },
+  {
+    "id": "{ event.CreatedAtStr() }",
+    "other": "{ event.CreatedAtStr() }"
+  },
+  {
+    "id": "{ metadata.NpubShort() }",
+    "other": "{ metadata.NpubShort() }"
+  },
+  {
+    "id": "{ params.CalendarEvent.Locations[0] }",
+    "other": "{ params.CalendarEvent.Locations[0] }"
+  },
+  {
+    "id": "{ params.CalendarEvent.Title }",
+    "other": "{ params.CalendarEvent.Title }"
+  },
+  {
+    "id": "{ params.EndAtTime } ({ params.TimeZone })",
+    "other": "{ params.EndAtTime } ({ params.TimeZone })"
+  },
+  {
+    "id": "{ params.Errors }",
+    "other": "{ params.Errors }"
+  },
+  {
+    "id": "{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }",
+    "other": "{ params.Event.author.ShortName() } op Nostr: { params.TitleizedContent }"
+  },
+  {
+    "id": "{ params.Event.subject }",
+    "other": "{ params.Event.subject }"
+  },
+  {
+    "id": "{ params.Info.Description }",
+    "other": "{ params.Info.Description }"
+  },
+  {
+    "id": "{ params.LiveEvent.Summary }",
+    "other": "{ params.LiveEvent.Summary }"
+  },
+  {
+    "id": "{ params.Metadata.DisplayName }",
+    "other": "{ params.Metadata.DisplayName }"
+  },
+  {
+    "id": "{ params.Metadata.Website }",
+    "other": "{ params.Metadata.Website }"
+  },
+  {
+    "id": "{ params.StartAtTime } ({ params.TimeZone })",
+    "other": "{ params.StartAtTime } ({ params.TimeZone })"
+  },
+  {
+    "id": "{ params.WikiEvent.Title }",
+    "other": "{ params.WikiEvent.Title }"
+  }
+]
