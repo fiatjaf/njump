@@ -16,6 +16,13 @@ func tWithData(ctx context.Context, id string, data map[string]any) string {
 	return i18n.Translate(ctx, id, data)
 }
 
+func isRTL(ctx context.Context) bool {
+	if val := ctx.Value("isRTL"); val != nil {
+		return val.(bool)
+	}
+	return false
+}
+
 func typewriterScript(ctx context.Context) string {
 	// Build array of translated strings for typewriter animation
 	keys := []string{

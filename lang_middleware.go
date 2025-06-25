@@ -11,6 +11,13 @@ import (
 
 var langRegex = regexp.MustCompile("^[a-z]{2}$")
 
+var rtlLanguages = map[string]bool{
+	"ar": true, // Arabic
+	"he": true, // Hebrew  
+	"fa": true, // Persian/Farsi
+	"ur": true, // Urdu
+}
+
 func languageMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
@@ -51,6 +58,7 @@ func languageMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			Msg("resolved language for request")
 		ctx := i18n.WithLanguage(r.Context(), lang)
 		ctx = context.WithValue(ctx, "requestPath", r.URL.Path)
+		ctx = context.WithValue(ctx, "isRTL", rtlLanguages[lang])
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }

@@ -17,6 +17,7 @@ templ topTemplate(params HeadParams) {
                        {"es", "Español"},
                        {"fr", "Français"},
                        {"it", "Italiano"},
+                       {"ar", "العربية"},
                    } {
                        if params.Lang == opt.Code {
                            <span>{opt.Label}</span>
@@ -39,6 +40,7 @@ templ topTemplate(params HeadParams) {
                        {"es", "Español"},
                        {"fr", "Français"},
                        {"it", "Italiano"},
+                       {"ar", "العربية"},
                    } {
                        <a 
                            href={ ctx.Value("requestPath").(string) + "?lang=" + opt.Code } 
@@ -163,6 +165,7 @@ templ topTemplate(params HeadParams) {
 						{"es", "Español"},
 						{"fr", "Français"},
 						{"it", "Italiano"},
+						{"ar", "العربية"},
 					} {
 						if params.Lang == opt.Code {
 							<span>{opt.Label}</span>
@@ -185,6 +188,7 @@ templ topTemplate(params HeadParams) {
 						{"es", "Español"},
 						{"fr", "Français"},
 						{"it", "Italiano"},
+						{"ar", "العربية"},
 					} {
 						<a 
 							href={ ctx.Value("requestPath").(string) + "?lang=" + opt.Code } 

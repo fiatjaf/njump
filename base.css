@@ -1,6 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Arabic fonts and RTL support */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap');
+
+/* Font family for Arabic text */
+[dir="rtl"] {
+  font-family: 'Noto Sans Arabic', 'Helvetica', 'ui-sans-serif', 'system-ui', sans-serif;
+}
+
+/* RTL text alignment and spacing adjustments */
+[dir="rtl"] .text-left { text-align: right; }
+[dir="rtl"] .text-right { text-align: left; }
+[dir="rtl"] .ml-auto { margin-left: auto; margin-right: 0; }
+[dir="rtl"] .mr-auto { margin-right: auto; margin-left: 0; }
+[dir="rtl"] .pl-4 { padding-left: 0; padding-right: 1rem; }
+[dir="rtl"] .pr-4 { padding-right: 0; padding-left: 1rem; }
 @layer utilities {
   html,
   body {

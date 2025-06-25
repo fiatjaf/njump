@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Helvetica', 'ui-sans-serif', 'system-ui']
+        sans: ['Helvetica', 'ui-sans-serif', 'system-ui'],
+        arabic: ['Noto Sans Arabic', 'Helvetica', 'ui-sans-serif', 'system-ui']
       },
       fontSize: {
         xs: '0.7rem',
