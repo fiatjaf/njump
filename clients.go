@@ -24,7 +24,7 @@ var (
 	native = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
 
 	nosta         = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
-	snort         = ClientReference{ID: "snort", Name: "Snort", Base: "https://snort.social/{code}", Platform: platformWeb}
+	phoenix         = ClientReference{ID: "phoenix", Name: "Phoenix", Base: "https://phoenix.social/{code}", Platform: platformWeb}
 	olasWeb       = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
 	primalWeb     = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: platformWeb}
 	nostrudel     = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
@@ -83,7 +83,7 @@ func generateClientList(
 			native,
 			damus, nostur, freeFromIOS, yakihonneIOS, nos, primalIOS,
 			voyage, yakihonneAndroid, primalAndroid, freeFromAndroid, yanaAndroid,
-			coracle, jumble, lumilumi, nostter, nostrudel, snort, primalWeb, iris,
+			coracle, jumble, lumilumi, nostter, nostrudel, phoenix, primalWeb, iris,
 		}
 	case 20:
 		clients = []ClientReference{
@@ -97,7 +97,7 @@ func generateClientList(
 			native,
 			nos, damus, nostur, primalIOS, freeFromIOS, yakihonneIOS,
 			voyage, yakihonneAndroid, yanaAndroid, freeFromAndroid, primalAndroid,
-			nosta, coracle, snort, nostter, nostrudel, primalWeb, iris, jumble,
+			nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris, jumble,
 		}
 	case 30023, 30024:
 		clients = []ClientReference{
@@ -110,7 +110,7 @@ func generateClientList(
 		clients = []ClientReference{
 			native,
 			amethyst,
-			lumilumi, snort, coracle, nostrudel,
+			lumilumi, phoenix, coracle, nostrudel,
 		}
 	case 9802:
 		clients = []ClientReference{
@@ -140,7 +140,7 @@ func generateClientList(
 			native,
 			yakihonneIOS, nos, damus, nostur, primalIOS, freeFromIOS,
 			voyage, amethyst, yakihonneAndroid, yanaAndroid, freeFromAndroid, voyage,
-			yakihonne, coracle, snort, nostter, nostrudel, primalWeb, iris,
+			yakihonne, coracle, phoenix, nostter, nostrudel, primalWeb, iris,
 		}
 	}
 
