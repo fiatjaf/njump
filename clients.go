@@ -24,7 +24,7 @@ var (
 	native = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
 
 	nosta         = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
-	phoenix         = ClientReference{ID: "phoenix", Name: "Phoenix", Base: "https://phoenix.social/{code}", Platform: platformWeb}
+	phoenix       = ClientReference{ID: "phoenix", Name: "Phoenix", Base: "https://phoenix.social/{code}", Platform: platformWeb}
 	olasWeb       = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
 	primalWeb     = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: platformWeb}
 	nostrudel     = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
@@ -97,7 +97,7 @@ func generateClientList(
 			native,
 			nos, damus, nostur, primalIOS, freeFromIOS, yakihonneIOS,
 			voyage, yakihonneAndroid, yanaAndroid, freeFromAndroid, primalAndroid,
-			nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris, jumble,
+			nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris,
 		}
 	case 30023, 30024:
 		clients = []ClientReference{
@@ -117,6 +117,7 @@ func generateClientList(
 			coracle,
 			nostrudel,
 			lumilumi,
+			jumble,
 		}
 	case 30311:
 		clients = []ClientReference{
