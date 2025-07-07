@@ -21,7 +21,8 @@ const (
 )
 
 var (
-	native = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
+	native     = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
+	defaultWeb = ClientReference{ID: "default-web", Name: "Your default web app", Base: "web+nostr:{code}", Platform: "web"}
 
 	nosta         = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
 	phoenix       = ClientReference{ID: "phoenix", Name: "Phoenix", Base: "https://phoenix.social/{code}", Platform: platformWeb}
@@ -77,6 +78,7 @@ func generateClientList(
 		clients = []ClientReference{
 			native,
 			jumbleRelay, chachiRelay, lumilumiRelay, coracleRelay, relayTools, nostterRelay,
+			defaultWeb,
 		}
 	case 1, 6:
 		clients = []ClientReference{
@@ -91,6 +93,7 @@ func generateClientList(
 			olasAndroid,
 			olasIOS,
 			lumilumi, jumble, olasWeb, coracle,
+			defaultWeb,
 		}
 	case 0:
 		clients = []ClientReference{
@@ -98,6 +101,7 @@ func generateClientList(
 			nos, damus, nostur, primalIOS, freeFromIOS, yakihonneIOS,
 			voyage, yakihonneAndroid, yanaAndroid, freeFromAndroid, primalAndroid,
 			nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris,
+			defaultWeb,
 		}
 	case 30023, 30024:
 		clients = []ClientReference{
@@ -105,12 +109,14 @@ func generateClientList(
 			damus, nos, nostur, yakihonneIOS,
 			yakihonneAndroid, amethyst,
 			yakihonne, lumilumi, coracle, pareto, habla,
+			defaultWeb,
 		}
 	case 1063:
 		clients = []ClientReference{
 			native,
 			amethyst,
 			lumilumi, phoenix, coracle, nostrudel,
+			defaultWeb,
 		}
 	case 9802:
 		clients = []ClientReference{
@@ -118,6 +124,7 @@ func generateClientList(
 			nostrudel,
 			lumilumi,
 			jumble,
+			defaultWeb,
 		}
 	case 30311:
 		clients = []ClientReference{
@@ -125,16 +132,19 @@ func generateClientList(
 			amethyst,
 			nostur,
 			zapStream, lumilumi, nostrudel,
+			defaultWeb,
 		}
 	case 30818:
 		clients = []ClientReference{
 			native,
 			wikistr, wikifreedia,
+			defaultWeb,
 		}
 	case 31922, 31923:
 		clients = []ClientReference{
 			native,
 			coracle,
+			defaultWeb,
 		}
 	default:
 		clients = []ClientReference{
@@ -142,6 +152,7 @@ func generateClientList(
 			yakihonneIOS, nos, damus, nostur, primalIOS, freeFromIOS,
 			voyage, amethyst, yakihonneAndroid, yanaAndroid, freeFromAndroid, voyage,
 			yakihonne, coracle, phoenix, nostter, nostrudel, primalWeb, iris,
+			defaultWeb,
 		}
 	}
 
