@@ -167,8 +167,19 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	subscript += " by " + data.event.author.ShortName()
-	if data.event.isReply() {
-		subscript += " (reply)"
+	{
+		suffix := ""
+		if data.event.isReply() {
+			suffix = " (reply)"
+			if data.event.Kind == 1111 {
+				if data.event.Tags.FindWithValue("k", "web") != nil {
+					if urlt := data.event.Tags.Find("i"); urlt != nil {
+						suffix = " on " + urlt[1]
+					}
+				}
+			}
+		}
+		subscript += suffix
 	}
 
 	seenOnRelays := ""
