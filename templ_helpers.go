@@ -23,6 +23,10 @@ func isRTL(ctx context.Context) bool {
 	return false
 }
 
+func availableLanguages() []i18n.LanguageOption {
+	return i18n.GetAvailableLanguages()
+}
+
 func typewriterScript(ctx context.Context) string {
 	// Build array of translated strings for typewriter animation
 	keys := []string{

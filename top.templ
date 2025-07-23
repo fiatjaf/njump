@@ -11,18 +11,7 @@ templ topTemplate(params HeadParams) {
                    _="on click toggle .hidden on #language-dropdown-menu"
                >
                    <!-- Show current language -->
-                   for _, opt := range []struct{Code, Label string}{
-                       {"en", "English"},
-                       {"de", "Deutsch"},
-                       {"es", "Español"},
-                       {"fr", "Français"},
-                       {"it", "Italiano"},
-                       {"pt", "Português"},
-                       {"nl", "Nederlands"},
-                       {"hu", "Magyar"},
-                       {"cz", "Čeština"},
-                       {"ar", "العربية"},
-                   } {
+                   for _, opt := range availableLanguages() {
                        if params.Lang == opt.Code {
                            <span>{opt.Label}</span>
                        }
@@ -38,18 +27,7 @@ templ topTemplate(params HeadParams) {
                    id="language-dropdown-menu"
                    class="hidden absolute top-full left-0 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-600 rounded-md shadow-lg z-50 min-w-[120px]"
                >
-                   for _, opt := range []struct{Code, Label string}{
-                       {"en", "English"},
-                       {"de", "Deutsch"},
-                       {"es", "Español"},
-                       {"fr", "Français"},
-                       {"it", "Italiano"},
-                       {"pt", "Português"},
-                       {"nl", "Nederlands"},
-                       {"hu", "Magyar"},
-                       {"cz", "Čeština"},
-                       {"ar", "العربية"},
-                   } {
+                   for _, opt := range availableLanguages() {
                        <a 
                            href={ ctx.Value("requestPath").(string) + "?lang=" + opt.Code } 
                            class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700 {if params.Lang == opt.Code}bg-gray-100 dark:bg-neutral-700 font-semibold{/if}"
@@ -167,18 +145,7 @@ templ topTemplate(params HeadParams) {
 					_="on click toggle .hidden on #mobile-language-dropdown-menu"
 				>
 					<!-- Show current language -->
-					for _, opt := range []struct{Code, Label string}{
-						{"en", "English"},
-						{"de", "Deutsch"},
-						{"es", "Español"},
-						{"fr", "Français"},
-						{"it", "Italiano"},
-						{"pt", "Português"},
-						{"nl", "Nederlands"},
-						{"hu", "Magyar"},
-						{"cz", "Čeština"},
-						{"ar", "العربية"},
-					} {
+					for _, opt := range availableLanguages() {
 						if params.Lang == opt.Code {
 							<span>{opt.Label}</span>
 						}
@@ -194,18 +161,7 @@ templ topTemplate(params HeadParams) {
 					id="mobile-language-dropdown-menu"
 					class="hidden absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-600 rounded-md shadow-lg z-50 min-w-[140px]"
 				>
-					for _, opt := range []struct{Code, Label string}{
-						{"en", "English"},
-						{"de", "Deutsch"},
-						{"es", "Español"},
-						{"fr", "Français"},
-						{"it", "Italiano"},
-						{"pt", "Português"},
-						{"nl", "Nederlands"},
-						{"hu", "Magyar"},
-						{"cz", "Čeština"},
-						{"ar", "العربية"},
-					} {
+					for _, opt := range availableLanguages() {
 						<a 
 							href={ ctx.Value("requestPath").(string) + "?lang=" + opt.Code } 
 							class="block px-4 py-3 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700 {if params.Lang == opt.Code}bg-gray-100 dark:bg-neutral-700 font-semibold{/if}"

@@ -21,6 +21,23 @@ type languageKey struct{}
 
 var bundle *goi18n.Bundle
 
+// isLanguageAllowed checks if a language is allowed based on ALLOWED_LANGUAGE env variable.
+// If ALLOWED_LANGUAGE is empty or undefined, all languages are allowed.
+func isLanguageAllowed(langTag string) bool {
+	allowedLangs := os.Getenv("ALLOWED_LANGUAGE")
+	if allowedLangs == "" {
+		return true // if not set, allow all languages
+	}
+	
+	// split by comma and check if langTag is in the list
+	for _, allowed := range strings.Split(allowedLangs, ",") {
+		if strings.TrimSpace(allowed) == langTag {
+			return true
+		}
+	}
+	return false
+}
+
 func init() {
 	bundle = goi18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
@@ -35,6 +52,15 @@ func init() {
 			return nil
 		}
 		ext := filepath.Ext(path)
+		// use filename (without extension) as language tag for filtering
+		langTag := strings.ToLower(strings.TrimSuffix(filepath.Base(path), ext))
+		
+		// check if this language is allowed
+		if !isLanguageAllowed(langTag) {
+			log.Debug().Str("path", path).Str("langTag", langTag).Msg("i18n: skipping language file (not in ALLOWED_LANGUAGE)")
+			return nil
+		}
+		
 		// attempt to load flat JSON mapping (legacy v1 format)
 		if ext == ".json" {
 			data, err := os.ReadFile(path)
@@ -44,8 +70,6 @@ func init() {
 			}
 			var mapping map[string]string
 			if err := json.Unmarshal(data, &mapping); err == nil {
-				// use filename (without extension) as language tag
-				langTag := strings.ToLower(strings.TrimSuffix(filepath.Base(path), ext))
 				for id, other := range mapping {
 					bundle.AddMessages(language.Make(langTag), &goi18n.Message{ID: id, Other: other})
 				}
@@ -94,4 +118,52 @@ func Translate(ctx context.Context, id string, data map[string]any) string {
 		return id
 	}
 	return msg
+}
+
+// LanguageOption represents a language choice with code and display label
+type LanguageOption struct {
+	Code  string
+	Label string
+}
+
+// GetAvailableLanguages returns the list of available languages based on ALLOWED_LANGUAGE env variable.
+// If ALLOWED_LANGUAGE is empty or undefined, returns all supported languages.
+func GetAvailableLanguages() []LanguageOption {
+	// Full list of supported languages with their display labels
+	allLanguages := []LanguageOption{
+		{"en", "English"},
+		{"de", "Deutsch"},
+		{"es", "Español"},
+		{"fr", "Français"},
+		{"it", "Italiano"},
+		{"pt", "Português"},
+		{"nl", "Nederlands"},
+		{"hu", "Magyar"},
+		{"cz", "Čeština"},
+		{"ar", "العربية"},
+		{"he", "עברית"},
+		{"fa", "فارسی"},
+		{"tr", "Türkçe"},
+	}
+	
+	allowedLangs := os.Getenv("ALLOWED_LANGUAGE")
+	if allowedLangs == "" {
+		return allLanguages // if not set, return all languages
+	}
+	
+	// Create a map for quick lookup of allowed languages
+	allowedMap := make(map[string]bool)
+	for _, allowed := range strings.Split(allowedLangs, ",") {
+		allowedMap[strings.TrimSpace(allowed)] = true
+	}
+	
+	// Filter the languages based on what's allowed
+	var availableLanguages []LanguageOption
+	for _, lang := range allLanguages {
+		if allowedMap[lang.Code] {
+			availableLanguages = append(availableLanguages, lang)
+		}
+	}
+	
+	return availableLanguages
 }
