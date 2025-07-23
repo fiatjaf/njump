@@ -1,0 +1,522 @@
+[
+  {
+    "id": "site.title",
+    "other": "njump - Nostr'a bir web ağ geçidi"
+  },
+  {
+    "id": "nav.about",
+    "other": "Hakkında"
+  },
+  {
+    "id": "nav.why",
+    "other": "Neden Nostr?"
+  },
+  {
+    "id": "nav.get_started",
+    "other": "Başlayın"
+  },
+  {
+    "id": "nav.resources",
+    "other": "Kaynaklar"
+  },
+  {
+    "id": "nav.development",
+    "other": "Geliştirme"
+  },
+  {
+    "id": "nav.join",
+    "other": "Nostr'a Katılın"
+  },
+  {
+    "id": "home.title",
+    "other": "Nostr - basit bir protokol"
+  },
+  {
+    "id": "home.hero.protocol",
+    "other": "PROTOKOL"
+  },
+  {
+    "id": "home.intro.today.title",
+    "other": "Bugünün interneti"
+  },
+  {
+    "id": "home.intro.today.subtitle",
+    "other": "İnternet, açık bir fikir ve bilgi alışverişi vizyonuyla başladı..."
+  },
+  {
+    "id": "home.intro.today.description",
+    "other": "İnternet, herkes için ifade, ifade ve örgütlenme özgürlüğü değerlerini desteklemeyi amaçlayan açık bir fikir ve bilgi alışverişi vizyonuyla başladı. Zamanla bu vizyon, büyük şirketler için neyin kâr getirebileceğine dair bir bakış açısına indirgendi. Bugün web, birkaç şirketin sahip olduğu ancak milyarlarca kişinin kullandığı bir avuç devasa sunucudan başka bir şey değil."
+  },
+  {
+    "id": "home.intro.problems",
+    "other": "Kimliklerimizin mülkiyetini üçüncü şahısların ellerine bıraktık. Yaratımlarımızın haklarını onlardan kâr elde etmek isteyenlere verdik. Çıkarlarımızı, dikkatimizi en üst düzeye çıkarmak için yazılmış algoritmalara devrettik. Bunu yaparken, bu şirketlere, hükümetlere ve diğer kontrolcü kuruluşlara ne gördüğümüzü, ne okuduğumuzu ve ne söylediğimizi kararlaştırmaları için orantısız bir güç verdik. Engellerinden kurtulmanın ve herkesin, her yerde, istediği gibi yaratmasına, konuşmasına ve sosyalleşmesine olanak tanıyan bir internet yaratmanın zamanı geldi, tıpkı amaçlandığı gibi."
+  },
+  {
+    "id": "home.intro.tomorrow.title",
+    "other": "Yarın için Nostr"
+  },
+  {
+    "id": "home.intro.tomorrow.subtitle",
+    "other": "Nostr, \"Notlar ve Röleler Tarafından Aktarılan Diğer Şeyler\" in kısaltmasıdır..."
+  },
+  {
+    "id": "home.intro.tomorrow.description",
+    "other": "Nostr, \"Notlar ve Röleler Tarafından İletilen Diğer Şeyler\" in kısaltmasıdır, merkezi sunuculara olan bağımlılığı ortadan kaldırarak sosyal ağları ve çevrimiçi iletişimi devrim niteliğinde değiştiriyor. Kullanıcıların istemcileri çalıştırdığı ve herkesin röleleri çalıştırabildiği bir istemci-röle modeli kullanır. Bilgiler (ve depolanması) bireyler, tutkulu gönüllüler, işletmeler ve kar amacı gütmeyen kuruluşlardan oluşan bir ağda dağıtılır."
+  },
+  {
+    "id": "home.intro.protocol.description",
+    "other": "Nostr protokolü, kriptografik anahtarlar ve imzalar aracılığıyla kurcalamaya karşı korumalı iletişim sağlar. Kullanıcıların notları rölelere yayınlamak için yollar oluşturmasını sağlayarak ve operatörler tarafından benzersiz, bağımsız rölelerin konuşlandırılmasını ve bakımını teşvik ederek, Nostr mevcut web'in birçok eksikliğini giderir. Birlikte çalışabilir uygulamalardan benzersiz ve her yerde bulunan kimliklere kadar, Nostr dünyanın daha önce hiç görmediği yaratıcı, işbirlikçi yeniliklere kapı açar."
+  },
+  {
+    "id": "home.main.title",
+    "other": "Nostr ile Özgürlüğü Güçlendirmek"
+  },
+  {
+    "id": "home.main.subtitle",
+    "other": "Güvenli, kullanıcı merkezli bir protokol ve sosyal ağ"
+  },
+  {
+    "id": "home.features.identity.title",
+    "other": "Kimliğinizin sahibi sizsiniz"
+  },
+  {
+    "id": "home.features.identity.desc",
+    "other": "Nostr, kimliğinizin benzersiz bir kriptografik anahtara bağlı olduğu bir açık anahtar sistemi kullanır. Herhangi bir merkezi otoriteye dayanmadan kimliğiniz üzerinde tam kontrole sahipsiniz. Nostr protokolü, Müşterini Tanı (KYC) süreçlerine olan ihtiyacı ortadan kaldırır. E-posta, kimlik, parmak izi veya iris taraması gerekmez! Gizliliğiniz tamamen sizin elinizde."
+  },
+  {
+    "id": "home.features.data.title",
+    "other": "Verilerinizi imzalarla doğrulayın"
+  },
+  {
+    "id": "home.features.data.desc",
+    "other": "Nostr'da kullanıcılar gönderilerini kriptografik anahtarlarıyla imzalarlar. Çoğu istemci bu süreci otomatik olarak yönetir. Bu kriptografik imzalar verilerinizin orijinalliğini sağlar. Ne yarattığınızı (ve ne yaratmadığınızı) kanıtlayabilirsiniz. Kullanıcı tarafından seçilen röleler bu verileri depolar ve gönderir. Bu röleler, arada durak olmadan diğer kullanıcılarla doğrudan iletişim kurar. Her istemci daha sonra bu imzaları doğrulayarak veri bütünlüğünü sağlar."
+  },
+  {
+    "id": "home.features.audience.title",
+    "other": "Kitlenizle doğrudan bağlantı kurun"
+  },
+  {
+    "id": "home.features.audience.desc",
+    "other": "Nostr'da kitlenizi ve akışınızı korursunuz. Hangi istemciyi kullanırsanız kullanın, kişi listeniz orada olacaktır. Tıpkı diğerlerininki gibi, seçtiğiniz rölelerde yayınlanır. Herkes tercih ettiği yayın rölelerini seçer ve istemciler yeni gönderiler bulmak için onlara bağlanır. Ayrıca, röleler spam veya tacize karşı filtreler ve iyi içerik keşfi için araçlar, küratörlüğünde içerik toplayıcıları veya özel akış sağlayıcıları olarak hareket edebilir."
+  },
+  {
+    "id": "home.features.speech.title",
+    "other": "Konuşma özgürlüğünüz var"
+  },
+  {
+    "id": "home.features.speech.desc",
+    "other": "Röleler kabul etmeye istekli olduğu sürece istediğiniz her şeyi yayınlayabilirsiniz. Röleler, yasaklar, içerik kaldırma ve topluluk yönergeleri dahil olmak üzere operatörlerinin seçtiği herhangi bir politika altında çalışabilir. Yalnızca belirli kullanıcıları veya belirli içerik türlerini barındırmayı seçebilirler. Söyleyeceklerinizi hiçbir röle kabul etmiyorsa, kolayca kendi rölenizi çalıştırabilirsiniz. Farklı rölelerde yayın yapmaya başladığınızda, istemciler ekli röle ipuçlarına göre sizi orada bulabilmelidir. Kişileriniz daha sonra güncellemelerinizi almaya devam edecektir."
+  },
+  {
+    "id": "home.features.anonymous.title",
+    "other": "Anonim kalma özgürlüğünüz var"
+  },
+  {
+    "id": "home.features.anonymous.desc",
+    "other": "Nostr kullanıcı anonimliğini destekler. Kullanıcılar, katılma yeteneklerini tehlikeye atmadan anonim olmayı veya takma ad kullanmayı seçebilirler. Nostr ayrıca izlemeyi önlemek için TOR'da da mevcuttur. Bir protokol olarak Nostr, herhangi bir kuruluşa, hükümete veya başka bir kuruluşa kullanıcı verileri sağlama kapasitesine sahip değildir. Bu, tüm kullanıcıların ifade özgürlüğünü yasaklardan veya kısıtlamalardan korumaya yardımcı olur. Herhangi bir bireysel röle veya istemci bu taleplere tabi olabilir, ancak mevcut veriler bir kullanıcının genel anahtarıyla sınırlı olacaktır. Bu kullanıcı kimliğini korumak için uygun adımları atmışsa, paylaşılacak çok az bilgi olacaktır."
+  },
+  {
+    "id": "home.features.develop.title",
+    "other": "Geliştirme özgürlüğünüz var"
+  },
+  {
+    "id": "home.features.develop.desc",
+    "other": "Nostr, geliştirmeyi ve özelleştirmeyi teşvik eder. Herkes, ağın büyümesine ve gelişmesine katkıda bulunarak protokol üzerinde serbestçe geliştirme yapabilir. Nostr üzerine inşa edilen tüm istemciler, röleler, araçlar ve uygulamalar, geçmişteki ve gelecekteki her türlü geliştirmeden faydalanabilir. Oluşturucular, uygulamaları ve özellikleri için ödeme yöntemleri sunma özgürlüğüne sahiptir ve daha önce hiç olmadığı kadar potansiyel bir gelir akışı sağlar."
+  },
+  {
+    "id": "home.cta.question",
+    "other": "Ne bekliyorsun?"
+  },
+  {
+    "id": "home.cta.button",
+    "other": "Nostr'a Katılın"
+  },
+  {
+    "id": "home.getting_started.title",
+    "other": "Nostr ile Başlayın"
+  },
+  {
+    "id": "home.getting_started.create.title",
+    "other": "Bir hesap oluştur"
+  },
+  {
+    "id": "home.getting_started.create.desc",
+    "other": "Nostr ile hesabınıza sahip olan merkezi bir sağlayıcı yoktur. Aslında, hesabınız kriptografi ile desteklenmektedir ve kendiniz manuel olarak bir (veya daha fazla!) oluşturabilirsiniz, sınırsız. Ancak en kolay yol, yeni hesabınızı saniyeler içinde oluşturmak için <a href=\"https://nstart.me\" class=\"underline\">yeni çevrimiçi sihirbazımızı</a> kullanmaktır. Ardından, Nostr'un her yerinde kullanabilirsiniz!"
+  },
+  {
+    "id": "home.getting_started.secure.title",
+    "other": "Anahtarınızı güvenceye alın"
+  },
+  {
+    "id": "home.getting_started.secure.desc",
+    "other": "Bir hesap bir çift anahtardır. Özel anahtar (nsec) dijital kimliğinizdir. Kaybolursa veya tehlikeye girerse, erişimi kurtarmanın veya kimlik bilgilerini değiştirmenin bir yolu yoktur. Özel anahtarınızı güvende ve emniyette tutmalısınız. Bir şifre yöneticisi kullanın, kağıt üzerinde bir yedek oluşturun ve YALNIZCA güvenilir uygulamalarda kullanın. Nsec'inizi asla bir web sitesine girmeyin. Anahtarınızı web'de güvenli bir şekilde kullanmak için bir <a href=\"#signers\" class=\"underline\">imzalama uzantısı</a> yükleyin."
+  },
+  {
+    "id": "home.getting_started.app.title",
+    "other": "Bir uygulama seçin"
+  },
+  {
+    "id": "home.getting_started.app.desc",
+    "other": "Nostr geliştiricileri, çok çeşitli kullanım durumları için zaten birkaç uygulama oluşturmuştur. Nostr'u kullanmaya başlamanın en basit yolu, bir <a href=\"#social\" class=\"underline\">sosyal istemci</a> indirmek ve dahil olmaktır. Sohbete katılarak toplulukla ve topluluk aracılığıyla öğrenin. Yardıma mı ihtiyacınız var? #asknostr etiketini kullanın!"
+  },
+  {
+    "id": "home.getting_started.explore.title",
+    "other": "Nostr'u Keşfedin"
+  },
+  {
+    "id": "home.getting_started.explore.desc",
+    "other": "Temel kavramlara aşina olduktan sonra, diğer sosyal istemcileri ve <a href=\"#readwrite\" class=\"underline\">Nostr uygulamalarını</a> keşfetmek için tercih ettiğiniz anahtar yönetim aracını ayarlayabilirsiniz. Zaten dijital kimliğiniz var ve her yerde çalışıyor. Nostr imzalama uygulamanızı, imzalama uzantınızı veya nsec'inizi kullanarak giriş yapmanız yeterlidir. Özel anahtarınızı kullanıyorsanız, uygulamanın güvenilir bir kaynaktan geldiğinden emin olun!"
+  },
+  {
+    "id": "home.getting_started.client_alt",
+    "other": "Nostr istemcisi"
+  },
+  {
+    "id": "home.resources.title",
+    "other": "Nostr kaynakları"
+  },
+  {
+    "id": "home.resources.subtitle",
+    "other": "Nostr ile yapabileceğiniz bazı şeyleri keşfedin"
+  },
+  {
+    "id": "home.resources.multimedia",
+    "other": "Multimedya"
+  },
+  {
+    "id": "home.resources.streaming",
+    "other": "Canlı yayın"
+  },
+  {
+    "id": "home.resources.publishing",
+    "other": "Okuma ve yazma"
+  },
+  {
+    "id": "home.resources.communities",
+    "other": "Topluluklar"
+  },
+  {
+    "id": "home.resources.tools",
+    "other": "Diğer şeyler"
+  },
+  {
+    "id": "home.resources.security",
+    "other": "Anahtar güvenliği"
+  },
+  {
+    "id": "home.resources.disclaimer",
+    "other": "Bu, Nostr üzerine zaten inşa edilmiş 100'den fazla uygulamanın sadece hızlı bir seçimidir, <a class=\"underline\" href=\"https://www.nostrapps.com\" target=\"_blank\">hepsini keşfedin</a>!"
+  },
+  {
+    "id": "home.development.title",
+    "other": "Nostr'da Geliştirin"
+  },
+  {
+    "id": "home.development.origins.title",
+    "other": "Her şeyin başladığı yer"
+  },
+  {
+    "id": "home.development.origins.desc",
+    "other": "Nostr \"manifestosu\" 2019'da yayınlandı. Yavaş ama emin adımlarla, fikir etrafında bir topluluk toplandı ve onu genişletti, onu her gün birçok gerçek insan tarafından kullanılan hızlı, esnek ve güvenilir bir protokole dönüştürdü."
+  },
+  {
+    "id": "home.development.nips.title",
+    "other": "NIP'leri Keşfedin"
+  },
+  {
+    "id": "home.development.nips.desc",
+    "other": "NIP'ler \"Nostr Uygulama Olasılıkları\" anlamına gelir. Nostr röle ve istemci uyumlu yazılımlar tarafından nelerin uygulanabileceğine dair bir kılavuz olarak mevcutturlar. Yeni Nostr uygulamanızı optimum ağ uyumluluğu ile geliştirmek için bunları inceleyin."
+  },
+  {
+    "id": "home.development.design.title",
+    "other": "Tasarım kılavuzu"
+  },
+  {
+    "id": "home.development.design.desc",
+    "other": "Nostrdesign.org, Nostr uygulamanızın arayüzünü en iyi nasıl geliştireceğinizi keşfetmek için resmi kaynaktır. Yeni bir paradigma keşfedin, kullanıcı arayüzünüzü optimize edin ve kullanıcı deneyimini nasıl geliştireceğinize dair ipuçları bulun, hepsi tek bir yerde."
+  },
+  {
+    "id": "home.development.read_more",
+    "other": "Daha fazlasını okuyun >>"
+  },
+  {
+    "id": "home.typewriter.not_crypto",
+    "other": "KRİPTO DEĞİL"
+  },
+  {
+    "id": "home.typewriter.simple",
+    "other": "BASİT"
+  },
+  {
+    "id": "home.typewriter.not_blockchain",
+    "other": "BLOK ZİNCİRİ DEĞİL"
+  },
+  {
+    "id": "home.typewriter.universal_identity",
+    "other": "EVRENSEL KİMLİK"
+  },
+  {
+    "id": "home.typewriter.not_company",
+    "other": "ŞİRKET DEĞİL"
+  },
+  {
+    "id": "home.typewriter.free_expression",
+    "other": "İFADE ÖZGÜRLÜĞÜ"
+  },
+  {
+    "id": "home.typewriter.free_association",
+    "other": "ÖRGÜTLENME ÖZGÜRLÜĞÜ"
+  },
+  {
+    "id": "home.typewriter.for_friends",
+    "other": "DOSTLAR VE DÜŞMANLAR İÇİN"
+  },
+  {
+    "id": "home.typewriter.for_everyone",
+    "other": "HERKES İÇİN"
+  },
+  {
+    "id": "home.typewriter.for_broadcasting",
+    "other": "YAYIN İÇİN"
+  },
+  {
+    "id": "home.typewriter.for_groups",
+    "other": "KAPALI GRUPLAR İÇİN"
+  },
+  {
+    "id": "home.typewriter.for_opinions",
+    "other": "TÜM GÖRÜŞLER İÇİN"
+  },
+  {
+    "id": "home.typewriter.like_internet",
+    "other": "İNTERNETİN KENDİSİ GİBİ"
+  },
+  {
+    "id": "home.typewriter.flexible",
+    "other": "ESNEK"
+  },
+  {
+    "id": "home.typewriter.scalable",
+    "other": "ÖLÇEKLENEBİLİR"
+  },
+  {
+    "id": "home.typewriter.public_square",
+    "other": "GERÇEK BİR KAMU MEYDANI"
+  },
+  {
+    "id": "home.typewriter.client_relay",
+    "other": "İSTEMCİ-RÖLE"
+  },
+  {
+    "id": "home.typewriter.not_p2p",
+    "other": "P2P DEĞİL"
+  },
+  {
+    "id": "home.typewriter.old_web",
+    "other": "ESKİ WEB"
+  },
+  {
+    "id": "home.typewriter.decentralized",
+    "other": "GERÇEKTEN MERKEZİ OLMAYAN"
+  },
+  {
+    "id": "home.typewriter.communities",
+    "other": "DOĞRU YAPILMIŞ TOPLULUKLAR"
+  },
+  {
+    "id": "home.typewriter.open_alternative",
+    "other": "AÇIK BİR ALTERNATİF"
+  },
+  {
+    "id": "home.typewriter.wikis",
+    "other": "SOSYAL WİKİLER"
+  },
+  {
+    "id": "home.typewriter.git",
+    "other": "GİT İŞBİRLİĞİ"
+  },
+  {
+    "id": "home.typewriter.articles",
+    "other": "UZUN MAKALELER"
+  },
+  {
+    "id": "home.typewriter.microblogging",
+    "other": "MİKROBLOGLAMA"
+  },
+  {
+    "id": "home.typewriter.livestreaming",
+    "other": "CANLI YAYIN"
+  },
+  {
+    "id": "home.typewriter.forums",
+    "other": "FORUMLAR"
+  },
+  {
+    "id": "home.typewriter.annotating",
+    "other": "WEB'İ AÇIKLAMA"
+  },
+  {
+    "id": "home.typewriter.commenting",
+    "other": "HER ŞEYİ YORUMLAMA"
+  },
+  {
+    "id": "home.typewriter.social_web",
+    "other": "YARININ SOSYAL WEBİ"
+  },
+  {
+    "id": "home.typewriter.for_you",
+    "other": "SİZİN İÇİN, BUGÜN"
+  },
+  {
+    "id": "home.typewriter.dots",
+    "other": "......."
+  },
+  {
+    "id": "about.title",
+    "other": "njump hakkında"
+  },
+  {
+    "id": "about.what.title",
+    "other": "njump nedir?"
+  },
+  {
+    "id": "about.what.description",
+    "other": "<i>njump</i>, profillere, notlara ve rölelere göz atmanızı sağlayan bir HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">Nostr</a> ağ geçididir. Bir kaynağı önizlemenin ve tercih ettiğiniz istemcide açmanın kolay bir yoludur. <i>njump</i>'un tipik kullanımı, <code>nostr:</code> şemasının henüz tanınmadığı Nostr dünyasının dışındaki içeriği paylaşmaktır."
+  },
+  {
+    "id": "about.usage.title",
+    "other": "Nasıl kullanılır"
+  },
+  {
+    "id": "about.usage.description",
+    "other": "<i>njump</i> şu anda {{.Domain}} altında yaşıyor, etki alanından sonra bir Nostr varlığı <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a> (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, vb.) ekleyerek ona ulaşabilirsiniz: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-19-varlığı&gt;</span>."
+  },
+  {
+    "id": "about.examples.title",
+    "other": "Örnekler"
+  },
+  {
+    "id": "about.examples.description",
+    "other": "Örneğin, işte bir <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">kullanıcı profili</a>, bir <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">not</a> ve bir <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">uzun formlu blog gönderisi</a>."
+  },
+  {
+    "id": "about.try.title",
+    "other": "Şimdi deneyin! Bir Nostr içeriğine atlayın:"
+  },
+  {
+    "id": "about.try.placeholder",
+    "other": "bir npub / nprofile / nevent / ... yapıştırın"
+  },
+  {
+    "id": "about.try.button",
+    "other": "Görüntüle"
+  },
+  {
+    "id": "about.try.or",
+    "other": "veya seç"
+  },
+  {
+    "id": "about.try.random",
+    "other": "rastgele bir içerik"
+  },
+  {
+    "id": "about.reasons.intro",
+    "other": "Nostr dışında Nostr içeriğini paylaşırken njump'ı seçmenin birkaç nedeni vardır:"
+  },
+  {
+    "id": "about.reasons.clean.title",
+    "other": "Temiz, hızlı ve sağlam"
+  },
+  {
+    "id": "about.reasons.clean.desc",
+    "other": "njump sayfaları son derece hafiftir ve hızlı yüklenir. İstemci tarafı javascript söz konusu değildir. Gereksiz ayrıntılar olmadan içeriğe odaklanan, tipografiye uygun özen gösterilerek minimalisttirler. Ayrıca, önbelleğe alınırlar, böylece bir sayfayı paylaştığınızda hızlı ve sorunsuz bir şekilde yüklenmesini bekleyebilirsiniz. Yeni kullanıcıları dahil etmek için mükemmel bir araçtır!"
+  },
+  {
+    "id": "about.reasons.previews.title",
+    "other": "Güzel önizlemeler"
+  },
+  {
+    "id": "about.reasons.previews.desc",
+    "other": "njump her şeyi sunucu tarafında oluşturur, bu nedenle Telegram, Discord, Twitter ve başka yerlerde çalışan kullanışlı, zengin önizlemeler oluşturabilir."
+  },
+  {
+    "id": "about.reasons.browser.title",
+    "other": "Harika tarayıcı deneyimi"
+  },
+  {
+    "id": "about.reasons.browser.desc",
+    "other": "Bir URL'yi doğrudan bir tarayıcıda açtığınızda, ziyaretçiler resimler, videolar ve Nostr etkinliklerine bağlantılar gibi başvurulan içeriği basit ama etkili bir şekilde görüntülenecektir. Ana notu gösterir ve ziyaretçinin onu takip etmesine olanak tanır. Hatta yazdırmak veya PDF'ye aktarmak için kendi özel CSS'si bile vardır."
+  },
+  {
+    "id": "about.reasons.cooperative.title",
+    "other": "İşbirlikçi (dışarı atlama)"
+  },
+  {
+    "id": "about.reasons.cooperative.desc",
+    "other": "njump kullanıcıları yakalamakla ilgilenmez. Aksine, onları bir web istemcileri listesinden veya yerel istemciler için nostr: önekiyle herhangi bir Nostr kaynağına \"atlamaya\" davet eder. Hatta her ziyaretçi için en çok kullanılan istemciyi hatırlar ve hızlı ve kolay erişim için onu en üste koyar."
+  },
+  {
+    "id": "about.reasons.nip89.title",
+    "other": "NIP-89 desteği"
+  },
+  {
+    "id": "about.reasons.nip89.desc",
+    "other": "destek yakında!"
+  },
+  {
+    "id": "about.reasons.seo.title",
+    "other": "Arama dostu (içeri atlama)"
+  },
+  {
+    "id": "about.reasons.seo.desc",
+    "other": "njump sayfaları statiktir, bu nedenle arama motorları onları dizine ekleyebilir. Bu, njump'ın başkalarının Nostr'da harika içerikler keşfetmesine, atlamasına ve bize katılmasına yardımcı olabileceği anlamına gelir! njump, bu açık amaca sahip tek Nostr kaynağıdır. İyi bir notun çevrimiçi olarak bulunabilmesini önemsiyorsanız, paylaşmak için njump'ı kullanın. Bu, Nostr'un gelişmesine ve herkes için daha erişilebilir hale gelmesine yardımcı olacaktır."
+  },
+  {
+    "id": "about.nip05.title",
+    "other": "NIP-05 profillerini paylaşın"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "Kendi profilinizi <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a>'ten esinlenilmiş güzel bir kalıcı bağlantıyla paylaşın: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>, örneğin: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> veya <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile.shows",
+    "other": "Bir profil, temel meta veri bilgilerinizi, atanmış \"giden kutusu\" rölelerinizi ve en son notlarınızı gösterir."
+  },
+  {
+    "id": "about.social.title",
+    "other": "Twitter, Telegram ve daha fazlasında paylaşın"
+  },
+  {
+    "id": "about.social.desc",
+    "other": "Nostr notlarını Twitter, Telegram ve diğer birçok \"sosyal platformda\" hızlı ve zahmetsizce paylaşın: sadece bir bağlantı bırakın ve njump, paylaşım deneyimini ve kullanışlılığını en üst düzeye çıkarmak için notun metnini tuval olarak önizleme görüntüsünü kullanarak oluşturacaktır. Telegram'da, uygulamadaki uzun formlu içeriğe erişmek için Anında Görüntüleme'miz de var!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "Röle görünümleri"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "Bir röleye gönderilen en son içeriği <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span> kullanarak görüntüleyin, örneğin: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "Bir röle hakkında bazı temel bilgiler (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) mevcuttur. Operatörlerin bu tanımlayıcıları daha kişisel ve bilgilendirici hale getirmeye başlamasını umuyoruz, böylece kullanıcıların bir röleye katılıp katılmayacaklarını değerlendirmeleri için bir yolu olur."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "Web sitesi widget'ları"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "Notları, uzun formlu içeriği ve profilleri basit bir komut dosyasıyla bir web sayfasına gömebilirsiniz:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;nip-19-varlığı&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "Denetçi aracı"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "Biliyorsunuz, annelerimiz de dahil olmak üzere hepimiz programcıyız, bu nedenle her <i>njump</i> sayfasında, etkinliğin tam JSON'unu incelemek için \"Daha fazla ayrıntı göster\" anahtarını değiştirebilirsiniz. Başka araçlar (örneğin <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a> gibi) yüklemeden, bu bilgilere ulaşmanın muhtemelen en hızlı yolu budur."
+  }
+]

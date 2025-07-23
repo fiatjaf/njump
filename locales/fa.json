@@ -1,0 +1,522 @@
+[
+  {
+    "id": "site.title",
+    "other": "njump - دروازه وب به Nostr"
+  },
+  {
+    "id": "nav.about",
+    "other": "درباره"
+  },
+  {
+    "id": "nav.why",
+    "other": "چرا Nostr؟"
+  },
+  {
+    "id": "nav.get_started",
+    "other": "شروع کنید"
+  },
+  {
+    "id": "nav.resources",
+    "other": "منابع"
+  },
+  {
+    "id": "nav.development",
+    "other": "توسعه"
+  },
+  {
+    "id": "nav.join",
+    "other": "به Nostr بپیوندید"
+  },
+  {
+    "id": "home.title",
+    "other": "Nostr - یک پروتکل ساده"
+  },
+  {
+    "id": "home.hero.protocol",
+    "other": "یک پروتکل"
+  },
+  {
+    "id": "home.intro.today.title",
+    "other": "اینترنت برای امروز"
+  },
+  {
+    "id": "home.intro.today.subtitle",
+    "other": "اینترنت با چشم اندازی برای تبادل آزاد ایده ها و اطلاعات آغاز شد..."
+  },
+  {
+    "id": "home.intro.today.description",
+    "other": "اینترنت با چشم اندازی برای تبادل آزاد ایده ها و اطلاعات آغاز شد، یکی که قصد داشت از ارزش های آزادی بیان، ابراز و تشکل برای همه حمایت کند. با گذشت زمان، این چشم انداز به دیدگاهی از آنچه می تواند برای شرکت های بزرگ سود به همراه داشته باشد، کاهش یافته است. امروز، وب چیزی جز تعداد انگشت شماری از سرورهای عظیم نیست که توسط چند شرکت در اختیار گرفته شده اما توسط میلیاردها نفر استفاده می شود."
+  },
+  {
+    "id": "home.intro.problems",
+    "other": "ما مالکیت هویت خود را در اختیار اشخاص ثالث قرار داده ایم. ما حقوق خلاقیت های خود را به کسانی که به دنبال سود بردن از آنها هستند، اعطا کرده ایم. ما علایق خود را به الگوریتم هایی که برای به حداکثر رساندن توجه ما نوشته شده اند، واگذار کرده ایم. با این کار، ما به این شرکت ها، دولت ها و سایر نهادهای کنترل کننده، قدرت نامتناسبی برای تصمیم گیری در مورد آنچه می بینیم، می خوانیم و می گوییم، داده ایم. زمان آن فرا رسیده است که از موانع آنها رها شویم و اینترنتی را ایجاد کنیم که به هر کسی، در هر کجا، امکان ایجاد، صحبت کردن و معاشرت را به میل خود، همانطور که در نظر گرفته شده بود، بدهد."
+  },
+  {
+    "id": "home.intro.tomorrow.title",
+    "other": "Nostr برای فردا"
+  },
+  {
+    "id": "home.intro.tomorrow.subtitle",
+    "other": "Nostr، مخفف \"یادداشت ها و سایر موارد منتقل شده توسط رله ها\"..."
+  },
+  {
+    "id": "home.intro.tomorrow.description",
+    "other": "Nostr، مخفف \"یادداشت ها و سایر موارد منتقل شده توسط رله ها\"، با از بین بردن وابستگی به سرورهای متمرکز، شبکه های اجتماعی و ارتباطات آنلاین را متحول می کند. این یک مدل مشتری-رله را به کار می گیرد که در آن کاربران مشتریان را اجرا می کنند و هر کسی می تواند رله ها را اداره کند. اطلاعات (و ذخیره سازی آن) در سراسر شبکه ای از افراد، داوطلبان پرشور، مشاغل و سازمان های غیرانتفاعی توزیع می شود."
+  },
+  {
+    "id": "home.intro.protocol.description",
+    "other": "پروتکل Nostr ارتباطات ضد دستکاری را از طریق کلیدهای رمزنگاری و امضاها تضمین می کند. با فعال کردن کاربران برای ایجاد مسیرهایی برای انتشار یادداشت ها به رله ها و تشویق استقرار و نگهداری رله های منحصر به فرد و مستقل توسط اپراتورها، Nostr بسیاری از کاستی های وب فعلی را برطرف می کند. از برنامه های کاربردی قابل تعامل تا هویت های منحصر به فرد و همه جا حاضر، Nostr درها را به روی نوآوری های خلاقانه و مشارکتی باز می کند که جهان هرگز ندیده است."
+  },
+  {
+    "id": "home.main.title",
+    "other": "توانمندسازی آزادی با Nostr"
+  },
+  {
+    "id": "home.main.subtitle",
+    "other": "یک پروتکل و شبکه اجتماعی امن و کاربر محور"
+  },
+  {
+    "id": "home.features.identity.title",
+    "other": "شما صاحب هویت خود هستید"
+  },
+  {
+    "id": "home.features.identity.desc",
+    "other": "Nostr از یک سیستم کلید عمومی استفاده می کند که در آن هویت شما به یک کلید رمزنگاری منحصر به فرد گره خورده است. شما کنترل کامل بر هویت خود دارید بدون اینکه به هیچ مرجع مرکزی تکیه کنید. پروتکل Nostr نیاز به فرآیندهای شناخت مشتری (KYC) را از بین می برد. نیازی به ایمیل، شناسه، اثر انگشت یا اسکن چشم نیست! حریم خصوصی شما کاملاً در اختیار شماست."
+  },
+  {
+    "id": "home.features.data.title",
+    "other": "داده های خود را با امضا تأیید کنید"
+  },
+  {
+    "id": "home.features.data.desc",
+    "other": "در Nostr، کاربران پست های خود را با کلیدهای رمزنگاری خود امضا می کنند. اکثر مشتریان این فرآیند را به طور خودکار انجام می دهند. این امضاهای رمزنگاری اصالت داده های شما را تضمین می کنند. شما می توانید ثابت کنید که چه چیزی را ایجاد کرده اید (و چه چیزی را ایجاد نکرده اید). رله های انتخاب شده توسط کاربر این داده ها را ذخیره و ارسال می کنند. این رله ها مستقیماً با سایر کاربران ارتباط برقرار می کنند، بدون هیچ توقفی در این بین. سپس هر مشتری این امضاها را تأیید می کند و یکپارچگی داده ها را تضمین می کند."
+  },
+  {
+    "id": "home.features.audience.title",
+    "other": "مستقیماً با مخاطبان خود ارتباط برقرار کنید"
+  },
+  {
+    "id": "home.features.audience.desc",
+    "other": "در Nostr، شما مخاطبان و فید خود را حفظ می کنید. از هر کلاینتی که استفاده کنید، لیست مخاطبین شما در آنجا خواهد بود. این در رله های انتخابی شما منتشر می شود، همانطور که لیست سایر کاربران نیز منتشر می شود. همه رله های انتشار ترجیحی خود را انتخاب می کنند و کلاینت ها برای یافتن پست های جدید به آنها متصل می شوند. علاوه بر این، رله ها می توانند به عنوان فیلترهایی در برابر هرزنامه یا آزار و اذیت و به عنوان وسیله ای برای کشف محتوای خوب، جمع آوری کننده محتوای انتخاب شده یا ارائه دهنده فیدهای سفارشی عمل کنند."
+  },
+  {
+    "id": "home.features.speech.title",
+    "other": "شما در بیان آزاد هستید"
+  },
+  {
+    "id": "home.features.speech.desc",
+    "other": "شما می توانید هر چیزی را که می خواهید منتشر کنید تا زمانی که رله ها مایل به پذیرش آن باشند. رله ها می توانند تحت هر سیاستی که اپراتورهایشان انتخاب می کنند، از جمله ممنوعیت ها، حذف محتوا و دستورالعمل های جامعه، فعالیت کنند. آنها ممکن است انتخاب کنند که فقط از کاربران خاص یا انواع خاصی از محتوا میزبانی کنند. اگر هیچ رله ای آنچه را که می خواهید بگویید نپذیرد، می توانید به راحتی رله خود را راه اندازی کنید. هنگامی که شروع به انتشار در رله های مختلف می کنید، کلاینت ها باید بتوانند شما را در آنجا بر اساس نکات رله پیوست شده پیدا کنند. سپس مخاطبین شما به دریافت به روزرسانی های شما ادامه خواهند داد."
+  },
+  {
+    "id": "home.features.anonymous.title",
+    "other": "شما آزاد هستید که ناشناس بمانید"
+  },
+  {
+    "id": "home.features.anonymous.desc",
+    "other": "Nostr از ناشناس ماندن کاربر پشتیبانی می کند. کاربران می توانند بدون به خطر انداختن توانایی خود برای شرکت، ناشناس بودن یا استفاده از نام مستعار را انتخاب کنند. Nostr همچنین در TOR برای جلوگیری از ردیابی در دسترس است. به عنوان یک پروتکل، Nostr ظرفیت ارائه داده های کاربر به هیچ نهادی، دولتی یا غیر آن را ندارد. این به محافظت از آزادی بیان همه کاربران در برابر ممنوعیت ها یا محدودیت ها کمک می کند. هر رله یا کلاینت فردی می تواند مشمول این درخواست ها باشد، اما داده های موجود به کلید عمومی کاربر محدود می شود. اگر آن کاربر اقدامات مناسبی برای محافظت از هویت خود انجام داده باشد، اطلاعات کمی برای به اشتراک گذاشتن وجود خواهد داشت."
+  },
+  {
+    "id": "home.features.develop.title",
+    "other": "شما در توسعه آزاد هستید"
+  },
+  {
+    "id": "home.features.develop.desc",
+    "other": "Nostr توسعه و سفارشی سازی را تشویق می کند. هر کسی آزاد است که بر روی پروتکل توسعه دهد و به رشد و تکامل شبکه کمک کند. همه کلاینت ها، رله ها، ابزارها و برنامه های Nostr که ساخته می شوند می توانند از هر توسعه گذشته و آینده بهره مند شوند. سازندگان آزادی ایجاد روش های پرداخت برای برنامه ها و ویژگی های خود را دارند و منبع درآمد بالقوه ای را مانند هرگز فراهم می کنند."
+  },
+  {
+    "id": "home.cta.question",
+    "other": "منتظر چه چیزی هستید؟"
+  },
+  {
+    "id": "home.cta.button",
+    "other": "به Nostr بپیوندید"
+  },
+  {
+    "id": "home.getting_started.title",
+    "other": "با Nostr شروع کنید"
+  },
+  {
+    "id": "home.getting_started.create.title",
+    "other": "یک حساب کاربری ایجاد کنید"
+  },
+  {
+    "id": "home.getting_started.create.desc",
+    "other": "با Nostr، هیچ ارائه دهنده مرکزی وجود ندارد که مالک حساب شما باشد. در واقع، حساب شما با رمزنگاری کار می کند و می توانید خودتان یکی (یا بیشتر!) را با دست و بدون محدودیت ایجاد کنید. با این حال، ساده ترین راه استفاده از <a href=\"https://start.nostr.net\" class=\"underline\">جادوگر آنلاین جدید ما</a> برای تولید حساب جدید خود در چند ثانیه است. سپس، می توانید از آن در سراسر Nostr استفاده کنید!"
+  },
+  {
+    "id": "home.getting_started.secure.title",
+    "other": "کلید خود را ایمن کنید"
+  },
+  {
+    "id": "home.getting_started.secure.desc",
+    "other": "یک حساب یک جفت کلید است. کلید خصوصی (nsec) هویت دیجیتال شماست. اگر گم شود یا فاش شود، هیچ راهی برای بازیابی دسترسی یا تغییر اعتبارنامه وجود ندارد. شما باید کلید خصوصی خود را ایمن و مطمئن نگه دارید. از یک مدیر رمز عبور استفاده کنید، یک نسخه پشتیبان روی کاغذ تهیه کنید و فقط در برنامه های معتبر از آن استفاده کنید. هرگز nsec خود را در یک وب سایت وارد نکنید. یک <a href=\"#signers\" class=\"underline\">افزونه امضاکننده</a> نصب کنید تا از کلید خود به طور ایمن در وب استفاده کنید."
+  },
+  {
+    "id": "home.getting_started.app.title",
+    "other": "یک برنامه انتخاب کنید"
+  },
+  {
+    "id": "home.getting_started.app.desc",
+    "other": "توسعه دهندگان Nostr قبلاً چندین برنامه برای طیف گسترده ای از کاربردها ساخته اند. ساده ترین راه برای شروع استفاده از Nostr، دانلود یک <a href=\"#social\" class=\"underline\">کلاینت اجتماعی</a> و مشارکت است. با و از طریق جامعه با مشارکت در گفتگو بیاموزید. به کمک نیاز دارید؟ از هشتگ #asknostr استفاده کنید!"
+  },
+  {
+    "id": "home.getting_started.explore.title",
+    "other": "Nostr را کاوش کنید"
+  },
+  {
+    "id": "home.getting_started.explore.desc",
+    "other": "پس از آشنایی با مفاهیم اولیه، می توانید ابزار مدیریت کلید ترجیحی خود را برای کاوش در سایر کلاینت های اجتماعی و <a href=\"#readwrite\" class=\"underline\">برنامه های Nostr</a> تنظیم کنید. شما قبلاً هویت دیجیتال خود را دارید و همه جا کار می کند. به سادگی با استفاده از برنامه امضاکننده Nostr، افزونه امضا یا nsec خود وارد شوید. اگر از کلید خصوصی خود استفاده می کنید، مطمئن شوید که برنامه از یک منبع معتبر است!"
+  },
+  {
+    "id": "home.getting_started.client_alt",
+    "other": "کلاینت Nostr"
+  },
+  {
+    "id": "home.resources.title",
+    "other": "منابع Nostr"
+  },
+  {
+    "id": "home.resources.subtitle",
+    "other": "برخی از کارهایی را که می توانید با Nostr انجام دهید، کشف کنید"
+  },
+  {
+    "id": "home.resources.multimedia",
+    "other": "چند رسانه ای"
+  },
+  {
+    "id": "home.resources.streaming",
+    "other": "پخش زنده"
+  },
+  {
+    "id": "home.resources.publishing",
+    "other": "خواندن و نوشتن"
+  },
+  {
+    "id": "home.resources.communities",
+    "other": "جوامع"
+  },
+  {
+    "id": "home.resources.tools",
+    "other": "موارد دیگر"
+  },
+  {
+    "id": "home.resources.security",
+    "other": "امنیت کلید"
+  },
+  {
+    "id": "home.resources.disclaimer",
+    "other": "این فقط یک انتخاب سریع از بیش از 100 برنامه ای است که قبلاً در Nostr ساخته شده اند، <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">همه آنها را کشف کنید</a>!"
+  },
+  {
+    "id": "home.development.title",
+    "other": "در Nostr توسعه دهید"
+  },
+  {
+    "id": "home.development.origins.title",
+    "other": "از کجا همه چیز شروع شد"
+  },
+  {
+    "id": "home.development.origins.desc",
+    "other": "\"مانیفست\" Nostr در سال 2019 منتشر شد. به آرامی اما مطمئناً، جامعه ای در اطراف این ایده جمع شد و آن را گسترش داد و آن را به یک پروتکل سریع، انعطاف پذیر و قابل اعتماد تبدیل کرد که روزانه توسط بسیاری از افراد واقعی استفاده می شود."
+  },
+  {
+    "id": "home.development.nips.title",
+    "other": "NIP ها را کشف کنید"
+  },
+  {
+    "id": "home.development.nips.desc",
+    "other": "NIP مخفف \"امکانات پیاده سازی Nostr\" است. آنها به عنوان راهنمایی برای آنچه که ممکن است توسط نرم افزار سازگار با رله و کلاینت Nostr پیاده سازی شود، وجود دارند. اینها را مطالعه کنید تا برنامه جدید Nostr خود را با سازگاری بهینه شبکه توسعه دهید."
+  },
+  {
+    "id": "home.development.design.title",
+    "other": "راهنمای طراحی"
+  },
+  {
+    "id": "home.development.design.desc",
+    "other": "Nostrdesign.org منبع رسمی برای کشف نحوه بهترین توسعه رابط برنامه Nostr شما است. پارادایم های جدید را کاوش کنید، رابط کاربری خود را بهینه کنید و نکاتی را در مورد چگونگی افزایش تجربه کاربری همه در یک مکان پیدا کنید."
+  },
+  {
+    "id": "home.development.read_more",
+    "other": "بیشتر بخوانید >>"
+  },
+  {
+    "id": "home.typewriter.not_crypto",
+    "other": "یک ارز دیجیتال نیست"
+  },
+  {
+    "id": "home.typewriter.simple",
+    "other": "ساده"
+  },
+  {
+    "id": "home.typewriter.not_blockchain",
+    "other": "یک بلاک چین نیست"
+  },
+  {
+    "id": "home.typewriter.universal_identity",
+    "other": "یک هویت جهانی"
+  },
+  {
+    "id": "home.typewriter.not_company",
+    "other": "یک شرکت نیست"
+  },
+  {
+    "id": "home.typewriter.free_expression",
+    "other": "آزادی بیان"
+  },
+  {
+    "id": "home.typewriter.free_association",
+    "other": "آزادی تشکل"
+  },
+  {
+    "id": "home.typewriter.for_friends",
+    "other": "برای دوستان و دشمنان"
+  },
+  {
+    "id": "home.typewriter.for_everyone",
+    "other": "برای همه"
+  },
+  {
+    "id": "home.typewriter.for_broadcasting",
+    "other": "برای پخش"
+  },
+  {
+    "id": "home.typewriter.for_groups",
+    "other": "برای گروه های بسته"
+  },
+  {
+    "id": "home.typewriter.for_opinions",
+    "other": "برای همه نظرات"
+  },
+  {
+    "id": "home.typewriter.like_internet",
+    "other": "مانند خود اینترنت"
+  },
+  {
+    "id": "home.typewriter.flexible",
+    "other": "انعطاف پذیر"
+  },
+  {
+    "id": "home.typewriter.scalable",
+    "other": "مقیاس پذیر"
+  },
+  {
+    "id": "home.typewriter.public_square",
+    "other": "یک میدان عمومی واقعی"
+  },
+  {
+    "id": "home.typewriter.client_relay",
+    "other": "مشتری-رله"
+  },
+  {
+    "id": "home.typewriter.not_p2p",
+    "other": "P2P نیست"
+  },
+  {
+    "id": "home.typewriter.old_web",
+    "other": "وب قدیمی"
+  },
+  {
+    "id": "home.typewriter.decentralized",
+    "other": "واقعا غیرمتمرکز"
+  },
+  {
+    "id": "home.typewriter.communities",
+    "other": "جوامع به درستی انجام شده است"
+  },
+  {
+    "id": "home.typewriter.open_alternative",
+    "other": "جایگزین باز"
+  },
+  {
+    "id": "home.typewriter.wikis",
+    "other": "ویکی های اجتماعی"
+  },
+  {
+    "id": "home.typewriter.git",
+    "other": "همکاری گیت"
+  },
+  {
+    "id": "home.typewriter.articles",
+    "other": "مقالات بلند"
+  },
+  {
+    "id": "home.typewriter.microblogging",
+    "other": "میکروبلاگینگ"
+  },
+  {
+    "id": "home.typewriter.livestreaming",
+    "other": "پخش زنده"
+  },
+  {
+    "id": "home.typewriter.forums",
+    "other": "انجمن ها"
+  },
+  {
+    "id": "home.typewriter.annotating",
+    "other": "حاشیه نویسی وب"
+  },
+  {
+    "id": "home.typewriter.commenting",
+    "other": "نظر دادن در مورد هر چیزی"
+  },
+  {
+    "id": "home.typewriter.social_web",
+    "other": "وب اجتماعی فردا"
+  },
+  {
+    "id": "home.typewriter.for_you",
+    "other": "برای شما، امروز"
+  },
+  {
+    "id": "home.typewriter.dots",
+    "other": "......."
+  },
+  {
+    "id": "about.title",
+    "other": "درباره njump"
+  },
+  {
+    "id": "about.what.title",
+    "other": "njump چیست؟"
+  },
+  {
+    "id": "about.what.description",
+    "other": "<i>njump</i> یک دروازه HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">Nostr</a> است که به شما امکان می دهد پروفایل ها، یادداشت ها و رله ها را مرور کنید. این یک راه آسان برای پیش نمایش یک منبع و باز کردن آن با کلاینت ترجیحی شما است. استفاده معمول از <i>njump</i> به اشتراک گذاری محتوا در خارج از دنیای Nostr است، جایی که طرح <code>nostr:</code> هنوز شناخته نشده است."
+  },
+  {
+    "id": "about.usage.title",
+    "other": "نحوه استفاده"
+  },
+  {
+    "id": "about.usage.description",
+    "other": "<i>njump</i> در حال حاضر تحت {{.Domain}} زندگی می کند، می توانید با اضافه کردن یک موجودیت Nostr <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a> (<code>npub</code>، <code>nevent</code>، <code>naddr</code>، و غیره) بعد از دامنه به آن دسترسی پیدا کنید: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-19-entity&gt;</span>."
+  },
+  {
+    "id": "about.examples.title",
+    "other": "مثال ها"
+  },
+  {
+    "id": "about.examples.description",
+    "other": "به عنوان مثال، در اینجا <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">یک پروفایل کاربری</a>، <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">یک یادداشت</a> و <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">یک پست وبلاگ طولانی</a> وجود دارد."
+  },
+  {
+    "id": "about.try.title",
+    "other": "همین حالا امتحان کنید! به مقداری محتوای Nostr بپرید:"
+  },
+  {
+    "id": "about.try.placeholder",
+    "other": "یک npub / nprofile / nevent / ... را جایگذاری کنید"
+  },
+  {
+    "id": "about.try.button",
+    "other": "مشاهده"
+  },
+  {
+    "id": "about.try.or",
+    "other": "یا انتخاب کنید"
+  },
+  {
+    "id": "about.try.random",
+    "other": "مقداری محتوای تصادفی"
+  },
+  {
+    "id": "about.reasons.intro",
+    "other": "دلایل متعددی برای انتخاب njump هنگام به اشتراک گذاری محتوای Nostr در خارج از Nostr وجود دارد:"
+  },
+  {
+    "id": "about.reasons.clean.title",
+    "other": "تمیز، سریع و محکم"
+  },
+  {
+    "id": "about.reasons.clean.desc",
+    "other": "صفحات njump بسیار سبک و سریع بارگذاری می شوند. هیچ جاوا اسکریپت سمت کلاینت در آن دخیل نیست. آنها با توجه مناسب به تایپوگرافی، با تمرکز بر محتوا بدون جزئیات غیر ضروری، مینیمالیستی هستند. علاوه بر این، آنها کش می شوند، بنابراین هنگام به اشتراک گذاری یک صفحه می توانید انتظار داشته باشید که سریع و بدون اصطکاک بارگذاری شود. این ابزار عالی برای جذب کاربران جدید است!"
+  },
+  {
+    "id": "about.reasons.previews.title",
+    "other": "پیش نمایش های زیبا"
+  },
+  {
+    "id": "about.reasons.previews.desc",
+    "other": "njump همه چیز را در سمت سرور رندر می کند، بنابراین قادر به تولید پیش نمایش های مفید و غنی است که در تلگرام، دیسکورد، توییتر و جاهای دیگر کار می کند."
+  },
+  {
+    "id": "about.reasons.browser.title",
+    "other": "تجربه مرورگر عالی"
+  },
+  {
+    "id": "about.reasons.browser.desc",
+    "other": "هنگام باز کردن URL به طور مستقیم در یک مرورگر، بازدیدکنندگان محتوای ارجاع داده شده مانند تصاویر، فیلم ها و پیوندها به رویدادهای Nostr را به روشی ساده اما موثر نمایش می دهند. این یادداشت والد را نشان می دهد و به بازدیدکننده اجازه می دهد آن را دنبال کند. حتی CSS سفارشی برای چاپ یا صادرات به PDF دارد."
+  },
+  {
+    "id": "about.reasons.cooperative.title",
+    "other": "تعاونی (پرش به بیرون)"
+  },
+  {
+    "id": "about.reasons.cooperative.desc",
+    "other": "njump علاقه ای به جذب کاربران ندارد. برعکس، آنها را دعوت می کند تا با انتخاب از لیستی از کلاینت های وب یا با پیشوند nostr: برای کلاینت های بومی، به هر منبع Nostr \"پرش\" کنند. حتی کلاینت پرکاربرد برای هر بازدیدکننده را به خاطر می آورد و آن را برای دسترسی سریع و آسان در بالای صفحه قرار می دهد."
+  },
+  {
+    "id": "about.reasons.nip89.title",
+    "other": "پشتیبانی از NIP-89"
+  },
+  {
+    "id": "about.reasons.nip89.desc",
+    "other": "پشتیبانی به زودی!"
+  },
+  {
+    "id": "about.reasons.seo.title",
+    "other": "دوستدار جستجو (پرش به داخل)"
+  },
+  {
+    "id": "about.reasons.seo.desc",
+    "other": "صفحات njump استاتیک هستند تا موتورهای جستجو بتوانند آنها را ایندکس کنند. این بدان معناست که njump می تواند به دیگران کمک کند تا محتوای عالی را در Nostr کشف کنند، وارد شوند و به ما بپیوندند! njump تنها منبع Nostr با این هدف صریح است. اگر برایتان مهم است که یک یادداشت خوب به صورت آنلاین پیدا شود، از njump برای به اشتراک گذاشتن آن استفاده کنید. این به Nostr کمک می کند تا شکوفا شود و برای همه در دسترس تر شود."
+  },
+  {
+    "id": "about.nip05.title",
+    "other": "پروفایل های NIP-05 را به اشتراک بگذارید"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "پروفایل خود را با یک پیوند دائمی زیبا با الهام از <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a> به اشتراک بگذارید: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>، به عنوان مثال: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> یا <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile.shows",
+    "other": "یک پروفایل اطلاعات اولیه فراداده شما، رله های \"outbox\" اختصاص داده شده و آخرین یادداشت های شما را نشان می دهد."
+  },
+  {
+    "id": "about.social.title",
+    "other": "در توییتر، تلگرام و موارد دیگر به اشتراک بگذارید"
+  },
+  {
+    "id": "about.social.desc",
+    "other": "به سرعت و بدون زحمت یادداشت های Nostr را در توییتر، تلگرام و بسیاری از \"پلتفرم های اجتماعی\" دیگر به اشتراک بگذارید: فقط یک پیوند را رها کنید و njump متن یادداشت را با استفاده از تصویر پیش نمایش به عنوان یک بوم، برای به حداکثر رساندن تجربه اشتراک گذاری و سودمندی، رندر می کند. در تلگرام، ما همچنین Instant View را برای دسترسی به محتوای طولانی در برنامه داریم!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "نماهای رله"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "آخرین محتوای ارسال شده به یک رله را با استفاده از <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span> مشاهده کنید، به عنوان مثال: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "برخی از اطلاعات اولیه رله (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) در دسترس است. ما امیدواریم که اپراتورها شروع به شخصی سازی و آموزنده تر کردن این توصیفگرها کنند تا کاربران راهی برای ارزیابی اینکه آیا به یک رله بپیوندند یا نه، داشته باشند."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "ابزارک های وب سایت"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "می توانید یادداشت ها، محتوای طولانی و پروفایل ها را در یک صفحه وب با یک اسکریپت ساده جاسازی کنید:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;nip-19-entity&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "ابزار بازرس"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "می دانید، همه ما برنامه نویس هستیم، از جمله مادرانمان، بنابراین برای هر صفحه <i>njump</i>، می توانید سوئیچ \"نمایش جزئیات بیشتر\" را برای بازرسی JSON کامل رویداد، تغییر دهید. بدون نصب ابزارهای دیگر (مانند <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>)، این احتمالاً سریعترین راه برای دسترسی به آن اطلاعات است."
+  }
+]
