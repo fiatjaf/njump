@@ -62,6 +62,7 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if count > 2 {
 			log.Debug().Str("path", r.URL.Path).Uint32("count", count).Int("qidx", qidx).Str("ip", actualIP(r)).
 				Msg("too many concurrent requests")
+			return
 		}
 
 		// lock (or wait for the lock)
