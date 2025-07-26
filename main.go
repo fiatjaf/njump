@@ -163,12 +163,14 @@ func main() {
 	}
 
 	var mainHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-		ipBlock(
-			agentBlock(
-				loggingMiddleware(
-					queueMiddleware(
-						corsM(
-							relay.ServeHTTP,
+		loggingMiddleware(
+			ipBlock(
+				agentBlock(
+					forceWaitMiddleware(
+						queueMiddleware(
+							corsM(
+								relay.ServeHTTP,
+							),
 						),
 					),
 				),

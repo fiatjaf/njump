@@ -35,6 +35,23 @@ var (
 	concurrentRequests = [26]atomic.Uint32{}
 )
 
+func forceWaitMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		log := log.With().Str("ip", actualIP(r)).Logger()
+		log.Debug().Msg("waiting")
+		now := time.Now()
+		select {
+		case <-time.After(time.Second * 20):
+			log.Debug().Msg("waited")
+		case <-ctx.Done():
+			d := time.Now().Sub(now)
+			log.Debug().Dur("after", time.Duration(d.Milliseconds())).Msg("canceled")
+			return
+		}
+	}
+}
+
 func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if len(r.URL.Path) <= 30 || strings.HasPrefix(r.URL.Path, "/njump/static") {

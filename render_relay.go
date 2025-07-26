@@ -9,6 +9,7 @@ import (
 )
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 	hostname := r.URL.Path[3:]
 
 	if strings.HasPrefix(hostname, "wss:/") || strings.HasPrefix(hostname, "ws:/") {
@@ -35,7 +36,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// relay metadata
-	info, _ := nip11.Fetch(r.Context(), hostname)
+	info, _ := nip11.Fetch(ctx, hostname)
 	if info.Name == "" {
 		info.Name = hostname
 	}
@@ -47,8 +48,8 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 	renderableLastNotes := make([]EnhancedEvent, 0, limit)
 	var lastEventAt *time.Time
-	for evt := range relayLastNotes(r.Context(), hostname, limit) {
-		ee := NewEnhancedEvent(r.Context(), evt)
+	for evt := range relayLastNotes(ctx, hostname, limit) {
+		ee := NewEnhancedEvent(ctx, evt)
 		ee.relays = []string{"wss://" + hostname}
 		renderableLastNotes = append(renderableLastNotes, ee)
 		if lastEventAt == nil {
@@ -98,6 +99,6 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 			LastNotes:  renderableLastNotes,
 			ModifiedAt: lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 			Clients:    generateClientList(-1, hostname),
-		}).Render(r.Context(), w)
+		}).Render(ctx, w)
 	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"net"
 	"net/http"
 	"strings"
@@ -22,6 +23,8 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 			"GPTBot",
 			"MJ12Bot",
 			"PetalBot",
+			"Trident",
+			"BLEXBot",
 		} {
 			if strings.Contains(ua, bua) {
 				// log.Debug().Str("ua", ua).Msg("user-agent blocked")
@@ -60,10 +63,15 @@ func ipBlock(next http.HandlerFunc) http.HandlerFunc {
 	} {
 		_, ipnet, err := net.ParseCIDR(cidr)
 		if err != nil {
-			log.Error().Str("cidr", cidr).Err(err).Msg("failed to parse cloudflare ip range")
+			log.Error().Str("cidr", cidr).Err(err).Msg("failed to parse ip range")
 			continue
 		}
 		ranges = append(ranges, ipnet)
+	}
+
+	ips := []net.IP{
+		// thinkbot
+		net.ParseIP("43.135.115.233"),
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -71,9 +79,15 @@ func ipBlock(next http.HandlerFunc) http.HandlerFunc {
 		if ip != nil {
 			for _, ipnet := range ranges {
 				if ipnet.Contains(ip) {
-					log.Debug().Stringer("ip", ip).Msg("ip blocked")
+					log.Debug().Stringer("ip", ip).Msg("ip range blocked")
 					http.Error(w, "", http.StatusForbidden)
 					return
+				}
+			}
+			for _, ipSingle := range ips {
+				if bytes.Equal(ip, ipSingle) {
+					log.Debug().Stringer("ip", ip).Msg("ip blocked")
+					http.Error(w, "", http.StatusForbidden)
 				}
 			}
 		}
