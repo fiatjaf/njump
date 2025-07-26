@@ -14,6 +14,8 @@ func redirectToFavicon(w http.ResponseWriter, r *http.Request) {
 }
 
 func redirectToRandom(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	var target string
 	defer func() {
 		switch r.Method {
@@ -26,7 +28,6 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 
 	// 50% of chance of picking a pubkey
 	if ra := rand.Intn(2); ra == 0 {
-
 		params := leafdb.AnyQuery("pubkey-archive")
 		params.Skip = rand.Intn(50)
 		for val := range internal.View(params) {
@@ -39,7 +40,7 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 
 	// otherwise try to pick an event
 	const RELAY = "wss://nostr.wine"
-	for evt := range relayLastNotes(r.Context(), RELAY, 1) {
+	for evt := range relayLastNotes(ctx, RELAY, 1) {
 		nevent, _ := nip19.EncodeEvent(evt.ID, []string{RELAY}, evt.PubKey)
 		target = "/" + nevent
 		return

@@ -6,28 +6,51 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"golang.org/x/sync/semaphore"
 )
 
-func loggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasPrefix(r.URL.Path, "/static/") || strings.HasPrefix(r.URL.Path, "/favicon") {
+type queuedReq struct {
+	w http.ResponseWriter
+	r *http.Request
+}
+
+var sem = semaphore.NewWeighted(int64(52))
+
+func semaphoreMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		if len(r.URL.Path) <= 30 || strings.HasPrefix(r.URL.Path, "/njump/static") {
 			next.ServeHTTP(w, r)
 			return
 		}
 
-		path := r.URL.Path
-		if r.URL.RawQuery != "" {
-			path += "?" + r.URL.RawQuery
+		var cost int64 = 0
+		for _, item := range []struct {
+			prefix string
+			cost   int64
+		}{{"/njump", 3}, {"/nevent1", 1}, {"/image", 3}, {"/naddr1", 1}, {"/npub1", 2}, {"/nprofile1", 2}, {"/note1", 1}, {"/embed", 2}} {
+			if strings.HasPrefix(r.URL.Path, item.prefix) {
+				cost = item.cost
+				break
+			}
 		}
-		log.Debug().
-			Str("ip", actualIP(r)).
-			Str("path", path).
-			Str("user-agent", r.Header.Get("User-Agent")).
-			Str("referer", r.Header.Get("Referer")).
-			Msg("request")
 
+		if cost == 0 {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		if err := sem.Acquire(ctx, cost); err != nil {
+			log.Warn().Err(err).Str("path", r.URL.Path).Str("ip", actualIP(r)).Msg("canceled request on semaphore")
+			http.Error(w, "server overloaded, try again later", 529)
+			return
+		}
+
+		defer sem.Release(cost)
 		next.ServeHTTP(w, r)
-	})
+	}
 }
 
 var (
@@ -35,25 +58,10 @@ var (
 	concurrentRequests = [26]atomic.Uint32{}
 )
 
-func forceWaitMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		log := log.With().Str("ip", actualIP(r)).Logger()
-		log.Debug().Msg("waiting")
-		now := time.Now()
-		select {
-		case <-time.After(time.Second * 20):
-			log.Debug().Msg("waited")
-		case <-ctx.Done():
-			d := time.Now().Sub(now)
-			log.Debug().Dur("after", time.Duration(d.Milliseconds())).Msg("canceled")
-			return
-		}
-	}
-}
-
 func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
 		if len(r.URL.Path) <= 30 || strings.HasPrefix(r.URL.Path, "/njump/static") {
 			next.ServeHTTP(w, r)
 			return
@@ -79,7 +87,7 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if count > 2 {
 			log.Debug().Str("path", r.URL.Path).Uint32("count", count).Int("qidx", qidx).Str("ip", actualIP(r)).
 				Msg("too many concurrent requests")
-			return
+			goto notthefirst
 		}
 
 		// lock (or wait for the lock)
@@ -95,17 +103,21 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
+		queue[qidx].Unlock()
+
 		// if we are not the first to request this we will wait for the underlying page to be loaded
 		// then we will be redirect to open it again, so hopefully we will hit the cloudflare cache this time
+	notthefirst:
 		path := r.URL.Path
 		if r.URL.RawQuery != "" {
 			path += "?" + r.URL.RawQuery
 		}
 
-		queue[qidx].Unlock()
-
-		time.Sleep(time.Millisecond * 90)
-		http.Redirect(w, r, path, http.StatusFound)
+		select {
+		case <-time.After(time.Second * 9):
+			http.Redirect(w, r, path, http.StatusFound)
+		case <-ctx.Done():
+		}
 	}
 }
 
