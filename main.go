@@ -166,8 +166,8 @@ func main() {
 		loggingMiddleware(
 			ipBlock(
 				agentBlock(
-					queueMiddleware(
-						semaphoreMiddleware(
+					semaphoreMiddleware(
+						queueMiddleware(
 							corsM(
 								relay.ServeHTTP,
 							),
