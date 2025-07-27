@@ -11,7 +11,6 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ua := r.Header.Get("User-Agent")
 		for _, bua := range []string{
-			"Amazonbot",
 			"semrush",
 			"Bytespider",
 			"AhrefsBot",
@@ -25,6 +24,8 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 			"PetalBot",
 			"Trident",
 			"BLEXBot",
+			"Aliyun",
+			"Amazon",
 		} {
 			if strings.Contains(ua, bua) {
 				// log.Debug().Str("ua", ua).Msg("user-agent blocked")

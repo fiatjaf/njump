@@ -47,7 +47,6 @@ templ eventPageTemplate(
 								} else {
 									in reply to
 									<span class="text-strongpink">
-										{{ println("PARENT: ", parent == nil) }}
 										@templ.Raw(replaceNostrURLsWithHTMLTags(nostrNoteNeventMatcher, "nostr:"+nip19.EncodePointer(parent)))
 									</span>
 								}
