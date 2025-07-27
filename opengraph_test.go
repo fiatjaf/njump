@@ -53,7 +53,7 @@ func TestNormalShortTextNote(t *testing.T) {
 func TestNoteWithTextImage(t *testing.T) {
 	og := makeRequest(t, "/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t", "")
 
-	assert.Contains(t, og.Image, "/njump/image/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t", "")
+	assert.Contains(t, og.Image, "/image/nevent1qqs860kwt3m500hfnve6vxdpagkfqkm6hq03dnn2n7u8dev580kd2uszyztuwzjyxe4x2dwpgken87tna2rdlhpd02va5cvvgrrywpddnr3jydc2w4t", "")
 	assert.Equal(t, og.TwitterCard, "summary_large_image", "")
 	assert.Contains(t, og.Text, "seen on", "")
 }

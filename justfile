@@ -42,4 +42,4 @@ check-samples:
     samples = $(cat samples.txt).splitlines()
     for code in samples:
         $(chromium @(base_url + '/' + code))
-        $(chromium @(base_url + '/njump/image/' + code))
+        $(chromium @(base_url + '/image/' + code))

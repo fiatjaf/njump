@@ -40,9 +40,9 @@ var multiNewlineRe = regexp.MustCompile(`\n\n+`)
 func renderImage(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	code := r.URL.Path[1+len("njump/image/"):]
+	code := r.URL.Path[1+len("/image/"):]
 	if code == "" {
-		fmt.Fprintf(w, "call /njump/image/<nip19 code>")
+		fmt.Fprintf(w, "call /image/<nip19 code>")
 		return
 	}
 

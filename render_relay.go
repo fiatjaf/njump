@@ -95,7 +95,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 			HeadParams: HeadParams{IsProfile: false},
 			Info:       info,
 			Hostname:   hostname,
-			Proxy:      "https://" + hostname + "/njump/proxy?src=",
+			Proxy:      "https://" + hostname + "/proxy?src=",
 			LastNotes:  renderableLastNotes,
 			ModifiedAt: lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 			Clients:    generateClientList(-1, hostname),
