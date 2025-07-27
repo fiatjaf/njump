@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"strings"
 	"sync"
@@ -99,7 +100,19 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			defer queue[qidx].Unlock()
 			// defer these calls because if there is a panic on ServeHTTP the server will catch it
 
-			next.ServeHTTP(w, r)
+			newCtx, cancel := context.WithTimeout(r.Context(), time.Second*30)
+			defer cancel()
+
+			done := make(chan struct{})
+			go func() {
+				next.ServeHTTP(w, r.WithContext(newCtx))
+				close(done)
+			}()
+
+			select {
+			case <-done:
+			case <-ctx.Done():
+			}
 			return
 		}
 
