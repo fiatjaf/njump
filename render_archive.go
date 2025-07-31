@@ -8,7 +8,8 @@ import (
 	"time"
 
 	"fiatjaf.com/leafdb"
-	"github.com/nbd-wtf/go-nostr/nip19"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip19"
 )
 
 func renderArchive(w http.ResponseWriter, r *http.Request) {
@@ -33,9 +34,9 @@ func renderArchive(w http.ResponseWriter, r *http.Request) {
 		params.Skip = (page - 1) * 5000
 		params.Limit = 5000
 		for val := range internal.View(params) {
-			pka := val.(*PubKeyArchive)
-			npub, _ := nip19.EncodePublicKey(pka.Pubkey)
-			data = append(data, npub)
+			if pka, err := nostr.PubKeyFromHex(val.(*PubKeyArchive).Pubkey); err == nil {
+				data = append(data, nip19.EncodeNpub(pka))
+			}
 		}
 	} else if strings.HasPrefix(r.URL.Path[1:], "relays-archive") {
 		data = []string{

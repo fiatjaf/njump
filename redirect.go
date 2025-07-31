@@ -6,7 +6,8 @@ import (
 	"net/http"
 
 	"fiatjaf.com/leafdb"
-	"github.com/nbd-wtf/go-nostr/nip19"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip19"
 )
 
 func redirectToFavicon(w http.ResponseWriter, r *http.Request) {
@@ -31,18 +32,18 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 		params := leafdb.AnyQuery("pubkey-archive")
 		params.Skip = rand.Intn(50)
 		for val := range internal.View(params) {
-			pka := val.(*PubKeyArchive)
-			npub, _ := nip19.EncodePublicKey(pka.Pubkey)
-			target = "/" + npub
-			return
+			pka, err := nostr.PubKeyFromHex(val.(*PubKeyArchive).Pubkey)
+			if err == nil {
+				target = "/" + nip19.EncodeNpub(pka)
+				return
+			}
 		}
 	}
 
 	// otherwise try to pick an event
 	const RELAY = "wss://nostr.wine"
 	for evt := range relayLastNotes(ctx, RELAY, 1) {
-		nevent, _ := nip19.EncodeEvent(evt.ID, []string{RELAY}, evt.PubKey)
-		target = "/" + nevent
+		target = "/" + nip19.EncodeNevent(evt.ID, []string{RELAY}, evt.PubKey)
 		return
 	}
 
@@ -52,13 +53,21 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 }
 
 func redirectFromPSlash(w http.ResponseWriter, r *http.Request) {
-	code, _ := nip19.EncodePublicKey(r.URL.Path[3:])
-	http.Redirect(w, r, "/"+code, http.StatusFound)
+	pk, err := nostr.PubKeyFromHexCheap(r.URL.Path[3:])
+	if err != nil {
+		http.Error(w, "invalid public key hex", 400)
+		return
+	}
+	http.Redirect(w, r, "/"+nip19.EncodeNpub(pk), http.StatusFound)
 	return
 }
 
 func redirectFromESlash(w http.ResponseWriter, r *http.Request) {
-	code, _ := nip19.EncodeEvent(r.URL.Path[3:], []string{}, "")
-	http.Redirect(w, r, "/"+code, http.StatusFound)
+	id, err := nostr.IDFromHex(r.URL.Path[3:])
+	if err != nil {
+		http.Error(w, "invalid public key hex", 400)
+		return
+	}
+	http.Redirect(w, r, "/"+nip19.EncodeNevent(id, nil, nostr.ZeroPK), http.StatusFound)
 	return
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr"
+	"fiatjaf.com/nostr"
 )
 
 var npubsArchive = make([]string, 0, 5000)
@@ -17,15 +17,15 @@ func updateArchives(ctx context.Context) {
 		case <-time.After(24 * time.Hour * 3):
 			log.Debug().Msg("refreshing the npubs archive")
 
-			for _, pubkey := range s.TrustedPubKeys {
+			for _, pubkey := range s.trustedPubKeys {
 				ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 				follows := sys.FetchFollowList(ctx, pubkey)
 				fla := &FollowListArchive{
-					Source:  pubkey,
+					Source:  pubkey.Hex(),
 					Pubkeys: make([]string, 0, 2000),
 				}
 				for _, follow := range follows.Items {
-					fla.Pubkeys = append(fla.Pubkeys, follow.Pubkey)
+					fla.Pubkeys = append(fla.Pubkeys, follow.Pubkey.Hex())
 				}
 				cancel()
 
@@ -47,13 +47,9 @@ func deleteOldCachedEvents(ctx context.Context) {
 			if ids, err := internal.deleteExpiredEvents(nostr.Now()); err != nil {
 				log.Fatal().Err(err).Msg("failed to delete expired events")
 			} else {
-				if ch, err := sys.Store.QueryEvents(ctx, nostr.Filter{IDs: ids}); err != nil {
-					log.Fatal().Err(err).Strs("ids", ids).Msg("fail to delete cached events")
-				} else {
-					for evt := range ch {
-						if err := sys.Store.DeleteEvent(ctx, evt); err != nil {
-							log.Error().Err(err).Stringer("event", evt).Msg("failed to delete this cached event")
-						}
+				for _, id := range ids {
+					if err := sys.Store.DeleteEvent(id); err != nil {
+						log.Error().Err(err).Stringer("event", id).Msg("failed to delete this cached event")
 					}
 				}
 			}

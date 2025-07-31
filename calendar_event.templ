@@ -2,8 +2,8 @@ package main
 
 import (
 	_ "embed"
-	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/nbd-wtf/go-nostr/nip52"
+	"fiatjaf.com/nostr/nip19"
+	"fiatjaf.com/nostr/nip52"
 	"html/template"
 	"strings"
 )
@@ -30,7 +30,7 @@ type Kind31922Or31923Metadata struct {
 func formatParticipants(participants []nip52.Participant) string {
 	var list = make([]string, 0)
 	for _, p := range participants {
-		nreplace, _ := nip19.EncodePublicKey(p.PubKey)
+		nreplace := nip19.EncodeNpub(p.PubKey)
 		nreplace = replaceNostrURLsWithHTMLTags(nostrNpubNprofileMatcher, "nostr:"+nreplace)
 		if p.Role != "" {
 			nreplace = nreplace + " as " + strings.ToTitle(p.Role)

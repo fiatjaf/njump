@@ -8,8 +8,8 @@ import (
 	_ "embed"
 	"html/template"
 
+	"fiatjaf.com/nostr/sdk"
 	"github.com/a-h/templ"
-	"github.com/nbd-wtf/go-nostr/sdk"
 )
 
 type TemplateID int

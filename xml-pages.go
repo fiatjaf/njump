@@ -3,8 +3,8 @@ package main
 import (
 	_ "embed"
 
-	"github.com/nbd-wtf/go-nostr/nip11"
-	"github.com/nbd-wtf/go-nostr/sdk"
+	"fiatjaf.com/nostr/nip11"
+	"fiatjaf.com/nostr/sdk"
 	"github.com/tylermmorton/tmpl"
 )
 

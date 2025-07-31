@@ -9,13 +9,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/nbd-wtf/go-nostr/nip31"
-	"github.com/nbd-wtf/go-nostr/nip52"
-	"github.com/nbd-wtf/go-nostr/nip53"
-	"github.com/nbd-wtf/go-nostr/nip92"
-	"github.com/nbd-wtf/go-nostr/nip94"
-	"github.com/nbd-wtf/go-nostr/sdk"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip19"
+	"fiatjaf.com/nostr/nip31"
+	"fiatjaf.com/nostr/nip52"
+	"fiatjaf.com/nostr/nip53"
+	"fiatjaf.com/nostr/nip92"
+	"fiatjaf.com/nostr/nip94"
+	"fiatjaf.com/nostr/sdk"
 )
 
 type Data struct {
@@ -61,23 +62,23 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 		}
 	}
 
-	ee := NewEnhancedEvent(ctx, event)
+	ee := NewEnhancedEvent(ctx, *event)
 	ee.relays = relays
 
 	data := Data{
 		event: ee,
 	}
 
-	data.nevent, _ = nip19.EncodeEvent(event.ID, relaysForNip19, event.PubKey)
-	data.neventNaked, _ = nip19.EncodeEvent(event.ID, nil, event.PubKey)
+	data.nevent = nip19.EncodeNevent(event.ID, relaysForNip19, event.PubKey)
+	data.neventNaked = nip19.EncodeNevent(event.ID, nil, event.PubKey)
 	data.naddr = ""
 	data.naddrNaked = ""
 	data.createdAt = time.Unix(int64(event.CreatedAt), 0).Format("2006-01-02 15:04:05 MST")
 
 	if event.Kind >= 30000 && event.Kind < 40000 {
 		if dTag := event.Tags.Find("d"); dTag != nil {
-			data.naddr, _ = nip19.EncodeEntity(event.PubKey, event.Kind, dTag[1], relaysForNip19)
-			data.naddrNaked, _ = nip19.EncodeEntity(event.PubKey, event.Kind, dTag[1], nil)
+			data.naddr = nip19.EncodeNaddr(event.PubKey, event.Kind, dTag[1], relaysForNip19)
+			data.naddrNaked = nip19.EncodeNaddr(event.PubKey, event.Kind, dTag[1], nil)
 		}
 	}
 
@@ -96,7 +97,8 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 	case 6:
 		data.templateId = Note
 		if reposted := event.Tags.Find("e"); reposted != nil {
-			originalNevent, _ := nip19.EncodeEvent(reposted[1], []string{}, "")
+			id, _ := nostr.IDFromHex(reposted[1])
+			originalNevent := nip19.EncodeNevent(id, []string{}, nostr.ZeroPK)
 			data.content = "Repost of nostr:" + originalNevent
 		}
 	case 1063:
@@ -145,8 +147,10 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			if len(sourceEvent) > 2 {
 				relayHints = []string{sourceEvent[2]}
 			}
-			naddr, _ := nip19.EncodeEntity(spl[1], kind, spl[2], relayHints)
-			data.Kind9802Metadata.SourceEvent = naddr
+			if pk, err := nostr.PubKeyFromHex(spl[1]); err == nil {
+				naddr := nip19.EncodeNaddr(pk, nostr.Kind(kind), spl[2], relayHints)
+				data.Kind9802Metadata.SourceEvent = naddr
+			}
 		} else if sourceUrl := event.Tags.Find("r"); sourceUrl != nil {
 			data.Kind9802Metadata.SourceURL = sourceUrl[1]
 			data.Kind9802Metadata.SourceName = sourceUrl[1]
@@ -168,7 +172,9 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 		if author := event.Tags.Find("p"); author != nil {
 			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 			defer cancel()
-			data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, author[1])
+			if pk, err := nostr.PubKeyFromHex(author[1]); err == nil {
+				data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, pk)
+			}
 		}
 		if context := event.Tags.Find("context"); context != nil {
 			data.Kind9802Metadata.Context = context[1]

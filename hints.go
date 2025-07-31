@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr/sdk/hints/memoryh"
+	"fiatjaf.com/nostr/sdk/hints/memoryh"
 )
 
 // save these things to a file so we can reload them later

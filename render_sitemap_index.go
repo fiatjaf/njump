@@ -4,7 +4,8 @@ import (
 	"net/http"
 
 	"fiatjaf.com/leafdb"
-	"github.com/nbd-wtf/go-nostr/nip19"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip19"
 )
 
 func renderSitemapIndex(w http.ResponseWriter, r *http.Request) {
@@ -12,9 +13,9 @@ func renderSitemapIndex(w http.ResponseWriter, r *http.Request) {
 	params := leafdb.AnyQuery("pubkey-archive")
 	params.Limit = 5000
 	for val := range internal.View(params) {
-		pka := val.(*PubKeyArchive)
-		npub, _ := nip19.EncodePublicKey(pka.Pubkey)
-		npubs = append(npubs, npub)
+		if pka, err := nostr.PubKeyFromHex(val.(*PubKeyArchive).Pubkey); err == nil {
+			npubs = append(npubs, nip19.EncodeNpub(pka))
+		}
 	}
 
 	if len(npubs) != 0 {

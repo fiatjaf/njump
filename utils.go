@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"html"
@@ -9,14 +10,13 @@ import (
 	"net/http"
 	"regexp"
 	"slices"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
 
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip19"
 	me "github.com/huantt/plaintext-extractor/markdown"
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/puzpuzpuz/xsync/v3"
 	"mvdan.cc/xurls/v2"
 )
@@ -47,7 +47,7 @@ var (
 	markdownExtractor = me.NewExtractor()
 )
 
-var kindNames = map[int]string{
+var kindNames = map[nostr.Kind]string{
 	0:     "Metadata",
 	1:     "Short Text Note",
 	2:     "Recommend Relay",
@@ -90,7 +90,7 @@ var kindNames = map[int]string{
 	30311: "Live Event",
 }
 
-var kindNIPs = map[int]string{
+var kindNIPs = map[nostr.Kind]string{
 	0:     "01",
 	1:     "01",
 	2:     "01",
@@ -460,32 +460,43 @@ func toJSONHTML(evt *nostr.Event) template.HTML {
 
 			// if it's tagging another event, pubkey or address, make it a clickable link
 			linkCls := "underline underline-offset-4 text-amber-700 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-200"
+
 			if i == 1 && tag[0] == "e" && nostr.IsValid32ByteHex(item) {
 				var relayHints []string
-				var authorHint string
+				var authorHint nostr.PubKey
 				if len(tag) > 2 {
 					relayHints = []string{tag[2]}
 					if len(tag) > 4 {
-						authorHint = tag[4]
+						authorHint, _ = nostr.PubKeyFromHexCheap(tag[4])
 					}
 				}
-				nevent, _ := nip19.EncodeEvent(item, relayHints, authorHint)
+				id, _ := nostr.IDFromHex(item)
+				nevent := nip19.EncodeNevent(id, relayHints, authorHint)
 				tagsHTML += `<a class="` + linkCls + `" href="/` + nevent + `">"` + item + `"</a>`
-			} else if spl := strings.Split(item, ":"); i == 1 && tag[0] == "a" && len(spl) == 3 && nostr.IsValidPublicKey(spl[1]) {
+			} else if spl := strings.Split(item, ":"); i == 1 && tag[0] == "a" && len(spl) == 3 && nostr.IsValid32ByteHex(spl[1]) {
+				pointer, err := nostr.EntityPointerFromTag(tag)
+				if err == nil {
+					naddr := nip19.EncodePointer(pointer)
+					tagsHTML += `<a class="` + linkCls + `" href="/` + naddr + `">"` + item + `"</a>`
+				} else {
+					// otherwise just print normally
+					itemJSON, _ := json.Marshal(item)
+					tagsHTML += html.EscapeString(string(itemJSON))
+				}
+			} else if i == 1 && strings.ToLower(tag[0]) == "p" {
 				var relayHints []string
 				if len(tag) > 2 {
 					relayHints = []string{tag[2]}
 				}
-				kind, _ := strconv.Atoi(spl[0])
-				naddr, _ := nip19.EncodeEntity(spl[1], kind, spl[2], relayHints)
-				tagsHTML += `<a class="` + linkCls + `" href="/` + naddr + `">"` + item + `"</a>`
-			} else if i == 1 && strings.ToLower(tag[0]) == "p" && nostr.IsValidPublicKey(item) {
-				var relayHints []string
-				if len(tag) > 2 {
-					relayHints = []string{tag[2]}
+				pk, err := nostr.PubKeyFromHexCheap(tag[1])
+				if err == nil {
+					nprofile := nip19.EncodeNprofile(pk, relayHints)
+					tagsHTML += `<a class="` + linkCls + `" href="/` + nprofile + `">"` + item + `"</a>`
+				} else {
+					// otherwise just print normally
+					itemJSON, _ := json.Marshal(item)
+					tagsHTML += html.EscapeString(string(itemJSON))
 				}
-				nprofile, _ := nip19.EncodeProfile(item, relayHints)
-				tagsHTML += `<a class="` + linkCls + `" href="/` + nprofile + `">"` + item + `"</a>`
 			} else {
 				// otherwise just print normally
 				itemJSON, _ := json.Marshal(item)
@@ -520,7 +531,7 @@ func toJSONHTML(evt *nostr.Event) template.HTML {
   <span class="`+keyCls+`">"tags":</span> %s,
   <span class="`+keyCls+`">"content":</span> <span class="text-zinc-500 dark:text-zinc-50">%s</span>,
   <span class="`+keyCls+`">"sig":</span> <span class="text-zinc-500 dark:text-zinc-50 content">"%s"</span>
-}`, evt.ID, evt.PubKey, evt.CreatedAt, evt.Kind, tagsHTML, html.EscapeString(string(contentJSON)), evt.Sig),
+}`, evt.ID.Hex(), evt.PubKey.Hex(), evt.CreatedAt, evt.Kind, tagsHTML, html.EscapeString(string(contentJSON)), hex.EncodeToString(evt.Sig[:])),
 	)
 }
 
