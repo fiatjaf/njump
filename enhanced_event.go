@@ -6,16 +6,15 @@ import (
 	"html"
 	"html/template"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip10"
-	"github.com/nbd-wtf/go-nostr/nip19"
-	"github.com/nbd-wtf/go-nostr/nip22"
-	"github.com/nbd-wtf/go-nostr/nip73"
-	"github.com/nbd-wtf/go-nostr/sdk"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip10"
+	"fiatjaf.com/nostr/nip19"
+	"fiatjaf.com/nostr/nip22"
+	"fiatjaf.com/nostr/nip73"
+	"fiatjaf.com/nostr/sdk"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
 )
 
@@ -29,9 +28,9 @@ type EnhancedEvent struct {
 
 func NewEnhancedEvent(
 	ctx context.Context,
-	event *nostr.Event,
+	event nostr.Event,
 ) EnhancedEvent {
-	ee := EnhancedEvent{Event: event}
+	ee := EnhancedEvent{Event: &event}
 
 	for _, tag := range event.Tags {
 		if len(tag) < 2 {
@@ -73,17 +72,9 @@ func (ee EnhancedEvent) getParent() nostr.Pointer {
 		return nip22.GetImmediateParent(ee.Tags)
 	case 1311:
 		if atag := ee.Tags.Find("a"); atag != nil {
-			parts := strings.Split(atag[1], ":")
-			kind, _ := strconv.Atoi(parts[0])
-			var relays []string
-			if (len(atag) > 2) && (atag[2] != "") {
-				relays = []string{atag[2]}
-			}
-			return nostr.EntityPointer{
-				PublicKey:  parts[1],
-				Kind:       kind,
-				Identifier: parts[2],
-				Relays:     relays,
+			pointer, err := nostr.EntityPointerFromTag(atag)
+			if err == nil {
+				return pointer
 			}
 		}
 	}
@@ -168,8 +159,7 @@ func (ee EnhancedEvent) Thumb() string {
 }
 
 func (ee EnhancedEvent) Npub() string {
-	npub, _ := nip19.EncodePublicKey(ee.Event.PubKey)
-	return npub
+	return nip19.EncodeNpub(ee.Event.PubKey)
 }
 
 func (ee EnhancedEvent) NpubShort() string {
@@ -178,8 +168,7 @@ func (ee EnhancedEvent) NpubShort() string {
 }
 
 func (ee EnhancedEvent) Nevent() string {
-	nevent, _ := nip19.EncodeEvent(ee.Event.ID, ee.relays, ee.Event.PubKey)
-	return nevent
+	return nip19.EncodeNevent(ee.Event.ID, ee.relays, ee.Event.PubKey)
 }
 
 func (ee EnhancedEvent) CreatedAtStr() string {

@@ -11,25 +11,27 @@ import (
 	"os/signal"
 	"strings"
 
-	"github.com/fiatjaf/khatru"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/khatru"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/nbd-wtf/go-nostr"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog"
 )
 
 type Settings struct {
-	Port                string   `envconfig:"PORT" default:"2999"`
-	Domain              string   `envconfig:"DOMAIN" default:"njump.me"`
-	ServiceURL          string   `envconfig:"SERVICE_URL"`
-	InternalDBPath      string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
-	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
-	KVStorePath         string   `envconfig:"KV_STORE_PATH" default:"/tmp/njump-kv"`
-	HintsMemoryDumpPath string   `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
-	TailwindDebug       bool     `envconfig:"TAILWIND_DEBUG"`
-	RelayConfigPath     string   `envconfig:"RELAY_CONFIG_PATH"`
-	TrustedPubKeys      []string `envconfig:"TRUSTED_PUBKEYS"`
-	MediaAlertAPIKey    string   `envconfig:"MEDIA_ALERT_API_KEY"`
+	Port                string `envconfig:"PORT" default:"2999"`
+	Domain              string `envconfig:"DOMAIN" default:"njump.me"`
+	ServiceURL          string `envconfig:"SERVICE_URL"`
+	InternalDBPath      string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
+	EventStorePath      string `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
+	KVStorePath         string `envconfig:"KV_STORE_PATH" default:"/tmp/njump-kv"`
+	HintsMemoryDumpPath string `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
+	TailwindDebug       bool   `envconfig:"TAILWIND_DEBUG"`
+	RelayConfigPath     string `envconfig:"RELAY_CONFIG_PATH"`
+	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
+
+	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
+	trustedPubKeys    []nostr.PubKey
 }
 
 //go:embed static/*
@@ -52,10 +54,15 @@ func main() {
 		if canonicalHost := os.Getenv("CANONICAL_HOST"); canonicalHost != "" {
 			s.Domain = canonicalHost
 		}
+
+		s.trustedPubKeys = make([]nostr.PubKey, len(s.TrustedPubKeysHex))
+		for i, pkhex := range s.TrustedPubKeysHex {
+			s.trustedPubKeys[i] = nostr.MustPubKeyFromHex(pkhex)
+		}
 	}
 
-	if len(s.TrustedPubKeys) == 0 {
-		s.TrustedPubKeys = defaultTrustedPubKeys
+	if len(s.trustedPubKeys) == 0 {
+		s.trustedPubKeys = defaultTrustedPubKeys
 	}
 
 	// eventstore and nostr system
@@ -125,13 +132,10 @@ func main() {
 	// expose our internal cache as a relay (mostly for debugging purposes)
 	relay := khatru.NewRelay()
 	relay.ServiceURL = "https://" + s.Domain
-	relay.QueryEvents = append(relay.QueryEvents, sys.Store.QueryEvents)
-	relay.DeleteEvent = append(relay.DeleteEvent, sys.Store.DeleteEvent)
-	relay.RejectEvent = append(relay.RejectEvent,
-		func(context.Context, *nostr.Event) (bool, string) {
-			return true, "this relay is not writable"
-		},
-	)
+	relay.UseEventstore(sys.Store, DB_MAX_LIMIT)
+	relay.OnEvent = func(ctx context.Context, event nostr.Event) (reject bool, msg string) {
+		return true, "this relay is not writable"
+	}
 
 	// admin
 	setupRelayManagement(relay)

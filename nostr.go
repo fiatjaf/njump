@@ -7,10 +7,10 @@ import (
 	"slices"
 	"time"
 
-	"github.com/fiatjaf/eventstore/badger"
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/sdk"
-	badger_kv "github.com/nbd-wtf/go-nostr/sdk/kvstore/badger"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/eventstore/boltdb"
+	"fiatjaf.com/nostr/sdk"
+	bolt_kv "fiatjaf.com/nostr/sdk/kvstore/bbolt"
 )
 
 type RelayConfig struct {
@@ -35,33 +35,31 @@ var (
 		},
 	}
 
-	defaultTrustedPubKeys = []string{
-		"7bdef7be22dd8e59f4600e044aa53a1cf975a9dc7d27df5833bc77db784a5805", // dtonon
-		"3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d", // fiatjaf
-		"97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322", // hodlbod
-		"ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49", // Michael Dilger
-		"30c25d24b998c6b51253253fd66d7ceccc7e47ae3d8c540d2a914bec77e89b1d", // ----
+	defaultTrustedPubKeys = []nostr.PubKey{
+		nostr.MustPubKeyFromHex("7bdef7be22dd8e59f4600e044aa53a1cf975a9dc7d27df5833bc77db784a5805"), // dtonon
+		nostr.MustPubKeyFromHex("3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d"), // fiatjaf
+		nostr.MustPubKeyFromHex("97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322"), // hodlbod
+		nostr.MustPubKeyFromHex("ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49"), // Michael Dilger
+		nostr.MustPubKeyFromHex("30c25d24b998c6b51253253fd66d7ceccc7e47ae3d8c540d2a914bec77e89b1d"), // ----
 	}
 )
 
 func initSystem() func() {
-	db := &badger.BadgerBackend{
-		Path:     s.EventStorePath,
-		MaxLimit: DB_MAX_LIMIT,
+	db := &boltdb.BoltBackend{
+		Path: s.EventStorePath,
 	}
 	if err := db.Init(); err != nil {
 		panic(err)
 	}
 
-	kv, err := badger_kv.NewStore(s.KVStorePath)
+	kv, err := bolt_kv.NewStore(s.KVStorePath)
 	if err != nil {
 		panic(err)
 	}
 
-	sys = sdk.NewSystem(
-		sdk.WithStore(db),
-		sdk.WithKVStore(kv),
-	)
+	sys = sdk.NewSystem()
+	sys.KVStore = kv
+	sys.Store = db
 
 	return db.Close
 }
@@ -88,14 +86,14 @@ func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, 
 	return evt, allRelays, nil
 }
 
-func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEvent, justFetched bool) {
+func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []EnhancedEvent, justFetched bool) {
 	limit := 100
 
 	go sys.FetchProfileMetadata(ctx, pubkey) // fetch this before so the cache is filled for later
 
 	filter := nostr.Filter{
-		Kinds:   []int{nostr.KindTextNote},
-		Authors: []string{pubkey},
+		Kinds:   []nostr.Kind{nostr.KindTextNote},
+		Authors: []nostr.PubKey{pubkey},
 		Limit:   limit,
 	}
 
@@ -103,17 +101,16 @@ func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEv
 	latestTimestamp := nostr.Timestamp(0)
 
 	// fetch from local store if available
-	ch, err := sys.Store.QueryEvents(ctx, filter)
-	if err == nil {
-		evt, has := <-ch
-		if has {
+	next, done := iter.Pull(sys.Store.QueryEvents(filter, DB_MAX_LIMIT))
+	evt, has := next()
+	if has {
+		lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
+		latestTimestamp = evt.CreatedAt
+		for evt, more := next(); more; evt, more = next() {
 			lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
-			latestTimestamp = evt.CreatedAt
-			for evt = range ch {
-				lastNotes = append(lastNotes, NewEnhancedEvent(ctx, evt))
-			}
 		}
 	}
+	done()
 
 	if (len(lastNotes) < limit/10) ||
 		(len(lastNotes) < limit/5 && latestTimestamp > nostr.Now()-60*60*24*2) ||
@@ -130,7 +127,7 @@ func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEv
 				relays = appendUnique(relays, sys.FallbackRelays.Next())
 			}
 
-			ch := sys.Pool.FetchMany(ctx, relays, filter, nostr.WithLabel("authorlast"))
+			ch := sys.Pool.FetchMany(ctx, relays, filter, nostr.SubscriptionOptions{Label: "authorlast"})
 		out:
 			for {
 				select {
@@ -143,7 +140,7 @@ func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEv
 					ee.relays = appendUnique([]string{ie.Relay.URL}, internal.getRelaysForEvent(ie.Event.ID)...)
 					lastNotes = append(lastNotes, ee)
 
-					sys.Store.SaveEvent(ctx, ie.Event)
+					sys.Store.SaveEvent(ie.Event)
 					internal.attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
 				case <-ctx.Done():
 					break out
@@ -155,20 +152,24 @@ func authorLastNotes(ctx context.Context, pubkey string) (lastNotes []EnhancedEv
 	return lastNotes, justFetched
 }
 
-func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[*nostr.Event] {
+func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[nostr.Event] {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 
-	return func(yield func(*nostr.Event) bool) {
+	return func(yield func(nostr.Event) bool) {
 		defer cancel()
 
 		for id := range internal.getEventsInRelay(hostname) {
-			res, _ := sys.StoreRelay.QuerySync(ctx, nostr.Filter{IDs: []string{id}})
-			if len(res) == 0 {
+			next, done := iter.Pull(sys.Store.QueryEvents(nostr.Filter{IDs: []nostr.ID{id}}, 1))
+			res, has := next()
+			done()
+
+			if !has {
 				internal.notCached(id)
 				continue
 			}
 			limit--
-			if !yield(res[0]) {
+
+			if !yield(res) {
 				return
 			}
 			if limit == 0 {
@@ -180,17 +181,11 @@ func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[*n
 			limit = max(limit, 50)
 
 			if relay, err := sys.Pool.EnsureRelay(hostname); err == nil {
-				ch, err := relay.QueryEvents(ctx, nostr.Filter{
-					Kinds: []int{1},
+				for evt := range relay.QueryEvents(nostr.Filter{
+					Kinds: []nostr.Kind{1},
 					Limit: limit,
-				})
-				if err != nil {
-					log.Error().Err(err).Stringer("relay", relay).Msg("failed to fetch relay notes")
-					return
-				}
-
-				for evt := range ch {
-					sys.StoreRelay.Publish(ctx, *evt)
+				}) {
+					sys.Store.SaveEvent(evt)
 					internal.attachRelaysToEvent(evt.ID, hostname)
 					if !yield(evt) {
 						return
@@ -201,7 +196,7 @@ func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[*n
 	}
 }
 
-func relaysPretty(ctx context.Context, pubkey string) []string {
+func relaysPretty(ctx context.Context, pubkey nostr.PubKey) []string {
 	s := make([]string, 0, 3)
 	for _, url := range sys.FetchOutboxRelays(ctx, pubkey, 3) {
 		trimmed := trimProtocolAndEndingSlash(url)

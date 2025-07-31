@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/sdk"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/sdk"
 )
 
 func isMaliciousBridged(pm sdk.ProfileMetadata) bool {
@@ -63,7 +63,7 @@ func hasExplicitMedia(ctx context.Context, event *nostr.Event) bool {
 	return false
 }
 
-// list copied from https://jsr.io/@gleasonator/policy/0.2.0/data/porntags.json
+// list copied from https://jsr.io/@gleasonator/policy/0.9.8/policies/AntiPornPolicy.ts
 var pornTags = []string{
 	"adult",
 	"ass",
@@ -81,27 +81,20 @@ var pornTags = []string{
 	"fuck",
 	"freeporn",
 	"girls",
-	"lewd",
 	"loli",
 	"milf",
-	"naked",
 	"nude",
-	"nudes",
-	"nudeart",
 	"nudity",
 	"nsfw",
 	"pantsu",
 	"pussy",
 	"porn",
-	"porngif",
 	"porno",
-	"pornstar",
 	"porntube",
 	"pornvideo",
 	"sex",
 	"sexpervertsyndicate",
 	"sexporn",
-	"sexworker",
 	"sexy",
 	"slut",
 	"teen",
@@ -110,6 +103,7 @@ var pornTags = []string{
 	"teens",
 	"transnsfw",
 	"xxx",
+	"うちの子を置くとみんながうちの子に対する印象をリアクションしてくれるタグ",
 }
 
 var pornWordsRe = func() *regexp.Regexp {

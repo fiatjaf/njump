@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nbd-wtf/go-nostr/nip11"
+	"fiatjaf.com/nostr/nip11"
 )
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {

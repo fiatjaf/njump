@@ -1,6 +1,6 @@
 package main
 
-import "github.com/nbd-wtf/go-nostr/nip11"
+import "fiatjaf.com/nostr/nip11"
 
 type RelayPageParams struct {
 	HeadParams
@@ -104,10 +104,10 @@ templ relayTemplate(params RelayPageParams) {
 						<div
 							class="-ml-4 mb-6 h-1.5 w-1/2 bg-zinc-100 dark:bg-zinc-700 sm:-ml-2.5"
 						></div>
-						if params.Info.PubKey != "" {
+						if params.Info.PubKey != nil {
 							<div class="mb-6 leading-5">
 								<div class="text-sm text-strongpink">Public Key</div>
-								{ params.Info.PubKey }
+								{ params.Info.PubKey.Hex() }
 							</div>
 						}
 						<!---->

@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"fiatjaf.com/leafdb"
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/sdk"
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/sdk"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -131,10 +131,9 @@ type InternalDB struct {
 	*leafdb.DB[proto.Message]
 }
 
-func (internal *InternalDB) scheduleEventExpiration(eventId string) {
-	idxkey, _ := hex.DecodeString(eventId[0:16])
+func (internal *InternalDB) scheduleEventExpiration(eventId nostr.ID) {
 	if err := internal.UpdateQuery(
-		leafdb.PrefixQuery("cached-id", idxkey),
+		leafdb.PrefixQuery("cached-id", eventId[0:8]),
 		func(t leafdb.DataType, data proto.Message) (proto.Message, error) {
 			ee := data.(*CachedEvent)
 			ee.Expiry = time.Now().Add(time.Hour * 24 * 7).Unix()
@@ -145,7 +144,7 @@ func (internal *InternalDB) scheduleEventExpiration(eventId string) {
 	}
 }
 
-func (internal *InternalDB) deleteExpiredEvents(now nostr.Timestamp) (eventIds []string, err error) {
+func (internal *InternalDB) deleteExpiredEvents(now nostr.Timestamp) (eventIds []nostr.ID, err error) {
 	deleted, err := internal.DB.DeleteQuery(leafdb.QueryParams{
 		Index:    "expiring-when",
 		StartKey: []byte{0},
@@ -155,16 +154,17 @@ func (internal *InternalDB) deleteExpiredEvents(now nostr.Timestamp) (eventIds [
 		return nil, err
 	}
 
-	ids := make([]string, len(deleted))
+	ids := make([]nostr.ID, len(deleted))
 	for i, d := range deleted {
-		ids[i] = d.Value.(*CachedEvent).Id
+		if id, err := nostr.IDFromHex(d.Value.(*CachedEvent).Id); err == nil {
+			ids[i] = id
+		}
 	}
 	return ids, nil
 }
 
-func (internal *InternalDB) notCached(id string) error {
-	idb, _ := hex.DecodeString(id[0:16])
-	_, err := internal.DB.DeleteQuery(leafdb.ExactQuery("cached-id", idb))
+func (internal *InternalDB) notCached(id nostr.ID) error {
+	_, err := internal.DB.DeleteQuery(leafdb.ExactQuery("cached-id", id[0:8]))
 	return err
 }
 
@@ -173,13 +173,12 @@ func (internal *InternalDB) overwriteFollowListArchive(fla *FollowListArchive) e
 	return err
 }
 
-func (internal *InternalDB) attachRelaysToEvent(eventId string, relays ...string) (allRelays []string) {
-	idxkey, _ := hex.DecodeString(eventId[0:16])
-	if _, err := internal.DB.Upsert("cached-id", idxkey, TypeCachedEvent, func(t leafdb.DataType, value proto.Message) (proto.Message, error) {
+func (internal *InternalDB) attachRelaysToEvent(eventId nostr.ID, relays ...string) (allRelays []string) {
+	if _, err := internal.DB.Upsert("cached-id", eventId[0:8], TypeCachedEvent, func(t leafdb.DataType, value proto.Message) (proto.Message, error) {
 		var ee *CachedEvent
 		if value == nil {
 			ee = &CachedEvent{
-				Id:     eventId,
+				Id:     eventId.Hex(),
 				Relays: make([]string, 0, len(relays)),
 				Expiry: time.Now().Add(time.Hour * 24 * 7).Unix(),
 			}
@@ -198,98 +197,70 @@ func (internal *InternalDB) attachRelaysToEvent(eventId string, relays ...string
 		allRelays = ee.Relays
 		return ee, nil
 	}); err != nil {
-		log.Error().Err(err).Str("id", eventId).Strs("relays", relays).Msg("failed to attach relays to event")
+		log.Error().Err(err).Str("id", eventId.Hex()).Strs("relays", relays).Msg("failed to attach relays to event")
 	}
 
 	return allRelays
 }
 
-func (internal *InternalDB) getRelaysForEvent(eventId string) []string {
-	idb, _ := hex.DecodeString(eventId[0:16])
-	for value := range internal.DB.Query(leafdb.ExactQuery("cached-id", idb)) {
+func (internal *InternalDB) getRelaysForEvent(eventId nostr.ID) []string {
+	for value := range internal.DB.Query(leafdb.ExactQuery("cached-id", eventId[0:8])) {
 		evtr := value.(*CachedEvent)
 		return evtr.Relays
 	}
 	return nil
 }
 
-func (internal *InternalDB) getEventsInRelay(hostname string) iter.Seq[string] {
-	return func(yield func(string) bool) {
+func (internal *InternalDB) getEventsInRelay(hostname string) iter.Seq[nostr.ID] {
+	return func(yield func(nostr.ID) bool) {
 		for value := range internal.DB.View(leafdb.ExactQuery("events-in-relay", []byte(hostname))) {
-			evtid := value.(*ID)
-			if !yield(evtid.Id) {
-				break
+			if evtid, err := nostr.IDFromHex(value.(*ID).Id); err == nil {
+				if !yield(evtid) {
+					break
+				}
 			}
 		}
 	}
 }
 
-func (internal *InternalDB) banEvent(id, reason string) error {
-	idb, err := hex.DecodeString(id)
-	if err != nil {
-		return err
-	}
-
-	_, err = internal.DB.AddOrReplace("banned-event", TypeBannedEvent, &BannedEvent{
-		Id:     idb,
+func (internal *InternalDB) banEvent(id nostr.ID, reason string) error {
+	_, err := internal.DB.AddOrReplace("banned-event", TypeBannedEvent, &BannedEvent{
+		Id:     id[:],
 		Reason: reason,
 	})
 
 	return err
 }
 
-func (internal *InternalDB) unbanEvent(id string) error {
-	idb, err := hex.DecodeString(id)
-	if err != nil {
-		return err
-	}
-	_, err = internal.DB.DeleteQuery(leafdb.ExactQuery("banned-event", idb[0:8]))
+func (internal *InternalDB) unbanEvent(id nostr.ID) error {
+	_, err := internal.DB.DeleteQuery(leafdb.ExactQuery("banned-event", id[0:8]))
 	return err
 }
 
-func (internal *InternalDB) isBannedEvent(id string) (bool, string) {
-	idb, err := hex.DecodeString(id)
-	if err != nil {
-		return false, ""
-	}
-
-	for record := range internal.DB.Query(leafdb.ExactQuery("banned-event", idb[0:8])) {
+func (internal *InternalDB) isBannedEvent(id nostr.ID) (bool, string) {
+	for record := range internal.DB.Query(leafdb.ExactQuery("banned-event", id[0:8])) {
 		return true, record.(*BannedEvent).Reason
 	}
 
 	return false, ""
 }
 
-func (internal *InternalDB) banPubkey(pk, reason string) error {
-	pkb, err := hex.DecodeString(pk)
-	if err != nil {
-		return err
-	}
-
-	_, err = internal.DB.AddOrReplace("banned-pubkey", TypeBannedPubkey, &BannedPubkey{
-		Pk:     pkb,
+func (internal *InternalDB) banPubkey(pk nostr.PubKey, reason string) error {
+	_, err := internal.DB.AddOrReplace("banned-pubkey", TypeBannedPubkey, &BannedPubkey{
+		Pk:     pk[:],
 		Reason: reason,
 	})
 
 	return err
 }
 
-func (internal *InternalDB) unbanPubkey(pk string) error {
-	pkb, err := hex.DecodeString(pk)
-	if err != nil {
-		return err
-	}
-	_, err = internal.DB.DeleteQuery(leafdb.ExactQuery("banned-pubkey", pkb[0:8]))
+func (internal *InternalDB) unbanPubkey(pk nostr.PubKey) error {
+	_, err := internal.DB.DeleteQuery(leafdb.ExactQuery("banned-pubkey", pk[0:8]))
 	return err
 }
 
-func (internal *InternalDB) isBannedPubkey(pk string) (bool, string) {
-	pkb, err := hex.DecodeString(pk)
-	if err != nil {
-		return false, ""
-	}
-
-	for record := range internal.DB.Query(leafdb.ExactQuery("banned-pubkey", pkb[0:8])) {
+func (internal *InternalDB) isBannedPubkey(pk nostr.PubKey) (bool, string) {
+	for record := range internal.DB.Query(leafdb.ExactQuery("banned-pubkey", pk[0:8])) {
 		return true, record.(*BannedPubkey).Reason
 	}
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "embed"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"html"
@@ -12,10 +11,10 @@ import (
 	"strings"
 	"time"
 
+	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip05"
+	"fiatjaf.com/nostr/nip19"
 	"github.com/a-h/templ"
-	"github.com/nbd-wtf/go-nostr"
-	"github.com/nbd-wtf/go-nostr/nip05"
-	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/pelletier/go-toml"
 )
 
@@ -35,9 +34,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	prefix, decoded, err := nip19.Decode(code)
 	if err != nil {
 		// if it's a 32-byte hex assume it's an event id
-		if _, err := hex.DecodeString(code); err == nil && len(code) == 64 {
-			redirectNevent, _ := nip19.EncodeEvent(code, []string{}, "")
-			http.Redirect(w, r, "/"+redirectNevent, http.StatusFound)
+		if id, err := nostr.IDFromHex(code); err == nil {
+			http.Redirect(w, r, "/"+nip19.EncodeNevent(id, nil, nostr.ZeroPK), http.StatusFound)
 			return
 		}
 
@@ -74,7 +72,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	// if we originally got a note code or an nevent with no hints
 	// augment the URL to point to an nevent with hints -- redirect
-	if p, ok := decoded.(nostr.EventPointer); (ok && p.Author == "" && len(p.Relays) == 0) || prefix == "note" {
+	if p, ok := decoded.(nostr.EventPointer); (ok && p.Author == nostr.ZeroPK && len(p.Relays) == 0) || prefix == "note" {
 		url := "/" + data.nevent
 		if r.URL.RawQuery != "" {
 			url += "?" + r.URL.RawQuery
@@ -262,15 +260,22 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		placeholderTag := "#[" + fmt.Sprintf("%d", i) + "]"
-		nreplace := ""
-		if tag[0] == "p" {
-			nreplace, _ = nip19.EncodePublicKey(tag[1])
-		} else if tag[0] == "e" {
-			nreplace, _ = nip19.EncodeEvent(tag[1], []string{}, "")
-		} else {
+		var nreplace nostr.Pointer
+		var err error
+		switch tag[0] {
+		case "p", "P":
+			nreplace, err = nostr.ProfilePointerFromTag(tag)
+		case "e", "E":
+			nreplace, err = nostr.EventPointerFromTag(tag)
+		case "a", "A":
+			nreplace, err = nostr.EventPointerFromTag(tag)
+		default:
 			continue
 		}
-		data.content = strings.ReplaceAll(data.content, placeholderTag, "nostr:"+nreplace)
+		if err == nil {
+			continue
+		}
+		data.content = strings.ReplaceAll(data.content, placeholderTag, "nostr:"+nip19.EncodePointer(nreplace))
 	}
 	if data.event.Kind == 30023 || data.event.Kind == 30024 {
 		// Remove duplicate title inside the body
@@ -316,7 +321,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		KindDescription: data.kindDescription,
 		KindNIP:         data.kindNIP,
 		EventJSON:       toJSONHTML(data.event.Event),
-		Kind:            data.event.Kind,
+		Kind:            int(data.event.Kind),
 		SeenOn:          data.event.relays,
 		Metadata:        data.event.author,
 	}
@@ -391,7 +396,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			Clients:          generateClientList(data.event.Kind, data.nevent),
+			Clients:          generateClientList(int(data.event.Kind), data.nevent),
 			Details:          detailsData,
 			Content:          template.HTML(content),
 			TitleizedContent: titleizedContent,
@@ -421,7 +426,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
 			},
-			Clients:          generateClientList(data.event.Kind, data.naddr),
+			Clients:          generateClientList(int(data.event.Kind), data.naddr),
 			Details:          detailsData,
 			Content:          template.HTML(data.content),
 			Cover:            data.cover,
@@ -442,7 +447,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 
 			Details: detailsData,
-			Clients: generateClientList(data.event.Kind, data.nevent),
+			Clients: generateClientList(int(data.event.Kind), data.nevent),
 
 			FileMetadata: *data.kind1063Metadata,
 			IsImage:      data.kind1063Metadata.IsImage(),
@@ -465,7 +470,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 			Details:   detailsData,
 			LiveEvent: *data.kind30311Metadata,
-			Clients: generateClientList(data.event.Kind, data.naddr,
+			Clients: generateClientList(int(data.event.Kind), data.naddr,
 				func(c ClientReference, s string) string {
 					if c == nostrudel {
 						s = strings.Replace(s, "/u/", "/streams/", 1)
@@ -490,7 +495,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:          detailsData,
 			Content:          template.HTML(data.content),
 			TitleizedContent: titleizedContent,
-			Clients:          generateClientList(data.event.Kind, data.naddr),
+			Clients:          generateClientList(int(data.event.Kind), data.naddr),
 		}
 
 		component = liveEventMessageTemplate(params, isEmbed)
@@ -548,7 +553,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			CalendarEvent: *data.kind31922Or31923Metadata,
 			Details:       detailsData,
 			Content:       template.HTML(data.content),
-			Clients:       generateClientList(data.event.Kind, data.naddr),
+			Clients:       generateClientList(int(data.event.Kind), data.naddr),
 		}
 
 		component = calendarEventTemplate(params, isEmbed)
@@ -574,13 +579,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:     detailsData,
 			Content:     data.content,
 			Clients: generateClientList(
-				data.event.Kind,
+				int(data.event.Kind),
 				data.naddr,
 				func(client ClientReference, url string) string {
 					return strings.Replace(url, "{handle}", data.Kind30818Metadata.Handle, -1)
 				},
 				func(client ClientReference, url string) string {
-					return strings.Replace(url, "{authorPubkey}", data.event.PubKey, -1)
+					return strings.Replace(url, "{authorPubkey}", data.event.PubKey.Hex(), -1)
 				},
 				func(client ClientReference, url string) string {
 					return strings.Replace(url, "{npub}", data.event.author.Npub(), -1)
@@ -612,7 +617,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Content:        template.HTML(data.content),
 			HighlightEvent: data.Kind9802Metadata,
 			Details:        detailsData,
-			Clients:        generateClientList(data.event.Kind, data.nevent),
+			Clients:        generateClientList(int(data.event.Kind), data.nevent),
 		}
 
 		component = highlightTemplate(params, isEmbed)
@@ -629,7 +634,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			},
 
 			Details:         detailsData,
-			Kind:            data.event.Kind,
+			Kind:            int(data.event.Kind),
 			KindDescription: data.kindDescription,
 		}
 
