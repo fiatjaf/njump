@@ -24,6 +24,8 @@ var (
 	native     = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
 	defaultWeb = ClientReference{ID: "default-web", Name: "Your default web app", Base: "web+nostr:{code}", Platform: "web"}
 
+	nosotros      = ClientReference{ID: "nosotros", Name: "Nosotros", Base: "https://dev.nosotros.app/{code}", Platform: platformWeb}
+	nosotrosRelay = ClientReference{ID: "nosotros", Name: "Nosotros", Base: "https://dev.nosotros.app/feed?kind=%5B1%2C6%5D&limit=100&type=relayfeed&relay=wss%3A%2F%2F{code}", Platform: platformWeb}
 	nosta         = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
 	phoenix       = ClientReference{ID: "phoenix", Name: "Phoenix", Base: "https://phoenix.social/{code}", Platform: platformWeb}
 	olasWeb       = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
@@ -78,7 +80,7 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			jumbleRelay, chachiRelay, lumilumiRelay, coracleRelay, relayTools, nostterRelay,
+			jumbleRelay, chachiRelay, nosotrosRelay, lumilumiRelay, coracleRelay, relayTools, nostterRelay,
 			defaultWeb,
 		}
 	case 1, 6:
@@ -86,14 +88,14 @@ func generateClientList(
 			native,
 			damus, nostur, freeFromIOS, yakihonneIOS, nos, primalIOS,
 			voyage, yakihonneAndroid, primalAndroid, freeFromAndroid, yanaAndroid,
-			coracle, jumble, lumilumi, nostter, nostrudel, phoenix, primalWeb, iris,
+			nosotros, jumble, coracle, lumilumi, nostter, nostrudel, phoenix, primalWeb, iris,
 		}
 	case 20:
 		clients = []ClientReference{
 			native,
 			olasAndroid,
 			olasIOS,
-			lumilumi, jumble, olasWeb, coracle,
+			nosotros, lumilumi, jumble, olasWeb, coracle,
 			defaultWeb,
 		}
 	case 0:
@@ -101,7 +103,7 @@ func generateClientList(
 			native,
 			nos, damus, nostur, primalIOS, freeFromIOS, yakihonneIOS,
 			voyage, yakihonneAndroid, yanaAndroid, freeFromAndroid, primalAndroid,
-			nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris,
+			nosotros, jumble, nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris,
 			defaultWeb,
 		}
 	case 30023, 30024:
