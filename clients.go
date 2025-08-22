@@ -42,6 +42,7 @@ var (
 	chachiRelay   = ClientReference{ID: "chachi", Name: "chachi", Base: "https://chachi.chat/relay/wss%3A%2F%2F{code}/feed"}
 
 	zapStream = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
+	shosho    = ClientReference{ID: "shosho", Name: "Shosho", Base: "https://shosho.live/live/{code}", Platform: platformWeb}
 
 	yakihonne = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/{code}", Platform: platformWeb}
 	habla     = ClientReference{ID: "habla", Name: "Habla", Base: "https://habla.news/a/{code}", Platform: platformWeb}
@@ -131,7 +132,7 @@ func generateClientList(
 			native,
 			amethyst,
 			nostur,
-			zapStream, lumilumi, nostrudel,
+			zapStream, shosho, lumilumi, nostrudel,
 			defaultWeb,
 		}
 	case 30818:
