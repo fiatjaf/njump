@@ -3,18 +3,17 @@ package main
 import (
 	"net/http"
 
-	"fiatjaf.com/leafdb"
-	"fiatjaf.com/nostr"
 	"fiatjaf.com/nostr/nip19"
 )
 
 func renderSitemapIndex(w http.ResponseWriter, r *http.Request) {
 	npubs := make([]string, 0, 5000)
-	params := leafdb.AnyQuery("pubkey-archive")
-	params.Limit = 5000
-	for val := range internal.View(params) {
-		if pka, err := nostr.PubKeyFromHex(val.(*PubKeyArchive).Pubkey); err == nil {
-			npubs = append(npubs, nip19.EncodeNpub(pka))
+	i := 0
+	for pk := range npubsArchive {
+		npubs = append(npubs, nip19.EncodeNpub(pk))
+		i++
+		if i == 5000 {
+			break
 		}
 	}
 

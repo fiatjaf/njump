@@ -44,6 +44,28 @@ var (
 	}
 )
 
+func isEventBanned(id nostr.ID) (bool, string) {
+	for evt := range sys.Store.QueryEvents(nostr.Filter{
+		Kinds:   []nostr.Kind{5},
+		Authors: s.trustedPubKeys,
+		Tags:    nostr.TagMap{"e": []string{id.Hex()}},
+	}, DB_MAX_LIMIT) {
+		return true, evt.Content
+	}
+	return false, ""
+}
+
+func isPubkeyBanned(pk nostr.PubKey) (bool, string) {
+	for evt := range sys.Store.QueryEvents(nostr.Filter{
+		Kinds:   []nostr.Kind{5},
+		Authors: s.trustedPubKeys,
+		Tags:    nostr.TagMap{"p": []string{pk.Hex()}},
+	}, DB_MAX_LIMIT) {
+		return true, evt.Content
+	}
+	return false, ""
+}
+
 func initSystem() func() {
 	db := &boltdb.BoltBackend{
 		Path: s.EventStorePath,
@@ -65,7 +87,7 @@ func initSystem() func() {
 }
 
 func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, []string, error) {
-	evt, relays, err := sys.FetchSpecificEventFromInput(ctx, code, sdk.FetchSpecificEventParameters{
+	evt, _, err := sys.FetchSpecificEventFromInput(ctx, code, sdk.FetchSpecificEventParameters{
 		WithRelays: withRelays,
 	})
 	if err != nil {
@@ -76,14 +98,7 @@ func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, 
 		return evt, nil, nil
 	}
 
-	if relays == nil {
-		return evt, internal.getRelaysForEvent(evt.ID), nil
-	}
-
-	// save relays if we got them
-	allRelays := internal.attachRelaysToEvent(evt.ID, relays...)
-
-	return evt, allRelays, nil
+	return evt, sys.GetEventRelays(evt.ID), nil
 }
 
 func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []EnhancedEvent, justFetched bool) {
@@ -137,11 +152,10 @@ func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []Enha
 					}
 
 					ee := NewEnhancedEvent(ctx, ie.Event)
-					ee.relays = appendUnique([]string{ie.Relay.URL}, internal.getRelaysForEvent(ie.Event.ID)...)
+					ee.relays = appendUnique([]string{ie.Relay.URL}, sys.GetEventRelays(ie.Event.ID)...)
 					lastNotes = append(lastNotes, ee)
 
 					sys.Store.SaveEvent(ie.Event)
-					internal.attachRelaysToEvent(ie.Event.ID, ie.Relay.URL)
 				case <-ctx.Done():
 					break out
 				}
@@ -155,29 +169,24 @@ func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []Enha
 func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[nostr.Event] {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 
+	url := nostr.NormalizeURL(hostname)
 	return func(yield func(nostr.Event) bool) {
 		defer cancel()
 
-		for id := range internal.getEventsInRelay(hostname) {
-			next, done := iter.Pull(sys.Store.QueryEvents(nostr.Filter{IDs: []nostr.ID{id}}, 1))
-			res, has := next()
-			done()
+		for evt := range sys.Store.QueryEvents(nostr.Filter{Kinds: []nostr.Kind{1, 1111}}, 99999) {
+			if slices.Contains(sys.GetEventRelays(evt.ID), url) {
+				limit--
 
-			if !has {
-				internal.notCached(id)
-				continue
-			}
-			limit--
-
-			if !yield(res) {
-				return
-			}
-			if limit == 0 {
-				return
+				if !yield(evt) {
+					return
+				}
+				if limit == 0 {
+					return
+				}
 			}
 		}
 
-		if limit > 0 {
+		if limit > 40 {
 			limit = max(limit, 50)
 
 			if relay, err := sys.Pool.EnsureRelay(hostname); err == nil {
@@ -186,7 +195,6 @@ func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[no
 					Limit: limit,
 				}) {
 					sys.Store.SaveEvent(evt)
-					internal.attachRelaysToEvent(evt.ID, hostname)
 					if !yield(evt) {
 						return
 					}

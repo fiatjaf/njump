@@ -5,7 +5,6 @@ import (
 	"math/rand"
 	"net/http"
 
-	"fiatjaf.com/leafdb"
 	"fiatjaf.com/nostr"
 	"fiatjaf.com/nostr/nip19"
 )
@@ -29,13 +28,12 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 
 	// 50% of chance of picking a pubkey
 	if ra := rand.Intn(2); ra == 0 {
-		params := leafdb.AnyQuery("pubkey-archive")
-		params.Skip = rand.Intn(50)
-		for val := range internal.View(params) {
-			pka, err := nostr.PubKeyFromHex(val.(*PubKeyArchive).Pubkey)
-			if err == nil {
-				target = "/" + nip19.EncodeNpub(pka)
-				return
+		if len(npubsArchive) > 0 {
+			for pk := range npubsArchive {
+				if rand.Intn(12) < 2 {
+					target = "/" + nip19.EncodeNpub(pk)
+					return
+				}
 			}
 		}
 	}

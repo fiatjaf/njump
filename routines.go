@@ -7,7 +7,7 @@ import (
 	"fiatjaf.com/nostr"
 )
 
-var npubsArchive = make([]string, 0, 5000)
+var npubsArchive map[nostr.PubKey]struct{}
 
 func updateArchives(ctx context.Context) {
 	for {
@@ -17,22 +17,16 @@ func updateArchives(ctx context.Context) {
 		case <-time.After(24 * time.Hour * 3):
 			log.Debug().Msg("refreshing the npubs archive")
 
+			pubkeySet := make(map[nostr.PubKey]struct{})
 			for _, pubkey := range s.trustedPubKeys {
 				ctx, cancel := context.WithTimeout(ctx, time.Second*4)
 				follows := sys.FetchFollowList(ctx, pubkey)
-				fla := &FollowListArchive{
-					Source:  pubkey.Hex(),
-					Pubkeys: make([]string, 0, 2000),
-				}
 				for _, follow := range follows.Items {
-					fla.Pubkeys = append(fla.Pubkeys, follow.Pubkey.Hex())
+					pubkeySet[follow.Pubkey] = struct{}{}
 				}
 				cancel()
-
-				if err := internal.overwriteFollowListArchive(fla); err != nil {
-					log.Fatal().Err(err).Msg("failed to overwrite archived pubkeys")
-				}
 			}
+			npubsArchive = pubkeySet
 		}
 	}
 }
@@ -43,14 +37,18 @@ func deleteOldCachedEvents(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case <-time.After(time.Hour * 6):
-			log.Debug().Msg("deleting old cached events")
-			if ids, err := internal.deleteExpiredEvents(nostr.Now()); err != nil {
-				log.Fatal().Err(err).Msg("failed to delete expired events")
-			} else {
-				for _, id := range ids {
+			threshold := nostr.Now() - 60*60*24*13
+			log.Debug().Time("threshold", threshold.Time()).Msg("deleting old cached events")
+			for evt := range sys.Store.QueryEvents(nostr.Filter{}, 999999) {
+				id := evt.ID
+
+				accessTime := sys.GetEventAccessTime(id)
+				if accessTime < threshold {
+					log.Info().Stringer("event", id).Time("last-access", accessTime.Time()).Msg("will delete")
 					if err := sys.Store.DeleteEvent(id); err != nil {
-						log.Error().Err(err).Stringer("event", id).Msg("failed to delete this cached event")
+						log.Error().Err(err).Stringer("event", id).Msg("failed to delete cached event")
 					}
+					sys.EraseAccessTime(id)
 				}
 			}
 		}

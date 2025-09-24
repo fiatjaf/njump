@@ -4,7 +4,7 @@ go 1.24.2
 
 require (
 	fiatjaf.com/leafdb v0.0.7
-	fiatjaf.com/nostr v0.0.0-20250923223459-3c540e726e17
+	fiatjaf.com/nostr v0.0.0-20250924142401-59bd3c29fffd
 	github.com/PuerkitoBio/goquery v1.10.1
 	github.com/a-h/templ v0.3.943
 	github.com/bytesparadise/libasciidoc v0.8.0

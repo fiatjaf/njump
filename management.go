@@ -22,16 +22,29 @@ func setupRelayManagement(relay *khatru.Relay) {
 		log.Info().Str("id", id.Hex()).Str("reason", reason).Msg("banning event")
 		sys.Store.DeleteEvent(id)
 
-		if err := internal.banEvent(id, reason); err != nil {
-			return err
+		authed, ok := khatru.GetAuthed(ctx)
+		if !ok {
+			panic("not authed")
 		}
 
-		return nil
+		evt := nostr.Event{
+			Kind:      5,
+			Tags:      nostr.Tags{{"e", id.Hex()}},
+			Content:   reason,
+			PubKey:    authed,
+			CreatedAt: nostr.Now(),
+		}
+		evt.ID = evt.GetID()
+		return sys.Store.SaveEvent(evt)
 	}
 	relay.ManagementAPI.AllowEvent = func(ctx context.Context, id nostr.ID, reason string) error {
 		log.Info().Str("id", id.Hex()).Str("reason", reason).Msg("unbanning event")
-		if err := internal.unbanEvent(id); err != nil {
-			return err
+		for evt := range sys.Store.QueryEvents(nostr.Filter{
+			Kinds:   []nostr.Kind{5},
+			Tags:    nostr.TagMap{"e": []string{id.Hex()}},
+			Authors: s.trustedPubKeys,
+		}, DB_MAX_LIMIT) {
+			sys.Store.DeleteEvent(evt.ID)
 		}
 		return nil
 	}
@@ -42,16 +55,29 @@ func setupRelayManagement(relay *khatru.Relay) {
 			sys.Store.DeleteEvent(evt.ID)
 		}
 
-		if err := internal.banPubkey(pk, reason); err != nil {
-			return err
+		authed, ok := khatru.GetAuthed(ctx)
+		if !ok {
+			panic("not authed")
 		}
 
-		return nil
+		evt := nostr.Event{
+			Kind:      5,
+			Tags:      nostr.Tags{{"p", pk.Hex()}},
+			Content:   reason,
+			PubKey:    authed,
+			CreatedAt: nostr.Now(),
+		}
+		evt.ID = evt.GetID()
+		return sys.Store.SaveEvent(evt)
 	}
 	relay.ManagementAPI.AllowPubKey = func(ctx context.Context, pk nostr.PubKey, reason string) error {
 		log.Info().Str("pk", pk.Hex()).Str("reason", reason).Msg("unbanning pubkey")
-		if err := internal.unbanPubkey(pk); err != nil {
-			return err
+		for evt := range sys.Store.QueryEvents(nostr.Filter{
+			Kinds:   []nostr.Kind{5},
+			Tags:    nostr.TagMap{"p": []string{pk.Hex()}},
+			Authors: s.trustedPubKeys,
+		}, DB_MAX_LIMIT) {
+			sys.Store.DeleteEvent(evt.ID)
 		}
 		return nil
 	}

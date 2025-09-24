@@ -41,7 +41,6 @@ var (
 	s   Settings
 	log = zerolog.New(os.Stderr).Output(zerolog.ConsoleWriter{Out: os.Stdout}).
 		With().Timestamp().Logger()
-	internal           *InternalDB
 	tailwindDebugStuff template.HTML
 )
 
@@ -114,13 +113,6 @@ func main() {
 
 	// image rendering stuff
 	initializeImageDrawingStuff()
-
-	// internal db
-	internal, err = NewInternalDB(s.InternalDBPath)
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to start internal db")
-		return
-	}
 
 	// initialize routines
 	ctx, cancel := context.WithCancel(context.Background())

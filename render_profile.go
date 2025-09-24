@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"fiatjaf.com/nostr/sdk"
 )
 
 func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, code string) {
@@ -24,25 +26,23 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		isRSS = true
 	}
 
-	profile, err := sys.FetchProfileFromInput(ctx, code)
-	if err != nil {
-		log.Warn().Err(err).Str("code", code).Msg("error fetching profile on render_profile")
+	pp := sdk.InputToProfile(ctx, code)
+	if pp == nil {
+		log.Warn().Str("code", code).Msg("invalid profile code")
 		w.Header().Set("Cache-Control", "max-age=60")
 		w.WriteHeader(http.StatusNotFound)
-
-		errorTemplate(ErrorPageParams{Errors: err.Error(), Clients: generateClientList(999999, code)}).Render(ctx, w)
+		errorTemplate(ErrorPageParams{Errors: "invalid profile code", Clients: generateClientList(999999, code)}).Render(ctx, w)
 		return
-	} else if profile.Event != nil {
-		internal.scheduleEventExpiration(profile.Event.ID)
 	}
 
-	// banned or unallowed conditions
-	if banned, reason := internal.isBannedPubkey(profile.PubKey); banned {
+	if banned, reason := isPubkeyBanned(pp.PublicKey); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
-		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
+		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Str("reason", reason).Msg("pubkey banned")
 		http.Error(w, "pubkey banned", http.StatusNotFound)
 		return
 	}
+
+	profile := sys.FetchProfileMetadata(ctx, pp.PublicKey)
 	if isMaliciousBridged(profile) {
 		http.Error(w, "profile is malicious", http.StatusNotFound)
 		return
@@ -69,6 +69,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 	w.Header().Set("Cache-Control", cacheControl)
 
+	var err error
 	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
 		w.Write([]byte(XML_HEADER))

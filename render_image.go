@@ -14,10 +14,10 @@ import (
 	"strings"
 	"time"
 
+	"fiatjaf.com/nostr/sdk"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
-	"fiatjaf.com/nostr/sdk"
 	"github.com/nfnt/resize"
 	xfont "golang.org/x/image/font"
 )
@@ -64,12 +64,12 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// banned or unallowed conditions
-	if banned, _ := internal.isBannedEvent(data.event.ID); banned {
+	if banned, _ := isEventBanned(data.event.ID); banned {
 		w.WriteHeader(http.StatusNotFound)
 		http.Error(w, "event banned", http.StatusNotFound)
 		return
 	}
-	if banned, _ := internal.isBannedPubkey(data.event.PubKey); banned {
+	if banned, _ := isPubkeyBanned(data.event.PubKey); banned {
 		w.WriteHeader(http.StatusNotFound)
 		http.Error(w, "pubkey banned", http.StatusNotFound)
 		return

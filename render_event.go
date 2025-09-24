@@ -85,13 +85,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	//
 
 	// banned or unallowed conditions
-	if banned, reason := internal.isBannedEvent(data.event.ID); banned {
+	if banned, reason := isEventBanned(data.event.ID); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
 		http.Error(w, "event banned", http.StatusNotFound)
 		return
 	}
-	if banned, reason := internal.isBannedPubkey(data.event.PubKey); banned {
+	if banned, reason := isPubkeyBanned(data.event.PubKey); banned {
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
 		http.Error(w, "pubkey banned", http.StatusNotFound)
@@ -105,6 +105,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "event is not allowed", http.StatusNotFound)
 		return
 	}
+
+	sys.TrackEventAccessTime(data.event.ID)
 
 	// gather page style from user-agent
 	style := getPreviewStyle(r)
