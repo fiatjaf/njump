@@ -36,6 +36,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	}
 
 	if banned, reason := isPubkeyBanned(pp.PublicKey); banned {
+		deleteAllEventsFromPubKey(pp.PublicKey)
 		w.Header().Set("Cache-Control", "max-age=60")
 		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Str("reason", reason).Msg("pubkey banned")
 		http.Error(w, "pubkey banned", http.StatusNotFound)

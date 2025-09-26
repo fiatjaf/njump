@@ -45,10 +45,7 @@ func deleteOldCachedEvents(ctx context.Context) {
 				accessTime := sys.GetEventAccessTime(id)
 				if accessTime < threshold {
 					log.Info().Stringer("event", id).Time("last-access", accessTime.Time()).Msg("will delete")
-					if err := sys.Store.DeleteEvent(id); err != nil {
-						log.Error().Err(err).Stringer("event", id).Msg("failed to delete cached event")
-					}
-					sys.EraseAccessTime(id)
+					deleteEvent(id)
 				}
 			}
 		}

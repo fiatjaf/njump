@@ -9,6 +9,18 @@ import (
 	"fiatjaf.com/nostr/nip86"
 )
 
+func deleteEvent(id nostr.ID) {
+	sys.Store.DeleteEvent(id)
+	sys.EraseAccessTime(id)
+	sys.EraseEventRelays(id)
+}
+
+func deleteAllEventsFromPubKey(pk nostr.PubKey) {
+	for evt := range sys.Store.QueryEvents(nostr.Filter{Authors: []nostr.PubKey{pk}}, DB_MAX_LIMIT) {
+		deleteEvent(evt.ID)
+	}
+}
+
 func setupRelayManagement(relay *khatru.Relay) {
 	relay.ManagementAPI.OnAPICall = func(ctx context.Context, mp nip86.MethodParams) (reject bool, msg string) {
 		for _, authed := range khatru.GetConnection(ctx).AuthedPublicKeys {
@@ -20,7 +32,7 @@ func setupRelayManagement(relay *khatru.Relay) {
 	}
 	relay.ManagementAPI.BanEvent = func(ctx context.Context, id nostr.ID, reason string) error {
 		log.Info().Str("id", id.Hex()).Str("reason", reason).Msg("banning event")
-		sys.Store.DeleteEvent(id)
+		deleteEvent(id)
 
 		authed, ok := khatru.GetAuthed(ctx)
 		if !ok {
@@ -44,16 +56,14 @@ func setupRelayManagement(relay *khatru.Relay) {
 			Tags:    nostr.TagMap{"e": []string{id.Hex()}},
 			Authors: s.trustedPubKeys,
 		}, DB_MAX_LIMIT) {
-			sys.Store.DeleteEvent(evt.ID)
+			deleteEvent(evt.ID)
 		}
 		return nil
 	}
 	relay.ManagementAPI.BanPubKey = func(ctx context.Context, pk nostr.PubKey, reason string) error {
 		log.Info().Str("pubkey", pk.Hex()).Str("reason", reason).Msg("banning pubkey")
 
-		for evt := range sys.Store.QueryEvents(nostr.Filter{Authors: []nostr.PubKey{pk}}, DB_MAX_LIMIT) {
-			sys.Store.DeleteEvent(evt.ID)
-		}
+		deleteAllEventsFromPubKey(pk)
 
 		authed, ok := khatru.GetAuthed(ctx)
 		if !ok {
@@ -77,7 +87,7 @@ func setupRelayManagement(relay *khatru.Relay) {
 			Tags:    nostr.TagMap{"p": []string{pk.Hex()}},
 			Authors: s.trustedPubKeys,
 		}, DB_MAX_LIMIT) {
-			sys.Store.DeleteEvent(evt.ID)
+			deleteEvent(evt.ID)
 		}
 		return nil
 	}

@@ -94,6 +94,16 @@ func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, 
 		return nil, nil, fmt.Errorf("couldn't find this event, did you include accurate relay or author hints in it?")
 	}
 
+	if banned, _ := isEventBanned(evt.ID); banned {
+		deleteEvent(evt.ID)
+		return nil, nil, fmt.Errorf("event is banned")
+	}
+
+	if banned, _ := isPubkeyBanned(evt.PubKey); banned {
+		deleteAllEventsFromPubKey(evt.PubKey)
+		return nil, nil, fmt.Errorf("pubkey is banned")
+	}
+
 	if !withRelays {
 		return evt, nil, nil
 	}
