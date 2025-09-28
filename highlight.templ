@@ -27,6 +27,13 @@ type Kind9802Metadata struct {
 	Comment       string
 }
 
+func getTextFragmentAnchor(sourceURL string, content string) string {
+	if !strings.HasSuffix(sourceURL, ".pdf") {
+		return "#:~:text=" + content
+	}
+	return ""
+}
+
 templ highlightInnerBlock(params HighlightPageParams) {
 	<h1 class="text-2xl" itemprop="headline">Highlight</h1>
 	<div itemprop="articleBody">
@@ -50,15 +57,11 @@ templ highlightInnerBlock(params HighlightPageParams) {
 					</a>,
 				}
 				<cite class="ml-2">
-					{{ anchor := "" }}
-					if !strings.HasSuffix(params.HighlightEvent.SourceURL, ".pdf") {
-						{{ anchor = "#:~:text=" + string(params.Content) }}
-					}
 					if params.HighlightEvent.SourceURL != "" {
-						<a href={ templ.SafeURL(params.HighlightEvent.SourceURL + anchor) }>{ params.HighlightEvent.SourceName }</a>
+						<a href={ templ.SafeURL(params.HighlightEvent.SourceURL + getTextFragmentAnchor(params.HighlightEvent.SourceURL, string(params.Content))) }>{ params.HighlightEvent.SourceName }</a>
 					}
 					if params.HighlightEvent.SourceEvent != "" {
-						<a href={ templ.SafeURL("/" + params.HighlightEvent.SourceEvent + anchor) }>{ params.HighlightEvent.SourceName }</a>
+						<a href={ templ.SafeURL("/" + params.HighlightEvent.SourceEvent + getTextFragmentAnchor(params.HighlightEvent.SourceURL, string(params.Content))) }>{ params.HighlightEvent.SourceName }</a>
 					}
 				</cite>
 			</footer>
