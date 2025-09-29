@@ -7,7 +7,7 @@ import (
 )
 
 func proxy(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Cache-Control", "max-age=6048000")
+	w.Header().Set("Cache-Control", "public, immutable, s-maxage=6048000, max-age=6048000")
 
 	src := r.URL.Query().Get("src")
 	urlParsed, err := url.Parse(src)

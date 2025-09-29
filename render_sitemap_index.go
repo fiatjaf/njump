@@ -18,9 +18,9 @@ func renderSitemapIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(npubs) != 0 {
-		w.Header().Set("Cache-Control", "max-age=3600")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=86400, max-age=86400")
 	} else {
-		w.Header().Set("Cache-Control", "max-age=180")
+		w.Header().Set("Cache-Control", "s-maxage=180, max-age=180")
 	}
 
 	w.Header().Add("content-type", "text/xml")

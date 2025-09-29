@@ -55,7 +55,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 
 	data, err := grabData(ctx, code, false)
 	if err != nil {
-		w.Header().Set("Cache-Control", "max-age=180")
+		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on oembed")
 		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
 		return
@@ -82,6 +82,8 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 		res.Type = "rich"
 		res.HTML = data.content
 	}
+
+	w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
 
 	format := r.URL.Query().Get("format")
 	if format == "xml" {

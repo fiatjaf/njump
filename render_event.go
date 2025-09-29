@@ -46,7 +46,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// otherwise error
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=86400, max-age=86400")
 		log.Warn().Err(err).Str("code", code).Msg("invalid code")
 		w.WriteHeader(http.StatusNotFound)
 		errorTemplate(ErrorPageParams{Errors: err.Error()}).Render(ctx, w)
@@ -63,7 +63,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	// get data for this event
 	data, err := grabData(ctx, code, true)
 	if err != nil {
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_event")
 		w.WriteHeader(http.StatusNotFound)
 		errorTemplate(ErrorPageParams{Errors: err.Error(), Clients: generateClientList(999999, code)}).Render(ctx, w)
@@ -86,13 +86,13 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	// banned or unallowed conditions
 	if banned, reason := isEventBanned(data.event.ID); banned {
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
 		http.Error(w, "event banned", http.StatusNotFound)
 		return
 	}
 	if banned, reason := isPubkeyBanned(data.event.PubKey); banned {
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
 		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
 		http.Error(w, "pubkey banned", http.StatusNotFound)
 		return
@@ -296,10 +296,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if data.templateId == TelegramInstantView {
 		w.Header().Set("Cache-Control", "no-cache")
-	} else if len(data.content) != 0 {
-		w.Header().Set("Cache-Control", "max-age=604800")
 	} else {
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
+		w.Header().Set("ETag", data.event.ID.Hex())
 	}
 
 	// oembed discovery

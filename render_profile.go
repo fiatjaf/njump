@@ -29,7 +29,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	pp := sdk.InputToProfile(ctx, code)
 	if pp == nil {
 		log.Warn().Str("code", code).Msg("invalid profile code")
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=86400, max-age=86400")
 		w.WriteHeader(http.StatusNotFound)
 		errorTemplate(ErrorPageParams{Errors: "invalid profile code", Clients: generateClientList(999999, code)}).Render(ctx, w)
 		return
@@ -37,7 +37,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 	if banned, reason := isPubkeyBanned(pp.PublicKey); banned {
 		deleteAllEventsFromPubKey(pp.PublicKey)
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
 		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Str("reason", reason).Msg("pubkey banned")
 		http.Error(w, "pubkey banned", http.StatusNotFound)
 		return
@@ -45,10 +45,16 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 	profile := sys.FetchProfileMetadata(ctx, pp.PublicKey)
 	if isMaliciousBridged(profile) {
+		deleteAllEventsFromPubKey(pp.PublicKey)
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
+		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Msg("pubkey malicious bridged blocked")
 		http.Error(w, "profile is malicious", http.StatusNotFound)
 		return
 	}
 	if is, _ := isExplicitContent(ctx, profile.Picture); is {
+		deleteAllEventsFromPubKey(pp.PublicKey)
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
+		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Msg("pubkey explicit content blocked")
 		http.Error(w, "profile is not allowed", http.StatusNotFound)
 		return
 	}
@@ -59,16 +65,11 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	}
 
 	var lastNotes []EnhancedEvent
-	var cacheControl string = "max-age=86400"
 	if !isEmbed {
-		var justFetched bool
-		lastNotes, justFetched = authorLastNotes(ctx, profile.PubKey)
-		if justFetched && profile.Event != nil {
-			cacheControl = "only-if-cached"
-		}
+		lastNotes, _ = authorLastNotes(ctx, profile.PubKey)
 	}
 
-	w.Header().Set("Cache-Control", cacheControl)
+	w.Header().Set("Cache-Control", "public, s-maxage=604800, max-age=604800")
 
 	var err error
 	if isSitemap {

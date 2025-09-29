@@ -5,7 +5,7 @@ import (
 )
 
 func renderHomepage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Cache-Control", "max-age=3600")
+	w.Header().Set("Cache-Control", "public, s-maxage=3600, max-age=3600")
 	err := homepageTemplate(HomePageParams{
 		HeadParams: HeadParams{IsHome: true, IsProfile: false},
 	}).Render(r.Context(), w)

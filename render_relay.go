@@ -63,9 +63,9 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(renderableLastNotes) != 0 {
-		w.Header().Set("Cache-Control", "max-age=3600")
+		w.Header().Set("Cache-Control", "public, immutable, max-age=86400, s-maxage=86400")
 	} else {
-		w.Header().Set("Cache-Control", "max-age=60")
+		w.Header().Set("Cache-Control", "public, max-age=86400, s-maxage=1200")
 	}
 
 	if isSitemap {

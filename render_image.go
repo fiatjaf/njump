@@ -108,7 +108,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "image/png")
-	w.Header().Set("Cache-Control", "max-age=604800")
+	w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
 
 	if err := png.Encode(w, img); err != nil {
 		log.Printf("error encoding image: %s", err)
