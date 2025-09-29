@@ -11,5 +11,6 @@ func renderAbout(w http.ResponseWriter, r *http.Request) {
 	}).Render(r.Context(), w)
 	if err != nil {
 		log.Warn().Err(err).Msg("error rendering tmpl")
+		LoggedError(err, "about page template rendering", r, nil)
 	}
 }

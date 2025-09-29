@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 	"sync"
@@ -105,8 +106,32 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 			done := make(chan struct{})
 			go func() {
+				defer func() {
+					if recovered := recover(); recovered != nil {
+						// Log the panic with full context
+						panicErr := fmt.Errorf("panic: %v", recovered)
+						metadata := map[string]string{
+							"panic_type":  fmt.Sprintf("%T", recovered),
+							"panic_value": fmt.Sprintf("%+v", recovered),
+						}
+
+						// Log the panic with full context
+						TrackError("panic", "HTTP handler panic recovered in queue goroutine", panicErr, r, metadata)
+
+						// Also log to standard logger with stack trace for immediate debugging
+						log.Error().
+							Interface("panic", recovered).
+							Str("path", r.URL.Path).
+							Str("method", r.Method).
+							Str("ip", actualIP(r)).
+							Msg("panic recovered in queue goroutine")
+
+						// Return a proper error response to the client
+						http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+					}
+					close(done)
+				}()
 				next.ServeHTTP(w, r.WithContext(newCtx))
-				close(done)
 			}()
 
 			select {

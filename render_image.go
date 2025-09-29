@@ -103,6 +103,10 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	img, err := drawImage(ctx, paragraphs, getPreviewStyle(r), data.event.author, data.event.CreatedAt.Time())
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to draw paragraphs as image")
+
+		LoggedError(err, "image generation failed", r, map[string]string{
+			"event_id": data.event.ID.String(),
+		})
 		http.Error(w, "error writing image!", 500)
 		return
 	}

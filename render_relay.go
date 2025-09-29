@@ -68,10 +68,11 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "public, max-age=86400, s-maxage=1200")
 	}
 
+	var err error
 	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
 		w.Write([]byte(XML_HEADER))
-		SitemapTemplate.Render(w, &SitemapPage{
+		err = SitemapTemplate.Render(w, &SitemapPage{
 			Host:          s.Domain,
 			ModifiedAt:    lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 			LastNotes:     renderableLastNotes,
@@ -82,7 +83,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
 		w.Write([]byte(XML_HEADER))
-		RSSTemplate.Render(w, &RSSPage{
+		err = RSSTemplate.Render(w, &RSSPage{
 			Host:          s.Domain,
 			ModifiedAt:    lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 			LastNotes:     renderableLastNotes,
@@ -91,7 +92,7 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		})
 
 	} else {
-		relayTemplate(RelayPageParams{
+		err = relayTemplate(RelayPageParams{
 			HeadParams: HeadParams{IsProfile: false},
 			Info:       info,
 			Hostname:   hostname,
@@ -100,5 +101,18 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 			ModifiedAt: lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 			Clients:    generateClientList(-1, hostname),
 		}).Render(ctx, w)
+	}
+
+	if err != nil {
+		log.Warn().Err(err).Msg("error rendering tmpl")
+		context := "relay template rendering"
+		if isSitemap {
+			context = "relay sitemap rendering"
+		} else if isRSS {
+			context = "relay RSS rendering"
+		}
+		LoggedError(err, context, r, map[string]string{
+			"relay_hostname": hostname,
+		})
 	}
 }

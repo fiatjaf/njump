@@ -139,6 +139,15 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 	if err != nil {
 		log.Warn().Err(err).Msg("error rendering tmpl")
+		context := "profile template rendering"
+		if isSitemap {
+			context = "profile sitemap rendering"
+		} else if isRSS {
+			context = "profile RSS rendering"
+		}
+		LoggedError(err, context, r, map[string]string{
+			"profile_code": code,
+		})
 	}
 	return
 }

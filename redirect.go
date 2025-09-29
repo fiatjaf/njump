@@ -20,7 +20,7 @@ func redirectToRandom(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		switch r.Method {
 		case "POST":
-			fmt.Fprintf(w, target[1:])
+			fmt.Fprintf(w, "%s", target[1:])
 		case "GET":
 			http.Redirect(w, r, target, http.StatusFound)
 		}

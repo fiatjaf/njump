@@ -643,7 +643,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
-		http.Error(w, "tried to render an unsupported template at render_event.go", 500)
+
+		templateErr := fmt.Errorf("unsupported template ID %d for event kind %d", int(data.templateId), data.event.Kind)
+		LoggedError(templateErr, "unsupported template", r, map[string]string{
+			"template_id": fmt.Sprintf("%d", int(data.templateId)),
+			"event_kind":  fmt.Sprintf("%d", data.event.Kind),
+			"event_id":    data.event.ID.String(),
+		})
+		http.Error(w, "tried to render an unsupported template", 500)
 		return
 	}
 

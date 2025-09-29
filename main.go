@@ -29,6 +29,7 @@ type Settings struct {
 	TailwindDebug       bool   `envconfig:"TAILWIND_DEBUG"`
 	RelayConfigPath     string `envconfig:"RELAY_CONFIG_PATH"`
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
+	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
 
 	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
 	trustedPubKeys    []nostr.PubKey
@@ -62,6 +63,12 @@ func main() {
 
 	if len(s.trustedPubKeys) == 0 {
 		s.trustedPubKeys = defaultTrustedPubKeys
+	}
+
+	// initialize error tracker
+	if err := InitErrorTracker(s.ErrorLogPath); err != nil {
+		log.Fatal().Err(err).Msg("failed to initialize error tracker")
+		return
 	}
 
 	// eventstore and nostr system
@@ -161,13 +168,15 @@ func main() {
 	}
 
 	var mainHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-		ipBlock(
-			agentBlock(
-				loggingMiddleware(
-					semaphoreMiddleware(
-						queueMiddleware(
-							corsM(
-								relay.ServeHTTP,
+		recoveryMiddleware(
+			ipBlock(
+				agentBlock(
+					loggingMiddleware(
+						semaphoreMiddleware(
+							queueMiddleware(
+								corsM(
+									relay.ServeHTTP,
+								),
 							),
 						),
 					),
@@ -180,7 +189,8 @@ func main() {
 	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: mainHandler}
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
-			log.Error().Err(err).Msg("")
+			log.Error().Err(err).Msg("server error")
+			TrackGenericError("HTTP server failed", err)
 		}
 	}()
 
