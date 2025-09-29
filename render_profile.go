@@ -62,6 +62,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	var createdAt string
 	if profile.Event != nil {
 		createdAt = profile.Event.CreatedAt.Time().Format("2006-01-02T15:04:05Z07:00")
+		w.Header().Set("ETag", profile.Event.ID.Hex())
 	}
 
 	var lastNotes []EnhancedEvent
@@ -70,7 +71,6 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	}
 
 	w.Header().Set("Cache-Control", "public, s-maxage=604800, max-age=604800, stale-while-revalidate=31536000")
-	w.Header().Set("ETag", profile.Event.ID.Hex())
 
 	var err error
 	if isSitemap {
