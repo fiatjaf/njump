@@ -58,27 +58,14 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	data, err := grabData(ctx, code)
 	if err != nil {
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
+		log.Warn().Err(err).Str("code", code).Msg("event error on render_image")
 		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
+		return
+	} else if data.event.Event == nil {
+		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_image")
-		return
-	}
-
-	// banned or unallowed conditions
-	if banned, _ := isEventBanned(data.event.ID); banned {
-		w.WriteHeader(http.StatusNotFound)
-		http.Error(w, "event banned", http.StatusNotFound)
-		return
-	}
-	if banned, _ := isPubkeyBanned(data.event.PubKey); banned {
-		w.WriteHeader(http.StatusNotFound)
-		http.Error(w, "pubkey banned", http.StatusNotFound)
-		return
-	}
-	hasURL := urlRegex.MatchString(data.event.Content)
-	if isMaliciousBridged(data.event.author) ||
-		(hasURL && hasProhibitedWordOrTag(data.event.Event)) ||
-		(hasURL && hasExplicitMedia(ctx, data.event.Event)) {
-		http.Error(w, "event is not allowed", http.StatusNotFound)
+		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
 		return
 	}
 
@@ -103,10 +90,6 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	img, err := drawImage(ctx, paragraphs, getPreviewStyle(r), data.event.author, data.event.CreatedAt.Time())
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to draw paragraphs as image")
-
-		LoggedError(err, "image generation failed", r, map[string]string{
-			"event_id": data.event.ID.String(),
-		})
 		http.Error(w, "error writing image!", 500)
 		return
 	}

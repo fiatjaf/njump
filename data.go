@@ -49,6 +49,9 @@ func grabData(ctx context.Context, code string) (Data, error) {
 	if err != nil {
 		return Data{}, fmt.Errorf("error fetching event: %w", err)
 	}
+	if event == nil {
+		return Data{}, nil
+	}
 
 	ee := NewEnhancedEvent(ctx, *event)
 	ee.relays = sys.GetEventRelays(event.ID)
@@ -255,6 +258,14 @@ func grabData(ctx context.Context, code string) (Data, error) {
 				}
 			}
 		}
+	}
+
+	// check malicious
+	hasURL := urlRegex.MatchString(data.event.Content)
+	if isMaliciousBridged(data.event.author) ||
+		(hasURL && hasProhibitedWordOrTag(data.event.Event)) ||
+		(hasURL && hasExplicitMedia(ctx, data.event.Event)) {
+		return data, fmt.Errorf("prohibited content: %w", err)
 	}
 
 	return data, nil

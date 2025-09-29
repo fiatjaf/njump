@@ -143,6 +143,8 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 
 	// otherwise try the relays
 	if event == nil {
+		await(ctx)
+
 		evt, _, err := sys.FetchSpecificEvent(ctx, pointer, sdk.FetchSpecificEventParameters{
 			SkipLocalStore:   true,
 			SaveToLocalStore: true,
@@ -256,6 +258,8 @@ func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[no
 		}
 
 		if limit > 40 {
+			await(ctx)
+
 			limit = max(limit, 50)
 
 			if relay, err := sys.Pool.EnsureRelay(hostname); err == nil {

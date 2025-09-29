@@ -63,10 +63,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	// get data for this event
 	data, err := grabData(ctx, code)
 	if err != nil {
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
+		log.Warn().Err(err).Str("code", code).Msg("event error on render_event")
+		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
+		return
+	} else if data.event.Event == nil {
 		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_event")
-		w.WriteHeader(http.StatusNotFound)
-		errorTemplate(ErrorPageParams{Errors: err.Error(), Clients: generateClientList(999999, code)}).Render(ctx, w)
+		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
 		return
 	}
 
@@ -82,30 +86,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// from here onwards we know we're rendering an event
-	//
-
-	// banned or unallowed conditions
-	if banned, reason := isEventBanned(data.event.ID); banned {
-		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
-		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("event banned")
-		http.Error(w, "event banned", http.StatusNotFound)
-		return
-	}
-	if banned, reason := isPubkeyBanned(data.event.PubKey); banned {
-		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
-		log.Warn().Err(err).Str("code", code).Str("reason", reason).Msg("pubkey banned")
-		http.Error(w, "pubkey banned", http.StatusNotFound)
-		return
-	}
-	hasURL := urlRegex.MatchString(data.event.Content)
-	if isMaliciousBridged(data.event.author) ||
-		(hasURL && hasProhibitedWordOrTag(data.event.Event)) ||
-		(hasURL && hasExplicitMedia(ctx, data.event.Event)) {
-		log.Warn().Str("event", data.nevent).Msg("detect prohibited content")
-		http.Error(w, "event is not allowed", http.StatusNotFound)
-		return
-	}
-
 	sys.TrackEventAccessTime(data.event.ID)
 
 	// gather page style from user-agent
@@ -643,13 +623,6 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
-
-		templateErr := fmt.Errorf("unsupported template ID %d for event kind %d", int(data.templateId), data.event.Kind)
-		LoggedError(templateErr, "unsupported template", r, map[string]string{
-			"template_id": fmt.Sprintf("%d", int(data.templateId)),
-			"event_kind":  fmt.Sprintf("%d", data.event.Kind),
-			"event_id":    data.event.ID.String(),
-		})
 		http.Error(w, "tried to render an unsupported template", 500)
 		return
 	}

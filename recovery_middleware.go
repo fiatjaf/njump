@@ -3,54 +3,69 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"runtime/debug"
+	"strings"
+	"sync"
+	"time"
 )
 
-// Catches panics and logs them while returning a proper HTTP response
-func recoveryMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			if recovered := recover(); recovered != nil {
-				// Create detailed error entry for the panic
-				panicErr := fmt.Errorf("panic: %v", recovered)
-				metadata := map[string]string{
-					"panic_type":  fmt.Sprintf("%T", recovered),
-					"panic_value": fmt.Sprintf("%+v", recovered),
-				}
+var globalErrorTrackerMutex = sync.Mutex{}
+var globalErrorFile = "/tmp/njump-errors"
 
-				// Log the panic with full context
-				TrackError("panic", "HTTP handler panic recovered", panicErr, r, metadata)
+func trackError(r *http.Request, trackedError any) []string {
+	globalErrorTrackerMutex.Lock()
+	defer globalErrorTrackerMutex.Unlock()
 
-				// Also log to standard logger with stack trace for immediate debugging
-				log.Error().
-					Interface("panic", recovered).
-					Str("path", r.URL.Path).
-					Str("method", r.Method).
-					Str("ip", actualIP(r)).
-					Bytes("stack", debug.Stack()).
-					Msg("panic recovered in HTTP handler")
+	dir := filepath.Dir(globalErrorFile)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		log.Fatal().Err(err).Msg("failed to create error log directory")
+		return nil
+	}
 
-				// Return a proper error response to the client
-				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			}
-		}()
+	file, err := os.OpenFile(globalErrorFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to open error tracking file")
+		return nil
+	}
+	defer file.Close()
 
-		next.ServeHTTP(w, r)
-	})
+	file.WriteString(fmt.Sprintf("when: %s\n", time.Now().Format(time.DateTime)))
+	file.WriteString(fmt.Sprintf("at: %s %s\n", r.Method, r.URL.Path))
+	file.WriteString(fmt.Sprintf("by whom: %s; ip: %s; from %s\n",
+		r.Header.Get("user-agent"), actualIP(r), r.Header.Get("referer")))
+	file.WriteString(fmt.Sprintf("what: %v\n", trackedError))
+
+	file.WriteString(fmt.Sprintf("trace:\n"))
+	trace := captureStackTrace(5 /* / skip 5 frames: recoveryMiddleware, captureStackTrace, trackError etc */)
+	for _, line := range trace {
+		file.WriteString(fmt.Sprintf("%s\n", line))
+	}
+
+	file.WriteString("\n---\n")
+
+	// return the stack trace so we can display it to the user
+	return trace
 }
 
-// Logs an application error with full context
-func LoggedError(err error, context string, r *http.Request, metadata map[string]string) {
-	if err == nil {
-		return
+func captureStackTrace(skip int) []string {
+	frames := make([]string, 0, 11)
+	stack := strings.Split(string(debug.Stack()), "\n")
+
+	frames = append(frames, stack[0])
+
+	for i := 1 + skip*2; i < min(1+skip*2+20, len(stack)); i++ { // capture up to 10 frames
+		line := stack[i]
+
+		if strings.HasPrefix(line, "\t") {
+			if idx := strings.Index(line, "/njump/"); idx != -1 {
+				line = "\t" + line[idx:]
+			}
+		}
+
+		frames = append(frames, line)
 	}
 
-	if metadata == nil {
-		metadata = make(map[string]string)
-	}
-	if context != "" {
-		metadata["context"] = context
-	}
-
-	TrackAppError(fmt.Sprintf("Application error: %s", context), err, r, metadata)
+	return frames
 }

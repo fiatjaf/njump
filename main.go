@@ -65,12 +65,6 @@ func main() {
 		s.trustedPubKeys = defaultTrustedPubKeys
 	}
 
-	// initialize error tracker
-	if err := InitErrorTracker(s.ErrorLogPath); err != nil {
-		log.Fatal().Err(err).Msg("failed to initialize error tracker")
-		return
-	}
-
 	// eventstore and nostr system
 	defer initSystem()()
 
@@ -165,16 +159,12 @@ func main() {
 	}
 
 	var mainHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-		recoveryMiddleware(
+		agentBlock(
 			ipBlock(
-				agentBlock(
-					loggingMiddleware(
-						semaphoreMiddleware(
-							queueMiddleware(
-								corsM(
-									relay.ServeHTTP,
-								),
-							),
+				loggingMiddleware(
+					queueMiddleware(
+						corsM(
+							relay.ServeHTTP,
 						),
 					),
 				),
@@ -187,7 +177,6 @@ func main() {
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Error().Err(err).Msg("server error")
-			TrackGenericError("HTTP server failed", err)
 		}
 	}()
 

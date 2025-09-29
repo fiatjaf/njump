@@ -36,12 +36,6 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// relay metadata
-	info, _ := nip11.Fetch(ctx, hostname)
-	if info.Name == "" {
-		info.Name = hostname
-	}
-
 	// last notes
 	limit := 50
 	if isSitemap {
@@ -61,6 +55,12 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	if lastEventAt == nil {
 		now := time.Now()
 		lastEventAt = &now
+	}
+
+	// relay metadata
+	info, _ := nip11.Fetch(ctx, hostname)
+	if info.Name == "" {
+		info.Name = hostname
 	}
 
 	if len(renderableLastNotes) != 0 {
@@ -116,14 +116,5 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Warn().Err(err).Msg("error rendering tmpl")
-		context := "relay template rendering"
-		if isSitemap {
-			context = "relay sitemap rendering"
-		} else if isRSS {
-			context = "relay RSS rendering"
-		}
-		LoggedError(err, context, r, map[string]string{
-			"relay_hostname": hostname,
-		})
 	}
 }
