@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 
 	"fiatjaf.com/nostr/nip19"
@@ -24,9 +25,17 @@ func renderSitemapIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Add("content-type", "text/xml")
-	w.Write([]byte(XML_HEADER))
-	SitemapIndexTemplate.Render(w, &SitemapIndexPage{
+
+	var buf bytes.Buffer
+	buf.WriteString(XML_HEADER)
+	err := SitemapIndexTemplate.Render(&buf, &SitemapIndexPage{
 		Host:  s.Domain,
 		Npubs: npubs,
 	})
+	if err == nil {
+		w.Write(buf.Bytes())
+	} else {
+		log.Warn().Err(err).Msg("error rendering sitemap index template")
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 	"strings"
 	"time"
@@ -71,25 +72,35 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	var err error
 	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
-		w.Write([]byte(XML_HEADER))
-		err = SitemapTemplate.Render(w, &SitemapPage{
+
+		var buf bytes.Buffer
+		buf.WriteString(XML_HEADER)
+		err = SitemapTemplate.Render(&buf, &SitemapPage{
 			Host:          s.Domain,
 			ModifiedAt:    lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 			LastNotes:     renderableLastNotes,
 			RelayHostname: hostname,
 			Info:          info,
 		})
+		if err == nil {
+			w.Write(buf.Bytes())
+		}
 
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
-		w.Write([]byte(XML_HEADER))
-		err = RSSTemplate.Render(w, &RSSPage{
+
+		var buf bytes.Buffer
+		buf.WriteString(XML_HEADER)
+		err = RSSTemplate.Render(&buf, &RSSPage{
 			Host:          s.Domain,
 			ModifiedAt:    lastEventAt.Format("2006-01-02T15:04:05Z07:00"),
 			LastNotes:     renderableLastNotes,
 			RelayHostname: hostname,
 			Info:          info,
 		})
+		if err == nil {
+			w.Write(buf.Bytes())
+		}
 
 	} else {
 		err = relayTemplate(RelayPageParams{

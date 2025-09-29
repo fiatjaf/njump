@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"html"
 	"html/template"
@@ -75,22 +76,32 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 	var err error
 	if isSitemap {
 		w.Header().Add("content-type", "text/xml")
-		w.Write([]byte(XML_HEADER))
-		err = SitemapTemplate.Render(w, &SitemapPage{
+
+		var buf bytes.Buffer
+		buf.WriteString(XML_HEADER)
+		err = SitemapTemplate.Render(&buf, &SitemapPage{
 			Host:       s.Domain,
 			ModifiedAt: createdAt,
 			Metadata:   profile,
 			LastNotes:  lastNotes,
 		})
+		if err == nil {
+			w.Write(buf.Bytes())
+		}
 	} else if isRSS {
 		w.Header().Add("content-type", "text/xml")
-		w.Write([]byte(XML_HEADER))
-		err = RSSTemplate.Render(w, &RSSPage{
+
+		var buf bytes.Buffer
+		buf.WriteString(XML_HEADER)
+		err = RSSTemplate.Render(&buf, &RSSPage{
 			Host:       s.Domain,
 			ModifiedAt: createdAt,
 			Metadata:   profile,
 			LastNotes:  lastNotes,
 		})
+		if err == nil {
+			w.Write(buf.Bytes())
+		}
 	} else {
 		w.Header().Add("content-type", "text/html")
 
