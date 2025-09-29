@@ -39,7 +39,7 @@ func deleteOldCachedEvents(ctx context.Context) {
 		case <-time.After(time.Hour * 6):
 			threshold := nostr.Now() - 60*60*24*13
 			log.Debug().Time("threshold", threshold.Time()).Msg("deleting old cached events")
-			for evt := range sys.Store.QueryEvents(nostr.Filter{}, 999999) {
+			for evt := range sys.Store.QueryEvents(nostr.Filter{Until: threshold}, 999999) {
 				id := evt.ID
 
 				accessTime := sys.GetEventAccessTime(id)
