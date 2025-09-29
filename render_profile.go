@@ -69,7 +69,8 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		lastNotes, _ = authorLastNotes(ctx, profile.PubKey)
 	}
 
-	w.Header().Set("Cache-Control", "public, s-maxage=604800, max-age=604800")
+	w.Header().Set("Cache-Control", "public, s-maxage=604800, max-age=604800, stale-while-revalidate=31536000")
+	w.Header().Set("ETag", profile.Event.ID.Hex())
 
 	var err error
 	if isSitemap {

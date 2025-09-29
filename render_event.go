@@ -297,7 +297,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if data.templateId == TelegramInstantView {
 		w.Header().Set("Cache-Control", "no-cache")
 	} else {
-		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
+		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800, stale-while-revalidate=31536000")
 		w.Header().Set("ETag", data.event.ID.Hex())
 	}
 
