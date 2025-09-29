@@ -143,7 +143,6 @@ func main() {
 	mux := relay.Router()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
 
-	mux.HandleFunc("/npubs-sitemaps.xml", renderSitemapIndex)
 	mux.HandleFunc("/services/oembed", renderOEmbed)
 	mux.HandleFunc("/njump/image/", renderImage)
 	mux.HandleFunc("/image/", renderImage)

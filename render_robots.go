@@ -32,8 +32,5 @@ Disallow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://%s/npubs-archive.xml
-Sitemap: https://%s/npubs-sitemaps.xml
-Sitemap: https://%s/relays-archive.xml
 `, s.Domain, s.Domain, s.Domain)
 }
