@@ -155,17 +155,19 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 		event = evt
 	}
 
-	// do banned checks again if necessary
-	if !hasCheckedAuthor {
-		if banned, _ := isPubkeyBanned(event.PubKey); banned {
-			deleteAllEventsFromPubKey(event.PubKey)
-			return nil, fmt.Errorf("pubkey is banned")
+	if event != nil {
+		// do banned checks again if necessary
+		if !hasCheckedAuthor {
+			if banned, _ := isPubkeyBanned(event.PubKey); banned {
+				deleteAllEventsFromPubKey(event.PubKey)
+				return nil, fmt.Errorf("pubkey is banned")
+			}
 		}
-	}
-	if !hasCheckedID {
-		if banned, _ := isEventBanned(event.ID); banned {
-			deleteEvent(event.ID)
-			return nil, fmt.Errorf("event is banned")
+		if !hasCheckedID {
+			if banned, _ := isEventBanned(event.ID); banned {
+				deleteEvent(event.ID)
+				return nil, fmt.Errorf("event is banned")
+			}
 		}
 	}
 
