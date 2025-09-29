@@ -4,6 +4,8 @@ fiatjaf.com/nostr v0.0.0-20250923223459-3c540e726e17 h1:bCx2ExbAMz3TXOiPn5TS2HWK
 fiatjaf.com/nostr v0.0.0-20250923223459-3c540e726e17/go.mod h1:Nq86Jjsd0OmsOEImUg0iCcLuqM5B67Nj2eu/2dP74Ss=
 fiatjaf.com/nostr v0.0.0-20250924142401-59bd3c29fffd h1:LnbRz+TxZAROXglKFT+Lqsdqe5Pu8PG0rSpmXGnES90=
 fiatjaf.com/nostr v0.0.0-20250924142401-59bd3c29fffd/go.mod h1:Nq86Jjsd0OmsOEImUg0iCcLuqM5B67Nj2eu/2dP74Ss=
+fiatjaf.com/nostr v0.0.0-20250929200447-1e40fecdc26d h1:mXqA+f1TNri7iWUeN5mc5BHVQfpla1Qel2TRnjhvlcE=
+fiatjaf.com/nostr v0.0.0-20250929200447-1e40fecdc26d/go.mod h1:Nq86Jjsd0OmsOEImUg0iCcLuqM5B67Nj2eu/2dP74Ss=
 github.com/DataDog/gostackparse v0.5.0 h1:jb72P6GFHPHz2W0onsN51cS3FkaMDcjb0QzgxxA4gDk=
 github.com/DataDog/gostackparse v0.5.0/go.mod h1:lTfqcJKqS9KnXQGnyQMCugq3u1FP6UZMfWR0aitKFMM=
 github.com/FastFilter/xorfilter v0.2.1 h1:lbdeLG9BdpquK64ZsleBS8B4xO/QW1IM0gMzF7KaBKc=

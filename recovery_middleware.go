@@ -13,6 +13,7 @@ import (
 
 var globalErrorTrackerMutex = sync.Mutex{}
 var globalErrorFile = "/tmp/njump-errors"
+var writeCount int
 
 func trackError(r *http.Request, trackedError any) []string {
 	globalErrorTrackerMutex.Lock()
@@ -44,6 +45,19 @@ func trackError(r *http.Request, trackedError any) []string {
 	}
 
 	file.WriteString("\n---\n")
+
+	writeCount++
+	if writeCount%20 == 0 {
+		content, err := os.ReadFile(globalErrorFile)
+		if err == nil {
+			blocks := strings.Split(string(content), "\n---\n")
+			if len(blocks) > 130 { // more than 130 errors
+				newBlocks := blocks[len(blocks)-51:] // keep last 50 errors + empty
+				newContent := strings.Join(newBlocks, "\n---\n")
+				os.WriteFile(globalErrorFile, []byte(newContent), 0644)
+			}
+		}
+	}
 
 	// return the stack trace so we can display it to the user
 	return trace
