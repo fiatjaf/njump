@@ -79,6 +79,7 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		err = SitemapTemplate.Render(w, &SitemapPage{
 			Host:       s.Domain,
 			ModifiedAt: createdAt,
+			Metadata:   profile,
 			LastNotes:  lastNotes,
 		})
 	} else if isRSS {
