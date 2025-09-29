@@ -25,11 +25,18 @@ var buckets = func() [52]*semaphore.Weighted {
 	return s
 }()
 
-var redirectToCloudflareCacheHitMaybe = errors.New("RTCCHM")
-var requestCanceledAbortEverything = errors.New("RCAE")
+var (
+	redirectToCloudflareCacheHitMaybe = errors.New("RTCCHM")
+	requestCanceledAbortEverything    = errors.New("RCAE")
+)
 
 func await(ctx context.Context) {
-	code := ctx.Value("code").(string)
+	val := ctx.Value("code")
+	if val == nil {
+		return
+	}
+
+	code := val.(string)
 	sem := buckets[int(fnv1a.HashString64(code)%uint64(len(buckets)))]
 
 	acquireTimeout, cancel := context.WithTimeoutCause(ctx, time.Second*9, redirectToCloudflareCacheHitMaybe)
