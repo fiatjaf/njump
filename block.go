@@ -11,6 +11,11 @@ func agentBlock(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ua := r.Header.Get("User-Agent")
 		for _, bua := range []string{
+			"Opera",
+			"meta-webindexer",
+			"Uptime",
+			"Amethyst",
+			"babbar.tech",
 			"semrush",
 			"Bytespider",
 			"AhrefsBot",
