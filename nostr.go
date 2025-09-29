@@ -9,6 +9,7 @@ import (
 
 	"fiatjaf.com/nostr"
 	"fiatjaf.com/nostr/eventstore/boltdb"
+	"fiatjaf.com/nostr/nip19"
 	"fiatjaf.com/nostr/sdk"
 	bolt_kv "fiatjaf.com/nostr/sdk/kvstore/bbolt"
 )
@@ -86,29 +87,87 @@ func initSystem() func() {
 	return db.Close
 }
 
-func getEvent(ctx context.Context, code string, withRelays bool) (*nostr.Event, []string, error) {
-	evt, _, err := sys.FetchSpecificEventFromInput(ctx, code, sdk.FetchSpecificEventParameters{
-		WithRelays: withRelays,
-	})
-	if err != nil {
-		return nil, nil, fmt.Errorf("couldn't find this event, did you include accurate relay or author hints in it?")
+func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
+	var pointer nostr.Pointer
+	prefix, data, err := nip19.Decode(code)
+	if err == nil {
+		switch prefix {
+		case "nevent":
+			pointer = data.(nostr.EventPointer)
+		case "naddr":
+			pointer = data.(nostr.EntityPointer)
+		case "note":
+			pointer = nostr.EventPointer{ID: data.(nostr.ID)}
+		default:
+			return nil, fmt.Errorf("invalid code '%s'", code)
+		}
+	} else {
+		if id, err := nostr.IDFromHex(code); err == nil {
+			pointer = nostr.EventPointer{ID: id}
+		} else {
+			return nil, fmt.Errorf("failed to decode '%s': %w", code, err)
+		}
 	}
 
-	if banned, _ := isEventBanned(evt.ID); banned {
-		deleteEvent(evt.ID)
-		return nil, nil, fmt.Errorf("event is banned")
+	// pre-ban before fetching
+	var hasCheckedAuthor bool
+	var hasCheckedID bool
+	var preauthor nostr.PubKey
+	switch p := pointer.(type) {
+	case nostr.EventPointer:
+		if banned, _ := isEventBanned(p.ID); banned {
+			deleteEvent(p.ID)
+			return nil, fmt.Errorf("event is banned")
+		}
+		hasCheckedID = true
+		preauthor = p.Author
+	case nostr.EntityPointer:
+		preauthor = p.PublicKey
+	case nostr.ProfilePointer:
+		preauthor = p.PublicKey
+	}
+	if preauthor != nostr.ZeroPK {
+		if banned, _ := isPubkeyBanned(preauthor); banned {
+			deleteAllEventsFromPubKey(preauthor)
+			return nil, fmt.Errorf("pubkey is banned")
+		}
+		hasCheckedAuthor = true
 	}
 
-	if banned, _ := isPubkeyBanned(evt.PubKey); banned {
-		deleteAllEventsFromPubKey(evt.PubKey)
-		return nil, nil, fmt.Errorf("pubkey is banned")
+	// first check localstore
+	var event *nostr.Event
+	for evt := range sys.Store.QueryEvents(pointer.AsFilter(), 1) {
+		event = &evt
+		break
 	}
 
-	if !withRelays {
-		return evt, nil, nil
+	// otherwise try the relays
+	if event == nil {
+		evt, _, err := sys.FetchSpecificEvent(ctx, pointer, sdk.FetchSpecificEventParameters{
+			SkipLocalStore:   true,
+			SaveToLocalStore: true,
+		})
+		if err != nil {
+			return evt, err
+		}
+		event = evt
 	}
 
-	return evt, sys.GetEventRelays(evt.ID), nil
+	// do banned checks again if necessary
+	if !hasCheckedAuthor {
+		if banned, _ := isPubkeyBanned(event.PubKey); banned {
+			deleteAllEventsFromPubKey(event.PubKey)
+			return nil, fmt.Errorf("pubkey is banned")
+		}
+	}
+	if !hasCheckedID {
+		if banned, _ := isEventBanned(event.ID); banned {
+			deleteEvent(event.ID)
+			return nil, fmt.Errorf("event is banned")
+		}
+	}
+
+	return event, err
 }
 
 func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []EnhancedEvent, justFetched bool) {

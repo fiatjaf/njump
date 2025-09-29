@@ -43,16 +43,19 @@ type Data struct {
 	Kind9802Metadata         Kind9802Metadata
 }
 
-func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
+func grabData(ctx context.Context, code string) (Data, error) {
 	// code can be a nevent or naddr, in which case we try to fetch the associated event
-	event, relays, err := getEvent(ctx, code, withRelays)
+	event, err := getEvent(ctx, code)
 	if err != nil {
 		return Data{}, fmt.Errorf("error fetching event: %w", err)
 	}
 
+	ee := NewEnhancedEvent(ctx, *event)
+	ee.relays = sys.GetEventRelays(event.ID)
+
 	relaysForNip19 := make([]string, 0, 3)
 	c := 0
-	for _, relayUrl := range relays {
+	for _, relayUrl := range ee.relays {
 		if sdk.IsVirtualRelay(relayUrl) {
 			continue
 		}
@@ -61,9 +64,6 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 			break
 		}
 	}
-
-	ee := NewEnhancedEvent(ctx, *event)
-	ee.relays = relays
 
 	data := Data{
 		event: ee,
@@ -158,7 +158,7 @@ func grabData(ctx context.Context, code string, withRelays bool) (Data, error) {
 
 		if data.Kind9802Metadata.SourceEvent != "" {
 			// Retrieve the title
-			sourceEvent, _, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent, withRelays)
+			sourceEvent, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent)
 			if title := sourceEvent.Tags.Find("title"); title != nil {
 				data.Kind9802Metadata.SourceName = title[1]
 			} else {

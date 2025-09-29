@@ -53,7 +53,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 
 	host := r.Header.Get("X-Forwarded-Host")
 
-	data, err := grabData(ctx, code, false)
+	data, err := grabData(ctx, code)
 	if err != nil {
 		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on oembed")

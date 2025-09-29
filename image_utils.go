@@ -218,7 +218,7 @@ func quotesAsBlockPrefixedText(ctx context.Context, lines []string) []string {
 			submatch := nostrNoteNeventMatcher.FindStringSubmatch(matchText)
 			nip19 := submatch[0][6:]
 
-			event, _, err := getEvent(ctx, nip19, false)
+			event, err := getEvent(ctx, nip19)
 			if err != nil {
 				// error case concat this to previous block
 				blocks[b] += matchText

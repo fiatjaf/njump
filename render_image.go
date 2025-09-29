@@ -56,7 +56,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		code = strings.TrimSuffix(code, ext)
 	}
 
-	data, err := grabData(ctx, code, false)
+	data, err := grabData(ctx, code)
 	if err != nil {
 		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_image")

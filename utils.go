@@ -313,7 +313,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 		defer cancel()
 		wg.Add(1)
 		go func() {
-			event, _, err := getEvent(ctx, nip19, false)
+			event, err := getEvent(ctx, nip19)
 			if err == nil {
 				quotedEvent := basicFormatting(submatches[0], false, usingTelegramInstantView, false)
 
