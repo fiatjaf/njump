@@ -62,7 +62,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 	} else if data.event.Event == nil {
 		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on oembed")
-		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
+		http.Error(w, "no event found", http.StatusNotFound)
 		return
 	}
 
