@@ -137,43 +137,42 @@ func main() {
 	mux := relay.Router()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
 
-	mux.HandleFunc("/services/oembed", renderOEmbed)
-	mux.HandleFunc("/njump/image/", renderImage)
-	mux.HandleFunc("/image/", renderImage)
-	mux.HandleFunc("/njump/proxy/", proxy)
-	mux.HandleFunc("/proxy/", proxy)
-	mux.HandleFunc("/robots.txt", renderRobots)
-	mux.HandleFunc("/r/", renderRelayPage)
-	mux.HandleFunc("/random", redirectToRandom)
-	mux.HandleFunc("/e/", redirectFromESlash)
-	mux.HandleFunc("/p/", redirectFromPSlash)
-	mux.HandleFunc("/favicon.ico", redirectToFavicon)
-	mux.HandleFunc("/embed/{code}", renderEmbedjs)
-	mux.HandleFunc("/about", renderAbout)
-	mux.HandleFunc("/{code}", renderEvent)
-	mux.HandleFunc("/{$}", renderHomepage)
+	sub := http.NewServeMux()
+	sub.HandleFunc("/services/oembed", renderOEmbed)
+	sub.HandleFunc("/njump/image/", renderImage)
+	sub.HandleFunc("/image/", renderImage)
+	sub.HandleFunc("/njump/proxy/", proxy)
+	sub.HandleFunc("/proxy/", proxy)
+	sub.HandleFunc("/robots.txt", renderRobots)
+	sub.HandleFunc("/r/", renderRelayPage)
+	sub.HandleFunc("/random", redirectToRandom)
+	sub.HandleFunc("/e/", redirectFromESlash)
+	sub.HandleFunc("/p/", redirectFromPSlash)
+	sub.HandleFunc("/favicon.ico", redirectToFavicon)
+	sub.HandleFunc("/embed/{code}", renderEmbedjs)
+	sub.HandleFunc("/about", renderAbout)
+	sub.HandleFunc("/{code}", renderEvent)
+	sub.HandleFunc("/{$}", renderHomepage)
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		agentBlock(
+			ipBlock(
+				loggingMiddleware(
+					queueMiddleware(
+						sub.ServeHTTP,
+					),
+				),
+			),
+		)(w, r)
+	})
 
 	corsH := cors.Default()
 	corsM := func(next http.HandlerFunc) http.HandlerFunc {
 		return corsH.Handler(next).ServeHTTP
 	}
 
-	var mainHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-		agentBlock(
-			ipBlock(
-				loggingMiddleware(
-					queueMiddleware(
-						corsM(
-							relay.ServeHTTP,
-						),
-					),
-				),
-			),
-		)(w, r)
-	}
-
 	log.Print("listening at http://0.0.0.0:" + s.Port)
-	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: mainHandler}
+	server := &http.Server{Addr: "0.0.0.0:" + s.Port, Handler: corsM(relay.ServeHTTP)}
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Error().Err(err).Msg("server error")
