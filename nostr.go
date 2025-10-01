@@ -72,12 +72,14 @@ func initSystem() func() {
 		Path: s.EventStorePath,
 	}
 	if err := db.Init(); err != nil {
-		panic(err)
+		log.Fatal().Err(err).Msg("failed to init eventstore")
+		return func() {}
 	}
 
 	kv, err := bolt_kv.NewStore(s.KVStorePath)
 	if err != nil {
-		panic(err)
+		log.Fatal().Err(err).Msg("failed to init kvstore")
+		return func() {}
 	}
 
 	sys = sdk.NewSystem()

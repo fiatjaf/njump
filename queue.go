@@ -20,14 +20,16 @@ type queuedReq struct {
 var buckets = func() [52]*semaphore.Weighted {
 	var s [52]*semaphore.Weighted
 	for i := range s {
-		s[i] = semaphore.NewWeighted(2)
+		s[i] = semaphore.NewWeighted(1)
 	}
 	return s
 }()
 
 var (
+	queueAcquireTimeoutError          = errors.New("QAT")
 	redirectToCloudflareCacheHitMaybe = errors.New("RTCCHM")
 	requestCanceledAbortEverything    = errors.New("RCAE")
+	serverUnderHeavyLoad              = errors.New("SUHL")
 )
 
 func await(ctx context.Context) {
@@ -35,30 +37,40 @@ func await(ctx context.Context) {
 	if val == nil {
 		return
 	}
+	code := val.(int)
 
-	code := val.(string)
-	sem := buckets[int(fnv1a.HashString64(code)%uint64(len(buckets)))]
+	sem := buckets[code]
+	if sem.TryAcquire(1) {
+		// means we're the first to use this bucket
+		go func() {
+			// we'll release it after the request is answered
+			<-ctx.Done()
+			sem.Release(1)
+		}()
+	} else {
+		// otherwise someone else has already locked it, so we wait
+		acquireTimeout, cancel := context.WithTimeoutCause(ctx, time.Second*6, queueAcquireTimeoutError)
+		defer cancel()
 
-	acquireTimeout, cancel := context.WithTimeoutCause(ctx, time.Second*9, redirectToCloudflareCacheHitMaybe)
-	defer cancel()
-
-	if err := sem.Acquire(acquireTimeout, 1); err != nil {
-		if context.Cause(acquireTimeout) == redirectToCloudflareCacheHitMaybe {
+		err := sem.Acquire(acquireTimeout, 1)
+		if err == nil {
+			// got it soon enough
+			sem.Release(1)
 			panic(redirectToCloudflareCacheHitMaybe)
+		} else if context.Cause(acquireTimeout) == queueAcquireTimeoutError {
+			// took too long
+			panic(serverUnderHeavyLoad)
 		} else {
+			// request was canceled
 			panic(requestCanceledAbortEverything)
 		}
 	}
-
-	go func() {
-		<-ctx.Done()
-		sem.Release(1)
-	}()
 }
 
 func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := context.WithValue(r.Context(), "code", r.URL.Path)
+		code := int(fnv1a.HashString64(r.URL.Path) % uint64(len(buckets)))
+		ctx := context.WithValue(r.Context(), "code", code)
 
 		defer func() {
 			err := recover()
@@ -75,12 +87,12 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				if r.URL.RawQuery != "" {
 					path += "?" + r.URL.RawQuery
 				}
+				http.Redirect(w, r, path, http.StatusFound)
 
-				select {
-				case <-time.After(time.Second * 9):
-					http.Redirect(w, r, path, http.StatusFound)
-				case <-ctx.Done():
-				}
+			case serverUnderHeavyLoad:
+				w.WriteHeader(504)
+				w.Write([]byte("server under heavy load, please try again in a couple of seconds"))
+				return
 
 			case requestCanceledAbortEverything:
 				return

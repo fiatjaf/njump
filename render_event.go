@@ -81,6 +81,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		if r.URL.RawQuery != "" {
 			url += "?" + r.URL.RawQuery
 		}
+		time.Sleep(time.Millisecond * 500)
 		http.Redirect(w, r, url, http.StatusFound)
 		return
 	}
