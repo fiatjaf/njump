@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"fiatjaf.com/nostr"
-	"fiatjaf.com/nostr/eventstore/boltdb"
+	"fiatjaf.com/nostr/eventstore/lmdb"
 	"fiatjaf.com/nostr/nip19"
 	"fiatjaf.com/nostr/sdk"
 	bolt_kv "fiatjaf.com/nostr/sdk/kvstore/bbolt"
@@ -68,7 +68,7 @@ func isPubkeyBanned(pk nostr.PubKey) (bool, string) {
 }
 
 func initSystem() func() {
-	db := &boltdb.BoltBackend{
+	db := &lmdb.LMDBBackend{
 		Path: s.EventStorePath,
 	}
 	if err := db.Init(); err != nil {
