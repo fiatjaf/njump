@@ -231,6 +231,9 @@ func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []Enha
 					lastNotes = append(lastNotes, ee)
 
 					sys.Store.SaveEvent(ie.Event)
+
+					// track this only the first time this event is downloaded for the profile page so we keep these fresh
+					sys.TrackEventAccessTime(evt.ID)
 				case <-ctx.Done():
 					break out
 				}
@@ -272,6 +275,10 @@ func relayLastNotes(ctx context.Context, hostname string, limit int) iter.Seq[no
 					Limit: limit,
 				}) {
 					sys.Store.SaveEvent(evt)
+
+					// track this only the first time this event is downloaded for the relay page so we keep these fresh
+					sys.TrackEventAccessTime(evt.ID)
+
 					if !yield(evt) {
 						return
 					}
