@@ -5,8 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
+	"sync/atomic"
 	"time"
 
+	"github.com/puzpuzpuz/xsync/v3"
 	"github.com/segmentio/fasthash/fnv1a"
 
 	"golang.org/x/sync/semaphore"
@@ -32,12 +35,22 @@ var (
 	serverUnderHeavyLoad              = errors.New("SUHL")
 )
 
+var inCourse = xsync.NewMapOfWithHasher[uint64, struct{}](
+	func(key uint64, seed uint64) uint64 { return key },
+)
+
 func await(ctx context.Context) {
-	val := ctx.Value("code")
+	val := ctx.Value("ticket")
 	if val == nil {
 		return
 	}
 	code := val.(int)
+
+	reqNum := ctx.Value("reqNum").(uint64)
+	if _, ok := inCourse.LoadOrStore(reqNum, struct{}{}); ok {
+		// we've already acquired a semaphore for this request, no need to do it again
+		return
+	}
 
 	sem := buckets[code]
 	if sem.TryAcquire(1) {
@@ -67,10 +80,26 @@ func await(ctx context.Context) {
 	}
 }
 
+var reqNumSource atomic.Uint64
+
 func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		code := int(fnv1a.HashString64(r.URL.Path) % uint64(len(buckets)))
-		ctx := context.WithValue(r.Context(), "code", code)
+		if r.URL.Path == "/favicon.ico" || strings.HasPrefix(r.URL.Path, "/njump/static/") {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		reqNum := reqNumSource.Add(1)
+
+		// these will be used when we later call await(ctx)
+		ticket := int(fnv1a.HashString64(r.URL.Path) % uint64(len(buckets)))
+		ctx := context.WithValue(
+			context.WithValue(
+				r.Context(),
+				"reqNum", reqNum,
+			),
+			"ticket", ticket,
+		)
 
 		defer func() {
 			err := recover()
@@ -109,5 +138,8 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}()
 
 		next.ServeHTTP(w, r.WithContext(ctx))
+
+		// cleanup this
+		inCourse.Delete(reqNum)
 	}
 }
