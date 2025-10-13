@@ -73,7 +73,7 @@ templ calendarEventInnerBlock(params CalendarPageParams) {
 				</div>
 			}
 		}
-		if params.CalendarEvent.Locations[0] != "" {
+		if len(params.CalendarEvent.Locations) > 0 && params.CalendarEvent.Locations[0] != "" {
 			<div class="w-full">
 				<div class="font-semibold text-sm ml-2">Location</div>
 				<div class="py-2 px-4 bg-neutral-200 dark:bg-neutral-800 rounded-md">

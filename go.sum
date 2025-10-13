@@ -1,9 +1,3 @@
-fiatjaf.com/leafdb v0.0.7 h1:yu0D+x/lNMB3OdN4gRzk4/0TPJ8tfljfYLAnNRHKw9w=
-fiatjaf.com/leafdb v0.0.7/go.mod h1:UAmS4uwhlAzFdNZUUG6vguJfnahqgEa+b7HU/Bi05wk=
-fiatjaf.com/nostr v0.0.0-20250923223459-3c540e726e17 h1:bCx2ExbAMz3TXOiPn5TS2HWK/90KOq3GOTlHFSguobs=
-fiatjaf.com/nostr v0.0.0-20250923223459-3c540e726e17/go.mod h1:Nq86Jjsd0OmsOEImUg0iCcLuqM5B67Nj2eu/2dP74Ss=
-fiatjaf.com/nostr v0.0.0-20250924142401-59bd3c29fffd h1:LnbRz+TxZAROXglKFT+Lqsdqe5Pu8PG0rSpmXGnES90=
-fiatjaf.com/nostr v0.0.0-20250924142401-59bd3c29fffd/go.mod h1:Nq86Jjsd0OmsOEImUg0iCcLuqM5B67Nj2eu/2dP74Ss=
 fiatjaf.com/nostr v0.0.0-20250929200447-1e40fecdc26d h1:mXqA+f1TNri7iWUeN5mc5BHVQfpla1Qel2TRnjhvlcE=
 fiatjaf.com/nostr v0.0.0-20250929200447-1e40fecdc26d/go.mod h1:Nq86Jjsd0OmsOEImUg0iCcLuqM5B67Nj2eu/2dP74Ss=
 github.com/DataDog/gostackparse v0.5.0 h1:jb72P6GFHPHz2W0onsN51cS3FkaMDcjb0QzgxxA4gDk=
@@ -34,7 +28,6 @@ github.com/bep/debounce v1.2.1/go.mod h1:H8yggRPQKLUhUoqrJC1bO2xNya7vanpDl7xR3IS
 github.com/btcsuite/btcd v0.20.1-beta/go.mod h1:wVuoA8VJLEcwgqHBwHmzLRazpKxTv13Px/pDuV7OomQ=
 github.com/btcsuite/btcd v0.22.0-beta.0.20220111032746-97732e52810c/go.mod h1:tjmYdS6MLJ5/s0Fj4DbLgSbDHbEqLJrtnHecBFkdz5M=
 github.com/btcsuite/btcd v0.23.5-0.20231215221805-96c9fd8078fd/go.mod h1:nm3Bko6zh6bWP60UxwoT5LzdGJsQJaPo6HjduXq9p6A=
-github.com/btcsuite/btcd v0.24.2 h1:aLmxPguqxza+4ag8R1I2nnJjSu2iFn/kqtHTIImswcY=
 github.com/btcsuite/btcd/btcec/v2 v2.1.0/go.mod h1:2VzYrv4Gm4apmbVVsSq5bqf1Ec8v56E48Vt0Y/umPgA=
 github.com/btcsuite/btcd/btcec/v2 v2.1.3/go.mod h1:ctjw4H1kknNJmRN4iP1R7bTQ+v3GJkZBd6mui8ZsAZE=
 github.com/btcsuite/btcd/btcec/v2 v2.3.5 h1:dpAlnAwmT1yIBm3exhT1/8iUSD98RDJM5vqJVQDQLiU=

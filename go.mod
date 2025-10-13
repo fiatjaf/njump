@@ -3,7 +3,6 @@ module github.com/fiatjaf/njump
 go 1.24.2
 
 require (
-	fiatjaf.com/leafdb v0.0.7
 	fiatjaf.com/nostr v0.0.0-20250929200447-1e40fecdc26d
 	github.com/PuerkitoBio/goquery v1.10.1
 	github.com/a-h/templ v0.3.943
@@ -22,13 +21,13 @@ require (
 	github.com/puzpuzpuz/xsync/v3 v3.5.1
 	github.com/rs/cors v1.11.1
 	github.com/rs/zerolog v1.33.0
+	github.com/segmentio/fasthash v1.0.3
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
 	github.com/stretchr/testify v1.10.0
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
 	golang.org/x/image v0.17.0
 	golang.org/x/sync v0.17.0
-	google.golang.org/protobuf v1.36.2
 	mvdan.cc/xurls/v2 v2.5.0
 )
 
@@ -70,7 +69,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
-	github.com/segmentio/fasthash v1.0.3 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
@@ -84,6 +82,7 @@ require (
 	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
 	golang.org/x/tools v0.37.0 // indirect
+	google.golang.org/protobuf v1.36.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
