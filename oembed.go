@@ -40,7 +40,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	targetURL, err := url.Parse(r.URL.Query().Get("url"))
-	if err != nil {
+	if err != nil || !strings.Contains(targetURL.Path, "/") {
 		http.Error(w, "invalid url: "+err.Error(), 400)
 		return
 	}
