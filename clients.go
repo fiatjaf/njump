@@ -24,31 +24,32 @@ var (
 	native     = ClientReference{ID: "native", Name: "Your default app", Base: "nostr:{code}", Platform: "native"}
 	defaultWeb = ClientReference{ID: "default-web", Name: "Your default web app", Base: "web+nostr:{code}", Platform: "web"}
 
-	nosotros      = ClientReference{ID: "nosotros", Name: "Nosotros", Base: "https://dev.nosotros.app/{code}", Platform: platformWeb}
-	nosotrosRelay = ClientReference{ID: "nosotros", Name: "Nosotros", Base: "https://dev.nosotros.app/feed?kind=%5B1%2C6%5D&limit=100&type=relayfeed&relay=wss%3A%2F%2F{code}", Platform: platformWeb}
-	nosta         = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
-	phoenix       = ClientReference{ID: "phoenix", Name: "Phoenix", Base: "https://phoenix.social/{code}", Platform: platformWeb}
-	olasWeb       = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
-	primalWeb     = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: platformWeb}
-	nostrudel     = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
-	nostter       = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: platformWeb}
-	nostterRelay  = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
-	jumble        = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/{code}", Platform: platformWeb}
-	jumbleRelay   = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: platformWeb}
-	coracle       = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
-	coracleRelay  = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
-	relayTools    = ClientReference{ID: "relay.tools", Name: "relay.tools", Base: "https://relay.tools/posts/?relay=wss://{code}"}
-	iris          = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
-	lumilumi      = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/{code}", Platform: platformWeb}
-	lumilumiRelay = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/relay/wss%3A%2F%2F{code}", Platform: platformWeb}
-	chachiRelay   = ClientReference{ID: "chachi", Name: "chachi", Base: "https://chachi.chat/relay/wss%3A%2F%2F{code}/feed"}
+	nosotros       = ClientReference{ID: "nosotros", Name: "Nosotros", Base: "https://dev.nosotros.app/{code}", Platform: platformWeb}
+	nosotrosRelay  = ClientReference{ID: "nosotros", Name: "Nosotros", Base: "https://dev.nosotros.app/feed?kind=%5B1%2C6%5D&limit=100&type=relayfeed&relay=wss%3A%2F%2F{code}", Platform: platformWeb}
+	nosta          = ClientReference{ID: "nosta", Name: "Nosta", Base: "https://nosta.me/{code}", Platform: platformWeb}
+	phoenix        = ClientReference{ID: "phoenix", Name: "Phoenix", Base: "https://phoenix.social/{code}", Platform: platformWeb}
+	olasWeb        = ClientReference{ID: "olas", Name: "Olas", Base: "https://olas.app/e/{code}", Platform: platformWeb}
+	primalWeb      = ClientReference{ID: "primal", Name: "Primal", Base: "https://primal.net/e/{code}", Platform: platformWeb}
+	nostrudel      = ClientReference{ID: "nostrudel", Name: "Nostrudel", Base: "https://nostrudel.ninja/l/{code}", Platform: platformWeb}
+	nostter        = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/{code}", Platform: platformWeb}
+	nostterRelay   = ClientReference{ID: "nostter", Name: "Nostter", Base: "https://nostter.app/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
+	jumble         = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/{code}", Platform: platformWeb}
+	jumbleRelay    = ClientReference{ID: "jumble", Name: "Jumble", Base: "https://jumble.social/?r=wss://{code}", Platform: platformWeb}
+	coracle        = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/{code}", Platform: platformWeb}
+	coracleRelay   = ClientReference{ID: "coracle", Name: "Coracle", Base: "https://coracle.social/relays/wss%3A%2F%2F{code}", Platform: platformWeb}
+	relayTools     = ClientReference{ID: "relay.tools", Name: "relay.tools", Base: "https://relay.tools/posts/?relay=wss://{code}"}
+	iris           = ClientReference{ID: "iris", Name: "Iris", Base: "https://iris.to/{code}", Platform: "web"}
+	lumilumi       = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/{code}", Platform: platformWeb}
+	lumilumiRelay  = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/relay/wss%3A%2F%2F{code}", Platform: platformWeb}
+	chachiRelay    = ClientReference{ID: "chachi", Name: "chachi", Base: "https://chachi.chat/relay/wss%3A%2F%2F{code}/feed"}
+	yakihonne      = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/{code}", Platform: platformWeb}
+	yakihonneRelay = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/r/?r=wss://{code}", Platform: platformWeb}
 
 	zapStream = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
 	shosho    = ClientReference{ID: "shosho", Name: "Shosho", Base: "https://shosho.live/live/{code}", Platform: platformWeb}
 
-	yakihonne = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/{code}", Platform: platformWeb}
-	habla     = ClientReference{ID: "habla", Name: "Habla", Base: "https://habla.news/a/{code}", Platform: platformWeb}
-	pareto    = ClientReference{ID: "pareto", Name: "Pareto", Base: "https://pareto.space/a/{code}", Platform: platformWeb}
+	habla  = ClientReference{ID: "habla", Name: "Habla", Base: "https://habla.news/a/{code}", Platform: platformWeb}
+	pareto = ClientReference{ID: "pareto", Name: "Pareto", Base: "https://pareto.space/a/{code}", Platform: platformWeb}
 
 	voyage           = ClientReference{ID: "voyage", Name: "Voyage", Base: "intent:{code}#Intent;scheme=nostr;package=com.dluvian.voyage;end`;", Platform: platformAndroid}
 	olasAndroid      = ClientReference{ID: "olas", Name: "Olas", Base: "intent:{code}#Intent;scheme=nostr;package=com.pablof7z.snapstr;end`;", Platform: platformAndroid}
@@ -80,7 +81,8 @@ func generateClientList(
 	case -1: // relays
 		clients = []ClientReference{
 			native,
-			jumbleRelay, chachiRelay, nosotrosRelay, lumilumiRelay, coracleRelay, relayTools, nostterRelay,
+			nostur, yakihonneAndroid, yakihonneIOS,
+			jumbleRelay, yakihonneRelay, chachiRelay, nosotrosRelay, lumilumiRelay, coracleRelay, relayTools, nostterRelay,
 			defaultWeb,
 		}
 	case 1, 6:
