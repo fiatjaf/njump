@@ -159,19 +159,6 @@ func grabData(ctx context.Context, code string) (Data, error) {
 			data.Kind9802Metadata.SourceName = sourceUrl[1]
 		}
 
-		if data.Kind9802Metadata.SourceEvent != "" {
-			// Retrieve the title
-			sourceEvent, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent)
-			if title := sourceEvent.Tags.Find("title"); title != nil {
-				data.Kind9802Metadata.SourceName = title[1]
-			} else {
-				data.Kind9802Metadata.SourceName = "Note dated " + sourceEvent.CreatedAt.Time().Format("January 1, 2006 15:04")
-			}
-			// Retrieve the author using the event, ignore the `p` tag in the highlight event
-			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-			defer cancel()
-			data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, sourceEvent.PubKey)
-		}
 		if author := event.Tags.Find("p"); author != nil {
 			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 			defer cancel()
@@ -179,6 +166,25 @@ func grabData(ctx context.Context, code string) (Data, error) {
 				data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, pk)
 			}
 		}
+
+		if data.Kind9802Metadata.SourceEvent != "" {
+			sourceEvent, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent)
+			if sourceEvent == nil {
+				data.Kind9802Metadata.SourceName = data.Kind9802Metadata.SourceEvent
+			} else {
+				if title := sourceEvent.Tags.Find("title"); title != nil {
+					data.Kind9802Metadata.SourceName = title[1]
+				} else {
+					data.Kind9802Metadata.SourceName = "Note dated " + sourceEvent.CreatedAt.Time().Format("January 1, 2006 15:04")
+				}
+
+				// retrieve the author using the event, ignore the `p` tag in the highlight event
+				ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+				defer cancel()
+				data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, sourceEvent.PubKey)
+			}
+		}
+
 		if context := event.Tags.Find("context"); context != nil {
 			data.Kind9802Metadata.Context = context[1]
 
@@ -196,6 +202,7 @@ func grabData(ctx context.Context, code string) (Data, error) {
 				)
 			}
 		}
+
 		if comment := event.Tags.Find("comment"); comment != nil {
 			data.Kind9802Metadata.Comment = basicFormatting(comment[1], false, false, false)
 		}
