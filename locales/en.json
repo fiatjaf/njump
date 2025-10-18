@@ -1,0 +1,522 @@
+[
+  {
+    "id": "site.title",
+    "other": "njump - Nostr Web Gateway"
+  },
+  {
+    "id": "nav.about",
+    "other": "About"
+  },
+  {
+    "id": "nav.why",
+    "other": "Why Nostr?"
+  },
+  {
+    "id": "nav.get_started",
+    "other": "Get Started"
+  },
+  {
+    "id": "nav.resources",
+    "other": "Resources"
+  },
+  {
+    "id": "nav.development",
+    "other": "Development"
+  },
+  {
+    "id": "nav.join",
+    "other": "Join Nostr"
+  },
+  {
+    "id": "home.title",
+    "other": "Nostr - A Simple Protocol"
+  },
+  {
+    "id": "home.hero.protocol",
+    "other": "A PROTOCOL"
+  },
+  {
+    "id": "home.intro.today.title",
+    "other": "Internet for Today"
+  },
+  {
+    "id": "home.intro.today.subtitle",
+    "other": "The internet began with a vision for an open exchange of ideas and information..."
+  },
+  {
+    "id": "home.intro.today.description",
+    "other": "The internet began with a vision for an open exchange of ideas and information, one intended to uphold the values of free speech, expression, and association for all. Over time, that vision has been reduced to the view of what could bring about profits for large corporations. Today, the web is nothing but a handful of massive servers owned by a few companies but used by billions of people."
+  },
+  {
+    "id": "home.intro.problems",
+    "other": "We've placed ownership of our identities into the hands of 3rd parties. We've granted rights to our creations to those seeking to profit from them. We've handed over our interests to algorithms written to maximize our attention. In doing so, we have given a disproportionate amount of power to these companies, governments, and other controlling entities to decide what we see, read, and say. It's time to break free from their barriers and create the internet that enables anyone, anywhere to create, to speak and to socialize as they wish, as was intended."
+  },
+  {
+    "id": "home.intro.tomorrow.title",
+    "other": "Nostr for Tomorrow"
+  },
+  {
+    "id": "home.intro.tomorrow.subtitle",
+    "other": "Nostr, an acronym for \"Notes and Other Stuff Transmitted by Relays\"..."
+  },
+  {
+    "id": "home.intro.tomorrow.description",
+    "other": "Nostr, an acronym for \"Notes and Other Stuff Transmitted by Relays\", revolutionizes social networking and online communication by eliminating dependency on centralized servers. It employs a client-relay model, where users run clients, and anyone can operate relays. Information (and its storage) are distributed throughout a network of individuals, passionate volunteers, businesses, and nonprofits alike."
+  },
+  {
+    "id": "home.intro.protocol.description",
+    "other": "The Nostr protocol ensures tamperproof communication through cryptographic keys and signatures. By enabling users to establish pathways for publishing notes to relays and incentivizing the deployment and maintenance of unique, independent relays by operators, Nostr addresses many shortcomings of the current web. From interoperable applications to unique and ubiquitous identities, Nostr opens doors to creative, collabrotive innovation like the world has never seen before."
+  },
+  {
+    "id": "home.main.title",
+    "other": "Empowering Freedom with Nostr"
+  },
+  {
+    "id": "home.main.subtitle",
+    "other": "A secure, user-centric protocol and social network"
+  },
+  {
+    "id": "home.features.identity.title",
+    "other": "You Own Your Identity"
+  },
+  {
+    "id": "home.features.identity.desc",
+    "other": "Nostr uses a public key system, where your identity is tied to a unique cryptographic key. You have full control over your identity without relying on any central authority. Nostr's protocol eliminates the need for Know Your Customer (KYC) processes. No email, ID, thumbprint, or eyeball scans required! Your privacy is entirely yours to keep."
+  },
+  {
+    "id": "home.features.data.title",
+    "other": "Affirm Your Data with Signatures"
+  },
+  {
+    "id": "home.features.data.desc",
+    "other": "In Nostr, users sign their posts with their cryptographic keys. Most clients handle this process automatically. These cryptographic signatures ensure the authenticity of your data. You can prove what you did (and did not) create. User-selected relays store and send this data. These relays communicate directly with other users, with no stops between. Each client then validates these signatures, ensuring the data's integrity."
+  },
+  {
+    "id": "home.features.audience.title",
+    "other": "Connect Directly with Your Audience"
+  },
+  {
+    "id": "home.features.audience.desc",
+    "other": "In Nostr, you maintain your audience and feed. Whichever client you use, your contact list will be there. It is published to the relays of your choice, as is that of other users. Everyone chooses their preferred publication relays, and clients connect to those to find new posts. Additionally, relays can act as filters against spam or harassment, and as discovery vehicles for good content, aggregators of curated content, or providers of custom feeds."
+  },
+  {
+    "id": "home.features.speech.title",
+    "other": "You are Free to Speak"
+  },
+  {
+    "id": "home.features.speech.desc",
+    "other": "You can publish anything you want as long as relays are willing to accept it. Relays can operate under any policies their operators may choose, including bans, content removal, and community guidelines. They may choose to host only certain users or specific types of content. If no relay will accept what you have to say, you can easily run your own. When you begin publishing to different relays, clients should be capable of finding you there, based on attached relay hints. Your contacts will then continue to receive your updates."
+  },
+  {
+    "id": "home.features.anonymous.title",
+    "other": "You are Free to Remain Anonymous"
+  },
+  {
+    "id": "home.features.anonymous.desc",
+    "other": "Nostr supports user anonymity. Users can choose to be anonymous or use pseudonyms without compromising their ability to participate. Nostr is also available on TOR to prevent tracking. As a protocol, Nostr does not have the capacity to provide user data to any entity, governmental or otherwise. This helps to safeguard all users' freedom of expression from prohibitions or restrictions. Any individual relay or client could be subject to these requests, but available data would be limited to that of a user's public key. If that user has taken appropriate steps to protect their identity, there would be little information to share."
+  },
+  {
+    "id": "home.features.develop.title",
+    "other": "You are Free to Develop"
+  },
+  {
+    "id": "home.features.develop.desc",
+    "other": "Nostr encourages development and customization. Anyone is free to develop on the protocol, contributing to the growth and evolution of the network. All Nostr clients, relays, tools, and apps that are built can benefit from every past and future development. Builders have the freedom to establish payment methods for their applications and features, providing a potential source of revenue like never before."
+  },
+  {
+    "id": "home.cta.question",
+    "other": "What Are You Waiting For?"
+  },
+  {
+    "id": "home.cta.button",
+    "other": "Join Nostr"
+  },
+  {
+    "id": "home.getting_started.title",
+    "other": "Get Started with Nostr"
+  },
+  {
+    "id": "home.getting_started.create.title",
+    "other": "Create an Account"
+  },
+  {
+    "id": "home.getting_started.create.desc",
+    "other": "With Nostr, there is no central provider who owns your account. In fact, your account is powered by cryptography, and you could create one (or more!) yourself by hand, with no limitation. The easiest way, though, is to use our <a href=\"https://start.nostr.net\" class=\"underline\">new online wizard</a> to generate your new account in seconds. Then, you can use it across all of Nostr!"
+  },
+  {
+    "id": "home.getting_started.secure.title",
+    "other": "Secure your Key"
+  },
+  {
+    "id": "home.getting_started.secure.desc",
+    "other": "An account is a key-pair. The private key (nsec) is your digital identity. If it is lost or exposed, there is no means to recover access or change credentials. You need to keep your private key safe and secure. Use a password manager, make a backup on paper, and use it ONLY in trusted apps. Never enter your nsec in a website. Install a <a href=\"#signers\" class=\"underline\">signer extension</a> to use your key safely on the web."
+  },
+  {
+    "id": "home.getting_started.app.title",
+    "other": "Pick an App"
+  },
+  {
+    "id": "home.getting_started.app.desc",
+    "other": "Nostr developers have already built several applications for a wide variety of uses. The simplest way to start using Nostr is to download a <a href=\"#social\" class=\"underline\">social client</a> and get involved. Learn with and through the community by engaging in conversation. Need help? Use the #asknostr hashtag!"
+  },
+  {
+    "id": "home.getting_started.explore.title",
+    "other": "Explore Nostr"
+  },
+  {
+    "id": "home.getting_started.explore.desc",
+    "other": "After you are familiar with the basic concepts, you can set up your preferred key management tool to explore other social clients and <a href=\"#readwrite\" class=\"underline\">Nostr applications</a>. You already have your digital identity and it works everywhere. Simply login in using your Nostr signer app, signing extension, or nsec. If using your private key, be sure the app is from a trusted source!"
+  },
+  {
+    "id": "home.getting_started.client_alt",
+    "other": "Nostr Client"
+  },
+  {
+    "id": "home.resources.title",
+    "other": "Nostr Resources"
+  },
+  {
+    "id": "home.resources.subtitle",
+    "other": "Discover some of what you can do with Nostr"
+  },
+  {
+    "id": "home.resources.multimedia",
+    "other": "Multimedia"
+  },
+  {
+    "id": "home.resources.streaming",
+    "other": "Live Stream"
+  },
+  {
+    "id": "home.resources.publishing",
+    "other": "Read & Write"
+  },
+  {
+    "id": "home.resources.communities",
+    "other": "Communities"
+  },
+  {
+    "id": "home.resources.tools",
+    "other": "Other Stuff"
+  },
+  {
+    "id": "home.resources.security",
+    "other": "Key Security"
+  },
+  {
+    "id": "home.resources.disclaimer",
+    "other": "This is only a quick selection of the 100+ applications that have already been built on Nostr, <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">discover them all</a>!"
+  },
+  {
+    "id": "home.development.title",
+    "other": "Develop on Nostr"
+  },
+  {
+    "id": "home.development.origins.title",
+    "other": "Where It All Started"
+  },
+  {
+    "id": "home.development.origins.desc",
+    "other": "The Nostr \"manifesto\" was published in 2019. Slowly but surely, a community gathered around the idea and expanded upon it, turning it into a fast, flexible and reliable protocol that is used by many real people everyday."
+  },
+  {
+    "id": "home.development.nips.title",
+    "other": "Discover the NIPs"
+  },
+  {
+    "id": "home.development.nips.desc",
+    "other": "NIPs stand for \"Nostr Implementation Possibilities\". They exist as a guide to what may be implemented by Nostr compatible relay and client software. Study these to develop your new Nostr application with optimal network compatibility."
+  },
+  {
+    "id": "home.development.design.title",
+    "other": "The Design Guide"
+  },
+  {
+    "id": "home.development.design.desc",
+    "other": "Nostrdesign.org is the official resource for discovering how to best develop the interface of your Nostr application. Explore new paradigms, optimise your UI, and find tips on how to enhance user experience all in one place."
+  },
+  {
+    "id": "home.development.read_more",
+    "other": "Read more >>"
+  },
+  {
+    "id": "home.typewriter.not_crypto",
+    "other": "NOT A CRYPTOCURRENCY"
+  },
+  {
+    "id": "home.typewriter.simple",
+    "other": "SIMPLE"
+  },
+  {
+    "id": "home.typewriter.not_blockchain",
+    "other": "NOT A BLOCKCHAIN"
+  },
+  {
+    "id": "home.typewriter.universal_identity",
+    "other": "A UNIVERSAL IDENTITY"
+  },
+  {
+    "id": "home.typewriter.not_company",
+    "other": "NOT A COMPANY"
+  },
+  {
+    "id": "home.typewriter.free_expression",
+    "other": "FREE EXPRESSION"
+  },
+  {
+    "id": "home.typewriter.free_association",
+    "other": "FREE ASSOCIATION"
+  },
+  {
+    "id": "home.typewriter.for_friends",
+    "other": "FOR FRIENDS AND ENEMIES"
+  },
+  {
+    "id": "home.typewriter.for_everyone",
+    "other": "FOR EVERYONE"
+  },
+  {
+    "id": "home.typewriter.for_broadcasting",
+    "other": "FOR BROADCASTING"
+  },
+  {
+    "id": "home.typewriter.for_groups",
+    "other": "FOR CLOSED GROUPS"
+  },
+  {
+    "id": "home.typewriter.for_opinions",
+    "other": "FOR ALL OPINIONS"
+  },
+  {
+    "id": "home.typewriter.like_internet",
+    "other": "LIKE THE INTERNET ITSELF"
+  },
+  {
+    "id": "home.typewriter.flexible",
+    "other": "FLEXIBLE"
+  },
+  {
+    "id": "home.typewriter.scalable",
+    "other": "SCALABLE"
+  },
+  {
+    "id": "home.typewriter.public_square",
+    "other": "A REAL PUBLIC SQUARE"
+  },
+  {
+    "id": "home.typewriter.client_relay",
+    "other": "CLIENT-RELAY"
+  },
+  {
+    "id": "home.typewriter.not_p2p",
+    "other": "NOT P2P"
+  },
+  {
+    "id": "home.typewriter.old_web",
+    "other": "THE OLD WEB"
+  },
+  {
+    "id": "home.typewriter.decentralized",
+    "other": "TRULY DECENTRALIZED"
+  },
+  {
+    "id": "home.typewriter.communities",
+    "other": "COMMUNITIES DONE RIGHT"
+  },
+  {
+    "id": "home.typewriter.open_alternative",
+    "other": "THE OPEN ALTERNATIVE"
+  },
+  {
+    "id": "home.typewriter.wikis",
+    "other": "SOCIAL WIKIS"
+  },
+  {
+    "id": "home.typewriter.git",
+    "other": "GIT COLLABORATION"
+  },
+  {
+    "id": "home.typewriter.articles",
+    "other": "LONG-FORM ARTICLES"
+  },
+  {
+    "id": "home.typewriter.microblogging",
+    "other": "MICROBLOGGING"
+  },
+  {
+    "id": "home.typewriter.livestreaming",
+    "other": "LIVESTREAMING"
+  },
+  {
+    "id": "home.typewriter.forums",
+    "other": "FORUMS"
+  },
+  {
+    "id": "home.typewriter.annotating",
+    "other": "ANNOTATING THE WEB"
+  },
+  {
+    "id": "home.typewriter.commenting",
+    "other": "COMMENTING ON ANYTHING"
+  },
+  {
+    "id": "home.typewriter.social_web",
+    "other": "THE SOCIAL WEB OF TOMORROW"
+  },
+  {
+    "id": "home.typewriter.for_you",
+    "other": "FOR YOU, TODAY"
+  },
+  {
+    "id": "home.typewriter.dots",
+    "other": "......."
+  },
+  {
+    "id": "about.title",
+    "other": "About njump"
+  },
+  {
+    "id": "about.what.title",
+    "other": "What is njump?"
+  },
+  {
+    "id": "about.what.description",
+    "other": "<i>njump</i> is a HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">Nostr</a> gateway that allows you to browse profiles, notes and relays. It is an easy way to preview a resource and open it with your preferred client. The typical use of <i>njump</i> is to share content outside the Nostr world, where the <code>nostr:</code> schema is not yet recognized."
+  },
+  {
+    "id": "about.usage.title",
+    "other": "How to Use"
+  },
+  {
+    "id": "about.usage.description",
+    "other": "<i>njump</i> currently lives under {{.Domain}}, you can reach it by appending a Nostr <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a> entity (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, etc) after the domain: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-19-entity&gt;</span>."
+  },
+  {
+    "id": "about.examples.title",
+    "other": "Examples"
+  },
+  {
+    "id": "about.examples.description",
+    "other": "For example, here's <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">a user profile</a>, <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">a note</a> and a <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">long blog post</a>."
+  },
+  {
+    "id": "about.try.title",
+    "other": "Try it now! Jump to some Nostr content:"
+  },
+  {
+    "id": "about.try.placeholder",
+    "other": "paste a npub / nprofile / nevent / ..."
+  },
+  {
+    "id": "about.try.button",
+    "other": "View"
+  },
+  {
+    "id": "about.try.or",
+    "other": "or pick"
+  },
+  {
+    "id": "about.try.random",
+    "other": "some random content"
+  },
+  {
+    "id": "about.reasons.intro",
+    "other": "There are several reasons to choose njump when sharing Nostr content outside of Nostr:"
+  },
+  {
+    "id": "about.reasons.clean.title",
+    "other": "Clean, Fast, and Solid"
+  },
+  {
+    "id": "about.reasons.clean.desc",
+    "other": "njump pages are extremely lightweight and fast to load. There is no client side javascript involved. They are minimalistic with the right attention to typography, focusing on the content without unnecessary details. Furthermore they are cached, so when sharing a page you can expect it to load fast and without friction. It's the perfect tool to onboard new users!"
+  },
+  {
+    "id": "about.reasons.previews.title",
+    "other": "Beautiful Previews"
+  },
+  {
+    "id": "about.reasons.previews.desc",
+    "other": "njump renders everything on the server-side, so it is able to generate useful, rich previews that work on Telegram, Discord, Twitter, and other places."
+  },
+  {
+    "id": "about.reasons.browser.title",
+    "other": "Great Browser Experience"
+  },
+  {
+    "id": "about.reasons.browser.desc",
+    "other": "When opening the URL directly in a browser, visitors will find referenced content like images, videoes, and links to Nostr events displayed in a simple but effective way. It shows the note parent, allowing the visitor to follow it up. It even has custom CSS for printing or exporting to PDF."
+  },
+  {
+    "id": "about.reasons.cooperative.title",
+    "other": "Cooperative (jump-out)"
+  },
+  {
+    "id": "about.reasons.cooperative.desc",
+    "other": "njump has no interest capturing users. On the contrary, it invites them to \"jump\" to any Nostr resource by picking from a list of web clients or, with a nostr: prefix, for native clients. It even remembers the most used client for each visitor and puts it on the top for fast, easy access."
+  },
+  {
+    "id": "about.reasons.nip89.title",
+    "other": "NIP-89 Support"
+  },
+  {
+    "id": "about.reasons.nip89.desc",
+    "other": "support coming!"
+  },
+  {
+    "id": "about.reasons.seo.title",
+    "other": "Search-Friendly (jump-in)"
+  },
+  {
+    "id": "about.reasons.seo.desc",
+    "other": "njump pages are static so that search engines can index them. This means that njump can help others to discover great content on Nostr, jump in and join us! njump is the only Nostr resource with this explicit goal. If you care that a good note can be found online, use njump to share it. This will help Nostr to flourish and make it more accessible to everyone."
+  },
+  {
+    "id": "about.nip05.title",
+    "other": "Share NIP-05 Profiles"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "Share your own profile with a pretty <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a> inspired permalink: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>, for example: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> or <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile.shows",
+    "other": "A profile shows your basic metadata info, assigned \"outbox\" relays, and your latest notes."
+  },
+  {
+    "id": "about.social.title",
+    "other": "Share on Twitter, Telegram, and More"
+  },
+  {
+    "id": "about.social.desc",
+    "other": "Quickly and effortlessly share Nostr notes on Twitter, Telegram, and many other \"social platforms\": just drop a link, and njump will render the note text using the preview image as a canvas, to maximize the sharing experience and utility. On Telegram, we have also the Instant View to access long content in-app!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "Relay Views"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "View the most recent content posted to a relay by using <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span>, for example: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "Some basic relay information (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) is available. We hope operators will start to make these descriptors more personal and informative, so users can have a way to evaluate whether or not to join a relay."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "Website Widgets"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "You can embed notes, long form contents, and profiles in a web page with a simple script:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;nip-19-entity&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "Inspector Tool"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "You know, we are all programmers, including our moms, so for every <i>njump</i> page, you can toggle the \"Show more details\" switch to inspect the full event JSON. Without installing other tools (like <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>), this is probably the fastest way to access that infomation."
+  }
+]

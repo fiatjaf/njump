@@ -17,6 +17,7 @@ import (
 	"fiatjaf.com/nostr/nip92"
 	"fiatjaf.com/nostr/nip94"
 	"fiatjaf.com/nostr/sdk"
+	"github.com/fiatjaf/njump/i18n"
 )
 
 type Data struct {
@@ -159,6 +160,19 @@ func grabData(ctx context.Context, code string) (Data, error) {
 			data.Kind9802Metadata.SourceName = sourceUrl[1]
 		}
 
+		if data.Kind9802Metadata.SourceEvent != "" {
+			// Retrieve the title
+			sourceEvent, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent)
+			if title := sourceEvent.Tags.Find("title"); title != nil {
+				data.Kind9802Metadata.SourceName = title[1]
+			} else {
+				data.Kind9802Metadata.SourceName = i18n.Translate(ctx, "event.source_note_dated", map[string]any{"date": sourceEvent.CreatedAt.Time().Format("January 1, 2006 15:04")})
+			}
+			// Retrieve the author using the event, ignore the `p` tag in the highlight event
+			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+			defer cancel()
+			data.Kind9802Metadata.Author = sys.FetchProfileMetadata(ctx, sourceEvent.PubKey)
+		}
 		if author := event.Tags.Find("p"); author != nil {
 			ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 			defer cancel()
@@ -213,7 +227,7 @@ func grabData(ctx context.Context, code string) (Data, error) {
 
 	data.kindDescription = kindNames[event.Kind]
 	if data.kindDescription == "" {
-		data.kindDescription = fmt.Sprintf("Kind %d", event.Kind)
+		data.kindDescription = i18n.Translate(ctx, "event.kind_number", map[string]any{"num": event.Kind})
 	}
 	data.kindNIP = kindNIPs[event.Kind]
 

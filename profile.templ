@@ -26,9 +26,9 @@ type ProfilePageParams struct {
 }
 
 templ profileTemplate(params ProfilePageParams) {
-	<!DOCTYPE html>
-	<html class="theme--default font-light print:text-base">
-		<meta charset="UTF-8"/>
+        <!DOCTYPE html>
+        <html class="theme--default font-light print:text-base" lang={ params.HeadParams.Lang } if isRTL(ctx) { dir="rtl" }>
+                <meta charset="UTF-8"/>
 		<head>
 			if params.Metadata.Name != "" && params.Metadata.DisplayName != "" {
 				<title>
@@ -53,7 +53,7 @@ templ profileTemplate(params ProfilePageParams) {
 				<meta property="og:description" content={ params.Metadata.About }/>
 			}
 			<meta name="twitter:card" content="summary"/>
-			<link rel="canonical" href={ "https://njump.me/" + params.Metadata.Npub() }/>
+			<link rel="canonical" href={ "https://" + params.Domain + "/" + params.Metadata.Npub() }/>
 			<link
 				rel="sitemap"
 				type="application/xml"

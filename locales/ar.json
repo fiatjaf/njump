@@ -1,0 +1,522 @@
+[
+  {
+    "id": "site.title",
+    "other": "njump - بوابة نوستر للويب"
+  },
+  {
+    "id": "nav.about",
+    "other": "حول"
+  },
+  {
+    "id": "nav.why",
+    "other": "لماذا نوستر؟"
+  },
+  {
+    "id": "nav.get_started",
+    "other": "ابدأ الآن"
+  },
+  {
+    "id": "nav.resources",
+    "other": "الموارد"
+  },
+  {
+    "id": "nav.development",
+    "other": "التطوير"
+  },
+  {
+    "id": "nav.join",
+    "other": "انضم إلى نوستر"
+  },
+  {
+    "id": "home.title",
+    "other": "نوستر - بروتوكول بسيط"
+  },
+  {
+    "id": "home.hero.protocol",
+    "other": "بروتوكول"
+  },
+  {
+    "id": "home.intro.today.title",
+    "other": "الإنترنت اليوم"
+  },
+  {
+    "id": "home.intro.today.subtitle",
+    "other": "بدأ الإنترنت برؤية للتبادل المفتوح للأفكار والمعلومات..."
+  },
+  {
+    "id": "home.intro.today.description",
+    "other": "بدأ الإنترنت برؤية للتبادل المفتوح للأفكار والمعلومات، رؤية تهدف إلى دعم قيم حرية التعبير والتعبير والانتماء للجميع. مع مرور الوقت، تم تقليل هذه الرؤية إلى وجهة نظر ما يمكن أن يحقق أرباحاً للشركات الكبيرة. اليوم، الويب ليس سوى حفنة من الخوادم الضخمة المملوكة لعدد قليل من الشركات ولكن يستخدمها مليارات الأشخاص."
+  },
+  {
+    "id": "home.intro.problems",
+    "other": "لقد وضعنا ملكية هوياتنا في أيدي أطراف ثالثة. لقد منحنا حقوق إبداعاتنا لأولئك الذين يسعون للربح منها. لقد سلمنا اهتماماتنا لخوارزميات مكتوبة لتعظيم انتباهنا. وبذلك، أعطينا قدراً غير متناسب من القوة لهذه الشركات والحكومات والكيانات المسيطرة الأخرى لتقرر ما نراه ونقرأه ونقوله. حان الوقت للتحرر من حواجزهم وإنشاء الإنترنت الذي يمكّن أي شخص، في أي مكان، من الإبداع والتحدث والتفاعل الاجتماعي كما يشاء، كما كان مقصوداً."
+  },
+  {
+    "id": "home.intro.tomorrow.title",
+    "other": "نوستر للغد"
+  },
+  {
+    "id": "home.intro.tomorrow.subtitle",
+    "other": "نوستر، اختصار لـ \"الملاحظات وأشياء أخرى تُنقل بواسطة المرحلات\"..."
+  },
+  {
+    "id": "home.intro.tomorrow.description",
+    "other": "نوستر، اختصار لـ \"الملاحظات وأشياء أخرى تُنقل بواسطة المرحلات\"، يثور على التواصل الاجتماعي والتواصل عبر الإنترنت من خلال إلغاء الاعتماد على الخوادم المركزية. يستخدم نموذج عميل-مرحل، حيث يدير المستخدمون العملاء، ويمكن لأي شخص تشغيل المرحلات. المعلومات (وتخزينها) موزعة في جميع أنحاء شبكة من الأفراد والمتطوعين المتحمسين والشركات والمنظمات غير الربحية على حد سواء."
+  },
+  {
+    "id": "home.intro.protocol.description",
+    "other": "يضمن بروتوكول نوستر التواصل المضاد للتلاعب من خلال المفاتيح والتوقيعات التشفيرية. من خلال تمكين المستخدمين من إنشاء مسارات لنشر الملاحظات إلى المرحلات وتحفيز نشر وصيانة مرحلات فريدة ومستقلة من قبل المشغلين، يعالج نوستر العديد من أوجه القصور في الويب الحالي. من التطبيقات القابلة للتشغيل البيني إلى الهويات الفريدة والمنتشرة في كل مكان، يفتح نوستر أبواباً للابتكار الإبداعي والتعاوني كما لم يره العالم من قبل."
+  },
+  {
+    "id": "home.main.title",
+    "other": "تمكين الحرية مع نوستر"
+  },
+  {
+    "id": "home.main.subtitle",
+    "other": "بروتوكول وشبكة اجتماعية آمنة ومتمركزة حول المستخدم"
+  },
+  {
+    "id": "home.features.identity.title",
+    "other": "أنت تملك هويتك"
+  },
+  {
+    "id": "home.features.identity.desc",
+    "other": "يستخدم نوستر نظام مفتاح عام، حيث ترتبط هويتك بمفتاح تشفيري فريد. لديك السيطرة الكاملة على هويتك دون الاعتماد على أي سلطة مركزية. يلغي بروتوكول نوستر الحاجة إلى عمليات اعرف عميلك (KYC). لا حاجة لبريد إلكتروني أو هوية أو بصمة إبهام أو مسح العين! خصوصيتك ملكك تماماً للاحتفاظ بها."
+  },
+  {
+    "id": "home.features.data.title",
+    "other": "أكد بياناتك بالتوقيعات"
+  },
+  {
+    "id": "home.features.data.desc",
+    "other": "في نوستر، يوقع المستخدمون منشوراتهم بمفاتيحهم التشفيرية. معظم العملاء يتعاملون مع هذه العملية تلقائياً. هذه التوقيعات التشفيرية تضمن أصالة بياناتك. يمكنك إثبات ما فعلته (وما لم تفعله). المرحلات المختارة من المستخدم تخزن وترسل هذه البيانات. هذه المرحلات تتواصل مباشرة مع المستخدمين الآخرين، بدون توقف بينهما. كل عميل يتحقق من هذه التوقيعات، مما يضمن سلامة البيانات."
+  },
+  {
+    "id": "home.features.audience.title",
+    "other": "اتصل مباشرة بجمهورك"
+  },
+  {
+    "id": "home.features.audience.desc",
+    "other": "في نوستر، تحتفظ بجمهورك وتغذيتك. أياً كان العميل الذي تستخدمه، ستكون قائمة جهات الاتصال الخاصة بك هناك. يتم نشرها إلى المرحلات التي تختارها، كما هو الحال مع المستخدمين الآخرين. يختار الجميع مرحلات النشر المفضلة لديهم، والعملاء يتصلون بتلك للعثور على منشورات جديدة. بالإضافة إلى ذلك، يمكن للمرحلات أن تعمل كمرشحات ضد الرسائل غير المرغوب فيها أو المضايقات، وكمركبات اكتشاف للمحتوى الجيد، أو مجمعات للمحتوى المنسق، أو مزودي التغذيات المخصصة."
+  },
+  {
+    "id": "home.features.speech.title",
+    "other": "أنت حر في التحدث"
+  },
+  {
+    "id": "home.features.speech.desc",
+    "other": "يمكنك نشر أي شيء تريده طالما أن المرحلات مستعدة لقبوله. يمكن للمرحلات أن تعمل تحت أي سياسات قد يختارها مشغلوها، بما في ذلك الحظر وإزالة المحتوى والإرشادات المجتمعية. قد يختارون استضافة مستخدمين معينين فقط أو أنواع معينة من المحتوى. إذا لم تقبل أي مرحل ما تريد قوله، يمكنك بسهولة تشغيل مرحلك الخاص. عندما تبدأ النشر إلى مرحلات مختلفة، يجب أن تكون العملاء قادرة على العثور عليك هناك، بناءً على تلميحات المرحل المرفقة. جهات الاتصال الخاصة بك ستستمر في تلقي تحديثاتك."
+  },
+  {
+    "id": "home.features.anonymous.title",
+    "other": "أنت حر في البقاء مجهول الهوية"
+  },
+  {
+    "id": "home.features.anonymous.desc",
+    "other": "يدعم نوستر إخفاء هوية المستخدم. يمكن للمستخدمين اختيار أن يكونوا مجهولين أو استخدام أسماء مستعارة دون المساس بقدرتهم على المشاركة. نوستر متاح أيضاً على TOR لمنع التتبع. كبروتوكول، لا يملك نوستر القدرة على تقديم بيانات المستخدم لأي كيان، حكومي أو غير ذلك. هذا يساعد في حماية حرية التعبير لجميع المستخدمين من المحظورات أو القيود. أي مرحل أو عميل فردي يمكن أن يخضع لهذه الطلبات، لكن البيانات المتاحة ستقتصر على المفتاح العام للمستخدم. إذا اتخذ هذا المستخدم خطوات مناسبة لحماية هويته، فستكون هناك معلومات قليلة للمشاركة."
+  },
+  {
+    "id": "home.features.develop.title",
+    "other": "أنت حر في التطوير"
+  },
+  {
+    "id": "home.features.develop.desc",
+    "other": "يشجع نوستر التطوير والتخصيص. أي شخص حر في التطوير على البروتوكول، مما يساهم في نمو وتطور الشبكة. جميع عملاء نوستر والمرحلات والأدوات والتطبيقات المبنية يمكن أن تستفيد من كل تطوير ماضي ومستقبلي. المطورون لديهم الحرية في وضع طرق دفع لتطبيقاتهم وميزاتهم، مما يوفر مصدر دخل محتمل كما لم يحدث من قبل."
+  },
+  {
+    "id": "home.cta.question",
+    "other": "ماذا تنتظر؟"
+  },
+  {
+    "id": "home.cta.button",
+    "other": "انضم إلى نوستر"
+  },
+  {
+    "id": "home.getting_started.title",
+    "other": "ابدأ مع نوستر"
+  },
+  {
+    "id": "home.getting_started.create.title",
+    "other": "إنشاء حساب"
+  },
+  {
+    "id": "home.getting_started.create.desc",
+    "other": "مع نوستر، لا يوجد مزود مركزي يملك حسابك. في الواقع، حسابك مدعوم بالتشفير، ويمكنك إنشاء واحد (أو أكثر!) بنفسك يدوياً، بدون قيود. الطريقة الأسهل، مع ذلك، هي استخدام <a href=\"https://start.nostr.net\" class=\"underline\">معالج الإنترنت الجديد</a> لإنشاء حسابك الجديد في ثوانٍ. ثم يمكنك استخدامه في جميع أنحاء نوستر!"
+  },
+  {
+    "id": "home.getting_started.secure.title",
+    "other": "أمّن مفتاحك"
+  },
+  {
+    "id": "home.getting_started.secure.desc",
+    "other": "الحساب هو زوج مفاتيح. المفتاح الخاص (nsec) هو هويتك الرقمية. إذا فُقد أو تعرض، فلا توجد وسيلة لاستعادة الوصول أو تغيير بيانات الاعتماد. تحتاج إلى الحفاظ على مفتاحك الخاص آمناً ومحمياً. استخدم مدير كلمات مرور، اعمل نسخة احتياطية على الورق، واستخدمه فقط في التطبيقات الموثوقة. لا تدخل nsec في موقع ويب أبداً. قم بتثبيت <a href=\"#signers\" class=\"underline\">امتداد الموقع</a> لاستخدام مفتاحك بأمان على الويب."
+  },
+  {
+    "id": "home.getting_started.app.title",
+    "other": "اختر تطبيقاً"
+  },
+  {
+    "id": "home.getting_started.app.desc",
+    "other": "لقد بنى مطورو نوستر بالفعل عدة تطبيقات لمجموعة واسعة من الاستخدامات. أبسط طريقة لبدء استخدام نوستر هي تحميل <a href=\"#social\" class=\"underline\">عميل اجتماعي</a> والمشاركة. تعلم مع وعبر المجتمع من خلال الانخراط في المحادثة. تحتاج مساعدة؟ استخدم هاشتاغ #asknostr!"
+  },
+  {
+    "id": "home.getting_started.explore.title",
+    "other": "استكشف نوستر"
+  },
+  {
+    "id": "home.getting_started.explore.desc",
+    "other": "بعد أن تصبح مألوفاً مع المفاهيم الأساسية، يمكنك إعداد أداة إدارة المفاتيح المفضلة لديك لاستكشاف عملاء اجتماعيين آخرين و<a href=\"#readwrite\" class=\"underline\">تطبيقات نوستر</a>. لديك بالفعل هويتك الرقمية وهي تعمل في كل مكان. ببساطة سجل الدخول باستخدام تطبيق موقع نوستر، أو امتداد التوقيع، أو nsec. إذا كنت تستخدم مفتاحك الخاص، تأكد من أن التطبيق من مصدر موثوق!"
+  },
+  {
+    "id": "home.getting_started.client_alt",
+    "other": "عميل نوستر"
+  },
+  {
+    "id": "home.resources.title",
+    "other": "موارد نوستر"
+  },
+  {
+    "id": "home.resources.subtitle",
+    "other": "اكتشف بعض ما يمكنك فعله مع نوستر"
+  },
+  {
+    "id": "home.resources.multimedia",
+    "other": "الوسائط المتعددة"
+  },
+  {
+    "id": "home.resources.streaming",
+    "other": "البث المباشر"
+  },
+  {
+    "id": "home.resources.publishing",
+    "other": "القراءة والكتابة"
+  },
+  {
+    "id": "home.resources.communities",
+    "other": "المجتمعات"
+  },
+  {
+    "id": "home.resources.tools",
+    "other": "أشياء أخرى"
+  },
+  {
+    "id": "home.resources.security",
+    "other": "أمان المفاتيح"
+  },
+  {
+    "id": "home.resources.disclaimer",
+    "other": "هذا مجرد اختيار سريع من أكثر من 100 تطبيق تم بناؤها بالفعل على نوستر، <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">اكتشفها جميعاً</a>!"
+  },
+  {
+    "id": "home.development.title",
+    "other": "طور على نوستر"
+  },
+  {
+    "id": "home.development.origins.title",
+    "other": "من أين بدأ كل شيء"
+  },
+  {
+    "id": "home.development.origins.desc",
+    "other": "تم نشر \"بيان\" نوستر في 2019. ببطء ولكن بثبات، تجمع مجتمع حول الفكرة وتوسع عليها، محولاً إياها إلى بروتوكول سريع ومرن وموثوق يستخدمه العديد من الأشخاص الحقيقيين كل يوم."
+  },
+  {
+    "id": "home.development.nips.title",
+    "other": "اكتشف NIPs"
+  },
+  {
+    "id": "home.development.nips.desc",
+    "other": "NIPs تعني \"إمكانيات تنفيذ نوستر\". توجد كدليل لما يمكن تنفيذه بواسطة برامج المرحل والعميل المتوافقة مع نوستر. ادرس هذه لتطوير تطبيق نوستر الجديد الخاص بك مع التوافق الأمثل للشبكة."
+  },
+  {
+    "id": "home.development.design.title",
+    "other": "دليل التصميم"
+  },
+  {
+    "id": "home.development.design.desc",
+    "other": "Nostrdesign.org هو المورد الرسمي لاكتشاف كيفية تطوير واجهة تطبيق نوستر الخاص بك بأفضل طريقة. استكشف نماذج جديدة، حسّن واجهة المستخدم، واعثر على نصائح حول كيفية تحسين تجربة المستخدم كل ذلك في مكان واحد."
+  },
+  {
+    "id": "home.development.read_more",
+    "other": "اقرأ المزيد >>"
+  },
+  {
+    "id": "home.typewriter.not_crypto",
+    "other": "ليس عملة مشفرة"
+  },
+  {
+    "id": "home.typewriter.simple",
+    "other": "بسيط"
+  },
+  {
+    "id": "home.typewriter.not_blockchain",
+    "other": "ليس بلوك تشين"
+  },
+  {
+    "id": "home.typewriter.universal_identity",
+    "other": "هوية عالمية"
+  },
+  {
+    "id": "home.typewriter.not_company",
+    "other": "ليس شركة"
+  },
+  {
+    "id": "home.typewriter.free_expression",
+    "other": "التعبير الحر"
+  },
+  {
+    "id": "home.typewriter.free_association",
+    "other": "الانتماء الحر"
+  },
+  {
+    "id": "home.typewriter.for_friends",
+    "other": "للأصدقاء والأعداء"
+  },
+  {
+    "id": "home.typewriter.for_everyone",
+    "other": "للجميع"
+  },
+  {
+    "id": "home.typewriter.for_broadcasting",
+    "other": "للبث"
+  },
+  {
+    "id": "home.typewriter.for_groups",
+    "other": "للمجموعات المغلقة"
+  },
+  {
+    "id": "home.typewriter.for_opinions",
+    "other": "لكل الآراء"
+  },
+  {
+    "id": "home.typewriter.like_internet",
+    "other": "مثل الإنترنت نفسه"
+  },
+  {
+    "id": "home.typewriter.flexible",
+    "other": "مرن"
+  },
+  {
+    "id": "home.typewriter.scalable",
+    "other": "قابل للتوسع"
+  },
+  {
+    "id": "home.typewriter.public_square",
+    "other": "ساحة عامة حقيقية"
+  },
+  {
+    "id": "home.typewriter.client_relay",
+    "other": "عميل-مرحل"
+  },
+  {
+    "id": "home.typewriter.not_p2p",
+    "other": "ليس P2P"
+  },
+  {
+    "id": "home.typewriter.old_web",
+    "other": "الويب القديم"
+  },
+  {
+    "id": "home.typewriter.decentralized",
+    "other": "لامركزي حقاً"
+  },
+  {
+    "id": "home.typewriter.communities",
+    "other": "المجتمعات بالطريقة الصحيحة"
+  },
+  {
+    "id": "home.typewriter.open_alternative",
+    "other": "البديل المفتوح"
+  },
+  {
+    "id": "home.typewriter.wikis",
+    "other": "ويكي اجتماعية"
+  },
+  {
+    "id": "home.typewriter.git",
+    "other": "تعاون GIT"
+  },
+  {
+    "id": "home.typewriter.articles",
+    "other": "مقالات طويلة"
+  },
+  {
+    "id": "home.typewriter.microblogging",
+    "other": "التدوين المصغر"
+  },
+  {
+    "id": "home.typewriter.livestreaming",
+    "other": "البث المباشر"
+  },
+  {
+    "id": "home.typewriter.forums",
+    "other": "منتديات"
+  },
+  {
+    "id": "home.typewriter.annotating",
+    "other": "التعليق على الويب"
+  },
+  {
+    "id": "home.typewriter.commenting",
+    "other": "التعليق على أي شيء"
+  },
+  {
+    "id": "home.typewriter.social_web",
+    "other": "الويب الاجتماعي للغد"
+  },
+  {
+    "id": "home.typewriter.for_you",
+    "other": "لك، اليوم"
+  },
+  {
+    "id": "home.typewriter.dots",
+    "other": "......."
+  },
+  {
+    "id": "about.title",
+    "other": "حول njump"
+  },
+  {
+    "id": "about.what.title",
+    "other": "ما هو njump؟"
+  },
+  {
+    "id": "about.what.description",
+    "other": "<i>njump</i> هو بوابة HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">نوستر</a> تتيح لك تصفح الملفات الشخصية والملاحظات والمرحلات. إنه طريقة سهلة لمعاينة مورد وفتحه مع العميل المفضل لديك. الاستخدام النموذجي لـ <i>njump</i> هو مشاركة المحتوى خارج عالم نوستر، حيث مخطط <code>nostr:</code> غير معترف به بعد."
+  },
+  {
+    "id": "about.usage.title",
+    "other": "كيفية الاستخدام"
+  },
+  {
+    "id": "about.usage.description",
+    "other": "<i>njump</i> يعيش حالياً تحت {{.Domain}}، يمكنك الوصول إليه عن طريق إلحاق كيان نوستر <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a> (<code>npub</code>، <code>nevent</code>، <code>naddr</code>، إلخ) بعد النطاق: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-19-entity&gt;</span>."
+  },
+  {
+    "id": "about.examples.title",
+    "other": "أمثلة"
+  },
+  {
+    "id": "about.examples.description",
+    "other": "على سبيل المثال، إليك <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">ملف شخصي للمستخدم</a>، <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">ملاحظة</a> و <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">مقال مدونة طويل</a>."
+  },
+  {
+    "id": "about.try.title",
+    "other": "جربه الآن! انتقل إلى بعض محتوى نوستر:"
+  },
+  {
+    "id": "about.try.placeholder",
+    "other": "الصق npub / nprofile / nevent / ..."
+  },
+  {
+    "id": "about.try.button",
+    "other": "عرض"
+  },
+  {
+    "id": "about.try.or",
+    "other": "أو اختر"
+  },
+  {
+    "id": "about.try.random",
+    "other": "بعض المحتوى العشوائي"
+  },
+  {
+    "id": "about.reasons.intro",
+    "other": "هناك عدة أسباب لاختيار njump عند مشاركة محتوى نوستر خارج نوستر:"
+  },
+  {
+    "id": "about.reasons.clean.title",
+    "other": "نظيف وسريع وثابت"
+  },
+  {
+    "id": "about.reasons.clean.desc",
+    "other": "صفحات njump خفيفة للغاية وسريعة التحميل. لا يوجد جافاسكريبت من جانب العميل. إنها بسيطة مع الانتباه المناسب للطباعة، مع التركيز على المحتوى دون تفاصيل غير ضرورية. علاوة على ذلك، يتم تخزينها مؤقتاً، لذلك عند مشاركة صفحة يمكنك توقع تحميلها بسرعة ودون احتكاك. إنها الأداة المثالية لضم مستخدمين جدد!"
+  },
+  {
+    "id": "about.reasons.previews.title",
+    "other": "معاينات جميلة"
+  },
+  {
+    "id": "about.reasons.previews.desc",
+    "other": "njump يعرض كل شيء من جانب الخادم، لذلك قادر على إنشاء معاينات مفيدة وغنية تعمل على تيليجرام وديسكورد وتويتر وأماكن أخرى."
+  },
+  {
+    "id": "about.reasons.browser.title",
+    "other": "تجربة متصفح رائعة"
+  },
+  {
+    "id": "about.reasons.browser.desc",
+    "other": "عند فتح الرابط مباشرة في متصفح، سيجد الزوار المحتوى المرجعي مثل الصور والفيديوهات وروابط أحداث نوستر معروضة بطريقة بسيطة لكن فعالة. يظهر والد الملاحظة، مما يسمح للزائر بمتابعته. حتى لديه CSS مخصص للطباعة أو التصدير إلى PDF."
+  },
+  {
+    "id": "about.reasons.cooperative.title",
+    "other": "تعاوني (القفز للخارج)"
+  },
+  {
+    "id": "about.reasons.cooperative.desc",
+    "other": "njump ليس لديه اهتمام بالاستحواذ على المستخدمين. على العكس، يدعوهم \"للقفز\" إلى أي مورد نوستر عن طريق الاختيار من قائمة عملاء الويب أو، مع بادئة nostr:، للعملاء الأصليين. حتى أنه يتذكر العميل الأكثر استخداماً لكل زائر ويضعه في الأعلى للوصول السريع والسهل."
+  },
+  {
+    "id": "about.reasons.nip89.title",
+    "other": "دعم NIP-89"
+  },
+  {
+    "id": "about.reasons.nip89.desc",
+    "other": "الدعم قادم!"
+  },
+  {
+    "id": "about.reasons.seo.title",
+    "other": "صديق لمحركات البحث (القفز للداخل)"
+  },
+  {
+    "id": "about.reasons.seo.desc",
+    "other": "صفحات njump ثابتة بحيث يمكن لمحركات البحث فهرستها. هذا يعني أن njump يمكن أن يساعد الآخرين في اكتشاف محتوى رائع على نوستر، والقفز للداخل والانضمام إلينا! njump هو المورد الوحيد لنوستر بهذا الهدف الصريح. إذا كنت تهتم بأن ملاحظة جيدة يمكن العثور عليها عبر الإنترنت، استخدم njump لمشاركتها. هذا سيساعد نوستر على الازدهار وجعله أكثر إمكانية الوصول للجميع."
+  },
+  {
+    "id": "about.nip05.title",
+    "other": "مشاركة ملفات NIP-05 الشخصية"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "شارك ملفك الشخصي مع رابط دائم جميل مستوحى من <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a>: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>، على سبيل المثال: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> أو <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile.shows",
+    "other": "الملف الشخصي يظهر معلومات البيانات الوصفية الأساسية، مرحلات \"الصندوق الخارجي\" المعينة، وأحدث ملاحظاتك."
+  },
+  {
+    "id": "about.social.title",
+    "other": "شارك على تويتر وتيليجرام والمزيد"
+  },
+  {
+    "id": "about.social.desc",
+    "other": "شارك بسرع وسهولة ملاحظات نوستر على تويتر وتيليجرام والعديد من \"المنصات الاجتماعية\" الأخرى: فقط أسقط رابط، وسيعرض njump نص الملاحظة باستخدام صورة المعاينة كلوحة قماش، لتعظيم تجربة ومنفعة المشاركة. على تيليجرام، لدينا أيضاً العرض الفوري للوصول إلى المحتوى الطويل داخل التطبيق!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "عروض المرحل"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "اعرض أحدث المحتوى المنشور إلى مرحل باستخدام <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span>، على سبيل المثال: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "بعض معلومات المرحل الأساسية (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) متاحة. نأمل أن يبدأ المشغلون في جعل هذه الواصفات أكثر شخصية وإعلامية، بحيث يمكن للمستخدمين تقييم ما إذا كانوا سينضمون إلى مرحل أم لا."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "أدوات الموقع"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "يمكنك تضمين الملاحظات والمحتوى طويل الشكل والملفات الشخصية في صفحة ويب بنص بسيط:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;nip-19-entity&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "أداة المفتش"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "تعلم، نحن جميعاً مبرمجون، بما في ذلك أمهاتنا، لذلك لكل صفحة <i>njump</i>، يمكنك تبديل مفتاح \"إظهار تفاصيل أكثر\" لفحص JSON الكامل للحدث. بدون تثبيت أدوات أخرى (مثل <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>)، هذا ربما أسرع طريقة للوصول إلى تلك المعلومات."
+  }
+]

@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"fiatjaf.com/nostr/sdk"
+	"github.com/fiatjaf/njump/i18n"
 	"github.com/fogleman/gg"
 	"github.com/go-text/typesetting/shaping"
 	"github.com/golang/freetype/truetype"
@@ -46,7 +47,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if code == "" {
-		fmt.Fprintf(w, "call /image/<nip19 code>")
+		fmt.Fprintf(w, i18n.Translate(ctx, "image.missing_code", nil))
 		return
 	}
 
@@ -58,17 +59,12 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 
 	data, err := grabData(ctx, code)
 	if err != nil {
-		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
-		log.Warn().Err(err).Str("code", code).Msg("event error on render_image")
-		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
-		return
-	} else if data.event.Event == nil {
-		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
+		http.Error(w, i18n.Translate(ctx, "error.fetch_event", map[string]any{"err": err.Error()}), http.StatusNotFound)
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_image")
-		http.Error(w, "no event found", http.StatusNotFound)
 		return
 	}
 
+	
 	content := data.event.Content
 	content = strings.Replace(content, "\r\n", "\n", -1)
 	content = multiNewlineRe.ReplaceAllString(content, "\n\n")
@@ -90,7 +86,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 	img, err := drawImage(ctx, paragraphs, getPreviewStyle(r), data.event.author, data.event.CreatedAt.Time())
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to draw paragraphs as image")
-		http.Error(w, "error writing image!", 500)
+		http.Error(w, i18n.Translate(ctx, "error.write_image", nil), 500)
 		return
 	}
 

@@ -1,0 +1,522 @@
+[
+  {
+    "id": "site.title",
+    "other": "njump - שער אינטרנט ל-Nostr"
+  },
+  {
+    "id": "nav.about",
+    "other": "אודות"
+  },
+  {
+    "id": "nav.why",
+    "other": "למה Nostr?"
+  },
+  {
+    "id": "nav.get_started",
+    "other": "התחל"
+  },
+  {
+    "id": "nav.resources",
+    "other": "מקורות"
+  },
+  {
+    "id": "nav.development",
+    "other": "פיתוח"
+  },
+  {
+    "id": "nav.join",
+    "other": "הצטרף ל-Nostr"
+  },
+  {
+    "id": "home.title",
+    "other": "Nostr - פרוטוקול פשוט"
+  },
+  {
+    "id": "home.hero.protocol",
+    "other": "פרוטוקול"
+  },
+  {
+    "id": "home.intro.today.title",
+    "other": "האינטרנט של היום"
+  },
+  {
+    "id": "home.intro.today.subtitle",
+    "other": "האינטרנט החל בחזון של חילופי רעיונות ומידע פתוחים..."
+  },
+  {
+    "id": "home.intro.today.description",
+    "other": "האינטרנט החל בחזון של חילופי רעיונות ומידע פתוחים, שנועד לקיים את ערכי חופש הביטוי, הביטוי וההתאגדות לכל. עם הזמן, חזון זה הצטמצם לתפיסה של מה שיכול להביא רווחים לתאגידים גדולים. כיום, הרשת אינה אלא קומץ שרתים מסיביים בבעלות כמה חברות אך בשימוש מיליארדי אנשים."
+  },
+  {
+    "id": "home.intro.problems",
+    "other": "העברנו את הבעלות על זהויותינו לידי צדדים שלישיים. הענקנו זכויות ליצירותינו לאלה המבקשים להרוויח מהן. מסרנו את תחומי העניין שלנו לאלגוריתמים שנכתבו כדי למקסם את תשומת הלב שלנו. בכך, הענקנו כמות לא פרופורציונלית של כוח לחברות, ממשלות וגופים שולטים אחרים אלה כדי להחליט מה אנו רואים, קוראים ואומרים. הגיע הזמן להשתחרר מהמחסומים שלהם וליצור את האינטרנט המאפשר לכל אחד, בכל מקום, ליצור, לדבר ולהתרועע כרצונו, כפי שהתכוון."
+  },
+  {
+    "id": "home.intro.tomorrow.title",
+    "other": "Nostr למחר"
+  },
+  {
+    "id": "home.intro.tomorrow.subtitle",
+    "other": "Nostr, ראשי תיבות של \"Notes and Other Stuff Transmitted by Relays\"..."
+  },
+  {
+    "id": "home.intro.tomorrow.description",
+    "other": "Nostr, ראשי תיבות של \"Notes and Other Stuff Transmitted by Relays\", מחולל מהפכה ברשתות החברתיות ובתקשורת המקוונת על ידי ביטול התלות בשרתים מרכזיים. הוא משתמש במודל לקוח-ממסר, שבו משתמשים מפעילים לקוחות, וכל אחד יכול להפעיל ממסרים. המידע (והאחסון שלו) מופץ ברשת של אנשים פרטיים, מתנדבים נלהבים, עסקים ועמותות כאחד."
+  },
+  {
+    "id": "home.intro.protocol.description",
+    "other": "פרוטוקול Nostr מבטיח תקשורת חסינת חבלה באמצעות מפתחות וחתימות קריפטוגרפיים. על ידי מתן אפשרות למשתמשים ליצור מסלולים לפרסום הערות לממסרים ותמרוץ הפריסה והתחזוקה של ממסרים ייחודיים ועצמאיים על ידי מפעילים, Nostr מטפל בחסרונות רבים של הרשת הנוכחית. החל מיישומים ניתנים להפעלה הדדית ועד זהויות ייחודיות וכלל-עולמיות, Nostr פותח דלתות לחדשנות יצירתית ושיתופית כפי שהעולם לא ראה מעולם."
+  },
+  {
+    "id": "home.main.title",
+    "other": "העצמת החופש עם Nostr"
+  },
+  {
+    "id": "home.main.subtitle",
+    "other": "פרוטוקול ורשת חברתית מאובטחים, ממוקדי משתמש"
+  },
+  {
+    "id": "home.features.identity.title",
+    "other": "אתה הבעלים של הזהות שלך"
+  },
+  {
+    "id": "home.features.identity.desc",
+    "other": "Nostr משתמש במערכת מפתח ציבורי, שבה הזהות שלך קשורה למפתח קריפטוגרפי ייחודי. יש לך שליטה מלאה על הזהות שלך מבלי להסתמך על שום רשות מרכזית. הפרוטוקול של Nostr מבטל את הצורך בתהליכי הכרת הלקוח (KYC). אין צורך בדוא\"ל, תעודת זהות, טביעת אצבע או סריקת קשתית! הפרטיות שלך היא כולה שלך."
+  },
+  {
+    "id": "home.features.data.title",
+    "other": "אשר את הנתונים שלך באמצעות חתימות"
+  },
+  {
+    "id": "home.features.data.desc",
+    "other": "ב-Nostr, משתמשים חותמים על הפוסטים שלהם באמצעות המפתחות הקריפטוגרפיים שלהם. רוב הלקוחות מטפלים בתהליך זה באופן אוטומטי. חתימות קריפטוגרפיות אלה מבטיחות את האותנטיות של הנתונים שלך. אתה יכול להוכיח מה יצרת (ומה לא). ממסרים שנבחרו על ידי המשתמש מאחסנים ושולחים נתונים אלה. ממסרים אלה מתקשרים ישירות עם משתמשים אחרים, ללא עצירות ביניהם. כל לקוח מאמת אז חתימות אלה, ומבטיח את שלמות הנתונים."
+  },
+  {
+    "id": "home.features.audience.title",
+    "other": "התחבר ישירות לקהל שלך"
+  },
+  {
+    "id": "home.features.audience.desc",
+    "other": "ב-Nostr, אתה שומר על הקהל והפיד שלך. לא משנה באיזה לקוח תשתמש, רשימת אנשי הקשר שלך תהיה שם. היא מתפרסמת בממסרים לבחירתך, וכך גם של משתמשים אחרים. כל אחד בוחר את ממסרי הפרסום המועדפים עליו, ולקוחות מתחברים אליהם כדי למצוא פוסטים חדשים. בנוסף, ממסרים יכולים לשמש כמסננים נגד דואר זבל או הטרדה, וככלי גילוי לתוכן טוב, צוברים של תוכן שאוצר או ספקים של פידים מותאמים אישית."
+  },
+  {
+    "id": "home.features.speech.title",
+    "other": "אתה חופשי לדבר"
+  },
+  {
+    "id": "home.features.speech.desc",
+    "other": "אתה יכול לפרסם כל מה שתרצה כל עוד ממסרים מוכנים לקבל זאת. ממסרים יכולים לפעול תחת כל מדיניות שמפעיליהם יבחרו, כולל איסורים, הסרת תוכן והנחיות קהילה. הם עשויים לבחור לארח רק משתמשים מסוימים או סוגים ספציפיים של תוכן. אם אף ממסר לא יקבל את מה שיש לך לומר, תוכל להפעיל בקלות ממסר משלך. כאשר תתחיל לפרסם בממסרים שונים, לקוחות אמורים להיות מסוגלים למצוא אותך שם, על סמך רמזים מצורפים של ממסרים. אנשי הקשר שלך ימשיכו לקבל את העדכונים שלך."
+  },
+  {
+    "id": "home.features.anonymous.title",
+    "other": "אתה חופשי להישאר אנונימי"
+  },
+  {
+    "id": "home.features.anonymous.desc",
+    "other": "Nostr תומך באנונימיות של המשתמש. משתמשים יכולים לבחור להיות אנונימיים או להשתמש בשמות בדויים מבלי לפגוע ביכולתם להשתתף. Nostr זמין גם ב-TOR כדי למנוע מעקב. כפרוטוקול, ל-Nostr אין את היכולת לספק נתוני משתמשים לאף ישות, ממשלתית או אחרת. זה עוזר להגן על חופש הביטוי של כל המשתמשים מפני איסורים או הגבלות. כל ממסר או לקוח בודד יכול להיות כפוף לבקשות אלה, אך הנתונים הזמינים יהיו מוגבלים לאלה של מפתח ציבורי של משתמש. אם משתמש זה נקט בצעדים מתאימים כדי להגן על זהותו, יהיה מעט מידע לחלוק."
+  },
+  {
+    "id": "home.features.develop.title",
+    "other": "אתה חופשי לפתח"
+  },
+  {
+    "id": "home.features.develop.desc",
+    "other": "Nostr מעודד פיתוח והתאמה אישית. כל אחד חופשי לפתח על הפרוטוקול, ולתרום לצמיחה ולהתפתחות של הרשת. כל הלקוחות, הממסרים, הכלים והאפליקציות של Nostr שנבנים יכולים להפיק תועלת מכל פיתוח בעבר ובעתיד. לבונים יש את החופש לקבוע אמצעי תשלום עבור היישומים והתכונות שלהם, ולספק מקור הכנסה פוטנציאלי כפי שלא היה מעולם."
+  },
+  {
+    "id": "home.cta.question",
+    "other": "למה אתה מחכה?"
+  },
+  {
+    "id": "home.cta.button",
+    "other": "הצטרף ל-Nostr"
+  },
+  {
+    "id": "home.getting_started.title",
+    "other": "התחל עם Nostr"
+  },
+  {
+    "id": "home.getting_started.create.title",
+    "other": "צור חשבון"
+  },
+  {
+    "id": "home.getting_started.create.desc",
+    "other": "עם Nostr, אין ספק מרכזי שבבעלותו חשבונך. למעשה, חשבונך מופעל על ידי קריפטוגרפיה, ותוכל ליצור אחד (או יותר!) בעצמך ביד, ללא הגבלה. עם זאת, הדרך הקלה ביותר היא להשתמש ב<a href=\"https://start.nostr.net\" class=\"underline\">אשף המקוון החדש שלנו</a> כדי ליצור את חשבונך החדש תוך שניות. לאחר מכן, תוכל להשתמש בו בכל Nostr!"
+  },
+  {
+    "id": "home.getting_started.secure.title",
+    "other": "אבטח את המפתח שלך"
+  },
+  {
+    "id": "home.getting_started.secure.desc",
+    "other": "חשבון הוא זוג מפתחות. המפתח הפרטי (nsec) הוא הזהות הדיגיטלית שלך. אם הוא אבד או נחשף, אין אמצעי לשחזר גישה או לשנות אישורים. עליך לשמור על המפתח הפרטי שלך בטוח ומאובטח. השתמש במנהל סיסמאות, צור גיבוי על נייר, והשתמש בו רק באפליקציות מהימנות. לעולם אל תזין את ה-nsec שלך באתר אינטרנט. התקן <a href=\"#signers\" class=\"underline\">תוסף חותם</a> כדי להשתמש במפתח שלך בבטחה באינטרנט."
+  },
+  {
+    "id": "home.getting_started.app.title",
+    "other": "בחר אפליקציה"
+  },
+  {
+    "id": "home.getting_started.app.desc",
+    "other": "מפתחי Nostr כבר בנו מספר יישומים למגוון רחב של שימושים. הדרך הפשוטה ביותר להתחיל להשתמש ב-Nostr היא להוריד <a href=\"#social\" class=\"underline\">לקוח חברתי</a> ולהתערב. למד עם ובאמצעות הקהילה על ידי השתתפות בשיחה. זקוק לעזרה? השתמש בהאשטאג #asknostr!"
+  },
+  {
+    "id": "home.getting_started.explore.title",
+    "other": "חקור את Nostr"
+  },
+  {
+    "id": "home.getting_started.explore.desc",
+    "other": "לאחר שתכיר את המושגים הבסיסיים, תוכל להגדיר את כלי ניהול המפתחות המועדף עליך כדי לחקור לקוחות חברתיים אחרים ו<a href=\"#readwrite\" class=\"underline\">יישומי Nostr</a>. כבר יש לך את הזהות הדיגיטלית שלך והיא עובדת בכל מקום. פשוט התחבר באמצעות אפליקציית החותם של Nostr, תוסף החתימה או nsec. אם אתה משתמש במפתח הפרטי שלך, ודא שהאפליקציה ממקור מהימן!"
+  },
+  {
+    "id": "home.getting_started.client_alt",
+    "other": "לקוח Nostr"
+  },
+  {
+    "id": "home.resources.title",
+    "other": "מקורות Nostr"
+  },
+  {
+    "id": "home.resources.subtitle",
+    "other": "גלה חלק ממה שאתה יכול לעשות עם Nostr"
+  },
+  {
+    "id": "home.resources.multimedia",
+    "other": "מולטימדיה"
+  },
+  {
+    "id": "home.resources.streaming",
+    "other": "שידור חי"
+  },
+  {
+    "id": "home.resources.publishing",
+    "other": "קרא וכתוב"
+  },
+  {
+    "id": "home.resources.communities",
+    "other": "קהילות"
+  },
+  {
+    "id": "home.resources.tools",
+    "other": "דברים אחרים"
+  },
+  {
+    "id": "home.resources.security",
+    "other": "אבטחת מפתח"
+  },
+  {
+    "id": "home.resources.disclaimer",
+    "other": "זוהי רק בחירה מהירה של 100+ היישומים שכבר נבנו על Nostr, <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">גלה את כולם</a>!"
+  },
+  {
+    "id": "home.development.title",
+    "other": "פתח על Nostr"
+  },
+  {
+    "id": "home.development.origins.title",
+    "other": "איפה הכל התחיל"
+  },
+  {
+    "id": "home.development.origins.desc",
+    "other": "\"המניפסט\" של Nostr פורסם בשנת 2019. לאט אבל בטוח, קהילה התאספה סביב הרעיון והרחיבה אותו, והפכה אותו לפרוטוקול מהיר, גמיש ואמין המשמש אנשים אמיתיים רבים מדי יום."
+  },
+  {
+    "id": "home.development.nips.title",
+    "other": "גלה את ה-NIPs"
+  },
+  {
+    "id": "home.development.nips.desc",
+    "other": "NIPs מייצגים \"אפשרויות יישום של Nostr\". הם קיימים כמדריך למה שניתן ליישם על ידי תוכנת ממסר ולקוח תואמת Nostr. למד אותם כדי לפתח את יישום Nostr החדש שלך עם תאימות רשת אופטימלית."
+  },
+  {
+    "id": "home.development.design.title",
+    "other": "מדריך העיצוב"
+  },
+  {
+    "id": "home.development.design.desc",
+    "other": "Nostrdesign.org הוא המשאב הרשמי לגילוי כיצד לפתח בצורה הטובה ביותר את הממשק של יישום Nostr שלך. חקור פרדיגמות חדשות, בצע אופטימיזציה של ממשק המשתמש שלך, ומצא טיפים כיצד לשפר את חווית המשתמש הכל במקום אחד."
+  },
+  {
+    "id": "home.development.read_more",
+    "other": "קרא עוד >>"
+  },
+  {
+    "id": "home.typewriter.not_crypto",
+    "other": "לא מטבע קריפטוגרפי"
+  },
+  {
+    "id": "home.typewriter.simple",
+    "other": "פשוט"
+  },
+  {
+    "id": "home.typewriter.not_blockchain",
+    "other": "לא בלוקצ'יין"
+  },
+  {
+    "id": "home.typewriter.universal_identity",
+    "other": "זהות אוניברסלית"
+  },
+  {
+    "id": "home.typewriter.not_company",
+    "other": "לא חברה"
+  },
+  {
+    "id": "home.typewriter.free_expression",
+    "other": "חופש ביטוי"
+  },
+  {
+    "id": "home.typewriter.free_association",
+    "other": "חופש התאגדות"
+  },
+  {
+    "id": "home.typewriter.for_friends",
+    "other": "לחברים ואויבים"
+  },
+  {
+    "id": "home.typewriter.for_everyone",
+    "other": "לכולם"
+  },
+  {
+    "id": "home.typewriter.for_broadcasting",
+    "other": "לשידור"
+  },
+  {
+    "id": "home.typewriter.for_groups",
+    "other": "לקבוצות סגורות"
+  },
+  {
+    "id": "home.typewriter.for_opinions",
+    "other": "לכל הדעות"
+  },
+  {
+    "id": "home.typewriter.like_internet",
+    "other": "כמו האינטרנט עצמו"
+  },
+  {
+    "id": "home.typewriter.flexible",
+    "other": "גמיש"
+  },
+  {
+    "id": "home.typewriter.scalable",
+    "other": "ניתן להרחבה"
+  },
+  {
+    "id": "home.typewriter.public_square",
+    "other": "כיכר ציבורית אמיתית"
+  },
+  {
+    "id": "home.typewriter.client_relay",
+    "other": "לקוח-ממסר"
+  },
+  {
+    "id": "home.typewriter.not_p2p",
+    "other": "לא P2P"
+  },
+  {
+    "id": "home.typewriter.old_web",
+    "other": "הרשת הישנה"
+  },
+  {
+    "id": "home.typewriter.decentralized",
+    "other": "מבוזר באמת"
+  },
+  {
+    "id": "home.typewriter.communities",
+    "other": "קהילות שנעשו נכון"
+  },
+  {
+    "id": "home.typewriter.open_alternative",
+    "other": "החלופה הפתוחה"
+  },
+  {
+    "id": "home.typewriter.wikis",
+    "other": "ויקי חברתי"
+  },
+  {
+    "id": "home.typewriter.git",
+    "other": "שיתוף פעולה ב-Git"
+  },
+  {
+    "id": "home.typewriter.articles",
+    "other": "מאמרים ארוכים"
+  },
+  {
+    "id": "home.typewriter.microblogging",
+    "other": "מיקרובלוגינג"
+  },
+  {
+    "id": "home.typewriter.livestreaming",
+    "other": "שידור חי"
+  },
+  {
+    "id": "home.typewriter.forums",
+    "other": "פורומים"
+  },
+  {
+    "id": "home.typewriter.annotating",
+    "other": "הערות על הרשת"
+  },
+  {
+    "id": "home.typewriter.commenting",
+    "other": "הערות על כל דבר"
+  },
+  {
+    "id": "home.typewriter.social_web",
+    "other": "הרשת החברתית של מחר"
+  },
+  {
+    "id": "home.typewriter.for_you",
+    "other": "בשבילך, היום"
+  },
+  {
+    "id": "home.typewriter.dots",
+    "other": "......."
+  },
+  {
+    "id": "about.title",
+    "other": "אודות njump"
+  },
+  {
+    "id": "about.what.title",
+    "other": "מה זה njump?"
+  },
+  {
+    "id": "about.what.description",
+    "other": "<i>njump</i> הוא שער HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">Nostr</a> המאפשר לך לגלוש בפרופילים, הערות וממסרים. זוהי דרך קלה להציג תצוגה מקדימה של משאב ולפתוח אותו עם הלקוח המועדף עליך. השימוש האופייני ב-<i>njump</i> הוא שיתוף תוכן מחוץ לעולם Nostr, שבו סכימת <code>nostr:</code> עדיין אינה מוכרת."
+  },
+  {
+    "id": "about.usage.title",
+    "other": "איך להשתמש"
+  },
+  {
+    "id": "about.usage.description",
+    "other": "<i>njump</i> חי כרגע תחת {{.Domain}}, תוכל להגיע אליו על ידי הוספת ישות Nostr <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a> (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, וכו') לאחר הדומיין: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-19-entity&gt;</span>."
+  },
+  {
+    "id": "about.examples.title",
+    "other": "דוגמאות"
+  },
+  {
+    "id": "about.examples.description",
+    "other": "לדוגמה, הנה <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">פרופיל משתמש</a>, <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">הערה</a> ו<a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">פוסט בלוג ארוך</a>."
+  },
+  {
+    "id": "about.try.title",
+    "other": "נסה זאת עכשיו! קפוץ לתוכן Nostr כלשהו:"
+  },
+  {
+    "id": "about.try.placeholder",
+    "other": "הדבק npub / nprofile / nevent / ..."
+  },
+  {
+    "id": "about.try.button",
+    "other": "הצג"
+  },
+  {
+    "id": "about.try.or",
+    "other": "או בחר"
+  },
+  {
+    "id": "about.try.random",
+    "other": "תוכן אקראי כלשהו"
+  },
+  {
+    "id": "about.reasons.intro",
+    "other": "ישנן מספר סיבות לבחור ב-njump בעת שיתוף תוכן Nostr מחוץ ל-Nostr:"
+  },
+  {
+    "id": "about.reasons.clean.title",
+    "other": "נקי, מהיר ומוצק"
+  },
+  {
+    "id": "about.reasons.clean.desc",
+    "other": "דפי njump קלים במיוחד ומהירים לטעינה. אין מעורבות של javascript בצד הלקוח. הם מינימליסטיים עם תשומת לב נכונה לטיפוגרפיה, תוך התמקדות בתוכן ללא פרטים מיותרים. יתר על כן, הם מאוחסנים במטמון, כך שכאשר אתה משתף דף, אתה יכול לצפות שהוא ייטען במהירות וללא חיכוך. זה הכלי המושלם להכניס משתמשים חדשים!"
+  },
+  {
+    "id": "about.reasons.previews.title",
+    "other": "תצוגות מקדימות יפות"
+  },
+  {
+    "id": "about.reasons.previews.desc",
+    "other": "njump מעבד הכל בצד השרת, כך שהוא מסוגל ליצור תצוגות מקדימות שימושיות ועשירות שעובדות בטלגרם, דיסקורד, טוויטר ובמקומות אחרים."
+  },
+  {
+    "id": "about.reasons.browser.title",
+    "other": "חווית דפדפן נהדרת"
+  },
+  {
+    "id": "about.reasons.browser.desc",
+    "other": "בעת פתיחת כתובת ה-URL ישירות בדפדפן, המבקרים ימצאו תוכן שאוזכר כמו תמונות, סרטונים וקישורים לאירועי Nostr המוצגים בצורה פשוטה אך יעילה. הוא מציג את הערת האב, ומאפשר למבקר לעקוב אחריה. יש לו אפילו CSS מותאם אישית להדפסה או לייצוא ל-PDF."
+  },
+  {
+    "id": "about.reasons.cooperative.title",
+    "other": "שיתופי (קפיצה החוצה)"
+  },
+  {
+    "id": "about.reasons.cooperative.desc",
+    "other": "ל-njump אין עניין בלכידת משתמשים. напротив, הוא מזמין אותם \"לקפוץ\" לכל משאב Nostr על ידי בחירה מתוך רשימה של לקוחות אינטרנט או, עם קידומת nostr:, עבור לקוחות מקוריים. הוא אפילו זוכר את הלקוח הנפוץ ביותר עבור כל מבקר ומציב אותו בראש לגישה מהירה וקלה."
+  },
+  {
+    "id": "about.reasons.nip89.title",
+    "other": "תמיכה ב-NIP-89"
+  },
+  {
+    "id": "about.reasons.nip89.desc",
+    "other": "תמיכה בקרוב!"
+  },
+  {
+    "id": "about.reasons.seo.title",
+    "other": "ידידותי לחיפוש (קפיצה פנימה)"
+  },
+  {
+    "id": "about.reasons.seo.desc",
+    "other": "דפי njump הם סטטיים כך שמנועי חיפוש יכולים לאנדקס אותם. זה אומר ש-njump יכול לעזור לאחרים לגלות תוכן נהדר ב-Nostr, לקפוץ פנימה ולהצטרף אלינו! njump הוא המשאב היחיד של Nostr עם מטרה מפורשת זו. אם אכפת לך שניתן למצוא הערה טובה באינטרנט, השתמש ב-njump כדי לשתף אותה. זה יעזור ל-Nostr לפרוח ולהפוך אותו לנגיש יותר לכולם."
+  },
+  {
+    "id": "about.nip05.title",
+    "other": "שתף פרופילי NIP-05"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "שתף את הפרופיל שלך עם קישור קבוע יפהפה בהשראת <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a>: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>, לדוגמה: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> או <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile.shows",
+    "other": "פרופיל מציג את פרטי המטא-נתונים הבסיסיים שלך, ממסרי \"תיבת דואר יוצא\" שהוקצו והערות האחרונות שלך."
+  },
+  {
+    "id": "about.social.title",
+    "other": "שתף בטוויטר, טלגרם ועוד"
+  },
+  {
+    "id": "about.social.desc",
+    "other": "שתף במהירות וללא מאמץ הערות Nostr בטוויטר, טלגרם ו\"פלטפורמות חברתיות\" רבות אחרות: פשוט זרוק קישור, ו-njump יעבד את טקסט ההערה באמצעות תמונת התצוגה המקדימה כקנבס, כדי למקסם את חווית השיתוף והתועלת. בטלגרם, יש לנו גם את התצוגה המיידית לגישה לתוכן ארוך בתוך האפליקציה!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "תצוגות ממסר"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "הצג את התוכן האחרון שפורסם בממסר באמצעות <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span>, לדוגמה: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "מידע בסיסי כלשהו על ממסר (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>) זמין. אנו מקווים שמפעילים יתחילו להפוך את התיאורים הללו לאישיים ואינפורמטיביים יותר, כך שלמשתמשים תהיה דרך להעריך אם להצטרף לממסר או לא."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "ווידג'טים לאתר"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "אתה יכול להטמיע הערות, תוכן ארוך ופרופילים בדף אינטרנט באמצעות סקריפט פשוט:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;nip-19-entity&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "כלי מפקח"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "אתה יודע, כולנו מתכנתים, כולל האמהות שלנו, כך שבכל דף <i>njump</i>, תוכל להחליף את המתג \"הצג פרטים נוספים\" כדי לבדוק את ה-JSON המלא של האירוע. מבלי להתקין כלים אחרים (כמו <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>), זוהי כנראה הדרך המהירה ביותר לגשת למידע זה."
+  }
+]

@@ -6,6 +6,8 @@ import (
 	"html"
 	"html/template"
 	"net/http"
+
+	"github.com/fiatjaf/njump/i18n"
 	"strings"
 	"time"
 
@@ -36,27 +38,13 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 		return
 	}
 
-	if banned, reason := isPubkeyBanned(pp.PublicKey); banned {
-		deleteAllEventsFromPubKey(pp.PublicKey)
-		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
-		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Str("reason", reason).Msg("pubkey banned")
-		http.Error(w, "pubkey banned", http.StatusNotFound)
-		return
-	}
-
 	profile := sys.FetchProfileMetadata(ctx, pp.PublicKey)
 	if isMaliciousBridged(profile) {
-		deleteAllEventsFromPubKey(pp.PublicKey)
-		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
-		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Msg("pubkey malicious bridged blocked")
-		http.Error(w, "profile is malicious", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.profile_malicious", nil), http.StatusNotFound)
 		return
 	}
 	if is, _ := isExplicitContent(ctx, profile.Picture); is {
-		deleteAllEventsFromPubKey(pp.PublicKey)
-		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
-		log.Warn().Str("pubkey", pp.PublicKey.Hex()).Msg("pubkey explicit content blocked")
-		http.Error(w, "profile is not allowed", http.StatusNotFound)
+		http.Error(w, i18n.Translate(ctx, "error.profile_not_allowed", nil), http.StatusNotFound)
 		return
 	}
 
@@ -107,7 +95,11 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 
 		nprofile := profile.Nprofile(ctx, sys, 2)
 		params := ProfilePageParams{
-			HeadParams: HeadParams{IsProfile: true},
+			HeadParams: HeadParams{
+				IsProfile: true,
+				Lang:      i18n.LanguageFromContext(ctx),
+				Domain:    s.Domain,
+			},
 			Details: DetailsParams{
 				HideDetails:     true,
 				CreatedAt:       createdAt,

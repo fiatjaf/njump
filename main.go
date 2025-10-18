@@ -19,20 +19,20 @@ import (
 )
 
 type Settings struct {
-	Port                string `envconfig:"PORT" default:"2999"`
-	Domain              string `envconfig:"DOMAIN" default:"njump.me"`
-	ServiceURL          string `envconfig:"SERVICE_URL"`
-	InternalDBPath      string `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
-	EventStorePath      string `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
-	KVStorePath         string `envconfig:"KV_STORE_PATH" default:"/tmp/njump-kv"`
-	HintsMemoryDumpPath string `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
-	TailwindDebug       bool   `envconfig:"TAILWIND_DEBUG"`
-	RelayConfigPath     string `envconfig:"RELAY_CONFIG_PATH"`
-	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
-	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
-
+	Port                string   `envconfig:"PORT" default:"2999"`
+	Domain              string   `envconfig:"DOMAIN" default:"njump.me"`
+	DefaultLanguage     string   `envconfig:"DEFAULT_LANGUAGE" default:"en"`
+	ServiceURL          string   `envconfig:"SERVICE_URL"`
+	InternalDBPath      string   `envconfig:"DISK_CACHE_PATH" default:"/tmp/njump-internal"`
+	EventStorePath      string   `envconfig:"EVENT_STORE_PATH" default:"/tmp/njump-db"`
+	KVStorePath         string   `envconfig:"KV_STORE_PATH" default:"/tmp/njump-kv"`
+	HintsMemoryDumpPath string   `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
+	TailwindDebug       bool     `envconfig:"TAILWIND_DEBUG"`
+	RelayConfigPath     string   `envconfig:"RELAY_CONFIG_PATH"`
 	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
 	trustedPubKeys    []nostr.PubKey
+	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
+	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
 }
 
 //go:embed static/*
@@ -157,9 +157,11 @@ func main() {
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		agentBlock(
 			ipBlock(
-				loggingMiddleware(
-					queueMiddleware(
-						sub.ServeHTTP,
+				languageMiddleware(
+					loggingMiddleware(
+						queueMiddleware(
+							sub.ServeHTTP,
+						),
 					),
 				),
 			),

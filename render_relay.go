@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"fiatjaf.com/nostr/nip11"
+	"github.com/fiatjaf/njump/i18n"
 )
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {
@@ -103,8 +104,12 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 		}
 
 	} else {
-		err = relayTemplate(RelayPageParams{
-			HeadParams: HeadParams{IsProfile: false},
+		relayTemplate(RelayPageParams{
+			HeadParams: HeadParams{
+				IsProfile: false,
+				Lang:      i18n.LanguageFromContext(r.Context()),
+				Domain:    s.Domain,
+			},
 			Info:       info,
 			Hostname:   hostname,
 			Proxy:      "https://" + hostname + "/proxy?src=",

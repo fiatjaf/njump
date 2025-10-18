@@ -1,0 +1,522 @@
+[
+  {
+    "id": "site.title",
+    "other": "njump - webová brána do Nostr"
+  },
+  {
+    "id": "nav.about",
+    "other": "O aplikaci"
+  },
+  {
+    "id": "nav.why",
+    "other": "Proč Nostr?"
+  },
+  {
+    "id": "nav.get_started",
+    "other": "Začínáme"
+  },
+  {
+    "id": "nav.resources",
+    "other": "Zdroje"
+  },
+  {
+    "id": "nav.development",
+    "other": "Vývoj"
+  },
+  {
+    "id": "nav.join",
+    "other": "Připojte se k Nostr"
+  },
+  {
+    "id": "home.title",
+    "other": "Nostr - jednoduchý protokol"
+  },
+  {
+    "id": "home.hero.protocol",
+    "other": "PROTOKOL"
+  },
+  {
+    "id": "home.intro.today.title",
+    "other": "Internet dneška"
+  },
+  {
+    "id": "home.intro.today.subtitle",
+    "other": "Internet začal s vizí otevřené výměny myšlenek a informací..."
+  },
+  {
+    "id": "home.intro.today.description",
+    "other": "Internet začal s vizí otevřené výměny myšlenek a informací, která měla podporovat hodnoty svobody slova, projevu a sdružování pro všechny. Postupem času se tato vize zredukovala na pohled, co by mohlo přinést zisk velkým korporacím. Dnes je web jen hrstkou masivních serverů vlastněných několika málo společnostmi, které však používají miliardy lidí."
+  },
+  {
+    "id": "home.intro.problems",
+    "other": "Vložili jsme vlastnictví našich identit do rukou třetích stran. Udělili jsme práva k našim výtvorům těm, kteří z nich chtějí profitovat. Předali jsme své zájmy algoritmům napsaným tak, aby maximalizovaly naši pozornost. Tím jsme dali těmto společnostem, vládám a dalším kontrolním entitám nepřiměřenou moc rozhodovat o tom, co vidíme, čteme a říkáme. Je čas vymanit se z jejich bariér a vytvořit internet, který umožní komukoli a kdekoli tvořit, mluvit a socializovat se, jak si přeje, jak bylo zamýšleno."
+  },
+  {
+    "id": "home.intro.tomorrow.title",
+    "other": "Nostr pro zítřek"
+  },
+  {
+    "id": "home.intro.tomorrow.subtitle",
+    "other": "Nostr, akronym pro \"Poznámky a další věci přenášené pomocí relays\"..."
+  },
+  {
+    "id": "home.intro.tomorrow.description",
+    "other": "Nostr, akronym pro \"Poznámky a další věci přenášené pomocí relays\", přináší revoluci do sociálních sítí a online komunikace tím, že odstraňuje závislost na centralizovaných serverech. Využívá model klient-relay, kde uživatelé spouštějí klienty a kdokoli může provozovat relays. Informace (a jejich ukládání) jsou distribuovány v síti jednotlivců, nadšených dobrovolníků, firem i neziskových organizací."
+  },
+  {
+    "id": "home.intro.protocol.description",
+    "other": "Protokol Nostr zajišťuje komunikaci odolnou proti neoprávněné manipulaci pomocí kryptografických klíčů a podpisů. Tím, že umožňuje uživatelům vytvářet cesty pro publikování poznámek na relays a motivuje operátory k nasazování a údržbě jedinečných, nezávislých relays, řeší Nostr mnoho nedostatků současného webu. Od interoperabilních aplikací po jedinečné a všudypřítomné identity, Nostr otevírá dveře kreativním, kolaborativním inovacím, jaké svět ještě neviděl."
+  },
+  {
+    "id": "home.main.title",
+    "other": "Posílení svobody s Nostr"
+  },
+  {
+    "id": "home.main.subtitle",
+    "other": "Bezpečný, na uživatele zaměřený protokol a sociální síť"
+  },
+  {
+    "id": "home.features.identity.title",
+    "other": "Vlastníte svou identitu"
+  },
+  {
+    "id": "home.features.identity.desc",
+    "other": "Nostr používá systém veřejného klíče, kde je vaše identita vázána na jedinečný kryptografický klíč. Máte plnou kontrolu nad svou identitou bez závislosti na jakékoli centrální autoritě. Protokol Nostr eliminuje potřebu procesů Know Your Customer (KYC). Není vyžadován žádný e-mail, občanský průkaz, otisk prstu ani skenování oční duhovky! Vaše soukromí je zcela ve vašich rukou."
+  },
+  {
+    "id": "home.features.data.title",
+    "other": "Potvrďte svá data podpisy"
+  },
+  {
+    "id": "home.features.data.desc",
+    "other": "V Nostr uživatelé podepisují své příspěvky svými kryptografickými klíči. Většina klientů tento proces zvládá automaticky. Tyto kryptografické podpisy zajišťují pravost vašich dat. Můžete dokázat, co jste vytvořili (a co ne). Uživatelem vybrané relays tato data ukládají a odesílají. Tyto relays komunikují přímo s ostatními uživateli, bez zastávek mezi nimi. Každý klient pak tyto podpisy ověřuje a zajišťuje tak integritu dat."
+  },
+  {
+    "id": "home.features.audience.title",
+    "other": "Spojte se přímo se svým publikem"
+  },
+  {
+    "id": "home.features.audience.desc",
+    "other": "V Nostr si udržujete své publikum a svůj feed. Ať už používáte jakéhokoli klienta, váš seznam kontaktů tam bude. Je publikován na relays dle vašeho výběru, stejně jako seznamy ostatních uživatelů. Každý si vybírá své preferované publikační relays a klienti se k nim připojují, aby našli nové příspěvky. Relays navíc mohou fungovat jako filtry proti spamu nebo obtěžování a jako prostředky pro objevování dobrého obsahu, agregátory kurátorovaného obsahu nebo poskytovatelé vlastních feedů."
+  },
+  {
+    "id": "home.features.speech.title",
+    "other": "Máte svobodu slova"
+  },
+  {
+    "id": "home.features.speech.desc",
+    "other": "Můžete publikovat cokoli, co chcete, pokud to relays budou ochotny přijmout. Relays mohou fungovat podle jakýchkoli zásad, které si jejich provozovatelé zvolí, včetně zákazů, odstraňování obsahu a komunitních pravidel. Mohou se rozhodnout hostovat pouze určité uživatele nebo specifické typy obsahu. Pokud žádný relay nepřijme to, co chcete říct, můžete si snadno spustit vlastní. Když začnete publikovat na různých relays, klienti by vás tam měli být schopni najít na základě připojených relay hints. Vaše kontakty pak budou nadále dostávat vaše aktualizace."
+  },
+  {
+    "id": "home.features.anonymous.title",
+    "other": "Máte právo zůstat v anonymitě"
+  },
+  {
+    "id": "home.features.anonymous.desc",
+    "other": "Nostr podporuje anonymitu uživatelů. Uživatelé si mohou zvolit anonymitu nebo používat pseudonymy, aniž by to ohrozilo jejich schopnost participovat. Nostr je také k dispozici na síti TOR, aby se zabránilo sledování. Jako protokol nemá Nostr kapacitu poskytovat uživatelská data žádné entitě, vládní ani jiné. To pomáhá chránit svobodu projevu všech uživatelů před zákazy nebo omezeními. Jakýkoli jednotlivý relay nebo klient by mohl být předmětem těchto žádostí, ale dostupná data by byla omezena na veřejný klíč uživatele. Pokud tento uživatel podnikl příslušné kroky k ochraně své identity, bylo by k dispozici jen málo informací."
+  },
+  {
+    "id": "home.features.develop.title",
+    "other": "Máte svobodu vyvíjet"
+  },
+  {
+    "id": "home.features.develop.desc",
+    "other": "Nostr podporuje vývoj a přizpůsobení. Každý může volně vyvíjet na protokolu a přispívat tak k růstu a evoluci sítě. Všichni klienti, relays, nástroje a aplikace postavené na Nostr mohou těžit z každého minulého i budoucího vývoje. Tvůrci mají svobodu zavádět platební metody pro své aplikace a funkce, což poskytuje potenciální zdroj příjmů jako nikdy předtím."
+  },
+  {
+    "id": "home.cta.question",
+    "other": "Na co čekáte?"
+  },
+  {
+    "id": "home.cta.button",
+    "other": "Připojte se k Nostr"
+  },
+  {
+    "id": "home.getting_started.title",
+    "other": "Začněte s Nostr"
+  },
+  {
+    "id": "home.getting_started.create.title",
+    "other": "Vytvořte si účet"
+  },
+  {
+    "id": "home.getting_started.create.desc",
+    "other": "S Nostr neexistuje žádný centrální poskytovatel, který by vlastnil váš účet. Váš účet je ve skutečnosti založen na kryptografii a můžete si jej (nebo i více!) vytvořit sami ručně, bez omezení. Nejjednodušší způsob je však použít našeho <a href=\"https://start.nostr.net\" class=\"underline\">nového online průvodce</a> k vygenerování nového účtu během několika sekund. Poté jej můžete používat napříč celým Nostr!"
+  },
+  {
+    "id": "home.getting_started.secure.title",
+    "other": "Zabezpečte si svůj klíč"
+  },
+  {
+    "id": "home.getting_started.secure.desc",
+    "other": "Účet je pár klíčů. Soukromý klíč (nsec) je vaše digitální identita. Pokud dojde k jeho ztrátě nebo prozrazení, neexistuje způsob, jak obnovit přístup nebo změnit přihlašovací údaje. Svůj soukromý klíč musíte uchovávat v bezpečí. Používejte správce hesel, vytvořte si zálohu na papíře a používejte jej POUZE v důvěryhodných aplikacích. Nikdy nezadávejte svůj nsec na webových stránkách. Nainstalujte si <a href=\"#signers\" class=\"underline\">rozšíření pro podepisování</a>, abyste mohli svůj klíč bezpečně používat na webu."
+  },
+  {
+    "id": "home.getting_started.app.title",
+    "other": "Vyberte si aplikaci"
+  },
+  {
+    "id": "home.getting_started.app.desc",
+    "other": "Vývojáři Nostr již vytvořili několik aplikací pro širokou škálu použití. Nejjednodušší způsob, jak začít používat Nostr, je stáhnout si <a href=\"#social\" class=\"underline\">sociálního klienta</a> a zapojit se. Učte se s komunitou a skrze ni zapojením se do konverzace. Potřebujete pomoc? Použijte hashtag #asknostr!"
+  },
+  {
+    "id": "home.getting_started.explore.title",
+    "other": "Prozkoumejte Nostr"
+  },
+  {
+    "id": "home.getting_started.explore.desc",
+    "other": "Poté, co se seznámíte se základními koncepty, můžete si nastavit preferovaný nástroj pro správu klíčů a prozkoumat další sociální klienty a <a href=\"#readwrite\" class=\"underline\">aplikace Nostr</a>. Již máte svou digitální identitu a ta funguje všude. Jednoduše se přihlaste pomocí vaší aplikace pro podepisování Nostr, rozšiřujícího doplňku pro podepisování nebo nsec. Pokud používáte svůj soukromý klíč, ujistěte se, že aplikace pochází z důvěryhodného zdroje!"
+  },
+  {
+    "id": "home.getting_started.client_alt",
+    "other": "Klient Nostr"
+  },
+  {
+    "id": "home.resources.title",
+    "other": "Zdroje o Nostr"
+  },
+  {
+    "id": "home.resources.subtitle",
+    "other": "Objevte, co všechno můžete s Nostr dělat"
+  },
+  {
+    "id": "home.resources.multimedia",
+    "other": "Multimédia"
+  },
+  {
+    "id": "home.resources.streaming",
+    "other": "Živé vysílání"
+  },
+  {
+    "id": "home.resources.publishing",
+    "other": "Čtení a psaní"
+  },
+  {
+    "id": "home.resources.communities",
+    "other": "Komunity"
+  },
+  {
+    "id": "home.resources.tools",
+    "other": "Další věci"
+  },
+  {
+    "id": "home.resources.security",
+    "other": "Zabezpečení klíčů"
+  },
+  {
+    "id": "home.resources.disclaimer",
+    "other": "Toto je pouze rychlý výběr z více než 100 aplikací, které již byly na Nostr postaveny, <a class=\"underline\" href=\"https://nostr.net\" target=\"_blank\">objevte je všechny</a>!"
+  },
+  {
+    "id": "home.development.title",
+    "other": "Vyvíjejte na Nostr"
+  },
+  {
+    "id": "home.development.origins.title",
+    "other": "Kde to všechno začalo"
+  },
+  {
+    "id": "home.development.origins.desc",
+    "other": "\"Manifest\" Nostr byl publikován v roce 2019. Pomalu, ale jistě se kolem této myšlenky shromáždila komunita a rozšířila ji, čímž ji proměnila v rychlý, flexibilní a spolehlivý protokol, který denně používá mnoho skutečných lidí."
+  },
+  {
+    "id": "home.development.nips.title",
+    "other": "Objevte NIPy"
+  },
+  {
+    "id": "home.development.nips.desc",
+    "other": "NIPs znamená \"Nostr Implementation Possibilities\" (Možnosti implementace Nostr). Existují jako průvodce tím, co může být implementováno softwarem kompatibilním s Nostr relay a klientem. Prostudujte si je, abyste mohli vyvinout svou novou aplikaci Nostr s optimální síťovou kompatibilitou."
+  },
+  {
+    "id": "home.development.design.title",
+    "other": "Průvodce designem"
+  },
+  {
+    "id": "home.development.design.desc",
+    "other": "Nostrdesign.org je oficiální zdroj pro objevování, jak nejlépe vyvinout rozhraní vaší aplikace Nostr. Prozkoumejte nové paradigma, optimalizujte své uživatelské rozhraní a najděte tipy, jak zlepšit uživatelský zážitek, vše na jednom místě."
+  },
+  {
+    "id": "home.development.read_more",
+    "other": "Číst dál >>"
+  },
+  {
+    "id": "home.typewriter.not_crypto",
+    "other": "NENÍ TO KRYPTOMĚNA"
+  },
+  {
+    "id": "home.typewriter.simple",
+    "other": "JEDNODUCHÝ"
+  },
+  {
+    "id": "home.typewriter.not_blockchain",
+    "other": "NENÍ TO BLOCKCHAIN"
+  },
+  {
+    "id": "home.typewriter.universal_identity",
+    "other": "UNIVERZÁLNÍ IDENTITA"
+  },
+  {
+    "id": "home.typewriter.not_company",
+    "other": "NENÍ TO FIRMA"
+  },
+  {
+    "id": "home.typewriter.free_expression",
+    "other": "SVOBODNÝ PROJEV"
+  },
+  {
+    "id": "home.typewriter.free_association",
+    "other": "SVOBODNÉ SDRUŽOVÁNÍ"
+  },
+  {
+    "id": "home.typewriter.for_friends",
+    "other": "PRO PŘÁTELE I NEPŘÁTELE"
+  },
+  {
+    "id": "home.typewriter.for_everyone",
+    "other": "PRO VŠECHNY"
+  },
+  {
+    "id": "home.typewriter.for_broadcasting",
+    "other": "PRO VYSÍLÁNÍ"
+  },
+  {
+    "id": "home.typewriter.for_groups",
+    "other": "PRO UZAVŘENÉ SKUPINY"
+  },
+  {
+    "id": "home.typewriter.for_opinions",
+    "other": "PRO VŠECHNY NÁZORY"
+  },
+  {
+    "id": "home.typewriter.like_internet",
+    "other": "JAKO SAMOTNÝ INTERNET"
+  },
+  {
+    "id": "home.typewriter.flexible",
+    "other": "FLEXIBILNÍ"
+  },
+  {
+    "id": "home.typewriter.scalable",
+    "other": "ŠKÁLOVATELNÝ"
+  },
+  {
+    "id": "home.typewriter.public_square",
+    "other": "SKUTEČNÉ VEŘEJNÉ NÁMĚSTÍ"
+  },
+  {
+    "id": "home.typewriter.client_relay",
+    "other": "KLIENT-RELAY"
+  },
+  {
+    "id": "home.typewriter.not_p2p",
+    "other": "NENÍ TO P2P"
+  },
+  {
+    "id": "home.typewriter.old_web",
+    "other": "STARÝ WEB"
+  },
+  {
+    "id": "home.typewriter.decentralized",
+    "other": "SKUTEČNĚ DECENTRALIZOVANÝ"
+  },
+  {
+    "id": "home.typewriter.communities",
+    "other": "KOMUNITY UDĚLANÉ SPRÁVNĚ"
+  },
+  {
+    "id": "home.typewriter.open_alternative",
+    "other": "OTEVŘENÁ ALTERNATIVA"
+  },
+  {
+    "id": "home.typewriter.wikis",
+    "other": "SOCIÁLNÍ WIKI"
+  },
+  {
+    "id": "home.typewriter.git",
+    "other": "SPOLUPRÁCE NA GITU"
+  },
+  {
+    "id": "home.typewriter.articles",
+    "other": "DLOUHÉ ČLÁNKY"
+  },
+  {
+    "id": "home.typewriter.microblogging",
+    "other": "MIKROBLOGOVÁNÍ"
+  },
+  {
+    "id": "home.typewriter.livestreaming",
+    "other": "ŽIVÉ VYSÍLÁNÍ"
+  },
+  {
+    "id": "home.typewriter.forums",
+    "other": "FÓRA"
+  },
+  {
+    "id": "home.typewriter.annotating",
+    "other": "ANOTOVÁNÍ WEBU"
+  },
+  {
+    "id": "home.typewriter.commenting",
+    "other": "KOMENTOVÁNÍ ČEHOKOLI"
+  },
+  {
+    "id": "home.typewriter.social_web",
+    "other": "SOCIÁLNÍ WEB ZÍTŘKA"
+  },
+  {
+    "id": "home.typewriter.for_you",
+    "other": "PRO VÁS, DNES"
+  },
+  {
+    "id": "home.typewriter.dots",
+    "other": "......."
+  },
+  {
+    "id": "about.title",
+    "other": "O aplikaci njump"
+  },
+  {
+    "id": "about.what.title",
+    "other": "Co je njump?"
+  },
+  {
+    "id": "about.what.description",
+    "other": "<i>njump</i> je HTTP <a class=\"underline\" href=\"https://github.com/nostr-protocol/nostr\">Nostr</a> brána, která vám umožňuje procházet profily, poznámky a relays. Je to snadný způsob, jak si prohlédnout zdroj a otevřít jej ve vašem preferovaném klientovi. Typické použití <i>njump</i> je sdílení obsahu mimo svět Nostr, kde schéma <code>nostr:</code> ještě není rozpoznáno."
+  },
+  {
+    "id": "about.usage.title",
+    "other": "Jak používat"
+  },
+  {
+    "id": "about.usage.description",
+    "other": "<i>njump</i> v současné době běží na adrese {{.Domain}}, můžete se k ní dostat připojením entity Nostr <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/19.md\">NIP-19</a> (<code>npub</code>, <code>nevent</code>, <code>naddr</code>, atd.) za doménu: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;entita-nip-19&gt;</span>."
+  },
+  {
+    "id": "about.examples.title",
+    "other": "Příklady"
+  },
+  {
+    "id": "about.examples.description",
+    "other": "Například, zde je <a class=\"underline\" href=\"/npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9\">profil uživatele</a>, <a class=\"underline\" href=\"/nevent1qqstnl4ddmhc0kzqpj7p543pvq9nvppc4laewc9x5ppucz7aagsa4dspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqgewaehxw309ac8junpd45kgtnxd9shg6npvchxxmmdqyv8wumn8ghj7un9d3shjtnndehhyapwwdhkx6tpdsds02v2\">poznámka</a> a <a class=\"underline\" href=\"/naddr1qqxnzd3cxqmrzv3exgmr2wfeqy08wumn8ghj7mn0wd68yttsw43zuam9d3kx7unyv4ezumn9wshszyrhwden5te0dehhxarj9ekk7mf0qy88wumn8ghj7mn0wvhxcmmv9uq3zamnwvaz7tmwdaehgu3wwa5kuef0qy2hwumn8ghj7un9d3shjtnwdaehgu3wvfnj7q3qdergggklka99wwrs92yz8wdjs952h2ux2ha2ed598ngwu9w7a6fsxpqqqp65wy2vhhv\">dlouhý blogový příspěvek</a>."
+  },
+  {
+    "id": "about.try.title",
+    "other": "Vyzkoušejte to teď! Přejděte na nějaký obsah Nostr:"
+  },
+  {
+    "id": "about.try.placeholder",
+    "other": "vložte npub / nprofile / nevent / ..."
+  },
+  {
+    "id": "about.try.button",
+    "other": "Zobrazit"
+  },
+  {
+    "id": "about.try.or",
+    "other": "nebo si vyberte"
+  },
+  {
+    "id": "about.try.random",
+    "other": "nějaký náhodný obsah"
+  },
+  {
+    "id": "about.reasons.intro",
+    "other": "Existuje několik důvodů, proč si vybrat njump při sdílení obsahu Nostr mimo Nostr:"
+  },
+  {
+    "id": "about.reasons.clean.title",
+    "other": "Čisté, rychlé a spolehlivé"
+  },
+  {
+    "id": "about.reasons.clean.desc",
+    "other": "Stránky njump jsou extrémně lehké a rychle se načítají. Není zde žádný javascript na straně klienta. Jsou minimalistické se správnou pozorností k typografii, zaměřují se na obsah bez zbytečných detailů. Navíc jsou cachované, takže při sdílení stránky můžete očekávat, že se načte rychle a bez problémů. Je to perfektní nástroj pro získávání nových uživatelů!"
+  },
+  {
+    "id": "about.reasons.previews.title",
+    "other": "Krásné náhledy"
+  },
+  {
+    "id": "about.reasons.previews.desc",
+    "other": "njump vykresluje vše na straně serveru, takže je schopen generovat užitečné, bohaté náhledy, které fungují na Telegramu, Discordu, Twitteru a dalších místech."
+  },
+  {
+    "id": "about.reasons.browser.title",
+    "other": "Skvělý zážitek v prohlížeči"
+  },
+  {
+    "id": "about.reasons.browser.desc",
+    "other": "Při otevření URL přímo v prohlížeči návštěvníci najdou odkazovaný obsah jako obrázky, videa a odkazy na události Nostr zobrazené jednoduchým, ale efektivním způsobem. Zobrazuje rodičovskou poznámku, což návštěvníkovi umožňuje ji sledovat. Má dokonce vlastní CSS pro tisk nebo export do PDF."
+  },
+  {
+    "id": "about.reasons.cooperative.title",
+    "other": "Kooperativní (jump-out)"
+  },
+  {
+    "id": "about.reasons.cooperative.desc",
+    "other": "njump nemá zájem o získávání uživatelů. Naopak, zve je, aby \"přeskočili\" na jakýkoli zdroj Nostr výběrem ze seznamu webových klientů nebo, s prefixem nostr:, pro nativní klienty. Dokonce si pamatuje nejpoužívanějšího klienta pro každého návštěvníka a umisťuje ho na první místo pro rychlý a snadný přístup."
+  },
+  {
+    "id": "about.reasons.nip89.title",
+    "other": "Podpora NIP-89"
+  },
+  {
+    "id": "about.reasons.nip89.desc",
+    "other": "podpora již brzy!"
+  },
+  {
+    "id": "about.reasons.seo.title",
+    "other": "Přátelské pro vyhledávače (jump-in)"
+  },
+  {
+    "id": "about.reasons.seo.desc",
+    "other": "Stránky njump jsou statické, takže je vyhledávače mohou indexovat. To znamená, že njump může pomoci ostatním objevit skvělý obsah na Nostr, připojit se a přidat se k nám! njump je jediný zdroj Nostr s tímto explicitním cílem. Pokud vám záleží na tom, aby bylo možné dobrou poznámku najít online, použijte k jejímu sdílení njump. To pomůže Nostr vzkvétat a zpřístupnit ho všem."
+  },
+  {
+    "id": "about.nip05.title",
+    "other": "Sdílejte profily NIP-05"
+  },
+  {
+    "id": "about.nip05_description",
+    "other": "Sdílejte svůj vlastní profil s pěkným permalinkem inspirovaným <a class=\"underline\" href=\"https://github.com/nostr-protocol/nips/blob/master/05.md\">NIP-05</a>: <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/&lt;nip-05&gt;</span>, například: <a class=\"underline\" href=\"/nvk.org\">https://{{.Domain}}/nvk.org</a> nebo <a class=\"underline\" href=\"/mike@mikedilger.com\">https://{{.Domain}}/mike@mikedilger.com</a>."
+  },
+  {
+    "id": "about.profile.shows",
+    "other": "Profil zobrazuje vaše základní informace o metadatech, přiřazené \"outbox\" relays a vaše nejnovější poznámky."
+  },
+  {
+    "id": "about.social.title",
+    "other": "Sdílejte na Twitteru, Telegramu a dalších"
+  },
+  {
+    "id": "about.social.desc",
+    "other": "Rychle a bez námahy sdílejte poznámky Nostr na Twitteru, Telegramu a mnoha dalších \"sociálních platformách\": stačí vložit odkaz a njump vykreslí text poznámky pomocí náhledového obrázku jako plátna, aby se maximalizoval zážitek ze sdílení a užitečnost. Na Telegramu máme také Instant View pro přístup k dlouhému obsahu přímo v aplikaci!"
+  },
+  {
+    "id": "about.relay_views",
+    "other": "Zobrazení relay"
+  },
+  {
+    "id": "about.relay_description",
+    "other": "Zobrazte nejnovější obsah zveřejněný na relay pomocí <span class=\"rounded bg-lavender px-1 dark:bg-garnet\">{{.Domain}}/r/&lt;relay-host&gt;</span>, například: <a class=\"underline\" href=\"/r/nostr.wine\">https://{{.Domain}}/r/nostr.wine</a>"
+  },
+  {
+    "id": "about.relay_info",
+    "other": "Jsou k dispozici některé základní informace o relay (<a href=\"https://github.com/nostr-protocol/nips/blob/master/11.md\">NIP-11</a>). Doufáme, že provozovatelé začnou tyto popisky dělat osobnějšími a informativnějšími, aby uživatelé měli způsob, jak posoudit, zda se k relay připojit, či nikoli."
+  },
+  {
+    "id": "about.website_widgets",
+    "other": "Widgety pro webové stránky"
+  },
+  {
+    "id": "about.widgets_full_description",
+    "other": "Můžete vkládat poznámky, dlouhé obsahy a profily na webovou stránku pomocí jednoduchého skriptu:<br/><span class=\"rounded bg-lavender px-1 dark:bg-garnet\">&lt;script src=\"https://{{.Domain}}/embed/&lt;entita-nip-19&gt;\" /&gt;</span>"
+  },
+  {
+    "id": "about.inspector_tool",
+    "other": "Nástroj pro inspekci"
+  },
+  {
+    "id": "about.inspector_description",
+    "other": "Víte, všichni jsme programátoři, včetně našich maminek, takže na každé stránce <i>njump</i> můžete přepnout přepínač \"Zobrazit více detailů\" a prozkoumat celý JSON události. Bez instalace dalších nástrojů (jako je <a class=\"underline\" href=\"https://github.com/fiatjaf/nak\">nak</a>) je to pravděpodobně nejrychlejší způsob, jak se k těmto informacím dostat."
+  }
+]

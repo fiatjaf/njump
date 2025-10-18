@@ -15,6 +15,7 @@ import (
 	"fiatjaf.com/nostr/nip05"
 	"fiatjaf.com/nostr/nip19"
 	"github.com/a-h/templ"
+	"github.com/fiatjaf/njump/i18n"
 	"github.com/pelletier/go-toml"
 )
 
@@ -87,6 +88,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// from here onwards we know we're rendering an event
+	//
+
+	// from here onwards we know we're rendering an event
 	sys.TrackEventAccessTime(data.event.ID)
 
 	// gather page style from user-agent
@@ -137,30 +141,19 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		subscript = fmt.Sprintf("%s: %s", kindNames[data.event.Kind], tValue)
+		subscript = i18n.Translate(ctx, "event.subscript.kind_tag", map[string]any{"kind": kindNames[data.event.Kind], "value": tValue})
 	} else if kindName, ok := kindNames[data.event.Kind]; ok {
 		subscript = kindName
 	} else {
-		subscript = fmt.Sprintf("kind:%d event", data.event.Kind)
+		subscript = i18n.Translate(ctx, "event.subscript.kind_event", map[string]any{"num": data.event.Kind})
 	}
 	if data.event.subject != "" {
 		subscript += " (" + data.event.subject + ")"
 	}
 
-	subscript += " by " + data.event.author.ShortName()
-	{
-		suffix := ""
-		if data.event.isReply() {
-			suffix = " (reply)"
-			if data.event.Kind == 1111 {
-				if data.event.Tags.FindWithValue("k", "web") != nil {
-					if urlt := data.event.Tags.Find("i"); urlt != nil {
-						suffix = " on " + urlt[1]
-					}
-				}
-			}
-		}
-		subscript += suffix
+	subscript += " " + i18n.Translate(ctx, "event.subscript.by_author", map[string]any{"author": data.event.author.ShortName()})
+	if data.event.isReply() {
+		subscript += " " + i18n.Translate(ctx, "event.subscript.reply", nil)
 	}
 
 	seenOnRelays := ""
@@ -169,7 +162,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		for i, r := range data.event.relays {
 			relays[i] = trimProtocolAndEndingSlash(r)
 		}
-		seenOnRelays = fmt.Sprintf("seen on %s", strings.Join(relays, ", "))
+		seenOnRelays = i18n.Translate(ctx, "event.seen_on", map[string]any{"relays": strings.Join(relays, ", ")})
 	}
 
 	textImageURL := ""
@@ -178,7 +171,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		textImageURL = fmt.Sprintf("https://%s/image/%s?%s", host, code, r.URL.RawQuery)
 		if data.event.subject != "" {
 			if seenOnRelays != "" {
-				description = fmt.Sprintf("%s -- %s", data.event.subject, seenOnRelays)
+				description = i18n.Translate(ctx, "event.description.subject_relays", map[string]any{"subject": data.event.subject, "relays": seenOnRelays})
 			} else {
 				description = data.event.subject
 			}
@@ -377,6 +370,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				Oembed:      oembed,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 			Clients:          generateClientList(int(data.event.Kind), data.nevent),
 			Details:          detailsData,
@@ -407,6 +402,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				Oembed:      oembed,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 			Clients:          generateClientList(int(data.event.Kind), data.naddr),
 			Details:          detailsData,
@@ -426,6 +423,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 
 			Details: detailsData,
@@ -448,6 +447,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 
 			Details:   detailsData,
@@ -472,6 +473,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 
 			Details:          detailsData,
@@ -526,6 +529,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 			TimeZone:      getUTCOffset(location),
 			StartAtDate:   startAtDate,
@@ -543,9 +548,9 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	case WikiEvent:
 		opengraph.Superscript = "wiki entry: " + data.Kind30818Metadata.Title
 		if strings.ToLower(data.Kind30818Metadata.Title) == data.Kind30818Metadata.Handle {
-			opengraph.Subscript = "by " + data.event.author.ShortName()
+			opengraph.Subscript = i18n.Translate(ctx, "event.subscript.by_author", map[string]any{"author": data.event.author.ShortName()})
 		} else {
-			opengraph.Subscript = fmt.Sprintf("\"%s\" by %s", data.Kind30818Metadata.Handle, data.event.author.ShortName())
+			opengraph.Subscript = i18n.Translate(ctx, "og.subscript.quote_by", map[string]any{"title": data.Kind30818Metadata.Handle, "author": data.event.author.ShortName()})
 		}
 
 		params := WikiPageParams{
@@ -555,6 +560,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 			PublishedAt: data.Kind30818Metadata.PublishedAt.Format("02 Jan 2006"),
 			WikiEvent:   data.Kind30818Metadata,
@@ -580,11 +587,11 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	case Highlight:
 		if data.Kind9802Metadata.Comment == "" {
 			opengraph.Superscript = data.Kind9802Metadata.SourceURL
-			opengraph.Subscript = "Highlight by " + data.event.author.ShortName()
+			opengraph.Subscript = i18n.Translate(ctx, "og.subscript.highlight_by", map[string]any{"author": data.event.author.ShortName()})
 			opengraph.Text = "> " + opengraph.Text
 		} else {
 			opengraph.Superscript = data.Kind9802Metadata.SourceURL
-			opengraph.Subscript = "Annotation by " + data.event.author.ShortName()
+			opengraph.Subscript = i18n.Translate(ctx, "og.subscript.annotation_by", map[string]any{"author": data.event.author.ShortName()})
 			opengraph.Text = data.Kind9802Metadata.Comment + "\n> " + opengraph.Text
 		}
 
@@ -595,6 +602,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 			Content:        template.HTML(data.content),
 			HighlightEvent: data.Kind9802Metadata,
@@ -613,6 +622,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 				IsProfile:   false,
 				NaddrNaked:  data.naddrNaked,
 				NeventNaked: data.neventNaked,
+				Lang:        i18n.LanguageFromContext(ctx),
+				Domain:      s.Domain,
 			},
 
 			Details:         detailsData,
@@ -624,7 +635,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 
 	default:
 		log.Error().Int("templateId", int(data.templateId)).Msg("no way to render")
-		http.Error(w, "tried to render an unsupported template", 500)
+		http.Error(w, i18n.Translate(ctx, "error.unsupported_template", nil), 500)
 		return
 	}
 

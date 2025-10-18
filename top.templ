@@ -2,11 +2,46 @@ package main
 
 templ topTemplate(params HeadParams) {
 	<header class="print:block flex flex-row text-base sm:p-4 sm:pb-6">
-		<div class="hidden sm:block sm:w-[14%]"></div>
+       <!-- Language Dropdown (Desktop) -->
+       <div class="hidden sm:block sm:w-[14%] sm:pr-4 relative">
+           <div class="relative">
+               <button 
+                   id="language-dropdown-button"
+                   class="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 hover:text-strongpink cursor-pointer"
+                   _="on click toggle .hidden on #language-dropdown-menu"
+               >
+                   <!-- Show current language -->
+                   for _, opt := range availableLanguages() {
+                       if params.Lang == opt.Code {
+                           <span>{opt.Label}</span>
+                       }
+                   }
+                   <!-- Dropdown arrow -->
+                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                   </svg>
+               </button>
+               
+               <!-- Dropdown menu -->
+               <div 
+                   id="language-dropdown-menu"
+                   class="hidden absolute top-full left-0 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-600 rounded-md shadow-lg z-50 min-w-[120px]"
+               >
+                   for _, opt := range availableLanguages() {
+                       <a 
+                           href={ ctx.Value("requestPath").(string) + "?lang=" + opt.Code } 
+                           class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700 {if params.Lang == opt.Code}bg-gray-100 dark:bg-neutral-700 font-semibold{/if}"
+                       >
+                           {opt.Label}
+                       </a>
+                   }
+               </div>
+           </div>
+       </div>
 		<!-- Mobile header -->
 		<div class="fixed top-0 left-0 right-0 flex justify-between items-center w-full sm:hidden z-40 p-4 bg-white dark:bg-neutral-900">
 			<!-- Join Nostr Button (Mobile - Left) -->
-			<a href="https://nstart.me" class="px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">Join Nostr</a>
+                        <a href="https://start.nostr.net" class="px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "nav.join") }</a>
 			<!-- Hamburger menu utton -->
 			<button
 				id="mobile-menu-button"
@@ -27,17 +62,17 @@ templ topTemplate(params HeadParams) {
 				<a href="/relays-archive/">Nostr relays archive</a>
 			</div>
 			if !(params.IsHome) {
-				<a href="/" class="mr-4">Why <span class="text-strongpink">Nostr</span>?</a>
+                                <a href="/" class="mr-4">{ t(ctx, "nav.why") }</a>
 			}
 			if params.IsHome {
-				<a href="#getstarted" class="mr-4 hover:text-strongpink">Get started</a>
-				<a href="#resources" class="mr-4 hover:text-strongpink">Apps & Resources</a>
-				<a href="#development" class="mr-4 hover:text-strongpink">Join the development</a>
+                                <a href="#getstarted" class="mr-4 hover:text-strongpink">{ t(ctx, "nav.get_started") }</a>
+                                <a href="#resources" class="mr-4 hover:text-strongpink">{ t(ctx, "nav.resources") }</a>
+                                <a href="#development" class="mr-4 hover:text-strongpink">{ t(ctx, "nav.development") }</a>
 			}
 			if !(params.IsAbout) {
-				<a href="/about" class="mr-4">What is <span class="text-strongpink">Njump</span>?</a>
+                                <a href="/about" class="mr-4">{ t(ctx, "nav.about") }</a>
 			}
-			<a href="https://nstart.me" class="leading-9 mr-4 px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">Join Nostr</a>
+                        <a href="https://start.nostr.net" class="leading-9 mr-4 px-2 py-1 bg-strongpink text-neutral-50 rounded-md text-nowrap">{ t(ctx, "nav.join") }</a>
 		</div>
 		<div class="hidden sm:block sm:w-[14%]">
 			<div
@@ -88,18 +123,54 @@ templ topTemplate(params HeadParams) {
 		<!-- Menu items -->
 		<div class="flex flex-col items-center space-y-8 text-xl text-neutral-800 dark:text-neutral-50 font-semibold">
 			if params.IsHome {
-				<a href="#" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Why Nostr?</a>
-				<a href="#getstarted" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Get started</a>
-				<a href="#resources" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Apps & Resources</a>
-				<a href="#development" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">Join the development</a>
+                                <a href="#" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "nav.why") }</a>
+                                <a href="#getstarted" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "nav.get_started") }</a>
+                                <a href="#resources" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "nav.resources") }</a>
+                                <a href="#development" class="text-2xl hover:text-strongpink" _="on click toggle .hidden on #mobile-menu-overlay">{ t(ctx, "nav.development") }</a>
 			}
 			if (!(params.IsAbout) && !(params.IsHome)) || params.IsAbout {
-				<a href="/" class="text-2xl hover:text-strongpink">Why Nostr?</a>
+                                <a href="/" class="text-2xl hover:text-strongpink">{ t(ctx, "nav.why") }</a>
 			}
 			if !(params.IsAbout) {
-				<a href="/about" class="text-2xl hover:text-strongpink">What is Njump?</a>
+                                <a href="/about" class="text-2xl hover:text-strongpink">{ t(ctx, "nav.about") }</a>
 			}
-			<a href="https://nstart.me" class="text-2xl text-strongpink">Join Nostr</a>
+                        <a href="https://start.nostr.net" class="text-2xl text-strongpink">{ t(ctx, "nav.join") }</a>
+		</div>
+		<!-- Language selector (Mobile) -->
+		<div class="absolute bottom-24 flex justify-center items-center text-xl text-neutral-800 dark:text-neutral-200 font-semibold">
+			<div class="relative">
+				<button 
+					id="mobile-language-dropdown-button"
+					class="flex items-center gap-2 px-4 py-2 bg-neutral-200 dark:bg-neutral-700 rounded-md hover:text-strongpink"
+					_="on click toggle .hidden on #mobile-language-dropdown-menu"
+				>
+					<!-- Show current language -->
+					for _, opt := range availableLanguages() {
+						if params.Lang == opt.Code {
+							<span>{opt.Label}</span>
+						}
+					}
+					<!-- Dropdown arrow -->
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</button>
+				
+				<!-- Dropdown menu -->
+				<div 
+					id="mobile-language-dropdown-menu"
+					class="hidden absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-600 rounded-md shadow-lg z-50 min-w-[140px]"
+				>
+					for _, opt := range availableLanguages() {
+						<a 
+							href={ ctx.Value("requestPath").(string) + "?lang=" + opt.Code } 
+							class="block px-4 py-3 text-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700 {if params.Lang == opt.Code}bg-gray-100 dark:bg-neutral-700 font-semibold{/if}"
+						>
+							{opt.Label}
+						</a>
+					}
+				</div>
+			</div>
 		</div>
 		<!-- Theme toggle -->
 		<div class="absolute bottom-16 flex justify-center items-center space-x-3 text-neutral-400 dark:text-neutral-500 font-semibold">
@@ -139,5 +210,14 @@ templ topTemplate(params HeadParams) {
 	<script type="text/hyperscript">
   on beforeprint from window tell <html /> remove .theme--dark add .theme--default
   on afterprint from window tell <html /> add .theme--dark remove .theme--default
+  
+  -- Close language dropdowns when clicking outside
+  on click from document 
+    if the target does not match '#language-dropdown-button, #language-dropdown-button *, #language-dropdown-menu, #language-dropdown-menu *'
+      add .hidden to #language-dropdown-menu
+    end
+    if the target does not match '#mobile-language-dropdown-button, #mobile-language-dropdown-button *, #mobile-language-dropdown-menu, #mobile-language-dropdown-menu *'
+      add .hidden to #mobile-language-dropdown-menu
+    end
 	</script>
 }

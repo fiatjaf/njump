@@ -51,7 +51,7 @@ templ highlightInnerBlock(params HighlightPageParams) {
 			<footer class="flex text-base mt-4">
 				<span>—</span>
 				if params.HighlightEvent.Author.Name != "" {
-					<a href={ "https://njump.me/" + templ.SafeURL(params.HighlightEvent.Author.Npub()) } class="flex ml-2">
+					<a href={ templ.SafeURL("https://" + params.Domain + "/" + params.HighlightEvent.Author.Npub()) } class="flex ml-2">
 						<img src={ params.HighlightEvent.Author.Picture } class="h-6 m-0 mr-1 rounded-full"/>
 						{ params.HighlightEvent.Author.Name }
 					</a>,

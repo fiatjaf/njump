@@ -5,17 +5,21 @@ type HomePageParams struct {
 
 	Npubs     []string
 	LastNotes []string
-}
+	Domain    string
+}	
 
 templ homepageTemplate(params HomePageParams) {
-	<!DOCTYPE html>
-	<html class="theme--default font-light">
-		<meta charset="UTF-8"/>
+        <!DOCTYPE html>
+        <html class="theme--default font-light" lang={ params.HeadParams.Lang } if isRTL(ctx) { dir="rtl" }>
+                <meta charset="UTF-8"/>
 		<head>
-			<title>njump - Jump on Board on Nostr, Start Now!</title>
+                       <title>{ t(ctx, "site.title") }</title>
 			<meta name="description" content=""/>
 			@headCommonTemplate(params.HeadParams)
 			<script src="https://cdn.jsdelivr.net/npm/typewriter-effect@2.21.0/dist/core.min.js"></script>
+			<script defer data-domain={ params.Domain } src="https://analytics.cypherpunk.cloud/js/script.outbound-links.js"></script>
+			<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+
 		</head>
 		<body
 			class="mb-16 bg-white text-gray-600 dark:bg-neutral-900 dark:text-neutral-50 print:text-black"
@@ -27,59 +31,14 @@ templ homepageTemplate(params HomePageParams) {
 				<div
 					class="w-full px-4 max-w-screen-2xl sm:flex sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 print:w-full"
 				>
-					<!-- Title nimation -->
+					<!-- Title animation -->
 					<div class="mb-10 px-4 sm:mb-20 mt-8 border-l-[0.8rem] border-strongpink pl-4">
 						<h1 class="font-bold">
 							<div class="text-[3.5em] sm:text-[4em] leading-[1em] text-neutral-300">
 								NOSTR <span class="text-neutral-400">IS</span>
 							</div>
-							<div class="text-[2.5em] h-20 sm:h-auto sm:text-[5em] leading-[1em] break-words" id="tw">A PROTOCOL</div>
-							<script>
-var tw = document.getElementById('tw')
-new Typewriter(tw, {
-  strings: [
-    '',
-    'A PROTOCOL',
-    'NOT A CRYPTOCURRENCY',
-    'SIMPLE',
-    'NOT A BLOCKCHAIN',
-    'A UNIVERSAL IDENTITY',
-    'NOT A COMPANY',
-    'FREE EXPRESSION',
-    'FREE ASSOCIATION',
-    'FOR FRIENDS AND ENEMIES',
-    'FOR EVERYONE',
-    'FOR BROADCASTING',
-    'FOR CLOSED GROUPS',
-    'FOR ALL OPINIONS',
-    'LIKE THE INTERNET ITSELF',
-    'FLEXIBLE',
-    'SCALABLE',
-    'A REAL PUBLIC SQUARE',
-    'CLIENT-RELAY',
-    'NOT P2P',
-    'THE OLD WEB',
-    'TRULY DECENTRALIZED',
-    'COMMUNITIES DONE RIGHT',
-    'THE OPEN ALTERNATIVE',
-    'SOCIAL WIKIS',
-    'GIT COLLABORATION',
-    'LONG-FORM ARTICLES',
-    'MICROBLOGGING',
-    'LIVESTREAMING',
-    'FORUMS',
-    'ANNOTATING THE WEB',
-    'COMMENTING ON ANYTHING',
-    'THE SOCIAL WEB OF TOMORROW',
-    'FOR YOU, TODAY',
-    '.......'
-  ],
-  autoStart: true,
-  loop: true,
-  cursorClassName: 'typewriter-cursor',
-  pauseFor: 3000
-})
-</script>
+							<div class="text-[2.5em] h-20 sm:h-auto sm:text-[5em] leading-[1em] break-words" id="tw">{ t(ctx, "home.hero.protocol") }</div>
+							@templ.Raw(typewriterScript(ctx))
 						</h1>
 					</div>
 				</div>
@@ -89,25 +48,25 @@ new Typewriter(tw, {
 					<!-- Intro -->
 					<div class="sm:flex sm:gap-20">
 						<div>
-							<h2 class="text-4xl text-strongpink">Internet for Today</h2>
-							<div class="text-xl mt-2">The internet began with a vision for an open exchange of ideas and information, one intended to uphold the values of free speech, expression, and association for all. Over time, that vision has been reduced to the view of what could bring about profits for large corporations. Today, the web is nothing but a handful of massive servers owned by a few companies but used by billions of people.</div>
-							<div class="mt-2 text-neutral-500 dark:text-neutral-300">We’ve placed ownership of our identities into the hands of 3rd parties. We’ve granted rights to our creations to those seeking to profit from them. We’ve handed over our interests to algorithms written to maximize our attention. In doing so, we have given a disproportionate amount of power to these companies, governments, and other controlling entities to decide what we see, read, and say. It’s time to break free from their barriers and create the internet that enables anyone, anywhere to create, to speak and to socialize as they wish, as was intended.</div>
+							<h2 class="text-4xl text-strongpink">{ t(ctx, "home.intro.today.title") }</h2>
+							<div class="text-xl mt-2">{ t(ctx, "home.intro.today.subtitle") }</div>
+							<div class="mt-2 text-neutral-500 dark:text-neutral-300">{ t(ctx, "home.intro.today.description") }</div>
 						</div>
 						<div class="mt-8 sm:mt-0">
-							<h2 class="text-4xl text-strongpink">Nostr for Tomorrow</h2>
-							<div class="text-xl mt-2">Nostr, an acronym for  “Notes and Other Stuff Transmitted by Relays”, revolutionizes social networking and online communication by eliminating dependency on centralized servers. It employs a client-relay model, where users run clients, and anyone can operate relays. Information (and its storage) are distributed throughout a network of individuals, passionate volunteers, businesses, and nonprofits alike.</div>
-							<div class="mt-2 text-neutral-500 dark:text-neutral-300">The Nostr protocol ensures tamperproof communication through cryptographic keys and signatures. By enabling users to establish pathways for publishing notes to relays and incentivizing the deployment and maintenance of unique, independent relays by operators, Nostr addresses many shortcomings of the current web. From interoperable applications to unique and ubiquitous identities, Nostr opens doors to creative, collabrotive innovation like the world has never seen before.</div>
+							<h2 class="text-4xl text-strongpink">{ t(ctx, "home.intro.tomorrow.title") }</h2>
+							<div class="text-xl mt-2">{ t(ctx, "home.intro.tomorrow.subtitle") }</div>
+							<div class="mt-2 text-neutral-500 dark:text-neutral-300">{ t(ctx, "home.intro.tomorrow.description") }</div>
 						</div>
 					</div>
 					<!-- Main section -->
 					<div id="why-nostr" class="mt-16 mb-12 sm:text-center">
-						<div class="text-4xl text-strongpink">Empowering Freedom with Nostr</div>
-						<div class="text-2xl">A secure, user-centric protocol and social network</div>
+						<div class="text-4xl text-strongpink">{ t(ctx, "home.main.title") }</div>
+						<div class="text-2xl">{ t(ctx, "home.main.subtitle") }</div>
 					</div>
 					<div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
-							<h3 class="text-2xl mb-4 text-strongpink">You Own Your Identity</h3>
-							<p>Nostr uses a public key system, where your identity is tied to a unique cryptographic key. You have full control over your identity without relying on any central authority. Nostr's protocol eliminates the need for Know Your Customer (KYC) processes. No email, ID, thumbprint, or eyeball scans required! Your privacy is entirely yours to keep.</p>
+							<h3 class="text-2xl mb-4 text-strongpink">{ t(ctx, "home.features.identity.title") }</h3>
+							<p>{ t(ctx, "home.features.identity.desc") }</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home01.png"/>
@@ -116,8 +75,8 @@ new Typewriter(tw, {
 					</div>
 					<div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
-							<h3 class="text-2xl mb-4 text-strongpink">Affirm Your Data with Signatures</h3>
-							<p>In Nostr, users sign their posts with their cryptographic keys. Most clients handle this process automatically. These cryptographic signatures ensure the authenticity of your data. You can prove what you did (and did not) create. User-selected relays store and send this data. These relays communicate directly with other users, with no stops between. Each client then validates these signatures, ensuring the data's integrity.</p>
+							<h3 class="text-2xl mb-4 text-strongpink">{ t(ctx, "home.features.data.title") }</h3>
+							<p>{ t(ctx, "home.features.data.desc") }</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home02.png"/>
@@ -126,8 +85,8 @@ new Typewriter(tw, {
 					</div>
 					<div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
-							<h3 class="text-2xl mb-4 text-strongpink">Connect Directly with Your Audience</h3>
-							<p>In Nostr, you maintain your audience and feed. Whichever client you use, your contact list will be there. It is published to the relays of your choice, as is that of other users. Everyone chooses their preferred publication relays, and clients connect to those to find new posts. Additionally, relays can act as filters against spam or harassment, and as discovery vehicles for good content, aggregators of curated content, or providers of custom feeds.</p>
+							<h3 class="text-2xl mb-4 text-strongpink">{ t(ctx, "home.features.audience.title") }</h3>
+							<p>{ t(ctx, "home.features.audience.desc") }</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home03.png"/>
@@ -136,8 +95,8 @@ new Typewriter(tw, {
 					</div>
 					<div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
-							<h3 class="text-2xl mb-4 text-strongpink">You are Free to Speak</h3>
-							<p>You can publish anything you want as long as relays are willing to accept it. Relays can operate under any policies their operators may choose, including bans, content removal, and community guidelines. They may choose to host only certain users or specific types of content. If no relay will accept what you have to say, you can easily run your own. When you begin publishing to different relays, clients should be capable of finding you there, based on attached relay hints. Your contacts will then continue to receive your updates.</p>
+							<h3 class="text-2xl mb-4 text-strongpink">{ t(ctx, "home.features.speech.title") }</h3>
+							<p>{ t(ctx, "home.features.speech.desc") }</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home04.png"/>
@@ -146,8 +105,8 @@ new Typewriter(tw, {
 					</div>
 					<div class="sm:flex sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
-							<h3 class="text-2xl mb-4 text-strongpink">You are Free to Remain Anonymous</h3>
-							<p>Nostr supports user anonymity. Users can choose to be anonymous or use pseudonyms without compromising their ability to participate. Nostr is also available on TOR to prevent tracking. As a protocol, Nostr does not have the capacity to provide user data to any entity, governmental or otherwise. This helps to safeguard  all users' freedom of expression from prohibitions or restrictions. Any individual relay or client could be subject to these requests, but available data would be limited to that of a user's public key. If that user has taken appropriate steps to protect their identity, there would be little information to share.</p>
+							<h3 class="text-2xl mb-4 text-strongpink">{ t(ctx, "home.features.anonymous.title") }</h3>
+							<p>{ t(ctx, "home.features.anonymous.desc") }</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home05.png"/>
@@ -156,8 +115,8 @@ new Typewriter(tw, {
 					</div>
 					<div class="sm:flex sm:flex-row-reverse sm:gap-20 mt-8 sm:mt-20 items-center">
 						<div class="sm:w-1/2">
-							<h3 class="text-2xl mb-4 text-strongpink">You are Free to Develop</h3>
-							<p>Nostr encourages development and customization. Anyone is free to develop on the protocol, contributing to the growth and evolution of the network. All Nostr clients, relays, tools, and apps that are built can benefit from every past and future development. Builders have the freedom to establish payment methods for their applications and features, providing a potential source of revenue like never before.</p>
+							<h3 class="text-2xl mb-4 text-strongpink">{ t(ctx, "home.features.develop.title") }</h3>
+							<p>{ t(ctx, "home.features.develop.desc") }</p>
 						</div>
 						<div class="sm:w-1/2 mt-4 sm:mt-0">
 							<img class="dark:hidden" src="/njump/static/home/home06.png"/>
@@ -166,33 +125,33 @@ new Typewriter(tw, {
 					</div>
 				</div>
 				<!-- Join Nostr -->
-				<dov class="mt-14 text-2xl font-semibold self-center">What Are You Waiting For?</dov>
-				<a href="https://nstart.me" class="mt-4 self-center px-8 py-1 text-2xl bg-strongpink text-neutral-50 rounded-md ">Join Nostr</a>
+				<div class="mt-14 text-2xl font-semibold self-center">{ t(ctx, "home.cta.question") }</div>
+				<a href="https://start.nostr.net" class="mt-4 self-center px-8 py-1 text-2xl bg-strongpink text-neutral-50 rounded-md ">{ t(ctx, "home.cta.button") }</a>
 				<!-- Get started -->
 				<div id="getstarted" class="relative px-4 sm:px-0 sm:flex mt-20 py-14 sm:py-28 justify-center bg-gradient-to-br from-slate-600 to-slate-900 text-neutral-50 dark:from-slate-700 dark:to-slate-950">
 					<div class="w-full max-w-screen-2xl sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12">
-						<h2 class="text-4xl mb-10 sm:mb-12">Get Started with Nostr</h2>
+						<h2 class="text-4xl mb-10 sm:mb-12">{ t(ctx, "home.getting_started.title") }</h2>
 						<div class="sm:flex sm:flex-row sm:flex-wrap sm:w-4/5">
 							<div class="sm:basis-1/2 sm:pr-20 mb-8">
-								<h3 class="text-2xl mb-1 text-strongpink">Create an Account</h3>
-								<p>With Nostr, there is no central provider who owns your account. In fact, your account is powered by cryptography, and you could create one (or more!) yourself by hand, with no limitation. The easiest way, though, is to use our <a href="https://nstart.me" class="underline">new online wizard</a> to generate your new account in seconds. Then, you can use it across all of Nostr!</p>
+								<h3 class="text-2xl mb-1 text-strongpink">{ t(ctx, "home.getting_started.create.title") }</h3>
+								<p>@templ.Raw(t(ctx, "home.getting_started.create.desc"))</p>
 							</div>
 							<div class="sm:basis-1/2 sm:pr-20 mb-8">
-								<h3 class="text-2xl mb-1 text-strongpink">Secure your Key</h3>
-								<p>An account is a key-pair. The private key (nsec) is your digital identity. If it is lost or exposed, there is no means to recover access or change credentials. You need to keep your private key safe and secure. Use a password manager, make a backup on paper, and use it ONLY in trusted apps. Never enter your nsec in a website. Install a <a href="#signers" class="underline">signer extension</a> to use your key safely on the web.</p>
+								<h3 class="text-2xl mb-1 text-strongpink">{ t(ctx, "home.getting_started.secure.title") }</h3>
+								<p>@templ.Raw(t(ctx, "home.getting_started.secure.desc"))</p>
 							</div>
 							<div class="sm:basis-1/2 sm:pr-20 mb-8 sm:mb-0">
-								<h3 class="text-2xl mb-1 text-strongpink">Pick an App</h3>
-								<p>Nostr developers have already built several applications for a wide variety of uses. The simplest way to start using Nostr is to download a <a href="#social" class="underline">social client</a> and get involved. Learn with and through the community by engaging in conversation. Need help? Use the #asknostr hashtag!</p>
+								<h3 class="text-2xl mb-1 text-strongpink">{ t(ctx, "home.getting_started.app.title") }</h3>
+								<p>@templ.Raw(t(ctx, "home.getting_started.app.desc"))</p>
 							</div>
 							<div class="sm:basis-1/2 sm:pr-20 mb-8 sm:mb-0">
-								<h3 class="text-2xl mb-1 text-strongpink">Explore Nostr</h3>
-								<p>After you are familiar with the basic concepts, you can set up your preferred key management tool to explore other social clients and <a href="#readwrite" class="underline">Nostr applications</a>. You already have your digital identity and it works everywhere. Simply login in using your Nostr signer app, signing extension, or nsec. If using your private key, be sure the app is from a trusted source!</p>
+								<h3 class="text-2xl mb-1 text-strongpink">{ t(ctx, "home.getting_started.explore.title") }</h3>
+								<p>@templ.Raw(t(ctx, "home.getting_started.explore.desc"))</p>
 							</div>
 						</div>
 					</div>
 					<div class="justify-end -mr-4 sm:-mr-0 sm:absolute flex sm:flex-row-reverse sm:top-1/2 sm:right-0 sm:transform sm:-translate-y-1/2 sm:w-1/4">
-						<img src="/njump/static/home/client.png" class="sm:h-full sm:object-cover" alt="Nostr Client"/>
+						<img src="/njump/static/home/client.png" class="sm:h-full sm:object-cover" alt={ t(ctx, "home.getting_started.client_alt") }/>
 					</div>
 				</div>
 				<!-- Resources -->
@@ -201,12 +160,12 @@ new Typewriter(tw, {
 					class="w-full px-4 py-14 sm:py-28 max-w-screen-2xl sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12 sm:gap-10 print:w-full"
 				>
 					<div id="why-nostr" class="mb-10 sm:mb-12 text-center">
-						<div class="text-4xl text-strongpink">Nostr Resources</div>
-						<div class="text-2xl">Discover some of what you can do with Nostr</div>
+						<div class="text-4xl text-strongpink">{ t(ctx, "home.resources.title") }</div>
+						<div class="text-2xl">{ t(ctx, "home.resources.subtitle") }</div>
 					</div>
 					<div class="grid grid-cols-1 sm:grid-cols-3 gap-y-8 sm:gap-x-8 sm:gap-y-12">
 						<div class="sm:basis-1/3 text-center bg-neutral-200/50 dark:bg-neutral-700/60 rounded-md p-8">
-							<h2 id="social" class="text-2xl text-strongpink">Multimedia</h2>
+							<h2 id="social" class="text-2xl text-strongpink">{ t(ctx, "home.resources.multimedia") }</h2>
 							<a href="https://nostur.com" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Nostur</h3>
 							</a>
@@ -218,19 +177,19 @@ new Typewriter(tw, {
 							</a>
 						</div>
 						<div class="sm:basis-1/3 text-center bg-neutral-200/50 dark:bg-neutral-700/60 rounded-md p-8">
-							<h2 class="text-2xl text-strongpink">Live Stream</h2>
+							<h2 class="text-2xl text-strongpink">{ t(ctx, "home.resources.streaming") }</h2>
+							<a href="https://honey.hivetalk.org/" class="group bg-slate-200" target="_blank">
+								<h3 class="text-xl mt-4 group-hover:text-strongpink">HiveTalk</h3>
+							</a>
 							<a href="https://zap.stream" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Zap.stream</h3>
-							</a>
-							<a href="https://shosho.live/" class="group bg-slate-200" target="_blank">
-								<h3 class="text-xl mt-4 group-hover:text-strongpink">shosho</h3>
 							</a>
 							<a href="https://nostrnests.com" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Nests</h3>
 							</a>
 						</div>
 						<div class="sm:basis-1/3 text-center bg-neutral-200/50 dark:bg-neutral-700/60 rounded-md p-8">
-							<h2 id="readwrite" class="text-2xl text-strongpink">Read & Write</h2>
+							<h2 id="readwrite" class="text-2xl text-strongpink">{ t(ctx, "home.resources.publishing") }</h2>
 							<a href="https://habla.news/" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Habla</h3>
 							</a>
@@ -242,7 +201,7 @@ new Typewriter(tw, {
 							</a>
 						</div>
 						<div class="sm:basis-1/3 text-center bg-neutral-200/50 dark:bg-neutral-700/60 rounded-md p-8">
-							<h2 class="text-2xl text-strongpink">Communities</h2>
+							<h2 class="text-2xl text-strongpink">{ t(ctx, "home.resources.communities") }</h2>
 							<a href="https://chachi.chat/" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Chachi</h3>
 							</a>
@@ -254,7 +213,7 @@ new Typewriter(tw, {
 							</a>
 						</div>
 						<div class="sm:basis-1/3 text-center bg-neutral-200/50 dark:bg-neutral-700/60 rounded-md p-8">
-							<h2 class="text-2xl text-strongpink">Other Stuff</h2>
+							<h2 class="text-2xl text-strongpink">{ t(ctx, "home.resources.tools") }</h2>
 							<a href="https://zapstore.dev" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">Zapstore</h3>
 							</a>
@@ -266,7 +225,7 @@ new Typewriter(tw, {
 							</a>
 						</div>
 						<div class="sm:basis-1/3 text-center bg-neutral-200/50 dark:bg-neutral-700/60 rounded-md p-8">
-							<h2 id="signers" class="text-2xl text-strongpink">Key Security</h2>
+							<h2 id="signers" class="text-2xl text-strongpink">{ t(ctx, "home.resources.security") }</h2>
 							<a href="https://chromewebstore.google.com/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp" class="group bg-slate-200" target="_blank">
 								<h3 class="text-xl mt-4 group-hover:text-strongpink">nos2x</h3>
 							</a>
@@ -278,27 +237,27 @@ new Typewriter(tw, {
 							</a>
 						</div>
 					</div>
-					<div class="mt-12 text-center">This is only a quick selection of the 100+ applications that have already been built on Nostr, <a class="underline" href="https://www.nostrapps.com" target="_blank">discover them all</a>!</div>
+					<div class="mt-12 text-center">@templ.Raw(t(ctx, "home.resources.disclaimer"))</div>
 				</div>
 				<!-- Develop on Nostr -->
 				<div id="development" class="relative px-4 sm:px-0 sm:flex mb-20 py-14 sm:py-28 justify-center bg-gradient-to-br from-sky-100 to-purple-100 dark:from-slate-700 dark:to-slate-950 dark:text-neutral-50">
 					<div class="w-full max-w-screen-2xl sm:w-11/12 sm:px-4 md:w-10/12 lg:w-9/12">
-						<h2 class="text-4xl mb-10 sm:mb-12 sm:text-center">Develop on Nostr</h2>
+						<h2 class="text-4xl mb-10 sm:mb-12 sm:text-center">{ t(ctx, "home.development.title") }</h2>
 						<div class="sm:flex sm:gap-20">
 							<div class="basis-1/3">
-								<h2 class="text-2xl text-strongpink">Where It All Started</h2>
-								<div class="mt-2">The Nostr "manifesto" was published in 2019. Slowly but surely, a community gathered around the idea and expanded upon it, turning it into a fast, flexible and reliable protocol that is used by many real people everyday.</div>
-								<a class="block underline mt-2 text-right" href="https://fiatjaf.com/nostr.html" target="_blank">Read more >></a>
+								<h2 class="text-2xl text-strongpink">{ t(ctx, "home.development.origins.title") }</h2>
+								<div class="mt-2">{ t(ctx, "home.development.origins.desc") }</div>
+								<a class="block underline mt-2 text-right" href="https://fiatjaf.com/nostr.html" target="_blank">{ t(ctx, "home.development.read_more") }</a>
 							</div>
 							<div class="basis-1/3">
-								<h2 class="text-2xl text-strongpink">Discover the NIPs</h2>
-								<div class="mt-2">NIPs stand for "Nostr Implementation Possibilities". They exist as a guide to what may be implemented by Nostr compatible relay and client software. Study these to develop your new Nostr application with optimal network compatibility.</div>
-								<a class="block underline mt-2 text-right" href="https://github.com/nostr-protocol/nips" target="_blank">Read more >></a>
+								<h2 class="text-2xl text-strongpink">{ t(ctx, "home.development.nips.title") }</h2>
+								<div class="mt-2">{ t(ctx, "home.development.nips.desc") }</div>
+								<a class="block underline mt-2 text-right" href="https://github.com/nostr-protocol/nips" target="_blank">{ t(ctx, "home.development.read_more") }</a>
 							</div>
 							<div class="basis-1/3">
-								<h2 class="text-2xl text-strongpink">The Design Guide</h2>
-								<div class="mt-2">Nostrdesign.org is the official resource for discovering how to best develop the interface of your Nostr application. Explore new paradigms, optimise your UI, and find tips on how to enhance user experience all in one place.</div>
-								<a class="block underline mt-2 text-right" href="https://nostrdesign.org/" target="_blank">Read more >></a>
+								<h2 class="text-2xl text-strongpink">{ t(ctx, "home.development.design.title") }</h2>
+								<div class="mt-2">{ t(ctx, "home.development.design.desc") }</div>
+								<a class="block underline mt-2 text-right" href="https://nostrdesign.org/" target="_blank">{ t(ctx, "home.development.read_more") }</a>
 							</div>
 						</div>
 					</div>
