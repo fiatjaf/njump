@@ -37,6 +37,13 @@ templ headCommonTemplate(params HeadParams) {
 	<script type="text/hyperscript">
 on load get [navigator.userAgent.includes('Safari'), navigator.userAgent.includes('Chrome')] then if it[0] is true and it[1] is false add .safari to <body /> end
 	</script>
+	<!-- Plausible Analytics -->
+	<script defer
+		data-domain={ params.Domain }
+		src="https://analytics.cypherpunk.cloud/js/script.outbound-links.js"
+		integrity="sha384-KlF/y31q+UHHoN2GTcV7btNi3MrlPO+7eXp8cO6MVQTC0N8xR7gK4mKqPnseCpK8"
+		crossorigin="anonymous"></script>
+	<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 }
 
 templ authorHeaderTemplate(metadata sdk.ProfileMetadata) {

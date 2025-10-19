@@ -75,3 +75,4 @@ type BaseEventPageParams struct {
 	Style Style
 	Alt   string
 }
+
