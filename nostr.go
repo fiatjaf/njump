@@ -176,6 +176,17 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	return event, err
 }
 
+func getMetadata(ctx context.Context, event nostr.Event) sdk.ProfileMetadata {
+	if event.Kind == 0 {
+		spm, _ := sdk.ParseMetadata(event)
+		return spm
+	} else {
+		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+		defer cancel()
+		return sys.FetchProfileMetadata(ctx, event.PubKey)
+	}
+}
+
 func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []EnhancedEvent, justFetched bool) {
 	limit := 100
 

@@ -45,14 +45,7 @@ func NewEnhancedEvent(
 		}
 	}
 
-	if event.Kind == 0 {
-		spm, _ := sdk.ParseMetadata(event)
-		ee.author = spm
-	} else {
-		ctx, cancel := context.WithTimeout(ctx, time.Second*3)
-		defer cancel()
-		ee.author = sys.FetchProfileMetadata(ctx, event.PubKey)
-	}
+	ee.author = getMetadata(ctx, event)
 
 	return ee
 }

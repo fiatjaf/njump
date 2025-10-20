@@ -56,20 +56,22 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		code = strings.TrimSuffix(code, ext)
 	}
 
-	data, err := grabData(ctx, code)
+	event, _, err := sys.FetchSpecificEventFromInput(ctx, code, sdk.FetchSpecificEventParameters{})
 	if err != nil {
 		w.Header().Set("Cache-Control", "public, immutable, s-maxage=604800, max-age=604800")
 		log.Warn().Err(err).Str("code", code).Msg("event error on render_image")
 		http.Error(w, "error fetching event: "+err.Error(), http.StatusNotFound)
 		return
-	} else if data.event.Event == nil {
+	} else if event == nil {
 		w.Header().Set("Cache-Control", "public, s-maxage=1200, max-age=1200")
 		log.Warn().Err(err).Str("code", code).Msg("event not found on render_image")
 		http.Error(w, "no event found", http.StatusNotFound)
 		return
 	}
 
-	content := data.event.Content
+	author := getMetadata(ctx, *event)
+
+	content := event.Content
 	content = strings.Replace(content, "\r\n", "\n", -1)
 	content = multiNewlineRe.ReplaceAllString(content, "\n\n")
 	content = strings.Replace(content, "\t", "  ", -1)
@@ -87,7 +89,7 @@ func renderImage(w http.ResponseWriter, r *http.Request) {
 		string(INVISIBLE_SPACE),
 	)
 
-	img, err := drawImage(ctx, paragraphs, getPreviewStyle(r), data.event.author, data.event.CreatedAt.Time())
+	img, err := drawImage(ctx, paragraphs, getPreviewStyle(r), author, event.CreatedAt.Time())
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to draw paragraphs as image")
 		http.Error(w, "error writing image!", 500)
