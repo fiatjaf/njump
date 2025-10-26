@@ -43,7 +43,7 @@ var (
 	lumilumiRelay  = ClientReference{ID: "lumilumi", Name: "Lumilumi", Base: "https://lumilumi.app/relay/wss%3A%2F%2F{code}", Platform: platformWeb}
 	chachiRelay    = ClientReference{ID: "chachi", Name: "chachi", Base: "https://chachi.chat/relay/wss%3A%2F%2F{code}/feed"}
 	yakihonne      = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/{code}", Platform: platformWeb}
-	yakihonneRelay = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/r/?r=wss://{code}", Platform: platformWeb}
+	yakihonneRelay = ClientReference{ID: "yakihonne", Name: "YakiHonne", Base: "https://yakihonne.com/r/content?r=wss://{code}", Platform: platformWeb}
 
 	zapStream = ClientReference{ID: "zap.stream", Name: "zap.stream", Base: "https://zap.stream/{code}", Platform: platformWeb}
 	shosho    = ClientReference{ID: "shosho", Name: "Shosho", Base: "https://shosho.live/live/{code}", Platform: platformWeb}
