@@ -33,6 +33,7 @@ var (
 	redirectToCloudflareCacheHitMaybe = errors.New("RTCCHM")
 	requestCanceledAbortEverything    = errors.New("RCAE")
 	serverUnderHeavyLoad              = errors.New("SUHL")
+	queueAcquireTimeout               = 6 * time.Second
 )
 
 var inCourse = xsync.NewMapOfWithHasher[uint64, struct{}](
@@ -62,7 +63,7 @@ func await(ctx context.Context) {
 		}()
 	} else {
 		// otherwise someone else has already locked it, so we wait
-		acquireTimeout, cancel := context.WithTimeoutCause(ctx, time.Second*6, queueAcquireTimeoutError)
+		acquireTimeout, cancel := context.WithTimeoutCause(ctx, queueAcquireTimeout, queueAcquireTimeoutError)
 		defer cancel()
 
 		err := sem.Acquire(acquireTimeout, 1)
@@ -102,11 +103,6 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		)
 
 		defer func() {
-			// Always clear the bookkeeping entry even when the handler exits through a panic path.
-			inCourse.Delete(reqNum)
-		}()
-
-		defer func() {
 			err := recover()
 
 			if err == nil {
@@ -142,6 +138,9 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}()
 
+		defer func() {
+			inCourse.Delete(reqNum)
+		}()
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }
