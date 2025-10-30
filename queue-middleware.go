@@ -102,6 +102,11 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		)
 
 		defer func() {
+			// Always clear the bookkeeping entry even when the handler exits through a panic path.
+			inCourse.Delete(reqNum)
+		}()
+
+		defer func() {
 			err := recover()
 
 			if err == nil {
@@ -138,8 +143,5 @@ func queueMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}()
 
 		next.ServeHTTP(w, r.WithContext(ctx))
-
-		// cleanup this
-		inCourse.Delete(reqNum)
 	}
 }
