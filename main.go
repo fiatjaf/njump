@@ -30,6 +30,7 @@ type Settings struct {
 	RelayConfigPath     string `envconfig:"RELAY_CONFIG_PATH"`
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
+	TrustProxyHeaders   bool   `envconfig:"TRUST_PROXY_HEADERS"`
 
 	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
 	trustedPubKeys    []nostr.PubKey
@@ -64,6 +65,9 @@ func main() {
 	if len(s.trustedPubKeys) == 0 {
 		s.trustedPubKeys = defaultTrustedPubKeys
 	}
+
+	configureProxyTrust(s.TrustProxyHeaders)
+	log.Info().Bool("trust_proxy_headers", s.TrustProxyHeaders).Msg("configured proxy trust mode")
 
 	// eventstore and nostr system
 	defer initSystem()()
