@@ -249,6 +249,11 @@ func replaceNostrURLsWithHTMLTags(matcher *regexp.Regexp, input string) string {
 func shortenNostrURLs(input string) string {
 	// match and replace npup1, nprofile1, note1, nevent1, etc
 	return nostrEveryMatcher.ReplaceAllStringFunc(input, func(match string) string {
+		if len(match) < 60 {
+			// broken, return as is
+			return match
+		}
+
 		nip19 := match[len("nostr:"):]
 		firstChars := nip19[:8]
 		lastChars := nip19[len(nip19)-4:]
@@ -286,6 +291,12 @@ func replaceUserReferencesWithNames(ctx context.Context, input []string, prefix 
 			nostrNpubNprofileMatcher.ReplaceAllStringFunc(line, func(match string) string {
 				submatch := nostrNpubNprofileMatcher.FindStringSubmatch(match)
 				nip19code := submatch[1]
+
+				if len(nip19code) < 60 {
+					// broken, return as is
+					return match
+				}
+
 				name, ok := getNameFromNip19(ctx, nip19code)
 				if ok {
 					return prefix + strings.ReplaceAll(name, " ", string(THIN_SPACE))
