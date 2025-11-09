@@ -90,7 +90,7 @@ func generateClientList(
 			native,
 			damus, nostur, freeFromIOS, yakihonneIOS, nos, primalIOS,
 			voyage, yakihonneAndroid, primalAndroid, freeFromAndroid, yanaAndroid,
-			nosotros, jumble, coracle, lumilumi, nostter, nostrudel, phoenix, primalWeb, iris,
+			nosotros, jumble, coracle, lumilumi, nostter, nostrudel, phoenix, primalWeb, iris, yakihonne,
 		}
 	case 20:
 		clients = []ClientReference{
@@ -105,7 +105,7 @@ func generateClientList(
 			native,
 			nos, damus, nostur, primalIOS, freeFromIOS, yakihonneIOS,
 			voyage, yakihonneAndroid, yanaAndroid, freeFromAndroid, primalAndroid,
-			nosotros, jumble, nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris,
+			nosotros, jumble, nosta, coracle, phoenix, nostter, nostrudel, primalWeb, iris, yakihonne,
 			defaultWeb,
 		}
 	case 30023, 30024:
