@@ -1,0 +1,304 @@
+{
+  "clients": {
+    "native": {
+      "name": "Your default app",
+      "base": "nostr:{code}",
+      "platform": "native"
+    },
+    "default-web": {
+      "name": "Your default web app",
+      "base": "web+nostr:{code}",
+      "platform": "web"
+    },
+    "nosotros": {
+      "name": "Nosotros",
+      "base": "https://dev.nosotros.app/{code}",
+      "platform": "web"
+    },
+    "nosotros-relay": {
+      "name": "Nosotros",
+      "base": "https://dev.nosotros.app/feed?kind=%5B1%2C6%5D&limit=100&type=relayfeed&relay=wss%3A%2F%2F{code}",
+      "platform": "web"
+    },
+    "nosta": {
+      "name": "Nosta",
+      "base": "https://nosta.me/{code}",
+      "platform": "web"
+    },
+    "phoenix": {
+      "name": "Phoenix",
+      "base": "https://phoenix.social/{code}",
+      "platform": "web"
+    },
+    "olas-web": {
+      "name": "Olas",
+      "base": "https://olas.app/e/{code}",
+      "platform": "web"
+    },
+    "primal-web": {
+      "name": "Primal",
+      "base": "https://primal.net/e/{code}",
+      "platform": "web"
+    },
+    "nostrudel": {
+      "name": "Nostrudel",
+      "base": "https://nostrudel.ninja/l/{code}",
+      "platform": "web"
+    },
+    "nostter": {
+      "name": "Nostter",
+      "base": "https://nostter.app/{code}",
+      "platform": "web"
+    },
+    "nostter-relay": {
+      "name": "Nostter",
+      "base": "https://nostter.app/relays/wss%3A%2F%2F{code}",
+      "platform": "web"
+    },
+    "jumble": {
+      "name": "Jumble",
+      "base": "https://jumble.social/{code}",
+      "platform": "web"
+    },
+    "jumble-relay": {
+      "name": "Jumble",
+      "base": "https://jumble.social/?r=wss://{code}",
+      "platform": "web"
+    },
+    "coracle": {
+      "name": "Coracle",
+      "base": "https://coracle.social/{code}",
+      "platform": "web"
+    },
+    "coracle-relay": {
+      "name": "Coracle",
+      "base": "https://coracle.social/relays/wss%3A%2F%2F{code}",
+      "platform": "web"
+    },
+    "relay-tools": {
+      "name": "relay.tools",
+      "base": "https://relay.tools/posts/?relay=wss://{code}",
+      "platform": "web"
+    },
+    "iris": {
+      "name": "Iris",
+      "base": "https://iris.to/{code}",
+      "platform": "web"
+    },
+    "lumilumi": {
+      "name": "Lumilumi",
+      "base": "https://lumilumi.app/{code}",
+      "platform": "web"
+    },
+    "lumilumi-relay": {
+      "name": "Lumilumi",
+      "base": "https://lumilumi.app/relay/wss%3A%2F%2F{code}",
+      "platform": "web"
+    },
+    "chachi-relay": {
+      "name": "chachi",
+      "base": "https://chachi.chat/relay/wss%3A%2F%2F{code}/feed",
+      "platform": "web"
+    },
+    "yakihonne": {
+      "name": "YakiHonne",
+      "base": "https://yakihonne.com/{code}",
+      "platform": "web"
+    },
+    "yakihonne-relay": {
+      "name": "YakiHonne",
+      "base": "https://yakihonne.com/r/content?r=wss://{code}",
+      "platform": "web"
+    },
+    "zap-stream": {
+      "name": "zap.stream",
+      "base": "https://zap.stream/{code}",
+      "platform": "web"
+    },
+    "shosho": {
+      "name": "Shosho",
+      "base": "https://shosho.live/live/{code}",
+      "platform": "web"
+    },
+    "habla": {
+      "name": "Habla",
+      "base": "https://habla.news/a/{code}",
+      "platform": "web"
+    },
+    "pareto": {
+      "name": "Pareto",
+      "base": "https://pareto.space/a/{code}",
+      "platform": "web"
+    },
+    "voyage": {
+      "name": "Voyage",
+      "base": "intent:{code}#Intent;scheme=nostr;package=com.dluvian.voyage;end`;",
+      "platform": "android"
+    },
+    "olas-android": {
+      "name": "Olas",
+      "base": "intent:{code}#Intent;scheme=nostr;package=com.pablof7z.snapstr;end`;",
+      "platform": "android"
+    },
+    "primal-android": {
+      "name": "Primal",
+      "base": "intent:{code}#Intent;scheme=nostr;package=net.primal.android;end`;",
+      "platform": "android"
+    },
+    "yakihonne-android": {
+      "name": "Yakihonne",
+      "base": "intent:{code}#Intent;scheme=nostr;package=com.yakihonne.yakihonne;end`;",
+      "platform": "android"
+    },
+    "freefrom-android": {
+      "name": "FreeFrom",
+      "base": "intent:{code}#Intent;scheme=nostr;package=com.freefrom;end`;",
+      "platform": "android"
+    },
+    "yana-android": {
+      "name": "Yana",
+      "base": "intent:{code}#Intent;scheme=nostr;package=yana.nostr;end`;",
+      "platform": "android"
+    },
+    "amethyst": {
+      "name": "Amethyst",
+      "base": "intent:{code}#Intent;scheme=nostr;package=com.vitorpamplona.amethyst;end`;",
+      "platform": "android"
+    },
+    "nos": {
+      "name": "Nos",
+      "base": "nos:{code}",
+      "platform": "ios"
+    },
+    "damus": {
+      "name": "Damus",
+      "base": "damus:{code}",
+      "platform": "ios"
+    },
+    "nostur": {
+      "name": "Nostur",
+      "base": "nostur:{code}",
+      "platform": "ios"
+    },
+    "olas-ios": {
+      "name": "Olas",
+      "base": "olas:{code}",
+      "platform": "ios"
+    },
+    "primal-ios": {
+      "name": "Primal",
+      "base": "primal:{code}",
+      "platform": "ios"
+    },
+    "freefrom-ios": {
+      "name": "FreeFrom",
+      "base": "freefrom:{code}",
+      "platform": "ios"
+    },
+    "yakihonne-ios": {
+      "name": "Yakihonne",
+      "base": "yakihhone:{code}",
+      "platform": "ios"
+    },
+    "wikistr": {
+      "name": "Wikistr",
+      "base": "https://Wikistr.com/{handle}*{authorPubkey}",
+      "platform": "web"
+    },
+    "wikifreedia": {
+      "name": "Wikifreedia",
+      "base": "https://wikifreedia.xyz/{handle}/{npub}",
+      "platform": "web"
+    }
+  },
+  "kindMappings": {
+    "-1": [
+      "native",
+      "nostur", "yakihonne-android", "yakihonne-ios",
+      "jumble-relay", "yakihonne-relay", "chachi-relay", "nosotros-relay", "lumilumi-relay", "coracle-relay", "relay-tools", "nostter-relay",
+      "default-web"
+    ],
+    "1": [
+      "native",
+      "damus", "nostur", "freefrom-ios", "yakihonne-ios", "nos", "primal-ios",
+      "voyage", "yakihonne-android", "primal-android", "freefrom-android", "yana-android",
+      "nosotros", "jumble", "coracle", "lumilumi", "nostter", "nostrudel", "phoenix", "primal-web", "iris", "yakihonne"
+    ],
+    "6": [
+      "native",
+      "damus", "nostur", "freefrom-ios", "yakihonne-ios", "nos", "primal-ios",
+      "voyage", "yakihonne-android", "primal-android", "freefrom-android", "yana-android",
+      "nosotros", "jumble", "coracle", "lumilumi", "nostter", "nostrudel", "phoenix", "primal-web", "iris", "yakihonne"
+    ],
+    "20": [
+      "native",
+      "olas-android",
+      "olas-ios",
+      "nosotros", "lumilumi", "jumble", "olas-web", "coracle",
+      "default-web"
+    ],
+    "0": [
+      "native",
+      "nos", "damus", "nostur", "primal-ios", "freefrom-ios", "yakihonne-ios",
+      "voyage", "yakihonne-android", "yana-android", "freefrom-android", "primal-android",
+      "nosotros", "jumble", "nosta", "coracle", "phoenix", "nostter", "nostrudel", "primal-web", "iris", "yakihonne",
+      "default-web"
+    ],
+    "30023": [
+      "native",
+      "damus", "nos", "nostur", "yakihonne-ios",
+      "yakihonne-android", "amethyst",
+      "yakihonne", "lumilumi", "coracle", "pareto", "habla",
+      "default-web"
+    ],
+    "30024": [
+      "native",
+      "damus", "nos", "nostur", "yakihonne-ios",
+      "yakihonne-android", "amethyst",
+      "yakihonne", "lumilumi", "coracle", "pareto", "habla",
+      "default-web"
+    ],
+    "1063": [
+      "native",
+      "amethyst",
+      "lumilumi", "phoenix", "coracle", "nostrudel",
+      "default-web"
+    ],
+    "9802": [
+      "coracle",
+      "nostrudel",
+      "lumilumi",
+      "jumble",
+      "default-web"
+    ],
+    "30311": [
+      "native",
+      "amethyst",
+      "nostur",
+      "zap-stream", "shosho", "lumilumi", "nostrudel",
+      "default-web"
+    ],
+    "30818": [
+      "native",
+      "wikistr", "wikifreedia",
+      "default-web"
+    ],
+    "31922": [
+      "native",
+      "coracle",
+      "default-web"
+    ],
+    "31923": [
+      "native",
+      "coracle",
+      "default-web"
+    ],
+    "default": [
+      "native",
+      "yakihonne-ios", "nos", "damus", "nostur", "primal-ios", "freefrom-ios",
+      "voyage", "amethyst", "yakihonne-android", "yana-android", "freefrom-android", "voyage",
+      "yakihonne", "coracle", "phoenix", "nostter", "nostrudel", "primal-web", "iris",
+      "default-web"
+    ]
+  }
+}
