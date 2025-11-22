@@ -125,10 +125,10 @@ func renderProfile(ctx context.Context, r *http.Request, w http.ResponseWriter, 
 			LastNotes:                  lastNotes,
 			Clients: generateClientList(0, nprofile,
 				func(c ClientReference, s string) string {
-					if c == nostrudel {
+					if c.ID == "nostrudel" {
 						s = strings.Replace(s, "/n/", "/u/", 1)
 					}
-					if c == primalWeb {
+					if c.ID == "primal-web" {
 						s = strings.Replace(
 							strings.Replace(s, "/e/", "/p/", 1),
 							nprofile, profile.Npub(), 1)

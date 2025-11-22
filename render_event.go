@@ -454,7 +454,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			LiveEvent: *data.kind30311Metadata,
 			Clients: generateClientList(int(data.event.Kind), data.naddr,
 				func(c ClientReference, s string) string {
-					if c == nostrudel {
+					if c.ID == "nostrudel" {
 						s = strings.Replace(s, "/u/", "/streams/", 1)
 					}
 					return s
