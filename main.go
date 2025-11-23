@@ -28,7 +28,7 @@ type Settings struct {
 	HintsMemoryDumpPath string `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
 	TailwindDebug       bool   `envconfig:"TAILWIND_DEBUG"`
 	RelayConfigPath     string `envconfig:"RELAY_CONFIG_PATH"`
-	ClientsConfigPath   string `envconfig:"CLIENTS_CONFIG_PATH"`
+	ClientsConfigPath   string `envconfig:"CLIENTS_CONFIG_PATH" default:"clients.json"`
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
 
