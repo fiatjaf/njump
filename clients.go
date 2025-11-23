@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"os"
 	"strconv"
 	"strings"
 
@@ -31,16 +29,6 @@ type clientData struct {
 var (
 	clientConfig ClientsConfig
 )
-
-func loadClientsConfig(configPath string) {
-	data, err := os.ReadFile(configPath)
-	if err != nil {
-		panic("Failed to read clients.json: " + err.Error())
-	}
-	if err := json.Unmarshal(data, &clientConfig); err != nil {
-		panic("Failed to parse clients.json: " + err.Error())
-	}
-}
 
 func generateClientList(
 	kind int,

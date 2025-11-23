@@ -28,7 +28,7 @@ type Settings struct {
 	HintsMemoryDumpPath string `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
 	TailwindDebug       bool   `envconfig:"TAILWIND_DEBUG"`
 	RelayConfigPath     string `envconfig:"RELAY_CONFIG_PATH"`
-	ClientsConfigPath   string `envconfig:"CLIENTS_CONFIG_PATH" default:"clients.json"`
+	ClientsConfigPath   string `envconfig:"CLIENTS_CONFIG_PATH"`
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
 
@@ -38,6 +38,9 @@ type Settings struct {
 
 //go:embed static/*
 var static embed.FS
+
+//go:embed clients.json
+var embeddedClientsJSON string
 
 var (
 	s   Settings
@@ -89,7 +92,20 @@ func main() {
 	}
 
 	if s.ClientsConfigPath != "" {
-		loadClientsConfig(s.ClientsConfigPath)
+		data, err := os.ReadFile(s.ClientsConfigPath)
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to load clients config")
+			return
+		}
+		if err := json.Unmarshal(data, &clientConfig); err != nil {
+			log.Fatal().Err(err).Msg("failed to parse clients config")
+			return
+		}
+	} else {
+		if err := json.Unmarshal([]byte(embeddedClientsJSON), &clientConfig); err != nil {
+			log.Fatal().Err(err).Msg("failed to parse embedded clients config")
+			return
+		}
 	}
 
 	// if we're in tailwind debug mode, initialize the runtime tailwind stuff
