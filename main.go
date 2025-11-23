@@ -28,6 +28,7 @@ type Settings struct {
 	HintsMemoryDumpPath string `envconfig:"HINTS_SAVE_PATH" default:"/tmp/njump-hints.json"`
 	TailwindDebug       bool   `envconfig:"TAILWIND_DEBUG"`
 	RelayConfigPath     string `envconfig:"RELAY_CONFIG_PATH"`
+	ClientsConfigPath   string `envconfig:"CLIENTS_CONFIG_PATH" default:"clients.json"`
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
 
@@ -85,6 +86,10 @@ func main() {
 		if len(relayConfig.Profiles) > 0 {
 			sys.MetadataRelays.URLs = relayConfig.Profiles
 		}
+	}
+
+	if s.ClientsConfigPath != "" {
+		loadClientsConfig(s.ClientsConfigPath)
 	}
 
 	// if we're in tailwind debug mode, initialize the runtime tailwind stuff

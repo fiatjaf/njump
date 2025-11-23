@@ -17,7 +17,7 @@ type ClientReference struct {
 	Platform string
 }
 
-type clientsConfig struct {
+type ClientsConfig struct {
 	Clients      map[string]clientData `json:"clients"`
 	KindMappings map[string][]string   `json:"kindMappings"`
 }
@@ -29,15 +29,15 @@ type clientData struct {
 }
 
 var (
-	config clientsConfig
+	clientConfig ClientsConfig
 )
 
-func init() {
-	data, err := os.ReadFile("clients.json")
+func loadClientsConfig(configPath string) {
+	data, err := os.ReadFile(configPath)
 	if err != nil {
 		panic("Failed to read clients.json: " + err.Error())
 	}
-	if err := json.Unmarshal(data, &config); err != nil {
+	if err := json.Unmarshal(data, &clientConfig); err != nil {
 		panic("Failed to parse clients.json: " + err.Error())
 	}
 }
@@ -48,14 +48,14 @@ func generateClientList(
 	withModifiers ...func(ClientReference, string) string,
 ) []ClientReference {
 	kindKey := strconv.Itoa(kind)
-	clientIDs, ok := config.KindMappings[kindKey]
+	clientIDs, ok := clientConfig.KindMappings[kindKey]
 	if !ok {
-		clientIDs = config.KindMappings["default"]
+		clientIDs = clientConfig.KindMappings["default"]
 	}
 
 	clients := make([]ClientReference, 0, len(clientIDs))
 	for _, id := range clientIDs {
-		clientInfo, ok := config.Clients[id]
+		clientInfo, ok := clientConfig.Clients[id]
 		if !ok {
 			continue
 		}
