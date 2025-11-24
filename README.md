@@ -58,8 +58,11 @@ DISK_CACHE_PATH="/tmp/njump-internal"
 EVENT_STORE_PATH="/tmp/njump-db"
 TAILWIND_DEBUG=
 RELAY_CONFIG_PATH=
+CLIENTS_CONFIG_PATH=
 TRUSTED_PUBKEYS=npub1...,npub1...
 ```
+
+---
 
 `RELAY_CONFIG_PATH` is path to json file to update relay configuration. You can set relay list like below:
 
@@ -75,3 +78,7 @@ TRUSTED_PUBKEYS=npub1...,npub1...
 See `relay-config.json.sample` for example.
 
 For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump`.
+
+---
+
+`CLIENTS_CONFIG_PATH` is path to json file to update the clients list. You can find the default at [/clients.json](./clients.json)
