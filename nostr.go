@@ -86,6 +86,23 @@ func initSystem() func() {
 	sys.KVStore = kv
 	sys.Store = db
 
+	sys.RelayListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
+	sys.FollowListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
+	sys.MetadataRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
+	sys.FallbackRelays = sdk.NewRelayStream(
+		"wss://offchain.pub",
+		"wss://relay.damus.io",
+		"wss://relay.primal.net",
+		"wss://nostr.mom",
+		"wss://nos.lol",
+		"wss://relay.mostr.pub",
+		"wss://nostr.wine",
+	)
+	sys.JustIDRelays = sdk.NewRelayStream(
+		"wss://cache2.primal.net/v1",
+		"wss://relay.nostr.band",
+	)
+
 	return db.Close
 }
 
