@@ -31,6 +31,7 @@ type Settings struct {
 	ClientsConfigPath   string `envconfig:"CLIENTS_CONFIG_PATH"`
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
+	TrustProxyHeaders   bool   `envconfig:"TRUST_PROXY_HEADERS"`
 
 	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
 	trustedPubKeys    []nostr.PubKey
@@ -68,6 +69,9 @@ func main() {
 	if len(s.trustedPubKeys) == 0 {
 		s.trustedPubKeys = defaultTrustedPubKeys
 	}
+
+	configureProxyTrust(s.TrustProxyHeaders)
+	log.Info().Bool("trust_proxy_headers", s.TrustProxyHeaders).Msg("configured proxy trust mode")
 
 	// eventstore and nostr system
 	defer initSystem()()
@@ -157,6 +161,7 @@ func main() {
 	// routes
 	mux := relay.Router()
 	mux.Handle("/njump/static/", http.StripPrefix("/njump/", http.FileServer(http.FS(static))))
+	mux.HandleFunc("/debug/metrics", renderMetrics)
 
 	sub := http.NewServeMux()
 	sub.HandleFunc("/services/oembed", renderOEmbed)
