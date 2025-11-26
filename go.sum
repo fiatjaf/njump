@@ -1,5 +1,5 @@
-fiatjaf.com/nostr v0.0.0-20251123095754-8458e262918a h1:r4AH4MyJdMUuz9MdgrTYxpKYSaE8iQdPbWbxFXtJx9w=
-fiatjaf.com/nostr v0.0.0-20251123095754-8458e262918a/go.mod h1:TLv5JlgQg1rMVoQFgV8y8OOIqOahHvvaRXw43DtZk8k=
+fiatjaf.com/nostr v0.0.0-20251126120447-7261a4b515ed h1:dip4Bxlfj4/N2oIIGCZpcYRrvfMObcXRcyBM5uYswnM=
+fiatjaf.com/nostr v0.0.0-20251126120447-7261a4b515ed/go.mod h1:ue7yw0zHfZj23Ml2kVSdBx0ENEaZiuvGxs/8VEN93FU=
 github.com/DataDog/gostackparse v0.5.0 h1:jb72P6GFHPHz2W0onsN51cS3FkaMDcjb0QzgxxA4gDk=
 github.com/DataDog/gostackparse v0.5.0/go.mod h1:lTfqcJKqS9KnXQGnyQMCugq3u1FP6UZMfWR0aitKFMM=
 github.com/FastFilter/xorfilter v0.2.1 h1:lbdeLG9BdpquK64ZsleBS8B4xO/QW1IM0gMzF7KaBKc=

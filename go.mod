@@ -1,9 +1,9 @@
 module github.com/fiatjaf/njump
 
-go 1.24.2
+go 1.25
 
 require (
-	fiatjaf.com/nostr v0.0.0-20251123095754-8458e262918a
+	fiatjaf.com/nostr v0.0.0-20251126120447-7261a4b515ed
 	github.com/PuerkitoBio/goquery v1.10.1
 	github.com/a-h/templ v0.3.960
 	github.com/bytesparadise/libasciidoc v0.8.0
