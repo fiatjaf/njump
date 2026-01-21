@@ -7,7 +7,7 @@ import (
 
 func renderRobots(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=3600")
-	fmt.Fprintf(w, `
+	fmt.Fprint(w, `
 User-agent: Amazonbot
 Disallow: /
 
@@ -32,5 +32,5 @@ Disallow: /
 User-agent: *
 Allow: /
 
-`, s.Domain, s.Domain, s.Domain)
+`)
 }
