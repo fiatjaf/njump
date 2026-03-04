@@ -130,12 +130,10 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 	prefix, data, err := nip19.Decode(code)
 	if err == nil {
 		switch prefix {
-		case "nevent":
+		case "nevent", "note":
 			pointer = data.(nostr.EventPointer)
 		case "naddr":
 			pointer = data.(nostr.EntityPointer)
-		case "note":
-			pointer = nostr.EventPointer{ID: data.(nostr.ID)}
 		default:
 			return nil, fmt.Errorf("invalid code '%s'", code)
 		}
