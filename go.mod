@@ -3,7 +3,7 @@ module github.com/fiatjaf/njump
 go 1.25
 
 require (
-	fiatjaf.com/nostr v0.0.0-20251126120447-7261a4b515ed
+	fiatjaf.com/nostr v0.0.0-20260304030104-1d14e6bebe83
 	github.com/PuerkitoBio/goquery v1.10.1
 	github.com/a-h/templ v0.3.960
 	github.com/bytesparadise/libasciidoc v0.8.0
@@ -32,6 +32,7 @@ require (
 )
 
 require (
+	fiatjaf.com/lib v0.3.6 // indirect
 	github.com/FastFilter/xorfilter v0.2.1 // indirect
 	github.com/ImVexed/fasturl v0.0.0-20230304231329-4e41488060f3 // indirect
 	github.com/PowerDNS/lmdb-go v1.9.3 // indirect
