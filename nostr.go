@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"iter"
 	"net"
+	"net/http"
 	"net/url"
+	"os"
 	"slices"
 	"strings"
 	"time"
@@ -16,6 +18,8 @@ import (
 	"fiatjaf.com/nostr/sdk"
 	bolt_kv "fiatjaf.com/nostr/sdk/kvstore/bbolt"
 )
+
+var userAgent = "njump@" + os.Getenv("DOMAIN") + " (https://github.com/fiatjaf/njump)"
 
 type RelayConfig struct {
 	Everything []string `json:"everything"`
@@ -88,6 +92,18 @@ func initSystem() func() {
 	sys = sdk.NewSystem()
 	sys.KVStore = kv
 	sys.Store = db
+
+	sys.Pool = nostr.NewPool(nostr.PoolOptions{
+		AuthorKindQueryMiddleware: sys.TrackQueryAttempts,
+		EventMiddleware:           sys.TrackEventHintsAndRelays,
+		DuplicateMiddleware:       sys.TrackEventRelaysD,
+		PenaltyBox:                true,
+		RelayOptions: nostr.RelayOptions{
+			RequestHeader: http.Header{
+				"User-Agent": []string{userAgent},
+			},
+		},
+	})
 
 	sys.RelayListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
 	sys.FollowListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
@@ -335,7 +351,6 @@ func relaysPretty(ctx context.Context, pubkey nostr.PubKey) []string {
 
 func isInvalidUrl(urlStr string) bool {
 	u, err := url.Parse(urlStr)
-
 	// Check for malformed URLs
 	if err != nil {
 		return true

@@ -277,6 +277,7 @@ func fetchImageFromURL(ctx context.Context, url string) (image.Image, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*350)
 	defer cancel()
 	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req.Header.Set("User-Agent", userAgent)
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch image from %s: %w", url, err)

@@ -61,6 +61,7 @@ func checkMediaAlert(ctx context.Context, mediaURL string, retry bool) (bool, er
 	if err != nil {
 		return false, fmt.Errorf("failed to create request: %w", err)
 	}
+	req.Header.Set("User-Agent", userAgent)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
