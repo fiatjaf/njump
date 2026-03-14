@@ -151,7 +151,7 @@ func grabData(ctx context.Context, code string) (Data, error) {
 	case 30023, 30024:
 		data.templateId = LongForm
 		data.content = event.Content
-	case 20:
+	case 20, 21, 22:
 		data.templateId = Note
 		data.content = event.Content
 	case 6:
@@ -312,14 +312,44 @@ func grabData(ctx context.Context, code string) (Data, error) {
 			data.video = data.kind1063Metadata.URL
 			data.videoType = strings.Split(data.kind1063Metadata.M, "/")[1]
 		}
-	} else if event.Kind == 20 {
+	} else if event.Kind == 20 || event.Kind == 21 || event.Kind == 22 {
 		imeta := nip92.ParseTags(event.Tags)
 		if len(imeta) > 0 {
-			data.image = imeta[0].URL
-
 			content := strings.Builder{}
 			content.Grow(110*len(imeta) + len(data.content))
 			for _, entry := range imeta {
+				if entry.URL == "" {
+					continue
+				}
+
+				if data.image == "" && imageExtensionMatcher.MatchString(entry.URL) {
+					data.image = entry.URL
+				} else if data.video == "" && videoExtensionMatcher.MatchString(entry.URL) {
+					data.video = entry.URL
+					if strings.HasSuffix(entry.URL, "mp4") {
+						data.videoType = "mp4"
+					} else if strings.HasSuffix(entry.URL, "mov") {
+						data.videoType = "mov"
+					} else if strings.HasSuffix(entry.URL, "ogg") || strings.HasSuffix(entry.URL, "ogv") {
+						data.videoType = "ogg"
+					} else {
+						data.videoType = "webm"
+					}
+				} else if (event.Kind == 21 || event.Kind == 22) && data.video == "" {
+					data.video = entry.URL
+					if strings.HasSuffix(entry.URL, "mp4") {
+						data.videoType = "mp4"
+					} else if strings.HasSuffix(entry.URL, "mov") {
+						data.videoType = "mov"
+					} else if strings.HasSuffix(entry.URL, "ogg") || strings.HasSuffix(entry.URL, "ogv") {
+						data.videoType = "ogg"
+					} else {
+						data.videoType = "mp4"
+					}
+				} else if event.Kind == 20 && data.image == "" {
+					data.image = entry.URL
+				}
+
 				content.WriteString(entry.URL)
 				content.WriteString(" ")
 			}

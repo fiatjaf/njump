@@ -10,21 +10,24 @@ For more information about njump's philosophy and its use, read the presentation
 
 ## Supported Kinds
 
-| kind    | description                | NIP         |
-| ------- | -------------------------- | ----------- |
-| `0`     | Metadata                   | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
-| `1`     | Short Text Note            | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
-| `6`     | Repost                     | [18](https://github.com/nostr-protocol/nips/blob/master/18.md) |
-| `11`    | Thread                     | [7D](https://github.com/nostr-protocol/nips/blob/master/7D.md) |
-| `1111`  | Comment                    | [22](https://github.com/nostr-protocol/nips/blob/master/22.md) |
-| `1063`  | File Metadata              | [94](https://github.com/nostr-protocol/nips/blob/master/94.md) |
-| `1311`  | Live Chat Message          | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
-| `30023` | Long-form Content          | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
-| `30024` | Draft Long-form Content    | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
-| `30311` | Live Event                 | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
-| `30818` | Wiki article               | [54](https://github.com/nostr-protocol/nips/blob/master/54.md) |
-| `31922` | Date-Based Calendar Event  | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
-| `31923` | Time-Based Calendar Event  | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
+| kind    | description               | NIP                                                            |
+| ------- | ------------------------- | -------------------------------------------------------------- |
+| `0`     | Metadata                  | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
+| `1`     | Short Text Note           | [1](https://github.com/nostr-protocol/nips/blob/master/01.md)  |
+| `6`     | Repost                    | [18](https://github.com/nostr-protocol/nips/blob/master/18.md) |
+| `11`    | Thread                    | [7D](https://github.com/nostr-protocol/nips/blob/master/7D.md) |
+| `20`    | Picture                   | [68](https://github.com/nostr-protocol/nips/blob/master/68.md) |
+| `21`    | Video                     | [71](https://github.com/nostr-protocol/nips/blob/master/71.md) |
+| `22`    | Short Video               | [71](https://github.com/nostr-protocol/nips/blob/master/71.md) |
+| `1111`  | Comment                   | [22](https://github.com/nostr-protocol/nips/blob/master/22.md) |
+| `1063`  | File Metadata             | [94](https://github.com/nostr-protocol/nips/blob/master/94.md) |
+| `1311`  | Live Chat Message         | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
+| `30023` | Long-form Content         | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
+| `30024` | Draft Long-form Content   | [23](https://github.com/nostr-protocol/nips/blob/master/23.md) |
+| `30311` | Live Event                | [53](https://github.com/nostr-protocol/nips/blob/master/53.md) |
+| `30818` | Wiki article              | [54](https://github.com/nostr-protocol/nips/blob/master/54.md) |
+| `31922` | Date-Based Calendar Event | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
+| `31923` | Time-Based Calendar Event | [52](https://github.com/nostr-protocol/nips/blob/master/52.md) |
 
 ## Running
 
@@ -68,10 +71,7 @@ TRUSTED_PUBKEYS=npub1...,npub1...
 
 ```json
 {
-  "everything": [
-    "wss://relay.nostr.band",
-    "wss://nostr.lol"
-  ]
+  "everything": ["wss://relay.nostr.band", "wss://nostr.lol"]
 }
 ```
 

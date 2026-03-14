@@ -5,7 +5,7 @@ go 1.25
 require (
 	fiatjaf.com/nostr v0.0.0-20260304030104-1d14e6bebe83
 	github.com/PuerkitoBio/goquery v1.10.1
-	github.com/a-h/templ v0.3.960
+	github.com/a-h/templ v0.3.1001
 	github.com/bytesparadise/libasciidoc v0.8.0
 	github.com/dgraph-io/ristretto v1.0.0
 	github.com/fogleman/gg v1.3.0
