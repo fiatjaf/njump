@@ -276,7 +276,7 @@ func authorLastNotes(ctx context.Context, pubkey nostr.PubKey) (lastNotes []Enha
 					sys.Store.SaveEvent(ie.Event)
 
 					// track this only the first time this event is downloaded for the profile page so we keep these fresh
-					sys.TrackEventAccessTime(evt.ID)
+					sys.TrackEventAccessTime(ie.Event.ID)
 				case <-ctx.Done():
 					break out
 				}
