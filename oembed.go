@@ -41,7 +41,11 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 
 	targetURL, err := url.Parse(r.URL.Query().Get("url"))
 	if err != nil || !strings.Contains(targetURL.Path, "/") {
-		http.Error(w, "invalid url: "+err.Error(), 400)
+		msg := "unexpected url path"
+		if err == nil {
+			msg = err.Error()
+		}
+		http.Error(w, "invalid url: "+msg, 400)
 		return
 	}
 	code := strings.Split(targetURL.Path, "/")[1]
