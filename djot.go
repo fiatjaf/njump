@@ -1,36 +1,96 @@
 package main
 
 import (
-	"fmt"
+	"html"
 	"regexp"
 	"strings"
+	"unicode"
 
 	"github.com/sivukhin/godjot/djot_parser"
 	"github.com/sivukhin/godjot/html_writer"
 )
 
-func parseWikilinks(djot string) string {
-	pattern := regexp.MustCompile(`\[\[([^\|\]]+)(?:\|([^\]]+))?\]\]`)
+func normalizeDTag(input string) string {
+	input = strings.ToLower(input)
+	input = strings.Join(strings.Fields(input), "-")
 
-	replacement := func(match string) string {
-		submatches := pattern.FindStringSubmatch(match)
-		target := strings.TrimSpace(submatches[1])
-		display := strings.TrimSpace(submatches[2])
-
-		if display == "" {
-			display = target
+	var sb strings.Builder
+	prevDash := false
+	for _, r := range input {
+		if r == '-' {
+			if !prevDash {
+				sb.WriteRune(r)
+			}
+			prevDash = true
+			continue
 		}
-
-		targetFormatted := strings.ToLower(strings.ReplaceAll(target, " ", "-"))
-		return fmt.Sprintf("[.bg-lavender.dark:prose:text-neutral-50.dark:text-neutral-50.dark:bg-garnet.px-1]#%s# [.wikilinks]#(link:https://wikistr.com/%s[Wikistr], link:https://wikifreedia.xyz/%s[Wikifreedia])#", display, targetFormatted, targetFormatted)
+		if unicode.IsLetter(r) || unicode.IsDigit(r) || r > 127 {
+			sb.WriteRune(r)
+			prevDash = false
+		}
 	}
-
-	transformedText := pattern.ReplaceAllStringFunc(djot, replacement)
-	return transformedText
+	result := strings.Trim(sb.String(), "-")
+	return result
 }
 
+func processWikilinks(djotInput string) string {
+	lines := strings.Split(djotInput, "\n")
+
+	defPattern := regexp.MustCompile(`^\[([^\]]+)\]:\s*(.+)$`)
+	definedRefs := make(map[string]bool)
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		match := defPattern.FindStringSubmatch(line)
+		if match != nil {
+			ref := strings.TrimSpace(match[1])
+			definedRefs[ref] = true
+		}
+	}
+
+	implicitPattern := regexp.MustCompile(`\[([^\]]+)\]\[\]`)
+	explicitPattern := regexp.MustCompile(`\[([^\]]+)\]\[([^\]]+)\]`)
+
+	djotInput = implicitPattern.ReplaceAllStringFunc(djotInput, func(match string) string {
+		submatch := implicitPattern.FindStringSubmatch(match)
+		display := strings.TrimSpace(submatch[1])
+
+		if definedRefs[display] {
+			return match
+		}
+
+		normalized := normalizeDTag(display)
+		return `<span class="wikilink" title="wikilink to ` + html.EscapeString(normalized) + `">` + display + `</span>`
+	})
+
+	djotInput = explicitPattern.ReplaceAllStringFunc(djotInput, func(match string) string {
+		submatch := explicitPattern.FindStringSubmatch(match)
+		display := strings.TrimSpace(submatch[1])
+		ref := strings.TrimSpace(submatch[2])
+
+		if ref == "" {
+			if definedRefs[display] {
+				return match
+			}
+			normalized := normalizeDTag(display)
+			return `<span class="wikilink" title="wikilink to ` + html.EscapeString(normalized) + `">` + display + `</span>`
+		}
+
+		if definedRefs[ref] {
+			return match
+		}
+
+		normalized := normalizeDTag(ref)
+		return `<span class="wikilink" title="wikilink to ` + html.EscapeString(normalized) + `">` + display + `</span>`
+	})
+
+	return djotInput
+}
+
+var nostrLinkMatcher = regexp.MustCompile(`href="nostr:((npub|note|nevent|nprofile|naddr)1[a-z0-9]+)"`)
+
 func djotToHTML(djotInput string) string {
-	djotInput = parseWikilinks(djotInput)
+	djotInput = processWikilinks(djotInput)
 
 	ast := djot_parser.BuildDjotAst([]byte(djotInput))
 	result := djot_parser.NewConversionContext(
@@ -38,6 +98,8 @@ func djotToHTML(djotInput string) string {
 		djot_parser.DefaultConversionRegistry,
 		nil,
 	).ConvertDjotToHtml(&html_writer.HtmlWriter{}, ast...)
+
+	result = nostrLinkMatcher.ReplaceAllString(result, `href="/$1"`)
 
 	return result
 }

@@ -44,13 +44,11 @@
     color: rgb(222, 222, 222);
   }
 
-  .wikilinks {
+  .wikilink {
     @apply text-neutral-500;
-    @apply dark:text-neutral-500;
-  }
-
-  .wikilinks a {
-    @apply text-neutral-500;
-    @apply dark:text-neutral-500;
+    @apply dark:text-neutral-400;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    cursor: help;
   }
 }
