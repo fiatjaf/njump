@@ -31,6 +31,7 @@ type Settings struct {
 	ClientsConfigPath   string `envconfig:"CLIENTS_CONFIG_PATH"`
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
+	CacheRetentionDays  int    `envconfig:"CACHE_RETENTION_DAYS" default:"13"`
 
 	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
 	trustedPubKeys    []nostr.PubKey
@@ -67,6 +68,10 @@ func main() {
 
 	if len(s.trustedPubKeys) == 0 {
 		s.trustedPubKeys = defaultTrustedPubKeys
+	}
+
+	if s.CacheRetentionDays < 1 {
+		log.Fatal().Int("value", s.CacheRetentionDays).Msg("CACHE_RETENTION_DAYS must be a positive integer")
 	}
 
 	// eventstore and nostr system
@@ -145,7 +150,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	go updateArchives(ctx)
-	go deleteOldCachedEvents(ctx)
+	go deleteOldCachedEvents(ctx, s.CacheRetentionDays)
 	go outboxHintsFileLoaderSaver(ctx)
 
 	// expose our internal cache as a relay (mostly for debugging purposes)
