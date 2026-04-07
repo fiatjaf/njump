@@ -177,8 +177,10 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 		break
 	}
 
-	// otherwise try the relays
-	if event == nil {
+	// for replaceable events (naddr) always try relays too since the local copy may be outdated
+	_, isReplaceable := pointer.(nostr.EntityPointer)
+
+	if event == nil || isReplaceable {
 		await(ctx)
 
 		evt, _, err := sys.FetchSpecificEvent(ctx, pointer, sdk.FetchSpecificEventParameters{
@@ -186,10 +188,17 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 			SaveToLocalStore: true,
 		})
 		if err != nil {
+			if event != nil {
+				// we had a local copy, use it as fallback
+				goto afterFetch
+			}
 			return evt, err
 		}
-		event = evt
+		if evt != nil && (event == nil || evt.CreatedAt > event.CreatedAt) {
+			event = evt
+		}
 	}
+afterFetch:
 
 	if event != nil {
 		// do banned checks again if necessary
