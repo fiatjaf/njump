@@ -93,17 +93,14 @@ func initSystem() func() {
 	sys.KVStore = kv
 	sys.Store = db
 
-	sys.Pool = nostr.NewPool(nostr.PoolOptions{
-		AuthorKindQueryMiddleware: sys.TrackQueryAttempts,
-		EventMiddleware:           sys.TrackEventHintsAndRelays,
-		DuplicateMiddleware:       sys.TrackEventRelaysD,
-		PenaltyBox:                true,
-		RelayOptions: nostr.RelayOptions{
-			RequestHeader: http.Header{
-				"User-Agent": []string{userAgent},
-			},
+	sys.Pool.QueryMiddleware = sys.TrackQueryAttempts
+	sys.Pool.EventMiddleware = sys.TrackEventHintsAndRelays
+	sys.Pool.DuplicateMiddleware = sys.TrackEventRelaysD
+	sys.Pool.RelayOptions = nostr.RelayOptions{
+		RequestHeader: http.Header{
+			"User-Agent": []string{userAgent},
 		},
-	})
+	}
 
 	sys.RelayListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
 	sys.FollowListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
