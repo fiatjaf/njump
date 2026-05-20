@@ -1,11 +1,11 @@
 module github.com/fiatjaf/njump
 
-go 1.25
+go 1.25.0
 
 require (
 	fiatjaf.com/nostr v0.0.0-20260504222624-a5aeff31d771
 	github.com/PuerkitoBio/goquery v1.10.1
-	github.com/a-h/templ v0.3.1001
+	github.com/a-h/templ v0.3.1020
 	github.com/dgraph-io/ristretto v1.0.0
 	github.com/fogleman/gg v1.3.0
 	github.com/go-text/typesetting v0.0.0-20231221124458-48cc05a56658
@@ -27,7 +27,7 @@ require (
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
 	golang.org/x/image v0.18.0
-	golang.org/x/sync v0.18.0
+	golang.org/x/sync v0.19.0
 	mvdan.cc/xurls/v2 v2.5.0
 )
 
@@ -75,11 +75,11 @@ require (
 	github.com/valyala/fasthttp v1.59.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.etcd.io/bbolt v1.4.2 // indirect
-	golang.org/x/crypto v0.44.0 // indirect
+	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6 // indirect
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
+	golang.org/x/text v0.34.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 

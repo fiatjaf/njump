@@ -50,6 +50,7 @@ var (
 var kindNames = map[nostr.Kind]string{
 	0:     "Metadata",
 	1:     "Short Text Note",
+	9:     "Chat Message",
 	2:     "Recommend Relay",
 	3:     "Contacts",
 	4:     "Encrypted Direct Messages",
@@ -97,6 +98,7 @@ var kindNames = map[nostr.Kind]string{
 var kindNIPs = map[nostr.Kind]string{
 	0:     "01",
 	1:     "01",
+	9:     "29",
 	2:     "01",
 	3:     "02",
 	4:     "04",

@@ -13,6 +13,7 @@ type NotePageParams struct {
 	Subject          string
 	TitleizedContent string
 	Clients          []ClientReference
+	GroupName        string
 }
 
 templ noteInnerBlock(params NotePageParams) {
@@ -22,6 +23,11 @@ templ noteInnerBlock(params NotePageParams) {
 		<h1 class="hidden">
 			{ params.Event.author.ShortName() } on Nostr: { params.TitleizedContent }
 		</h1>
+	}
+	if params.Event.Kind == 9 && params.GroupName != "" {
+		<div class="mb-4 text-sm text-stone-500 dark:text-neutral-400">
+			chat message in group { params.GroupName }
+		</div>
 	}
 	if params.Cover != "" {
 		<img src={ params.Cover } alt={ params.Alt } class="mt-1"/>

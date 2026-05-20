@@ -42,6 +42,8 @@ type Data struct {
 	Kind30818Metadata        Kind30818Metadata
 	Nip51SetMetadata         Nip51SetMetadata
 	Kind9802Metadata         Kind9802Metadata
+
+	groupName string
 }
 
 // Helper function to extract contacts from p-tags (used by Follow Sets, Starter Packs, etc)
@@ -145,9 +147,42 @@ func grabData(ctx context.Context, code string) (Data, error) {
 	data.alt = nip31.GetAlt(*event)
 
 	switch event.Kind {
-	case 1, 7, 11, 1111:
+	case 1, 7, 9, 11, 1111:
 		data.templateId = Note
 		data.content = event.Content
+
+		if event.Kind == 9 {
+			if hTag := event.Tags.Find("h"); hTag != nil && len(hTag) > 1 {
+				groupId := hTag[1]
+				data.groupName = groupId // fallback to raw ID
+
+				// try fetching kind 39000 group metadata from the relay where the event was found
+				if len(ee.relays) > 0 {
+					ctx, cancel := context.WithTimeout(ctx, time.Second)
+					defer cancel()
+
+					if relay, err := sys.Pool.EnsureRelay(ee.relays[0]); err == nil {
+						sub, err := relay.Subscribe(ctx, nostr.Filter{
+							Kinds: []nostr.Kind{39000},
+							Tags:  nostr.TagMap{"d": []string{groupId}},
+							Limit: 1,
+						}, nostr.SubscriptionOptions{})
+						if err == nil {
+							select {
+							case meta, ok := <-sub.Events:
+								if ok {
+									if nameTag := meta.Tags.Find("name"); nameTag != nil && len(nameTag) > 1 {
+										data.groupName = nameTag[1]
+									}
+								}
+							case <-ctx.Done():
+								// timeout, keep the fallback groupId
+							}
+						}
+					}
+				}
+			}
+		}
 	case 30023, 30024:
 		data.templateId = LongForm
 		data.content = event.Content
