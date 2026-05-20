@@ -92,6 +92,7 @@ var kindNames = map[nostr.Kind]string{
 	30078: "Application-specific Data",
 	30818: "Wiki article",
 	30311: "Live Event",
+	39000: "Group Metadata",
 	39089: "Starter Pack",
 }
 
@@ -140,6 +141,7 @@ var kindNIPs = map[nostr.Kind]string{
 	30078: "78",
 	30818: "54",
 	30311: "53",
+	39000: "29",
 	39089: "51",
 }
 
@@ -334,7 +336,7 @@ func renderQuotesAsHTML(ctx context.Context, input string, usingTelegramInstantV
 		defer cancel()
 		wg.Add(1)
 		go func() {
-			event, _ := getEvent(ctx, nip19)
+			event, _ := getEvent(ctx, nip19, false)
 			if event != nil {
 				quotedEvent := basicFormatting(submatches[0], false, usingTelegramInstantView, false)
 

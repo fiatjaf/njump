@@ -27,6 +27,7 @@ const (
 	FollowSet
 	StarterPack
 	Highlight
+	GroupMetadata
 	Other
 )
 

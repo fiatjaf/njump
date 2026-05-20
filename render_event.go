@@ -382,7 +382,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			Details:          detailsData,
 			Content:          template.HTML(content),
 			TitleizedContent: titleizedContent,
-			GroupName:        data.groupName,
+			GroupName:        data.Kind39000Metadata.Name,
+			GroupLink:        data.Kind39000Metadata.Address.Code(),
 		}
 
 		component = noteTemplate(params, isEmbed)
@@ -646,6 +647,61 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		}
 
 		component = highlightTemplate(params, isEmbed)
+
+	case GroupMetadata:
+		naddr := data.naddr
+		if naddr == "" && data.event.Tags.Find("d") != nil {
+			naddr = nip19.EncodeNaddr(data.event.PubKey, data.event.Kind, data.event.Tags.Find("d")[1], nil)
+		}
+
+		groupId := ""
+		if dTag := data.event.Tags.Find("d"); dTag != nil {
+			groupId = dTag[1]
+		}
+		groupName := ""
+		if nameTag := data.event.Tags.Find("name"); nameTag != nil && len(nameTag) > 1 {
+			groupName = nameTag[1]
+		}
+		groupPicture := ""
+		if picTag := data.event.Tags.Find("picture"); picTag != nil && len(picTag) > 1 {
+			groupPicture = picTag[1]
+		}
+		groupAbout := ""
+		if aboutTag := data.event.Tags.Find("about"); aboutTag != nil && len(aboutTag) > 1 {
+			groupAbout = aboutTag[1]
+		}
+
+		opengraph.Superscript = data.event.authorLong() + " on Nostr"
+		if groupName != "" {
+			opengraph.Subscript = fmt.Sprintf("Group: %s (%s)", groupName, groupId)
+		} else {
+			opengraph.Subscript = fmt.Sprintf("Group: %s", groupId)
+		}
+		if groupPicture != "" {
+			opengraph.Image = groupPicture
+		}
+		opengraph.Text = groupAbout
+
+		params := GroupMetadataPageParams{
+			BaseEventPageParams: baseEventPageParams,
+			OpenGraphParams:     opengraph,
+			HeadParams: HeadParams{
+				IsProfile:   false,
+				Oembed:      oembed,
+				NaddrNaked:  data.naddrNaked,
+				NeventNaked: data.neventNaked,
+			},
+			Details:          detailsData,
+			Content:          template.HTML(data.content),
+			TitleizedContent: titleizedContent,
+			GroupId:          groupId,
+			GroupName:        groupName,
+			GroupPicture:     groupPicture,
+			GroupAbout:       groupAbout,
+			Naddr:            naddr,
+		}
+
+		component = groupMetadataTemplate(params, isEmbed)
 
 	case Other:
 		detailsData.HideDetails = false // always open this since we know nothing else about the event

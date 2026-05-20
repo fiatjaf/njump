@@ -1,0 +1,64 @@
+package main
+
+import "html/template"
+
+type GroupMetadataPageParams struct {
+	BaseEventPageParams
+	OpenGraphParams
+	HeadParams
+
+	Details          DetailsParams
+	Content          template.HTML
+	TitleizedContent string
+	GroupId          string
+	GroupName        string
+	GroupPicture     string
+	GroupAbout       string
+	Naddr            string
+}
+
+templ groupMetadataInnerBlock(params GroupMetadataPageParams) {
+	if params.GroupName != "" {
+		<h1 class="text-2xl" itemprop="headline">"{ params.GroupName }"</h1>
+	} else {
+		<h1>Group: '{ params.GroupId }'</h1>
+	}
+	<div class="mb-4 text-sm text-stone-500 dark:text-neutral-400">
+		Group { params.GroupId }
+	</div>
+	if params.GroupPicture != "" {
+		<img src={ params.GroupPicture } alt={ params.GroupName } class="max-h-48 rounded-lg mb-4"/>
+	}
+	if params.GroupAbout != "" {
+		<div class="mb-4 leading-6 text-stone-700 dark:text-neutral-300">{ params.GroupAbout }</div>
+	}
+	<!-- main content -->
+	if params.Content != "" {
+		<div dir="auto" class="leading-6" itemprop="articleBody">
+			@templ.Raw(params.Content)
+		</div>
+	}
+}
+
+templ groupMetadataTemplate(params GroupMetadataPageParams, isEmbed bool) {
+	<!DOCTYPE html>
+	if isEmbed {
+		@embeddedPageTemplate(
+			params.Event,
+			params.NeventNaked,
+		) {
+			@groupMetadataInnerBlock(params)
+		}
+	} else {
+		@eventPageTemplate(
+			params.TitleizedContent,
+			params.OpenGraphParams,
+			params.HeadParams,
+			nil,
+			params.Details,
+			params.Event,
+		) {
+			@groupMetadataInnerBlock(params)
+		}
+	}
+}

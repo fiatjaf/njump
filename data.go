@@ -10,7 +10,9 @@ import (
 	"time"
 
 	"fiatjaf.com/nostr"
+	"fiatjaf.com/nostr/nip11"
 	"fiatjaf.com/nostr/nip19"
+	"fiatjaf.com/nostr/nip29"
 	"fiatjaf.com/nostr/nip31"
 	"fiatjaf.com/nostr/nip52"
 	"fiatjaf.com/nostr/nip53"
@@ -42,8 +44,7 @@ type Data struct {
 	Kind30818Metadata        Kind30818Metadata
 	Nip51SetMetadata         Nip51SetMetadata
 	Kind9802Metadata         Kind9802Metadata
-
-	groupName string
+	Kind39000Metadata        nip29.Group
 }
 
 // Helper function to extract contacts from p-tags (used by Follow Sets, Starter Packs, etc)
@@ -104,7 +105,15 @@ func extractContactsFromPTags(ctx context.Context, event *nostr.Event, maxContac
 
 func grabData(ctx context.Context, code string) (Data, error) {
 	// code can be a nevent or naddr, in which case we try to fetch the associated event
-	event, err := getEvent(ctx, code)
+	// for kind 39000 (group metadata), skip local store and don't save it
+	isGroupMetadata := false
+	if prefix, data, err := nip19.Decode(code); err == nil && prefix == "naddr" {
+		if ep, ok := data.(nostr.EntityPointer); ok && ep.Kind == 39000 {
+			isGroupMetadata = true
+		}
+	}
+
+	event, err := getEvent(ctx, code, isGroupMetadata)
 	if err != nil {
 		return Data{}, fmt.Errorf("error fetching event: %w", err)
 	}
@@ -154,35 +163,47 @@ func grabData(ctx context.Context, code string) (Data, error) {
 		if event.Kind == 9 {
 			if hTag := event.Tags.Find("h"); hTag != nil && len(hTag) > 1 {
 				groupId := hTag[1]
-				data.groupName = groupId // fallback to raw ID
+				data.Kind39000Metadata.Address.ID = groupId
+				data.Kind39000Metadata.Address.Relay = ee.relays[0]
 
 				// try fetching kind 39000 group metadata from the relay where the event was found
 				if len(ee.relays) > 0 {
-					ctx, cancel := context.WithTimeout(ctx, time.Second)
+					ctx, cancel := context.WithTimeout(ctx, time.Second*2)
 					defer cancel()
 
-					if relay, err := sys.Pool.EnsureRelay(ee.relays[0]); err == nil {
-						sub, err := relay.Subscribe(ctx, nostr.Filter{
-							Kinds: []nostr.Kind{39000},
-							Tags:  nostr.TagMap{"d": []string{groupId}},
-							Limit: 1,
-						}, nostr.SubscriptionOptions{})
-						if err == nil {
-							select {
-							case meta, ok := <-sub.Events:
-								if ok {
-									if nameTag := meta.Tags.Find("name"); nameTag != nil && len(nameTag) > 1 {
-										data.groupName = nameTag[1]
+					for _, relay := range ee.relays {
+						info, err := nip11.Fetch(ctx, relay)
+						if err != nil || info.Self == nil {
+							continue
+						}
+
+						if relay, err := sys.Pool.EnsureRelay(relay); err == nil {
+							sub, err := relay.Subscribe(ctx, nostr.Filter{
+								Kinds: []nostr.Kind{39000},
+								Tags:  nostr.TagMap{"d": []string{groupId}},
+								Limit: 1,
+							}, nostr.SubscriptionOptions{})
+							if err == nil {
+								select {
+								case meta, ok := <-sub.Events:
+									if ok {
+										data.Kind39000Metadata.MergeInMetadataEvent(&meta)
+										data.Kind39000Metadata.Address.Relay = relay.URL
+										data.Kind39000Metadata.Address.Self = *info.Self
+										break
 									}
+								case <-ctx.Done():
+									// timeout, keep the fallback groupId
 								}
-							case <-ctx.Done():
-								// timeout, keep the fallback groupId
 							}
 						}
 					}
 				}
 			}
 		}
+	case 39000:
+		data.templateId = GroupMetadata
+		data.content = event.Content
 	case 30023, 30024:
 		data.templateId = LongForm
 		data.content = event.Content
@@ -288,7 +309,7 @@ func grabData(ctx context.Context, code string) (Data, error) {
 		}
 
 		if data.Kind9802Metadata.SourceEvent != "" {
-			sourceEvent, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent)
+			sourceEvent, _ := getEvent(ctx, data.Kind9802Metadata.SourceEvent, false)
 			if sourceEvent == nil {
 				data.Kind9802Metadata.SourceName = data.Kind9802Metadata.SourceEvent
 			} else {

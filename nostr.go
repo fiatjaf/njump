@@ -122,7 +122,7 @@ func initSystem() func() {
 	return db.Close
 }
 
-func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
+func getEvent(ctx context.Context, code string, skipLocalStore bool) (*nostr.Event, error) {
 	var pointer nostr.Pointer
 	prefix, data, err := nip19.Decode(code)
 	if err == nil {
@@ -169,9 +169,11 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 
 	// first check localstore
 	var event *nostr.Event
-	for evt := range sys.Store.QueryEvents(pointer.AsFilter(), 1) {
-		event = &evt
-		break
+	if !skipLocalStore {
+		for evt := range sys.Store.QueryEvents(pointer.AsFilter(), 1) {
+			event = &evt
+			break
+		}
 	}
 
 	// otherwise try the relays
@@ -180,7 +182,7 @@ func getEvent(ctx context.Context, code string) (*nostr.Event, error) {
 
 		evt, _, err := sys.FetchSpecificEvent(ctx, pointer, sdk.FetchSpecificEventParameters{
 			SkipLocalStore:   true,
-			SaveToLocalStore: true,
+			SaveToLocalStore: !skipLocalStore,
 		})
 		if err != nil {
 			return evt, err

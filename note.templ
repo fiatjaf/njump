@@ -14,6 +14,7 @@ type NotePageParams struct {
 	TitleizedContent string
 	Clients          []ClientReference
 	GroupName        string
+	GroupLink        string
 }
 
 templ noteInnerBlock(params NotePageParams) {
@@ -26,7 +27,12 @@ templ noteInnerBlock(params NotePageParams) {
 	}
 	if params.Event.Kind == 9 && params.GroupName != "" {
 		<div class="mb-4 text-sm text-stone-500 dark:text-neutral-400">
-			chat message in group { params.GroupName }
+			chat message in group
+			if params.GroupLink != "" {
+				<a href={ templ.URL("/" + params.GroupLink) } class="underline underline-offset-2 hover:text-stone-700 dark:hover:text-neutral-200">{ params.GroupName }</a>
+			} else {
+				{ params.GroupName }
+			}
 		</div>
 	}
 	if params.Cover != "" {
