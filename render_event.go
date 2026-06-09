@@ -255,7 +255,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		default:
 			continue
 		}
-		if err == nil {
+		if err != nil {
 			continue
 		}
 		data.content = strings.ReplaceAll(data.content, placeholderTag, "nostr:"+nip19.EncodePointer(nreplace))
