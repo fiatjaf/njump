@@ -492,7 +492,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 		// Fallback for deprecated 'name' field
 		if data.kind31922Or31923Metadata.Title == "" {
 			for _, tag := range data.event.Tags {
-				if tag[0] == "name" {
+				if len(tag) >= 2 && tag[0] == "name" {
 					data.kind31922Or31923Metadata.Title = tag[1]
 					break
 				}
