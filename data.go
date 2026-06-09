@@ -164,13 +164,15 @@ func grabData(ctx context.Context, code string) (Data, error) {
 			if hTag := event.Tags.Find("h"); hTag != nil && len(hTag) > 1 {
 				groupId := hTag[1]
 				data.Kind39000Metadata.Address.ID = groupId
-				data.Kind39000Metadata.Address.Relay = ee.relays[0]
 
 				// try fetching kind 39000 group metadata from the relay where the event was found
 				if len(ee.relays) > 0 {
+					data.Kind39000Metadata.Address.Relay = ee.relays[0]
+
 					ctx, cancel := context.WithTimeout(ctx, time.Second*2)
 					defer cancel()
 
+				relayLoop:
 					for _, relay := range ee.relays {
 						info, err := nip11.Fetch(ctx, relay)
 						if err != nil || info.Self == nil {
@@ -190,7 +192,7 @@ func grabData(ctx context.Context, code string) (Data, error) {
 										data.Kind39000Metadata.MergeInMetadataEvent(&meta)
 										data.Kind39000Metadata.Address.Relay = relay.URL
 										data.Kind39000Metadata.Address.Self = *info.Self
-										break
+										break relayLoop
 									}
 								case <-ctx.Done():
 									// timeout, keep the fallback groupId
