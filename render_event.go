@@ -132,7 +132,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	if data.event.Kind >= 30000 && data.event.Kind < 40000 {
 		tValue := "~"
 		for _, tag := range data.event.Tags {
-			if tag[0] == "t" {
+			if len(tag) >= 2 && tag[0] == "t" {
 				tValue = tag[1]
 				break
 			}
