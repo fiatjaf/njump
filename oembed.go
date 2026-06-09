@@ -42,7 +42,7 @@ func renderOEmbed(w http.ResponseWriter, r *http.Request) {
 	targetURL, err := url.Parse(r.URL.Query().Get("url"))
 	if err != nil || !strings.Contains(targetURL.Path, "/") {
 		msg := "unexpected url path"
-		if err == nil {
+		if err != nil {
 			msg = err.Error()
 		}
 		http.Error(w, "invalid url: "+msg, 400)
