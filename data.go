@@ -125,13 +125,12 @@ func grabData(ctx context.Context, code string) (Data, error) {
 	ee.relays = sys.GetEventRelays(event.ID)
 
 	relaysForNip19 := make([]string, 0, 3)
-	c := 0
 	for _, relayUrl := range ee.relays {
 		if sdk.IsVirtualRelay(relayUrl) {
 			continue
 		}
 		relaysForNip19 = append(relaysForNip19, relayUrl)
-		if c == 2 {
+		if len(relaysForNip19) == 3 {
 			break
 		}
 	}
