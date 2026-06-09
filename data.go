@@ -368,7 +368,9 @@ func grabData(ctx context.Context, code string) (Data, error) {
 			data.image = data.kind1063Metadata.URL
 		} else if data.kind1063Metadata.IsVideo() {
 			data.video = data.kind1063Metadata.URL
-			data.videoType = strings.Split(data.kind1063Metadata.M, "/")[1]
+			if _, subtype, ok := strings.Cut(data.kind1063Metadata.M, "/"); ok {
+				data.videoType = subtype
+			}
 		}
 	} else if event.Kind == 20 || event.Kind == 21 || event.Kind == 22 {
 		imeta := nip92.ParseTags(event.Tags)
