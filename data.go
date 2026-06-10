@@ -287,14 +287,16 @@ func grabData(ctx context.Context, code string) (Data, error) {
 			data.Kind9802Metadata.SourceName = "#" + shortenString(sourceEvent[1], 8, 4)
 		} else if sourceEvent := event.Tags.Find("a"); sourceEvent != nil {
 			spl := strings.Split(sourceEvent[1], ":")
-			kind, _ := strconv.Atoi(spl[0])
-			var relayHints []string
-			if len(sourceEvent) > 2 {
-				relayHints = []string{sourceEvent[2]}
-			}
-			if pk, err := nostr.PubKeyFromHex(spl[1]); err == nil {
-				naddr := nip19.EncodeNaddr(pk, nostr.Kind(kind), spl[2], relayHints)
-				data.Kind9802Metadata.SourceEvent = naddr
+			if len(spl) >= 3 {
+				kind, _ := strconv.Atoi(spl[0])
+				var relayHints []string
+				if len(sourceEvent) > 2 {
+					relayHints = []string{sourceEvent[2]}
+				}
+				if pk, err := nostr.PubKeyFromHex(spl[1]); err == nil {
+					naddr := nip19.EncodeNaddr(pk, nostr.Kind(kind), spl[2], relayHints)
+					data.Kind9802Metadata.SourceEvent = naddr
+				}
 			}
 		} else if sourceUrl := event.Tags.Find("r"); sourceUrl != nil {
 			data.Kind9802Metadata.SourceURL = sourceUrl[1]
