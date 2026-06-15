@@ -41,7 +41,10 @@ type Settings struct {
 var static embed.FS
 
 //go:embed clients.json
-var embeddedClientsJSON string
+var embeddedClientsJSON []byte
+
+//go:embed relay-config.json
+var embeddedRelayConfigJSON []byte
 
 var (
 	s   Settings
@@ -77,6 +80,13 @@ func main() {
 	// eventstore and nostr system
 	defer initSystem()()
 
+	var embeddedRelayConfig RelayConfig
+	err = json.Unmarshal(embeddedRelayConfigJSON, &relayConfig)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to parse embedded relay config")
+		return
+	}
+	setRelayConfig(embeddedRelayConfig)
 	if s.RelayConfigPath != "" {
 		configr, err := os.ReadFile(s.RelayConfigPath)
 		if err != nil {
@@ -88,17 +98,7 @@ func main() {
 			log.Fatal().Err(err).Msgf("failed to load %q", s.RelayConfigPath)
 			return
 		}
-		if len(relayConfig.Everything) > 0 {
-			sys.FallbackRelays.URLs = relayConfig.Everything
-		}
-		if len(relayConfig.Profiles) > 0 {
-			sys.MetadataRelays.URLs = relayConfig.Profiles
-			sys.RelayListRelays.URLs = relayConfig.Profiles
-			sys.FollowListRelays.URLs = relayConfig.Profiles
-		}
-		if len(relayConfig.JustIds) > 0 {
-			sys.JustIDRelays.URLs = relayConfig.JustIds
-		}
+		setRelayConfig(relayConfig)
 	}
 
 	if s.ClientsConfigPath != "" {
@@ -112,7 +112,7 @@ func main() {
 			return
 		}
 	} else {
-		if err := json.Unmarshal([]byte(embeddedClientsJSON), &clientConfig); err != nil {
+		if err := json.Unmarshal(embeddedClientsJSON, &clientConfig); err != nil {
 			log.Fatal().Err(err).Msg("failed to parse embedded clients config")
 			return
 		}
@@ -214,4 +214,21 @@ func main() {
 	signal.Notify(sc, os.Interrupt)
 	<-sc
 	server.Close()
+}
+
+func setRelayConfig(relayConfig RelayConfig) {
+	if len(relayConfig.RelayListRelays) > 0 {
+		sys.RelayListRelays.URLs = relayConfig.RelayListRelays
+	}
+	if len(relayConfig.Everything) > 0 {
+		sys.FallbackRelays.URLs = relayConfig.Everything
+	}
+	if len(relayConfig.Profiles) > 0 {
+		sys.MetadataRelays.URLs = relayConfig.Profiles
+		sys.RelayListRelays.URLs = relayConfig.Profiles
+		sys.FollowListRelays.URLs = relayConfig.Profiles
+	}
+	if len(relayConfig.JustIds) > 0 {
+		sys.JustIDRelays.URLs = relayConfig.JustIds
+	}
 }

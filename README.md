@@ -76,7 +76,7 @@ TRUSTED_PUBKEYS=npub1...,npub1...
 }
 ```
 
-See `relay-config.json.sample` for example.
+See `relay-config.json` for example.
 
 For example, when running from a precompiled binary you can do something like `PORT=5000 ./njump`.
 

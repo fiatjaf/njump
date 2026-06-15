@@ -22,9 +22,10 @@ import (
 var userAgent = "njump@" + os.Getenv("DOMAIN") + " (https://github.com/fiatjaf/njump)"
 
 type RelayConfig struct {
-	Everything []string `json:"everything"`
-	Profiles   []string `json:"profiles"`
-	JustIds    []string `json:"justIds"`
+	RelayListRelays []string `json:"relay_list"`
+	Everything      []string `json:"everything"`
+	Profiles        []string `json:"profiles"`
+	JustIds         []string `json:"justIds"`
 }
 
 const DB_MAX_LIMIT = 500
@@ -101,23 +102,6 @@ func initSystem() func() {
 			"User-Agent": []string{userAgent},
 		},
 	}
-
-	sys.RelayListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
-	sys.FollowListRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
-	sys.MetadataRelays = sdk.NewRelayStream("wss://purplepag.es", "wss://user.kindpag.es", "wss://relay.nos.social", "wss://relay.vertexlab.io", "wss://indexer.coracle.social")
-	sys.FallbackRelays = sdk.NewRelayStream(
-		"wss://offchain.pub",
-		"wss://relay.damus.io",
-		"wss://relay.primal.net",
-		"wss://nostr.mom",
-		"wss://nos.lol",
-		"wss://relay.mostr.pub",
-		"wss://nostr.wine",
-	)
-	sys.JustIDRelays = sdk.NewRelayStream(
-		"wss://cache2.primal.net/v1",
-		"wss://relay.nostr.band",
-	)
 
 	return db.Close
 }

@@ -77,7 +77,7 @@ func timeoutMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				// Only write retry page if handler hasn't written anything yet
 				tw.mu.Lock()
 				hasWritten := tw.wroteHeader
-				tw.mu.Unlock()
+				defer tw.mu.Unlock()
 
 				if !hasWritten {
 					w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
