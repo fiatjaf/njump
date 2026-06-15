@@ -32,9 +32,8 @@ type Settings struct {
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
 	CacheRetentionDays  int    `envconfig:"CACHE_RETENTION_DAYS" default:"13"`
-	TranslateAPIURL     string `envconfig:"TRANSLATE_API_URL"`
-	TranslateAPIKey     string `envconfig:"TRANSLATE_API_KEY"`
-	TranslateAPIEmail   string `envconfig:"TRANSLATE_API_EMAIL"`
+	LaraAccessKeyID     string `envconfig:"LARA_ACCESS_KEY_ID"`
+	LaraAccessKeySecret string `envconfig:"LARA_ACCESS_KEY_SECRET"`
 
 	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
 	trustedPubKeys    []nostr.PubKey
