@@ -70,6 +70,16 @@
       "base": "https://coracle.social/{code}",
       "platform": "web"
     },
+    "fevela": {
+      "name": "Fevela",
+      "base": "https://fevela.me/{code}",
+      "platform": "web"
+    },
+    "fevela-relay": {
+      "name": "Fevela",
+      "base": "https://fevela.me/?r=wss://{code}",
+      "platform": "web"
+    },
     "coracle-relay": {
       "name": "Coracle",
       "base": "https://coracle.social/relays/wss%3A%2F%2F{code}",
@@ -214,6 +224,7 @@
   "kindMappings": {
     "-1": [
       "native",
+      "fevela-relay",
       "nostur",
       "yakihonne-android",
       "yakihonne-ios",
@@ -229,6 +240,7 @@
     ],
     "1": [
       "native",
+      "fevela",
       "damus",
       "nostur",
       "freefrom-ios",
@@ -253,6 +265,7 @@
     ],
     "6": [
       "native",
+      "fevela",
       "damus",
       "nostur",
       "freefrom-ios",
@@ -277,6 +290,7 @@
     ],
     "20": [
       "native",
+      "fevela",
       "olas-android",
       "olas-ios",
       "nosotros",
@@ -288,6 +302,7 @@
     ],
     "0": [
       "native",
+      "fevela",
       "nos",
       "damus",
       "nostur",
@@ -311,9 +326,10 @@
       "yakihonne",
       "default-web"
     ],
-    "9802": ["coracle", "nostrudel", "lumilumi", "jumble", "default-web"],
+    "9802": ["fevela", "coracle", "nostrudel", "lumilumi", "jumble", "default-web"],
     "1063": [
       "native",
+      "fevela",
       "amethyst",
       "lumilumi",
       "phoenix",
@@ -321,9 +337,10 @@
       "nostrudel",
       "default-web"
     ],
-    "30000": ["native", "amethyst", "coracle", "nostrudel", "default-web"],
+    "30000": ["native", "fevela", "amethyst", "coracle", "nostrudel", "default-web"],
     "30023": [
       "native",
+      "fevela",
       "damus",
       "nos",
       "nostur",
@@ -339,6 +356,7 @@
     ],
     "30024": [
       "native",
+      "fevela",
       "damus",
       "nos",
       "nostur",
@@ -354,6 +372,7 @@
     ],
     "30311": [
       "native",
+      "fevela",
       "amethyst",
       "nostur",
       "zap-stream",
@@ -363,11 +382,12 @@
       "default-web"
     ],
     "30818": ["native", "wikistr", "wikifreedia", "default-web"],
-    "31922": ["native", "coracle", "default-web"],
-    "31923": ["native", "coracle", "default-web"],
-    "39089": ["native", "amethyst", "coracle", "nostrudel", "default-web"],
+    "31922": ["native", "fevela", "coracle", "default-web"],
+    "31923": ["native", "fevela", "coracle", "default-web"],
+    "39089": ["native", "fevela", "amethyst", "coracle", "nostrudel", "default-web"],
     "default": [
       "native",
+      "fevela",
       "yakihonne-ios",
       "nos",
       "damus",
