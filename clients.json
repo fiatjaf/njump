@@ -219,6 +219,16 @@
       "name": "Wikifreedia",
       "base": "https://wikifreedia.xyz/{handle}/{npub}",
       "platform": "web"
+    },
+    "ditto": {
+      "name": "Ditto",
+      "base": "https://ditto.pub/{code}",
+      "platform": "web"
+    },
+    "ditto-relay": {
+      "name": "Ditto",
+      "base": "https://ditto.pub/r/wss://{code}",
+      "platform": "web"
     }
   },
   "kindMappings": {
@@ -234,6 +244,7 @@
       "nosotros-relay",
       "lumilumi-relay",
       "coracle-relay",
+      "ditto-relay",
       "relay-tools",
       "nostter-relay",
       "default-web"
@@ -255,6 +266,7 @@
       "nosotros",
       "jumble",
       "coracle",
+      "ditto",
       "lumilumi",
       "nostter",
       "nostrudel",
@@ -280,6 +292,7 @@
       "nosotros",
       "jumble",
       "coracle",
+      "ditto",
       "lumilumi",
       "nostter",
       "nostrudel",
@@ -298,6 +311,7 @@
       "jumble",
       "olas-web",
       "coracle",
+      "ditto",
       "default-web"
     ],
     "0": [
@@ -318,6 +332,7 @@
       "jumble",
       "nosta",
       "coracle",
+      "ditto",
       "phoenix",
       "nostter",
       "nostrudel",
@@ -350,6 +365,7 @@
       "yakihonne",
       "lumilumi",
       "coracle",
+      "ditto",
       "pareto",
       "habla",
       "default-web"
@@ -366,6 +382,7 @@
       "yakihonne",
       "lumilumi",
       "coracle",
+      "ditto",
       "pareto",
       "habla",
       "default-web"
@@ -379,6 +396,7 @@
       "shosho",
       "lumilumi",
       "nostrudel",
+      "ditto",
       "default-web"
     ],
     "30818": ["native", "wikistr", "wikifreedia", "default-web"],
@@ -402,6 +420,7 @@
       "voyage",
       "yakihonne",
       "coracle",
+      "ditto",
       "phoenix",
       "nostter",
       "nostrudel",
