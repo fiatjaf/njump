@@ -219,6 +219,11 @@
       "name": "Wikifreedia",
       "base": "https://wikifreedia.xyz/{handle}/{npub}",
       "platform": "web"
+    },
+    "noornote": {
+      "name": "Noornote",
+      "base": "https://noornote.app/{code}",
+      "platform": "web"
     }
   },
   "kindMappings": {
@@ -261,7 +266,8 @@
       "phoenix",
       "primal-web",
       "iris",
-      "yakihonne"
+      "yakihonne",
+      "noornote"
     ],
     "6": [
       "native",
@@ -286,7 +292,8 @@
       "phoenix",
       "primal-web",
       "iris",
-      "yakihonne"
+      "yakihonne",
+      "noornote"
     ],
     "20": [
       "native",
@@ -324,6 +331,7 @@
       "primal-web",
       "iris",
       "yakihonne",
+      "noornote",
       "default-web"
     ],
     "9802": ["fevela", "coracle", "nostrudel", "lumilumi", "jumble", "default-web"],
@@ -352,6 +360,7 @@
       "coracle",
       "pareto",
       "habla",
+      "noornote",
       "default-web"
     ],
     "30024": [
@@ -368,6 +377,7 @@
       "coracle",
       "pareto",
       "habla",
+      "noornote",
       "default-web"
     ],
     "30311": [
