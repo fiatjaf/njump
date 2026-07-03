@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html"
 	"regexp"
 	"strings"
 	"unicode"
@@ -60,7 +59,7 @@ func processWikilinks(djotInput string) string {
 		}
 
 		normalized := normalizeDTag(display)
-		return `<span class="wikilink" title="wikilink to ` + html.EscapeString(normalized) + `">` + display + `</span>`
+		return `[` + display + `]{.wikilink title="wikilink to “` + normalized + `”"}`
 	})
 
 	djotInput = explicitPattern.ReplaceAllStringFunc(djotInput, func(match string) string {
@@ -68,20 +67,12 @@ func processWikilinks(djotInput string) string {
 		display := strings.TrimSpace(submatch[1])
 		ref := strings.TrimSpace(submatch[2])
 
-		if ref == "" {
-			if definedRefs[display] {
-				return match
-			}
-			normalized := normalizeDTag(display)
-			return `<span class="wikilink" title="wikilink to ` + html.EscapeString(normalized) + `">` + display + `</span>`
-		}
-
 		if definedRefs[ref] {
 			return match
 		}
 
 		normalized := normalizeDTag(ref)
-		return `<span class="wikilink" title="wikilink to ` + html.EscapeString(normalized) + `">` + display + `</span>`
+		return `[` + display + `]{.wikilink title="wikilink to “` + normalized + `”"}`
 	})
 
 	return djotInput
