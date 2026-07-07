@@ -8,15 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/dgraph-io/ristretto"
 )
-
-var mediaAlertCache, _ = ristretto.NewCache(&ristretto.Config[string, bool]{
-	NumCounters: 1e6,     // number of keys to track frequency of (1M)
-	MaxCost:     1 << 24, // maximum cost of cache (64MB)
-	BufferItems: 64,      // number of keys per Get buffer
-})
 
 type mediaAlertResponse struct {
 	Message string  `json:"message"`
@@ -24,29 +16,11 @@ type mediaAlertResponse struct {
 }
 
 // isExplicitContent checks if the provided URL contains explicit content
-// it returns true if the content is explicit, false otherwise
-// the function handles caching and retries for timeout errors
 func isExplicitContent(ctx context.Context, mediaURL string) (bool, error) {
-	// check cache first
-	if val, found := mediaAlertCache.Get(mediaURL); found {
-		return val, nil
-	}
-
-	// make the API request
-	isExplicit, err := checkMediaAlert(ctx, mediaURL, false)
-	if err != nil {
-		return false, err
-	}
-
-	// store result in cache
-	mediaAlertCache.SetWithTTL(mediaURL, isExplicit, 1, 24*time.Hour)
-
-	return isExplicit, nil
+	return checkMediaAlert(ctx, mediaURL)
 }
 
-// checkMediaAlert makes the actual API request to the Media Alert service
-// if retry is true, this is a retry attempt after a timeout
-func checkMediaAlert(ctx context.Context, mediaURL string, retry bool) (bool, error) {
+func checkMediaAlert(ctx context.Context, mediaURL string) (bool, error) {
 	if s.MediaAlertAPIKey == "" {
 		return false, nil // skip check if no API key is configured
 	}
@@ -83,28 +57,6 @@ func checkMediaAlert(ctx context.Context, mediaURL string, retry bool) (bool, er
 	case "SUCCESS":
 		return result.Score >= 0.90, nil
 	case "TIMEOUT":
-		if retry {
-			// if this is already a retry, don't retry again
-			return false, nil
-		}
-
-		// handle timeout by retrying after delay
-		go func() {
-			// create a new context with timeout for the retry
-			retryCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-			defer cancel()
-
-			// wait before retrying
-			time.Sleep(20 * time.Second)
-
-			// retry the request
-			isExplicit, err := checkMediaAlert(retryCtx, mediaURL, true)
-			if err == nil {
-				// update cache with the result (the expensive stuff we store for longer )
-				mediaAlertCache.SetWithTTL(mediaURL, isExplicit, 1, time.Hour*72)
-			}
-		}()
-
 		return false, nil
 	case "RATE LIMITED":
 		log.Warn().Str("url", mediaURL).Msg("media alert API rate limited")
