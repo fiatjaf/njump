@@ -80,10 +80,9 @@ func hasProhibitedContent(ctx context.Context, event *nostr.Event) bool {
 	}()
 
 	go func() {
-		safe, err := checkAedos(ctx, event.ID.Hex())
+		safe, err := checkAedosSafe(ctx, event.ID.Hex())
 		if err != nil {
-			aedosCh <- false
-			return
+			log.Warn().Err(err).Str("event", event.ID.Hex()).Msg("aedos call failed")
 		}
 		aedosCh <- !safe
 	}()
@@ -155,17 +154,15 @@ type aedosRequestEvent struct {
 }
 
 type aedosResponse struct {
-	Type       string   `json:"type"`
-	EventID    string   `json:"event_id"`
-	Status     string   `json:"status"`
-	Cache      bool     `json:"cache"`
-	Labels     []string `json:"labels"`
-	Confidence float64  `json:"confidence"`
+	Type       string  `json:"type"`
+	EventID    string  `json:"event_id"`
+	Status     string  `json:"status"`
+	Confidence float64 `json:"confidence"`
 }
 
-// checkAedos checks event via aedos.nostr.com API.
+// checkAedosSafe checks event via aedos.nostr.com API.
 // Returns true if safe, false if warn/prohibited, error on failure.
-func checkAedos(ctx context.Context, eventID string) (bool, error) {
+func checkAedosSafe(ctx context.Context, eventID string) (bool, error) {
 	ctx, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
 
@@ -186,22 +183,22 @@ func checkAedos(ctx context.Context, eventID string) (bool, error) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return false, fmt.Errorf("request failed: %w", err)
+		return true, fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode >= 300 {
 		msg, _ := io.ReadAll(resp.Body)
-		return false, fmt.Errorf("got unexpected response %d: %s", resp.StatusCode, string(msg))
+		return true, fmt.Errorf("got unexpected response %d: %s", resp.StatusCode, string(msg))
 	}
 
 	var results []aedosResponse
 	if err := json.NewDecoder(resp.Body).Decode(&results); err != nil {
-		return false, fmt.Errorf("failed to decode response: %w", err)
+		return true, fmt.Errorf("failed to decode response: %w", err)
 	}
 
 	if len(results) == 0 {
-		return false, fmt.Errorf("empty response")
+		return true, fmt.Errorf("empty response")
 	}
 
-	return results[0].Status == "safe", nil
+	return results[0].Status == "safe" || results[0].Status == "unknown", nil
 }
