@@ -15,6 +15,7 @@ type GroupMetadataPageParams struct {
 	GroupPicture     string
 	GroupAbout       string
 	Naddr            string
+	Clients          []ClientReference
 }
 
 templ groupMetadataInnerBlock(params GroupMetadataPageParams) {
@@ -54,7 +55,7 @@ templ groupMetadataTemplate(params GroupMetadataPageParams, isEmbed bool) {
 			params.TitleizedContent,
 			params.OpenGraphParams,
 			params.HeadParams,
-			nil,
+			params.Clients,
 			params.Details,
 			params.Event,
 		) {

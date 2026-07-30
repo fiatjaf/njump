@@ -699,6 +699,7 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			GroupPicture:     groupPicture,
 			GroupAbout:       groupAbout,
 			Naddr:            naddr,
+			Clients:          generateClientList(int(data.event.Kind), naddr),
 		}
 
 		component = groupMetadataTemplate(params, isEmbed)

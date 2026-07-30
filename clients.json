@@ -219,6 +219,21 @@
       "name": "Wikifreedia",
       "base": "https://wikifreedia.xyz/{handle}/{npub}",
       "platform": "web"
+    },
+    "nostrord": {
+      "name": "Nostrord",
+      "base": "https://web.nostrord.com/#/g/{relay_hint}/{d_tag}",
+      "platform": "web"
+    },
+    "flotilla": {
+      "name": "Flotilla",
+      "base": "https://app.flotilla.social/spaces/{relay_hint}/{d_tag}",
+      "platform": "web"
+    },
+    "grimoire": {
+      "name": "Grimoire",
+      "base": "https://grimoire2.netlify.app/run?cmd=chat%20{relay_hint}%27{d_tag}",
+      "platform": "web"
     }
   },
   "kindMappings": {
@@ -326,7 +341,14 @@
       "yakihonne",
       "default-web"
     ],
-    "9802": ["fevela", "coracle", "nostrudel", "lumilumi", "jumble", "default-web"],
+    "9802": [
+      "fevela",
+      "coracle",
+      "nostrudel",
+      "lumilumi",
+      "jumble",
+      "default-web"
+    ],
     "1063": [
       "native",
       "fevela",
@@ -337,7 +359,14 @@
       "nostrudel",
       "default-web"
     ],
-    "30000": ["native", "fevela", "amethyst", "coracle", "nostrudel", "default-web"],
+    "30000": [
+      "native",
+      "fevela",
+      "amethyst",
+      "coracle",
+      "nostrudel",
+      "default-web"
+    ],
     "30023": [
       "native",
       "fevela",
@@ -384,7 +413,15 @@
     "30818": ["native", "wikistr", "wikifreedia", "default-web"],
     "31922": ["native", "fevela", "coracle", "default-web"],
     "31923": ["native", "fevela", "coracle", "default-web"],
-    "39089": ["native", "fevela", "amethyst", "coracle", "nostrudel", "default-web"],
+    "39089": [
+      "native",
+      "fevela",
+      "amethyst",
+      "coracle",
+      "nostrudel",
+      "default-web"
+    ],
+    "39000": ["native", "default-web", "nostrord", "flotilla", "grimoire"],
     "default": [
       "native",
       "fevela",
