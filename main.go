@@ -32,6 +32,8 @@ type Settings struct {
 	MediaAlertAPIKey    string `envconfig:"MEDIA_ALERT_API_KEY"`
 	ErrorLogPath        string `envconfig:"ERROR_LOG_PATH" default:"/tmp/njump-errors.jsonl"`
 	CacheRetentionDays  int    `envconfig:"CACHE_RETENTION_DAYS" default:"13"`
+	LaraAccessKeyID     string `envconfig:"LARA_ACCESS_KEY_ID"`
+	LaraAccessKeySecret string `envconfig:"LARA_ACCESS_KEY_SECRET"`
 
 	TrustedPubKeysHex []string `envconfig:"TRUSTED_PUBKEYS"`
 	trustedPubKeys    []nostr.PubKey
@@ -174,6 +176,8 @@ func main() {
 	sub.HandleFunc("/image/", renderImage)
 	sub.HandleFunc("/njump/proxy/", proxy)
 	sub.HandleFunc("/proxy/", proxy)
+	sub.HandleFunc("/njump/translate", translateProxy)
+	sub.HandleFunc("/translate", translateProxy)
 	sub.HandleFunc("/robots.txt", renderRobots)
 	sub.HandleFunc("/r/", renderRelayPage)
 	sub.HandleFunc("/random", redirectToRandom)
