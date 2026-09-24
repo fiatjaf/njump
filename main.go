@@ -155,7 +155,11 @@ func main() {
 
 	// expose our internal cache as a relay (mostly for debugging purposes)
 	relay := khatru.NewRelay()
-	relay.ServiceURL = "https://" + s.Domain
+	if strings.HasSuffix(strings.Split(s.Domain, ":")[0], "localhost") {
+		relay.ServiceURL = "http://" + s.Domain
+	} else {
+		relay.ServiceURL = "https://" + s.Domain
+	}
 	relay.UseEventstore(sys.Store, DB_MAX_LIMIT)
 	relay.OnEvent = func(ctx context.Context, event nostr.Event) (reject bool, msg string) {
 		return true, "this relay is not writable"
