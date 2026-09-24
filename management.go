@@ -23,7 +23,7 @@ func deleteAllEventsFromPubKey(pk nostr.PubKey) {
 
 func setupRelayManagement(relay *khatru.Relay) {
 	relay.ManagementAPI.OnAPICall = func(ctx context.Context, mp nip86.MethodParams) (reject bool, msg string) {
-		for _, authed := range khatru.GetConnection(ctx).AuthedPublicKeys {
+		for _, authed := range khatru.GetAllAuthed(ctx) {
 			if slices.Contains(s.trustedPubKeys, authed) {
 				return false, ""
 			}
