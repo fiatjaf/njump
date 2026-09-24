@@ -147,6 +147,13 @@ var pornTags = []string{
 	"transnsfw",
 	"xxx",
 	"うちの子を置くとみんながうちの子に対する印象をリアクションしてくれるタグ",
+	"onlyfans",
+	"chaturbate",
+	"stripchat",
+	"bongacams",
+	"freecams",
+	"cam4",
+	"camsoda",
 }
 
 var pornWordsRe = func() *regexp.Regexp {
