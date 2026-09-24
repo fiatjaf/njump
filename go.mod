@@ -3,7 +3,7 @@ module github.com/fiatjaf/njump
 go 1.25.0
 
 require (
-	fiatjaf.com/nostr v0.0.0-20260615112943-0616b30ab35c
+	fiatjaf.com/nostr v0.0.0-20260919022302-cf8167ebdb95
 	github.com/PuerkitoBio/goquery v1.10.1
 	github.com/a-h/templ v0.3.1020
 	github.com/dgraph-io/ristretto v1.0.0
