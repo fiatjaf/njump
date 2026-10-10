@@ -8,11 +8,26 @@ import (
 )
 
 // timeoutResponseWriter wraps http.ResponseWriter to prevent writes after timeout
+// the handler gets its own header map (like http.TimeoutHandler) so that it never
+// shares a map with the timeout path, which writes headers from another goroutine
 type timeoutResponseWriter struct {
 	http.ResponseWriter
+	h           http.Header
 	mu          sync.Mutex
 	timedOut    bool
 	wroteHeader bool
+}
+
+func (tw *timeoutResponseWriter) Header() http.Header { return tw.h }
+
+// must be called with tw.mu held
+func (tw *timeoutResponseWriter) writeHeaderLocked(code int) {
+	tw.wroteHeader = true
+	dst := tw.ResponseWriter.Header()
+	for k, vv := range tw.h {
+		dst[k] = vv
+	}
+	tw.ResponseWriter.WriteHeader(code)
 }
 
 func (tw *timeoutResponseWriter) WriteHeader(code int) {
@@ -21,8 +36,7 @@ func (tw *timeoutResponseWriter) WriteHeader(code int) {
 	if tw.timedOut || tw.wroteHeader {
 		return
 	}
-	tw.wroteHeader = true
-	tw.ResponseWriter.WriteHeader(code)
+	tw.writeHeaderLocked(code)
 }
 
 func (tw *timeoutResponseWriter) Write(b []byte) (int, error) {
@@ -32,15 +46,18 @@ func (tw *timeoutResponseWriter) Write(b []byte) (int, error) {
 		return 0, http.ErrHandlerTimeout
 	}
 	if !tw.wroteHeader {
-		tw.wroteHeader = true
+		tw.writeHeaderLocked(http.StatusOK)
 	}
 	return tw.ResponseWriter.Write(b)
 }
 
-func (tw *timeoutResponseWriter) markTimedOut() {
+// marks the writer as timed out and reports whether the handler had already
+// started the response, atomically so the handler can't start it in between
+func (tw *timeoutResponseWriter) markTimedOut() (wroteHeader bool) {
 	tw.mu.Lock()
 	defer tw.mu.Unlock()
 	tw.timedOut = true
+	return tw.wroteHeader
 }
 
 func timeoutMiddleware(next http.HandlerFunc) http.HandlerFunc {
@@ -48,7 +65,7 @@ func timeoutMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
 		defer cancel()
 
-		tw := &timeoutResponseWriter{ResponseWriter: w}
+		tw := &timeoutResponseWriter{ResponseWriter: w, h: make(http.Header)}
 		done := make(chan struct{})
 		panicChan := make(chan interface{}, 1)
 
@@ -72,13 +89,9 @@ func timeoutMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		case <-ctx.Done():
 			// Timeout reached
-			tw.markTimedOut()
+			hasWritten := tw.markTimedOut()
 			if ctx.Err() == context.DeadlineExceeded {
 				// Only write retry page if handler hasn't written anything yet
-				tw.mu.Lock()
-				hasWritten := tw.wroteHeader
-				defer tw.mu.Unlock()
-
 				if !hasWritten {
 					w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 					w.Header().Set("Pragma", "no-cache")
