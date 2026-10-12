@@ -3,11 +3,14 @@ package main
 import (
 	"bytes"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
 	"fiatjaf.com/nostr/nip11"
 )
+
+var validRelayHostname = regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)+(:[0-9]{1,5})?(/[^:@]*)?$`)
 
 func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -33,6 +36,13 @@ func renderRelayPage(w http.ResponseWriter, r *http.Request) {
 
 	if len(hostname) < 3 {
 		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
+	// crawlers follow mangled links like /r/nostur:intent:web+nostr:relay.example.com
+	// endlessly, and every one of them costs a relay dial that only ends in a timeout
+	if !validRelayHostname.MatchString(hostname) {
+		http.NotFound(w, r)
 		return
 	}
 
