@@ -89,6 +89,14 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 	// from here onwards we know we're rendering an event
 	sys.TrackEventAccessTime(data.event.ID)
 
+	// user has requested to not be indexed, 404
+	if indexOptOut(data.event.author) {
+		w.Header().Set("Cache-Control", "max-age=60")
+		w.WriteHeader(http.StatusNotFound)
+		errorTemplate(ErrorPageParams{Errors: "user has requested to not be indexed"}).Render(ctx, w)
+		return
+	}
+
 	// gather page style from user-agent
 	style := getPreviewStyle(r)
 
