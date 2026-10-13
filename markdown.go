@@ -12,46 +12,52 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 )
 
-var mdrenderer = html.NewRenderer(html.RendererOptions{
-	Flags: html.HrefTargetBlank | html.SkipHTML,
-	RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
-		switch v := node.(type) {
-		case *ast.HTMLSpan:
-			w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
-			return ast.GoToNext, true
-		case *ast.HTMLBlock:
-			w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
-			return ast.GoToNext, true
-		}
-
-		return ast.GoToNext, false
-	},
-})
-
-var tgivmdrenderer = html.NewRenderer(html.RendererOptions{
-	Flags: html.CommonFlags | html.HrefTargetBlank,
-	RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
-		// telegram instant view really doesn't like when there is an image inside a paragraph (like <p><img></p>)
-		// so we use this custom thing to stop all paragraphs before the images, print the images then start a new
-		// paragraph afterwards.
-		if img, ok := node.(*ast.Image); ok {
-			if entering {
-				src := img.Destination
-				w.Write([]byte(`</p><img src="`))
-				html.EscLink(w, src)
-				w.Write([]byte(`" alt="`))
-			} else {
-				if img.Title != nil {
-					w.Write([]byte(`" title="`))
-					html.EscapeHTML(w, img.Title)
-				}
-				w.Write([]byte(`" /><p>`))
+// html.Renderer keeps state (the heading ids it has seen) while rendering, so
+// it can't be shared between goroutines: make a new one for every document.
+func newMdRenderer() *html.Renderer {
+	return html.NewRenderer(html.RendererOptions{
+		Flags: html.HrefTargetBlank | html.SkipHTML,
+		RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
+			switch v := node.(type) {
+			case *ast.HTMLSpan:
+				w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
+				return ast.GoToNext, true
+			case *ast.HTMLBlock:
+				w.Write([]byte(stdhtml.EscapeString(string(v.Literal))))
+				return ast.GoToNext, true
 			}
-			return ast.GoToNext, true
-		}
-		return ast.GoToNext, false
-	},
-})
+
+			return ast.GoToNext, false
+		},
+	})
+}
+
+func newTgivMdRenderer() *html.Renderer {
+	return html.NewRenderer(html.RendererOptions{
+		Flags: html.CommonFlags | html.HrefTargetBlank,
+		RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
+			// telegram instant view really doesn't like when there is an image inside a paragraph (like <p><img></p>)
+			// so we use this custom thing to stop all paragraphs before the images, print the images then start a new
+			// paragraph afterwards.
+			if img, ok := node.(*ast.Image); ok {
+				if entering {
+					src := img.Destination
+					w.Write([]byte(`</p><img src="`))
+					html.EscLink(w, src)
+					w.Write([]byte(`" alt="`))
+				} else {
+					if img.Title != nil {
+						w.Write([]byte(`" title="`))
+						html.EscapeHTML(w, img.Title)
+					}
+					w.Write([]byte(`" /><p>`))
+				}
+				return ast.GoToNext, true
+			}
+			return ast.GoToNext, false
+		},
+	})
+}
 
 func mdToHTML(md string, usingTelegramInstantView bool) string {
 	md = strings.ReplaceAll(md, "\u00A0", " ")
@@ -68,9 +74,11 @@ func mdToHTML(md string, usingTelegramInstantView bool) string {
 			parser.Tables,
 	).Parse([]byte(md))
 
-	renderer := mdrenderer
+	var renderer *html.Renderer
 	if usingTelegramInstantView {
-		renderer = tgivmdrenderer
+		renderer = newTgivMdRenderer()
+	} else {
+		renderer = newMdRenderer()
 	}
 
 	// create HTML renderer with extensions
