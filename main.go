@@ -81,7 +81,7 @@ func main() {
 	defer initSystem()()
 
 	var embeddedRelayConfig RelayConfig
-	err = json.Unmarshal(embeddedRelayConfigJSON, &relayConfig)
+	err = json.Unmarshal(embeddedRelayConfigJSON, &embeddedRelayConfig)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to parse embedded relay config")
 		return
