@@ -1,6 +1,8 @@
 module github.com/fiatjaf/njump
 
-go 1.25.0
+go 1.26.0
+
+toolchain go1.27.3
 
 require (
 	fiatjaf.com/nostr v0.0.0-20260919022302-cf8167ebdb95
@@ -27,7 +29,7 @@ require (
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
 	golang.org/x/image v0.18.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.24.0
 	mvdan.cc/xurls/v2 v2.5.0
 )
 
@@ -75,11 +77,11 @@ require (
 	github.com/valyala/fasthttp v1.59.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.etcd.io/bbolt v1.4.2 // indirect
-	golang.org/x/crypto v0.48.0 // indirect
+	golang.org/x/crypto v0.58.0 // indirect
 	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6 // indirect
-	golang.org/x/net v0.51.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/net v0.62.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
