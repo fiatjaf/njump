@@ -28,7 +28,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/texttheater/golang-levenshtein v1.0.1
 	github.com/tylermmorton/tmpl v0.0.0-20231025031313-5552ee818c6d
-	golang.org/x/image v0.18.0
+	golang.org/x/image v0.47.0
 	golang.org/x/sync v0.24.0
 	mvdan.cc/xurls/v2 v2.5.0
 )
