@@ -15,6 +15,7 @@ import (
 	"fiatjaf.com/nostr/nip05"
 	"fiatjaf.com/nostr/nip19"
 	"github.com/a-h/templ"
+	"github.com/mstrofnone/nostrlib-nip05-namecoin/namecoin"
 	"github.com/pelletier/go-toml"
 )
 
@@ -39,8 +40,8 @@ func renderEvent(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// it may be a NIP-05
-		if nip05.IsValidIdentifier(code) {
+		// it may be a NIP-05 (DNS) or a `.bit` (Namecoin) identifier
+		if nip05.IsValidIdentifier(code) || namecoin.IsDotBit(code) {
 			renderProfile(ctx, r, w, code)
 			return
 		}
